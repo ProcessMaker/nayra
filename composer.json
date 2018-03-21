@@ -1,0 +1,29 @@
+{
+    "name": "processmaker/processmaker-re",
+    "description": "Runtime environment for ProcessMaker",
+    "authors": [
+        {
+            "name": "David Callizaya",
+            "email": "david.callizaya@processmaker.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "ProcessMaker\\": "src/ProcessMaker/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Feature\\": "tests/Feature/",
+            "ProcessMaker\\": ["src/ProcessMaker/", "test/unit/ProcessMaker/"],
+            "ProcessMaker\\Models\\": "tests/ProcessMaker/Models/",
+            "ProcessMaker\\Bpmn\\": "tests/ProcessMaker/Bpmn/"
+        }
+    },
+    "require": {
+        "illuminate/events": "v5.4.36"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    }
+}
