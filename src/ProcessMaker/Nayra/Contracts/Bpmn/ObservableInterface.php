@@ -11,6 +11,18 @@ interface ObservableInterface
 {
 
     /**
+     *  Returns the list of observers of the object
+     *
+     * @return array
+     */
+    public function getObservers();
+
+    /**
+     *  Returns the list of observers of the object
+     *
+     * @return array
+     */
+    /**
      * Attach a callback to an event.
      *
      * @param string $event
