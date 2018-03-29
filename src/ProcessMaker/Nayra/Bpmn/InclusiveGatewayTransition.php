@@ -4,7 +4,9 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule for a inclusive gateway.
@@ -22,7 +24,7 @@ class InclusiveGatewayTransition implements TransitionInterface
      *
      * @return bool
      */
-    protected function assertCondition()
+    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
     {
         return true;
     }

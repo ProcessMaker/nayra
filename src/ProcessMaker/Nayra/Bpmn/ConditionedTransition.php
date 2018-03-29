@@ -25,12 +25,12 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
      * Condition required to transit the element.
      *
      * @param TokenInterface $token
+     * @param ExecutionInstanceInterface $executionInstance
      *
      * @return mixed
      */
-    protected function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
     {
-        $this->getOwnerProcess();
         $condition = $this->condition;
         return $condition($executionInstance->getDataStore()->getData());
     }

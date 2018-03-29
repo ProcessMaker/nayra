@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionedTransitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -21,6 +22,13 @@ trait GatewayTrait
      * @var Collection
      */
     private $conditionedTransitions;
+
+    /**
+     * Default transition associated to the gateway.
+     *
+     * @var TransitionInterface
+     */
+    private $defaultTransition;
 
     /**
      * Concrete gateway class should implement the logic of the
@@ -71,9 +79,9 @@ trait GatewayTrait
      *
      * @return DefaultTransitionInterface
      */
-    protected function defaultTransition(DefaultTransitionInterface $transition)
+    protected function setDefaultTransition(TransitionInterface $transition)
     {
-        $transition->setConditionedTransitions($this->conditionedTransitions);
+        $this->defaultTransition = $transition;
         return $transition;
     }
 
@@ -94,6 +102,16 @@ trait GatewayTrait
                 $this->buildConnectionTo($flow->getTarget());
             }
         }
+    }
+
+    /**
+     * Returns the list of conditioned transitions of the gateway
+     *
+     * @return Collection
+     */
+    public function getConditionedTransitions()
+    {
+        return $this->conditionedTransitions;
     }
 
 }
