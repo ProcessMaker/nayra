@@ -44,13 +44,13 @@ trait EndEventTrait
     public function buildTransitions(RepositoryFactoryInterface $factory)
     {
         $this->setFactory($factory);
-        $this->endState = new State($this);
+        $this->endState = new State($this, 'CLOSING');
         $this->transition = new EndTransition($this);
         $this->endState->connectTo($this->transition);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_AFTER_TRANSIT,
             function () {
-                $this->fireEvent(EventNodeInterface::EVENT_EVENT_TRIGGERED);
+                $this->notifyEvent(EventNodeInterface::EVENT_EVENT_TRIGGERED);
             }
         );
     }

@@ -24,11 +24,15 @@ interface FlowNodeInterface extends FlowElementInterface
     public function createFlowTo(FlowNodeInterface $target, FlowRepositoryInterface $flowRepository, $properties=[]);
 
     /**
+     * Get the outgoing flows.
+     *
      * @return FlowCollectionInterface
      */
     public function getFlows();
 
     /**
+     * Add a transition rule for the node element.
+     *
      * @param TransitionInterface $transition
      *
      * @return $this
@@ -36,12 +40,15 @@ interface FlowNodeInterface extends FlowElementInterface
     public function addTransition(TransitionInterface $transition);
 
     /**
+     * Get the transitions rules of the node element.
      *
      * @return TransitionInterface[]
      */
     public function getTransitions();
 
     /**
+     * Build the transition rules of the node element.
+     *
      * @param RepositoryFactoryInterface $factory Factory that will be used to create tokens.
      *
      * @return $this
@@ -49,6 +56,8 @@ interface FlowNodeInterface extends FlowElementInterface
     public function buildTransitions(RepositoryFactoryInterface $factory);
 
     /**
+     * Build the transition rules of the outgoing flows.
+     *
      * @param RepositoryFactoryInterface $factory Factory that will be used to create tokens.
      *
      * @return $this

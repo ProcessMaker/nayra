@@ -4,7 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Bpmn\EntityTrait;
+use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\ObservableTrait;
 use ProcessMaker\Nayra\Bpmn\FlowElementTrait;
@@ -21,7 +21,7 @@ use ProcessMaker\Nayra\Bpmn\TraversableTrait;
 trait StateTrait
 {
 
-    use FlowElementTrait,
+    use BaseTrait,
         TraversableTrait,
         ObservableTrait;
     /**
@@ -31,10 +31,18 @@ trait StateTrait
      */
     private $tokens;
 
-    protected function initPlaceBehavior(EntityInterface $owner)
+    /**
+     * State name.
+     *
+     * @var string
+     */
+    private $name;
+
+    protected function initPlaceBehavior(EntityInterface $owner, $name)
     {
         $this->tokens = new Collection();
         $this->setFactory($owner->getFactory());
+        $this->setName($name);
     }
 
     /**
@@ -73,5 +81,28 @@ trait StateTrait
     public function getTokens()
     {
         return $this->tokens;
+    }
+
+    /**
+     * Get state name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set state name.
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
 }

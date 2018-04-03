@@ -4,7 +4,7 @@ namespace ProcessMaker\Nayra\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Bpmn\EntityTrait;
+use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;

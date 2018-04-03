@@ -8,11 +8,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 
 /**
- * Transition rule for an activity.
+ * Transition rule when a exception is catch.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class ActivityTransition implements TransitionInterface
+class ExceptionTransition implements TransitionInterface
 {
 
     use TransitionTrait;
@@ -26,6 +26,6 @@ class ActivityTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token)
     {
-        return $token->getProperty('STATUS') === ActivityInterface::TOKEN_STATE_COMPLETED;
+        return $token->getProperty('STATUS') === ActivityInterface::TOKEN_STATE_FAILING;
     }
 }

@@ -85,4 +85,11 @@ interface CollectionInterface extends SeekableIterator
      * @return array
      */
     public function splice($offset, $length = null, $replacement = null);
+
+    /**
+     * Converts the collection to an array
+     *
+     * @return void
+     */
+    public function toArray();
 }

@@ -2,6 +2,9 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+
 /**
  * Test an activity with exception.
  *
@@ -36,43 +39,52 @@ class ActivityExceptionTest extends EngineTestCase
     }
 
     /**
-     * Test transitions from start event, activity and end event.
+     * Test activity exception.
      *
      */
     public function testSimpleTransitions()
     {
-        //Data store to access the runtime data.
+        //Create a data store to test the process.
         $dataStore = $this->dataStoreRepository->createDataStoreInstance();
-        //Process contains the flow.
+
+        //Load a simple process with activity exception.
         $process = $this->createSimpleProcessInstance();
         $this->engine->createExecutionInstance($process, $dataStore);
 
-        //Get References
+        //Get references to the start event and activity.
         $start = $process->getEvents()->item(0);
         $activity = $process->getActivities()->item(0);
 
+        //Assert: Initially the activity does not have tokens.
         $this->assertEquals(0, $activity->getTokens($dataStore)->count());
-        //Raise start event
+
+        //Trigger start event
         $start->start();
         $this->engine->runToNextState();
         $this->assertEvents([
-            'EventTriggered',
-            'ActivityActivated',
-            'ActivityException',
+            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
 
-        $this->assertEquals(1, $activity->getTokens($dataStore)->count());
+        //Assert: The activity has one token.
+        $this->assertEquals(1, $activity->getTokens()->count());
+
+        //Assert: The activity is in FAILING status.
+        $token = $activity->getTokens()->item(0);
+        $this->assertEquals(ActivityInterface::TOKEN_STATE_FAILING, $token->getStatus());
 
         //Complete the activity
-        $token = $activity->getTokens($dataStore)->item(0);
+        $token = $activity->getTokens()->item(0);
         $activity->complete($token);
         $this->engine->runToNextState();
         $this->assertEvents([
-            'ActivityCompleted',
-            'ActivityClosed',
-            'EventTriggered',
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EventNodeInterface::EVENT_EVENT_TRIGGERED,
         ]);
 
+        //Assert: Finally the activity does not have tokens.
         $this->assertEquals(0, $activity->getTokens($dataStore)->count());
     }
 }

@@ -13,7 +13,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
  */
 trait FlowElementTrait
 {
-    use EntityTrait;
+    use BaseTrait;
 
     /**
      * Owner process.

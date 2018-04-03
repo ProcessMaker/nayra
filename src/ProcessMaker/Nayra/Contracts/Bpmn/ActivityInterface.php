@@ -34,6 +34,13 @@ interface ActivityInterface extends EntityInterface, FlowNodeInterface
     const EVENT_ACTIVITY_CLOSED = 'ActivityClosed';
 
     /**
+     * Token states defined for Activity
+     */
+    const TOKEN_STATE_ACTIVE = 'ACTIVE';
+    const TOKEN_STATE_FAILING = 'FAILING';
+    const TOKEN_STATE_COMPLETED = 'COMPLETED';
+
+    /**
      * Properties.
      */
     const PROPERTIES = [
@@ -102,19 +109,9 @@ interface ActivityInterface extends EntityInterface, FlowNodeInterface
     public function complete(TokenInterface $token);
 
     /**
-     * Activity's work.
-     *
-     * @return $this
-     * @throws ActivityWorkException
-     */
-    public function work();
-
-    /**
      * Get tokens in the activity.
-     *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface $dataStore
      *
      * @return CollectionInterface
      */
-    public function getTokens(DataStoreInterface $dataStore);
+    public function getTokens();
 }

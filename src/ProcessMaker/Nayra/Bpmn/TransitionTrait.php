@@ -7,7 +7,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
-use ProcessMaker\Nayra\Bpmn\EntityTrait;
+use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Engine\EngineTrait;
 use ProcessMaker\Nayra\Bpmn\ObservableTrait;
 use ProcessMaker\Nayra\Bpmn\FlowElementTrait;

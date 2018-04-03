@@ -5,7 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Bpmn\ActivityTransition;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
-use ProcessMaker\Nayra\Bpmn\EntityTrait;
+use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Bpmn\BpmnEventsTrait;
 use ProcessMaker\Nayra\Bpmn\State;
@@ -40,7 +40,7 @@ trait InclusiveGatewayTrait
         $this->setFactory($factory);
         $this->transition=new InclusiveGatewayTransition($this);
         $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function()  {
-            $this->fireEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);
         });
     }
 
@@ -50,10 +50,10 @@ trait InclusiveGatewayTrait
      * @return StateInterface
      */
     public function getInputPlace() {
-        $incomingPlace=new State($this);
+        $incomingPlace=new State($this, 'INCOMMING');
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function () {
-            $this->fireEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES, $this);
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES, $this);
         });
         return $incomingPlace;
     }
@@ -82,7 +82,7 @@ trait InclusiveGatewayTrait
      * @return $this
      */
     protected function buildConditionedConnectionTo(FlowNodeInterface $target, callable $condition, $default=false) {
-        $outgoingPlace = new State($this);
+        $outgoingPlace = new State($this, 'OUTGOING');
         if ($default) {
             $outgoingTransition = $this->defaultTransition(new DefaultTransition($this));
         } else {
@@ -92,7 +92,7 @@ trait InclusiveGatewayTrait
             );
         }
         $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function()  {
-            $this->fireEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this);
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this);
         });
         $this->transition->connectTo($outgoingPlace);
         $outgoingPlace->connectTo($outgoingTransition);

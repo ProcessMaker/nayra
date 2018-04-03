@@ -13,16 +13,16 @@ interface ObservableInterface
     /**
      * Attach a callback to an event.
      *
-     * @param $event
-     * @param $callback
+     * @param string $event
+     * @param callable $callback
      */
-    public function attachEvent($event, $callback);
+    public function attachEvent($event, callable $callback);
 
     /**
      * Detach a callback from an event.
      *
-     * @param $event
-     * @param $callback
+     * @param string $event
+     * @param callable $callback
      */
-    public function detachEvent($event, $callback);
+    public function detachEvent($event, callable $callback);
 }

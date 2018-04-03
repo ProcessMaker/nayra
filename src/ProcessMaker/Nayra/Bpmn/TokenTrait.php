@@ -13,7 +13,7 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
  */
 trait TokenTrait
 {
-    use EntityTrait;
+    use BaseTrait;
 
     /**
      *
@@ -29,7 +29,7 @@ trait TokenTrait
     /**
      * Get the owner of the token.
      *
-     * @return StateInterface
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
     public function getOwner()
     {
@@ -45,5 +45,15 @@ trait TokenTrait
     {
         $this->owner = $owner;
         return $this;
+    }
+
+    /**
+     * Get token status.
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->getOwner()->getName();
     }
 }

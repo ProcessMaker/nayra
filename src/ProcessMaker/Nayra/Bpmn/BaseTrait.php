@@ -2,17 +2,15 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ReflectionMethod;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 use ReflectionClass;
 
 /**
- * EntityTrait
+ * BaseTrait
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-trait EntityTrait
+trait BaseTrait
 {
 
     /**
@@ -23,7 +21,7 @@ trait EntityTrait
     private $factory;
 
     /**
-     * EntityTrait constructor.
+     * BaseTrait constructor.
      *
      * @param array ...$args
      */

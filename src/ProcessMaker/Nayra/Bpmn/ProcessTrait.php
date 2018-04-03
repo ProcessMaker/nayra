@@ -12,7 +12,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 trait ProcessTrait
 {
-    use EntityTrait;
+    use BaseTrait;
 
     /**
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface $activities

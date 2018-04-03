@@ -201,4 +201,14 @@ class Collection implements CollectionInterface
     {
         $this->index = $index;
     }
+
+    /**
+     * Converts the collection to an array
+     *
+     * @return void
+     */
+    public function toArray()
+    {
+        return $this->items;
+    }
 }

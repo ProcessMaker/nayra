@@ -29,7 +29,7 @@ trait StartEventTrait
         $this->transition->attachEvent(
             TransitionInterface::EVENT_BEFORE_TRANSIT,
             function() {
-                $this->fireEvent(EventNodeInterface::EVENT_EVENT_TRIGGERED, $this);
+                $this->notifyEvent(EventNodeInterface::EVENT_EVENT_TRIGGERED, $this);
             }
         );
     }
