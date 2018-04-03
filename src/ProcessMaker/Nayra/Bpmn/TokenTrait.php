@@ -2,9 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 
 /**
  * Trait for a token.

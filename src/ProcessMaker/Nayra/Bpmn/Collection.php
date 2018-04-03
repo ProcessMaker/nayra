@@ -80,7 +80,7 @@ class Collection implements CollectionInterface
     /**
      * Unshift element.
      *
-     * @param type $item
+     * @param mixed $item
      *
      * @return mixed Unshift element
      */
@@ -92,7 +92,7 @@ class Collection implements CollectionInterface
     /**
      * Get the index of the element in the collection.
      *
-     * @param type $item
+     * @param mixed $item
      *
      * @return integer
      */

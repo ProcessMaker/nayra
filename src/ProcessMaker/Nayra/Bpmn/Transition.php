@@ -2,9 +2,9 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Bpmn\TransitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Bpmn\TransitionTrait;
 
 /**
  * Transition rule that always pass the token.

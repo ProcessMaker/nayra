@@ -45,7 +45,7 @@ interface CollectionInterface extends SeekableIterator
     /**
      * Unshift element.
      *
-     * @param type $item
+     * @param mixed $item
      *
      * @return mixed Unshift element
      */
@@ -54,7 +54,7 @@ interface CollectionInterface extends SeekableIterator
     /**
      * Get the index of the element in the collection.
      *
-     * @param type $item
+     * @param mixed $item
      *
      * @return integer
      */

@@ -2,12 +2,11 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-
+use Illuminate\Contracts\Events\Dispatcher;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
-use Illuminate\Contracts\Events\Dispatcher;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 trait ProcessTrait

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
 
 /**
  * Test an activity with exception.

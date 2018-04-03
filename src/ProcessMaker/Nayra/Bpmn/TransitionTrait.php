@@ -2,19 +2,14 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
-use ProcessMaker\Nayra\Engine\EngineTrait;
-use ProcessMaker\Nayra\Bpmn\ObservableTrait;
 use ProcessMaker\Nayra\Bpmn\FlowElementTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Bpmn\ObservableTrait;
 use ProcessMaker\Nayra\Bpmn\TraversableTrait;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**

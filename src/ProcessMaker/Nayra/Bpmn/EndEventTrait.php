@@ -2,14 +2,12 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\EntityTrait;
 use ProcessMaker\Nayra\Bpmn\EndTransition;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
-use ProcessMaker\Nayra\Bpmn\BpmnEventsTrait;
 use ProcessMaker\Nayra\Bpmn\State;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
