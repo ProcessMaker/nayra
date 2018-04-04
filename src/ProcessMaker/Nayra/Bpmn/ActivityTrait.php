@@ -59,7 +59,7 @@ trait ActivityTrait
             }
         );
         $this->activityTransition->attachEvent(
-            TransitionInterface::EVENT_BEFORE_TRANSIT,
+            TransitionInterface::EVENT_AFTER_TRANSIT,
             function () {
                 $this->fireEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this);
 
