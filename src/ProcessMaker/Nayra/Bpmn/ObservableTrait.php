@@ -17,10 +17,10 @@ trait ObservableTrait
     /**
      * Attach a callback to an event.
      *
-     * @param $event
-     * @param $callback
+     * @param string $event
+     * @param callable $callback
      */
-    public function attachEvent($event, $callback)
+    public function attachEvent($event, callable $callback)
     {
         $this->observers[$event][] = $callback;
     }
@@ -28,10 +28,10 @@ trait ObservableTrait
     /**
      * Detach a callback from an event.
      *
-     * @param $event
-     * @param $callback
+     * @param string $event
+     * @param callable $callback
      */
-    public function detachEvent($event, $callback)
+    public function detachEvent($event, callable $callback)
     {
         $index = array_search($callback, $this->observers[$event], true);
         if ($index !== false) {

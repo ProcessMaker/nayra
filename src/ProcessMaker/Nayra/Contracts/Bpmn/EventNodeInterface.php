@@ -33,6 +33,11 @@ interface EventNodeInterface extends EntityInterface, FlowNodeInterface
     const EVENT_EVENT_TRIGGERED = 'EventTriggered';
 
     /**
+     * Token states defined for Event
+     */
+    const TOKEN_STATE_ACTIVE = 'ACTIVE';
+
+    /**
      * Properties.
      */
     const PROPERTIES = [

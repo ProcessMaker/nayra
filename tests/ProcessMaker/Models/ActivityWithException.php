@@ -4,7 +4,7 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\ActivityTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Exceptions\ActivityWorkException;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * This activity will raise an exception when executed.
@@ -18,13 +18,14 @@ class ActivityWithException implements ActivityInterface
         LocalPropertiesTrait;
 
     /**
-     * Called when activated.
+     * Configure the activity to go to a FAILING status when activated.
      *
-     * @throws ActivityWorkException
      */
-    public function work()
+    public function initActivity()
     {
-        throw new ActivityWorkException();
+        $this->attachEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, function ($self, TokenInterface $token) {
+            $token->setProperty('STATUS', ActivityInterface::TOKEN_STATE_FAILING);
+        });
     }
 
     /**

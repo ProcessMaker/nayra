@@ -9,24 +9,24 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition rule for an activity.
+ * Transition rule when a exception is catch.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class ActivityTransition implements TransitionInterface
+class ExceptionTransition implements TransitionInterface
 {
-
     use TransitionTrait;
 
     /**
      * Condition required to transit the element.
      *
      * @param TokenInterface $token
+     * @param ExecutionInstanceInterface $executionInstance
      *
      * @return bool
      */
     public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
     {
-        return $token->getProperty('STATUS') === ActivityInterface::TOKEN_STATE_COMPLETED;
+        return $token->getProperty('STATUS') === ActivityInterface::TOKEN_STATE_FAILING;
     }
 }

@@ -3,19 +3,17 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\TransitionTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition rule for an activity.
+ * Transition rule that always pass the token.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class ActivityTransition implements TransitionInterface
+class Transition implements TransitionInterface
 {
-
     use TransitionTrait;
 
     /**
@@ -27,6 +25,6 @@ class ActivityTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
     {
-        return $token->getProperty('STATUS') === ActivityInterface::TOKEN_STATE_COMPLETED;
+        return true;
     }
 }

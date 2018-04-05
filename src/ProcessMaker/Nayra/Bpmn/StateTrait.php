@@ -2,16 +2,14 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Bpmn\EntityTrait;
+use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\ObservableTrait;
-use ProcessMaker\Nayra\Bpmn\FlowElementTrait;
-use ProcessMaker\Nayra\Bpmn\TokenTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Bpmn\TraversableTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Trait to implement state of a node in which tokens can be received.
@@ -21,7 +19,7 @@ use ProcessMaker\Nayra\Bpmn\TraversableTrait;
 trait StateTrait
 {
 
-    use FlowElementTrait,
+    use BaseTrait,
         TraversableTrait,
         ObservableTrait;
     /**
@@ -31,13 +29,28 @@ trait StateTrait
      */
     private $tokens;
 
-    protected function initPlaceBehavior(EntityInterface $owner)
+    /**
+     * State name.
+     *
+     * @var string
+     */
+    private $name;
+
+    /**
+     * Initialize the state object.
+     *
+     * @param EntityInterface $owner
+     * @param string $name
+     */
+    protected function initState(EntityInterface $owner, $name)
     {
         $this->tokens = new Collection();
         $this->setFactory($owner->getFactory());
+        $this->setName($name);
     }
 
     /**
+     * Consume a token in the current state.
      *
      * @return bool
      */
@@ -52,6 +65,7 @@ trait StateTrait
     }
 
     /**
+     * Add a new token instance to the state.
      *
      * @return bool
      */
@@ -73,5 +87,28 @@ trait StateTrait
     public function getTokens()
     {
         return $this->tokens;
+    }
+
+    /**
+     * Get state name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set state name.
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
 }

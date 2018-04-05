@@ -9,5 +9,5 @@ namespace ProcessMaker\Nayra\Bpmn;
  */
 trait FlowTrait
 {
-    use EntityTrait;
+    use BaseTrait;
 }

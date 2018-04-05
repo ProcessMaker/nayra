@@ -9,6 +9,9 @@ namespace ProcessMaker\Nayra\Bpmn;
  */
 trait BpmnEventsTrait
 {
+    use ObservableTrait {
+        notifyEvent as private internalNotifyEvent;
+    }
 
     /**
      * Array map of custom event classes for the bpmn element.
@@ -18,12 +21,12 @@ trait BpmnEventsTrait
     abstract protected function getBpmnEventClasses();
 
     /**
-     * Fire a event for the current bpmn element.
+     * Fire a event for the bpmn element.
      *
-     * @param $event
+     * @param string $event
      * @param array ...$arguments
      */
-    protected function fireEvent($event, ...$arguments)
+    protected function notifyEvent($event, ...$arguments)
     {
         $bpmnEvents = $this->getBpmnEventClasses();
         if (isset($bpmnEvents[$event])) {
@@ -32,5 +35,7 @@ trait BpmnEventsTrait
             $payload = ["object" => $this, "arguments" => $arguments];
         }
         $this->getOwnerProcess()->getDispatcher()->dispatch($event, $payload);
+        array_unshift($arguments, $event);
+        call_user_func_array([$this, 'internalNotifyEvent'], $arguments);
     }
 }

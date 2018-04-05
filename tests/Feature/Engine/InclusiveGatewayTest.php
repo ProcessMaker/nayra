@@ -110,15 +110,19 @@ class InclusiveGatewayTest extends EngineTestCase
     }
 
     /**
+     * Test a inclusive gateway with two outgoing flows.
+     *
      * Test transitions from start event, inclusive gateways, activities and end event,
-     * with both activities activated.
+     * with two activities activated.
      */
     public function testInclusiveGatewayAllPaths()
     {
-        //Data store to access the runtime data.
+        //Create a data store with data.
         $dataStore = $this->dataStoreRepository->createDataStoreInstance();
         $dataStore->putData('A', '1');
         $dataStore->putData('B', '1');
+
+        //Load the process
         $process = $this->createProcessWithInclusiveGateway();
         $this->engine->createExecutionInstance($process, $dataStore);
 
@@ -130,6 +134,8 @@ class InclusiveGatewayTest extends EngineTestCase
         //Start the process
         $start->start();
         $this->engine->runToNextState();
+
+        //Assertion: Verify the triggered engine events. Two activities are activated.
         $this->assertEvents([
             EventNodeInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
@@ -145,6 +151,8 @@ class InclusiveGatewayTest extends EngineTestCase
         $tokenA = $activityA->getTokens($dataStore)->item(0);
         $activityA->complete($tokenA);
         $this->engine->runToNextState();
+
+        //Assertion: Verify the triggered engine events. The activity is closed.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
@@ -155,6 +163,8 @@ class InclusiveGatewayTest extends EngineTestCase
         $tokenB = $activityB->getTokens($dataStore)->item(0);
         $activityB->complete($tokenB);
         $this->engine->runToNextState();
+
+        //Assertion: Verify the triggered engine events. The activity is closed and process is ended.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
@@ -168,12 +178,14 @@ class InclusiveGatewayTest extends EngineTestCase
     }
 
     /**
-     * Test transitions from start event, inclusive gateways, activities and end event,
-     * with only activity B activated.
+     * Test a inclusive gateway with one activated outgoing flow.
+     *
+     * Test transitions from start event, inclusive gateways, two activities and one end event,
+     * with only one activity (B) activated.
      */
     public function testInclusiveGatewayOnlyB()
     {
-        //Data store to access the runtime data.
+        //Create a data store with data.
         $dataStore = $this->dataStoreRepository->createDataStoreInstance();
         $dataStore->putData('A', '0');
         $dataStore->putData('B', '1');
@@ -188,6 +200,8 @@ class InclusiveGatewayTest extends EngineTestCase
         //Start the process
         $start->start();
         $this->engine->runToNextState();
+
+        //Assertion: Verify the triggered engine events. One activity is activated.
         $this->assertEvents([
             EventNodeInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
@@ -201,6 +215,8 @@ class InclusiveGatewayTest extends EngineTestCase
         $tokenB = $activityB->getTokens($dataStore)->item(0);
         $activityB->complete($tokenB);
         $this->engine->runToNextState();
+
+        //Assertion: Verify the triggered engine events. The activity is closed and process is ended.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
@@ -217,7 +233,7 @@ class InclusiveGatewayTest extends EngineTestCase
      */
     public function testDefaultTransition()
     {
-        //Data store to access the runtime data.
+        //Create a data store with data.
         $dataStore = $this->dataStoreRepository->createDataStoreInstance();
         $dataStore->putData('A', '2');
         $process = $this->createProcessWithDefaultTransition();
@@ -230,7 +246,7 @@ class InclusiveGatewayTest extends EngineTestCase
         $start->start();
         $this->engine->runToNextState();
 
-        //The correct events of the default transition should be triggered
+        //Assertion: The correct events of the default transition should be triggered
         $this->assertEvents([
             EventNodeInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,

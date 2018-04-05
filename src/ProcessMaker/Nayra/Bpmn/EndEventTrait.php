@@ -2,14 +2,12 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\EntityTrait;
 use ProcessMaker\Nayra\Bpmn\EndTransition;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
-use ProcessMaker\Nayra\Bpmn\BpmnEventsTrait;
 use ProcessMaker\Nayra\Bpmn\State;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -23,7 +21,7 @@ trait EndEventTrait
     use FlowNodeTrait;
 
     /**
-     * Recieve tokens.
+     * Receive tokens.
      *
      * @var StateInterface
      */
@@ -44,13 +42,13 @@ trait EndEventTrait
     public function buildTransitions(RepositoryFactoryInterface $factory)
     {
         $this->setFactory($factory);
-        $this->endState = new State($this);
+        $this->endState = new State($this, EventNodeInterface::TOKEN_STATE_ACTIVE);
         $this->transition = new EndTransition($this);
         $this->endState->connectTo($this->transition);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_AFTER_TRANSIT,
             function () {
-                $this->fireEvent(EventNodeInterface::EVENT_EVENT_TRIGGERED);
+                $this->notifyEvent(EventNodeInterface::EVENT_EVENT_TRIGGERED);
             }
         );
     }

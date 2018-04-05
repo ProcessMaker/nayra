@@ -45,7 +45,7 @@ interface CollectionInterface extends SeekableIterator
     /**
      * Unshift element.
      *
-     * @param type $item
+     * @param mixed $item
      *
      * @return mixed Unshift element
      */
@@ -54,7 +54,7 @@ interface CollectionInterface extends SeekableIterator
     /**
      * Get the index of the element in the collection.
      *
-     * @param type $item
+     * @param mixed $item
      *
      * @return integer
      */
@@ -85,4 +85,11 @@ interface CollectionInterface extends SeekableIterator
      * @return array
      */
     public function splice($offset, $length = null, $replacement = null);
+
+    /**
+     * Converts the collection to an array
+     *
+     * @return array
+     */
+    public function toArray();
 }

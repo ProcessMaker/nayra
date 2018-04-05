@@ -34,4 +34,20 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
      * @return CollectionInterface
      */
     public function getTokens();
+
+    /**
+     * Get state name
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * Set state name.
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name);
 }
