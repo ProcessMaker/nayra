@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
  * End event behavior's implementation.
@@ -60,6 +61,7 @@ trait EndEventTrait
      */
     public function getInputPlace()
     {
+        $this->addInput($this->endState);
         return $this->endState;
     }
 
@@ -72,7 +74,6 @@ trait EndEventTrait
      */
     protected function buildConnectionTo(FlowNodeInterface $target)
     {
-        $this->transition->connectTo($target->getInputPlace());
-        return $this;
+        throw new InvalidSequenceFlowException('An end event cannot have outgoing flows.');
     }
 }

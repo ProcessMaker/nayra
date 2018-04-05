@@ -6,9 +6,6 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
-use ProcessMaker\Bpmn\TestEngine;
-use ProcessMaker\Models\RepositoryFactory;
 
 /**
  * Test transitions
@@ -133,6 +130,7 @@ class InclusiveGatewayTest extends EngineTestCase
 
         //Start the process
         $start->start();
+
         $this->engine->runToNextState();
 
         //Assertion: Verify the triggered engine events. Two activities are activated.
@@ -150,6 +148,10 @@ class InclusiveGatewayTest extends EngineTestCase
         //Completes the Activity A
         $tokenA = $activityA->getTokens($dataStore)->item(0);
         $activityA->complete($tokenA);
+
+        //the run to next state should go false when the max steps is reached.
+        $this->assertFalse($this->engine->runToNextState(1));
+
         $this->engine->runToNextState();
 
         //Assertion: Verify the triggered engine events. The activity is closed.
