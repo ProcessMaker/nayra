@@ -21,4 +21,12 @@ interface TransitionInterface extends ConnectionNodeInterface
      */
     public function execute(ExecutionInstanceInterface $executionInstance);
 
+    /**
+     * Evaluates if the transition condition evaluates to true using the data of the execution instance
+     *
+     * @param TokenInterface $token
+     * @param ExecutionInstanceInterface $executionInstance
+     * @return mixed
+     */
+    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance);
 }

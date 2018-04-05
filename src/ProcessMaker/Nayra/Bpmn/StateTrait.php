@@ -36,7 +36,13 @@ trait StateTrait
      */
     private $name;
 
-    protected function initPlaceBehavior(EntityInterface $owner, $name)
+    /**
+     * Initialize the state object.
+     *
+     * @param EntityInterface $owner
+     * @param string $name
+     */
+    protected function initState(EntityInterface $owner, $name)
     {
         $this->tokens = new Collection();
         $this->setFactory($owner->getFactory());
@@ -44,6 +50,7 @@ trait StateTrait
     }
 
     /**
+     * Consume a token in the current state.
      *
      * @return bool
      */
@@ -58,6 +65,7 @@ trait StateTrait
     }
 
     /**
+     * Add a new token instance to the state.
      *
      * @return bool
      */

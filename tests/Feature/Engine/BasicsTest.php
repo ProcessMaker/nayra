@@ -54,8 +54,10 @@ class BasicsTest extends EngineTestCase
         $start = $process->getEvents()->item(0);
         $activity = $process->getActivities()->item(0);
 
+        //Assertion: Verify the activity has no tokens
         $this->assertEquals(0, $activity->getTokens($dataStore)->count());
-        //Raise start event
+
+        //Trigger start event
         $start->start();
         $this->engine->runToNextState();
         $this->assertEvents([
@@ -63,6 +65,7 @@ class BasicsTest extends EngineTestCase
             'ActivityActivated',
         ]);
 
+        //Assertion: Verify the activity has one token
         $this->assertEquals(1, $activity->getTokens($dataStore)->count());
 
         //Complete the activity
@@ -75,6 +78,7 @@ class BasicsTest extends EngineTestCase
             'EventTriggered',
         ]);
 
+        //Assertion: Verify the activity has no tokens
         $this->assertEquals(0, $activity->getTokens($dataStore)->count());
     }
 }

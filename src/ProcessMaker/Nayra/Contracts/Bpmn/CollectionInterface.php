@@ -89,7 +89,7 @@ interface CollectionInterface extends SeekableIterator
     /**
      * Converts the collection to an array
      *
-     * @return void
+     * @return array
      */
     public function toArray();
 }

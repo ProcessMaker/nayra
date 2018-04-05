@@ -37,6 +37,13 @@ interface GatewayInterface extends EntityInterface, FlowNodeInterface
     const EVENT_GATEWAY_ACTIVATED = 'GatewayActivated';
     const EVENT_GATEWAY_EXCEPTION = 'GatewayException';
     const EVENT_GATEWAY_TOKEN_PASSED = 'GatewayTokenPassed';
+    const EVENT_GATEWAY_TOKEN_CONSUMED = 'GatewayTokenConsumed';
+
+    /**
+     * Token states defined for Gateway
+     */
+    const TOKEN_STATE_INCOMMING = 'INCOMMING';
+    const TOKEN_STATE_OUTGOING = 'OUTGOING';
 
     /**
      * Properties.

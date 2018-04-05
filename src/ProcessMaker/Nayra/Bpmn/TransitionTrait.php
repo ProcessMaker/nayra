@@ -22,8 +22,11 @@ trait TransitionTrait
         TraversableTrait,
         ObservableTrait;
 
+    private $owner;
+
     protected function initTransition(FlowNodeInterface $owner)
     {
+        $this->owner = $owner;
         $owner->addTransition($this);
     }
 
@@ -39,7 +42,7 @@ trait TransitionTrait
             })->count() === 0;
     }
 
-    abstract protected function assertCondition(TokenInterface $token);
+    abstract public function assertCondition(TokenInterface $token);
 
     protected function conditionIsFalse()
     {
@@ -48,17 +51,18 @@ trait TransitionTrait
 
     protected function doTransit(CollectionInterface $consumeTokens)
     {
+        $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this);
+
         $consumeTokens->find(function (TokenInterface $token) {
             $token->getOwner()->consumeToken($token);
         });
 
-        $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this);
+        $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this);
 
         $this->outgoing()->find(function (ConnectionInterface $flow) {
             return $flow->targetState()->addNewToken();
         });
 
-        $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this);
         return true;
     }
 

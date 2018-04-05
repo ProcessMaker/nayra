@@ -205,7 +205,7 @@ class Collection implements CollectionInterface
     /**
      * Converts the collection to an array
      *
-     * @return void
+     * @return array
      */
     public function toArray()
     {

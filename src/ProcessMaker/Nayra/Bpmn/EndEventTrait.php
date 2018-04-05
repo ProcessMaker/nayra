@@ -21,7 +21,7 @@ trait EndEventTrait
     use FlowNodeTrait;
 
     /**
-     * Recieve tokens.
+     * Receive tokens.
      *
      * @var StateInterface
      */
@@ -42,7 +42,7 @@ trait EndEventTrait
     public function buildTransitions(RepositoryFactoryInterface $factory)
     {
         $this->setFactory($factory);
-        $this->endState = new State($this, 'CLOSING');
+        $this->endState = new State($this, EventNodeInterface::TOKEN_STATE_ACTIVE);
         $this->transition = new EndTransition($this);
         $this->endState->connectTo($this->transition);
         $this->transition->attachEvent(
