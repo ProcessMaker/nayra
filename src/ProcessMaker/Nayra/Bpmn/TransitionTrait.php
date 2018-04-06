@@ -22,7 +22,7 @@ trait TransitionTrait
         TraversableTrait,
         ObservableTrait;
 
-    private $owner;
+    protected $owner;
 
     /**
      * When the transition is activated one or more tokens could be consumed.
@@ -31,7 +31,7 @@ trait TransitionTrait
      *
      * @var int $tokensConsumedPerTransition
      */
-    protected $tokensConsumedPerTransition = 1;
+    private $tokensConsumedPerTransition = 1;
 
     protected function initTransition(FlowNodeInterface $owner)
     {
@@ -82,7 +82,7 @@ trait TransitionTrait
         if ($hasAllRequiredTokens) {
             $hasInputTokens = false;
             $this->incoming()->find(function ($flow) use (&$consumeTokens, &$hasInputTokens, $executionInstance) {
-                $pendingTokens = $this->tokensConsumedPerTransition;
+                $pendingTokens = $this->getTokensConsumedPerTransition();
                 $flow->origin()->getTokens()->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingTokens) {
                     $hasInputTokens = true;
                     $result = $pendingTokens !== 0
@@ -100,5 +100,28 @@ trait TransitionTrait
             }
         }
         return false;
+    }
+
+    /**
+     * Set the number of tokens to be consumed when a transition is activated.
+     *
+     * @param int $tokensConsumedPerTransition
+     *
+     * @return $this
+     */
+    protected function setTokensConsumedPerTransition($tokensConsumedPerTransition)
+    {
+        $this->tokensConsumedPerTransition = $tokensConsumedPerTransition;
+        return $this;
+    }
+
+    /**
+     * Get the number of tokens to be consumed when a transition is activated.
+     *
+     * @return int
+     */
+    protected function getTokensConsumedPerTransition()
+    {
+        return $this->tokensConsumedPerTransition;
     }
 }

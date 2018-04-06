@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Engine;
 
-use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
  * Test transitions
@@ -284,5 +284,23 @@ class ParallelGatewayTest extends EngineTestCase
             EventNodeInterface::EVENT_EVENT_TRIGGERED,
         ]);
     }
-}
 
+    /**
+     * Test parallel gateway can not have conditioned outgoing flows.
+     *
+     */
+    public function testParallelCanNotHaveConditionedOutgoingFlow()
+    {
+        //Create a parallel gateway and an activity.
+        $gatewayA = $this->gatewayRepository->createParallelGatewayInstance();
+        $activityA = $this->activityRepository->createActivityInstance();
+
+        //Assertion: Throw exception when creating a conditioned flow from parallel.
+        $this->expectException('ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException');
+        $gatewayA->createConditionedFlowTo($activityA, function() {}, false, $this->flowRepository);
+        $process = $this->processRepository->createProcessInstance();
+        $process
+            ->addActivity($activityA)
+            ->addGateway($gatewayA);
+    }
+}

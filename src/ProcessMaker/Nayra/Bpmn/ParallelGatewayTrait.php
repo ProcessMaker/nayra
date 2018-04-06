@@ -80,17 +80,18 @@ trait ParallelGatewayTrait
     }
 
     /**
-     * Parallel gateway does not have conditioned flows. They will work as if they
-     * did not has conditions.
+     * A parallel gateway can not have conditioned outgoing flows.
+     * This method has no effect.
      *
      * @param FlowNodeInterface $target
      * @param callable $condition
      * @param bool $default
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    protected function buildConditionedConnectionTo(FlowNodeInterface $target, callable $condition, $default=false) {
-        $this->buildConnectionTo($target);
-        return $this;
+    protected function buildConditionedConnectionTo(FlowNodeInterface $target, callable $condition, $default=false)
+    {
     }
 }
