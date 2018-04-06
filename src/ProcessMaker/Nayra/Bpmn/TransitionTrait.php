@@ -24,6 +24,15 @@ trait TransitionTrait
 
     private $owner;
 
+    /**
+     * When the transition is activated one or more tokens could be consumed.
+     *  Default = 1
+     *  0 or -1 = Means no limit.
+     *
+     * @var int $tokensConsumedPerTransition
+     */
+    protected $tokensConsumedPerTransition = 1;
+
     protected function initTransition(FlowNodeInterface $owner)
     {
         $this->owner = $owner;
@@ -73,11 +82,14 @@ trait TransitionTrait
         if ($hasAllRequiredTokens) {
             $hasInputTokens = false;
             $this->incoming()->find(function ($flow) use (&$consumeTokens, &$hasInputTokens, $executionInstance) {
-                $flow->origin()->getTokens()->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance) {
+                $pendingTokens = $this->tokensConsumedPerTransition;
+                $flow->origin()->getTokens()->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingTokens) {
                     $hasInputTokens = true;
-                    $result = $this->assertCondition($token, $executionInstance);
+                    $result = $pendingTokens !== 0
+                        && $this->assertCondition($token, $executionInstance);
                     if ($result) {
                         $consumeTokens[] = $token;
+                        $pendingTokens--;
                     }
                 });
             });
