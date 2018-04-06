@@ -17,23 +17,6 @@ class DefaultTransition implements TransitionInterface
     use TransitionTrait;
 
     /**
-     * Bpm element to which this transition is associated
-     *
-     * @var GatewayInterface
-     */
-    private $owner;
-
-    /**
-     * Method that initializes the transition parameters
-     *
-     * @param $owner
-     */
-    protected function initDefaultTransition($owner)
-    {
-        $this->owner = $owner;
-    }
-
-    /**
      * Returns true if the condition of the transition is met with the DataStore of the passed execution instance
      *
      * @param TokenInterface $token

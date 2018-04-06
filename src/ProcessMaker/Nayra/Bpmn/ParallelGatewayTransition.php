@@ -21,9 +21,11 @@ class ParallelGatewayTransition implements TransitionInterface
      * If there are excess tokens at an incoming Sequence Flow, these tokens remain at
      * this Sequence Flow after execution of the Gateway.
      *
-     * @var int $tokensConsumedPerTransition
      */
-    protected $tokensConsumedPerTransition = 1;
+    protected function initParallelGatewayTransition()
+    {
+        $this->setTokensConsumedPerTransition(1);
+    }
 
     /**
      * Always true because the conditions are not defined in the gateway, but for each
