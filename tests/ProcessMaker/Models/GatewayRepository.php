@@ -2,10 +2,9 @@
 
 namespace ProcessMaker\Models;
 
-
+use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Repositories\GatewayRepositoryInterface;
 
 /**
@@ -36,6 +35,16 @@ class GatewayRepository implements GatewayRepositoryInterface
     public function createExclusiveGatewayInstance()
     {
         return new ExclusiveGateway($this->getFactory());
+    }
+
+    /**
+     * Create a parallel gateway instance.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface
+     */
+    public function createParallelGatewayInstance()
+    {
+        return new ParallelGateway($this->getFactory());
     }
 
     /**

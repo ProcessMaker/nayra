@@ -22,7 +22,16 @@ trait TransitionTrait
         TraversableTrait,
         ObservableTrait;
 
-    private $owner;
+    protected $owner;
+
+    /**
+     * When the transition is activated one or more tokens could be consumed.
+     *  Default = 1
+     *  0 or -1 = Means no limit.
+     *
+     * @var int $tokensConsumedPerTransition
+     */
+    private $tokensConsumedPerTransition = 1;
 
     protected function initTransition(FlowNodeInterface $owner)
     {
@@ -73,11 +82,14 @@ trait TransitionTrait
         if ($hasAllRequiredTokens) {
             $hasInputTokens = false;
             $this->incoming()->find(function ($flow) use (&$consumeTokens, &$hasInputTokens, $executionInstance) {
-                $flow->origin()->getTokens()->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance) {
+                $pendingTokens = $this->getTokensConsumedPerTransition();
+                $flow->origin()->getTokens()->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingTokens) {
                     $hasInputTokens = true;
-                    $result = $this->assertCondition($token, $executionInstance);
+                    $result = $pendingTokens !== 0
+                        && $this->assertCondition($token, $executionInstance);
                     if ($result) {
                         $consumeTokens[] = $token;
+                        $pendingTokens--;
                     }
                 });
             });
@@ -88,5 +100,28 @@ trait TransitionTrait
             }
         }
         return false;
+    }
+
+    /**
+     * Set the number of tokens to be consumed when a transition is activated.
+     *
+     * @param int $tokensConsumedPerTransition
+     *
+     * @return $this
+     */
+    protected function setTokensConsumedPerTransition($tokensConsumedPerTransition)
+    {
+        $this->tokensConsumedPerTransition = $tokensConsumedPerTransition;
+        return $this;
+    }
+
+    /**
+     * Get the number of tokens to be consumed when a transition is activated.
+     *
+     * @return int
+     */
+    protected function getTokensConsumedPerTransition()
+    {
+        return $this->tokensConsumedPerTransition;
     }
 }

@@ -11,14 +11,14 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
- * Base implementation for a inclusive gateway.
+ * Base implementation for a parallel gateway.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-trait InclusiveGatewayTrait
+trait ParallelGatewayTrait
 {
 
-    use ConditionedGatewayTrait;
+    use FlowNodeTrait;
 
     /**
      * @var TransitionInterface
@@ -33,7 +33,7 @@ trait InclusiveGatewayTrait
     public function buildTransitions(RepositoryFactoryInterface $factory)
     {
         $this->setFactory($factory);
-        $this->transition=new InclusiveGatewayTransition($this);
+        $this->transition=new ParallelGatewayTransition($this);
         $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function()  {
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);
         });
@@ -65,33 +65,14 @@ trait InclusiveGatewayTrait
      */
     protected function buildConnectionTo(FlowNodeInterface $target)
     {
-        return $this->buildConditionedConnectionTo($target, function () {
-            return true;
-        }, false);
-    }
-
-    /**
-     * Add a conditioned transition for the inclusive gateway.
-     *
-     * @param FlowNodeInterface $target
-     * @param callable $condition
-     * @param bool $default
-     *
-     * @return $this
-     */
-    protected function buildConditionedConnectionTo(FlowNodeInterface $target, callable $condition, $default=false) {
         $outgoingPlace = new State($this, GatewayInterface::TOKEN_STATE_OUTGOING);
-        if ($default) {
-            $outgoingTransition = $this->setDefaultTransition(new DefaultTransition($this));
-        } else {
-            $outgoingTransition = $this->conditionedTransition(
-                new ConditionedTransition($this),
-                $condition
-            );
-        }
-        $outgoingTransition->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, function(TransitionInterface $transition)  {
-            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this);
-        });
+        $outgoingTransition = new Transition($this);
+        $outgoingTransition->attachEvent(
+            TransitionInterface::EVENT_AFTER_TRANSIT,
+            function(TransitionInterface $transition)  {
+                $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this, $transition);
+            }
+        );
         $this->transition->connectTo($outgoingPlace);
         $outgoingPlace->connectTo($outgoingTransition);
         $outgoingTransition->connectTo($target->getInputPlace());

@@ -12,7 +12,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-trait GatewayTrait
+trait ConditionedGatewayTrait
 {
     use FlowNodeTrait;
 
@@ -47,10 +47,10 @@ trait GatewayTrait
     );
 
     /**
-     * Initialize the GatewayTrait.
+     * Initialize the ConditionedGatewayTrait.
      *
      */
-    protected function initGatewayTrait()
+    protected function initConditionedGatewayTrait()
     {
         $this->conditionedTransitions = new Collection;
     }
