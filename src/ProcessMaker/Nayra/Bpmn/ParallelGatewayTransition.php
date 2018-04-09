@@ -16,10 +16,8 @@ class ParallelGatewayTransition implements TransitionInterface
     use TransitionTrait;
 
     /**
-     * The Parallel Gateway consumes exactly one token from each incoming Sequence Flow
-     * and produces exactly one token at each outgoing Sequence Flow.
-     * If there are excess tokens at an incoming Sequence Flow, these tokens remain at
-     * this Sequence Flow after execution of the Gateway.
+     * Initialize the tokens consumed property, the Parallel Gateway consumes
+     * exactly one token from each incoming Sequence Flow.
      *
      */
     protected function initParallelGatewayTransition()

@@ -18,7 +18,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 trait ParallelGatewayTrait
 {
 
-    use GatewayTrait;
+    use FlowNodeTrait;
 
     /**
      * @var TransitionInterface
@@ -77,21 +77,5 @@ trait ParallelGatewayTrait
         $outgoingPlace->connectTo($outgoingTransition);
         $outgoingTransition->connectTo($target->getInputPlace());
         return $this;
-    }
-
-    /**
-     * A parallel gateway can not have conditioned outgoing flows.
-     * This method has no effect.
-     *
-     * @param FlowNodeInterface $target
-     * @param callable $condition
-     * @param bool $default
-     *
-     * @return $this
-     *
-     * @codeCoverageIgnore
-     */
-    protected function buildConditionedConnectionTo(FlowNodeInterface $target, callable $condition, $default=false)
-    {
     }
 }

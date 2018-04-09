@@ -17,7 +17,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 trait ExclusiveGatewayTrait
 {
 
-    use GatewayTrait;
+    use ConditionedGatewayTrait;
 
     /**
      * @var TransitionInterface
