@@ -257,5 +257,25 @@ class InclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);
+
+        $dataStore->putData('A', '1');
+        $process = $this->createProcessWithDefaultTransition();
+        $this->engine->createExecutionInstance($process, $dataStore);
+
+        //Get References
+        $start = $process->getEvents()->item(0);
+
+        //Start the process
+        $start->start();
+        $this->engine->runToNextState();
+        //Assertion: The correct events of the default transition should be triggered
+        $this->assertEvents([
+            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
+            GatewayInterface::EVENT_GATEWAY_ACTIVATED,
+            GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+        ]);
     }
 }

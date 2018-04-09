@@ -29,6 +29,16 @@ class GatewayRepository implements GatewayRepositoryInterface
     }
 
     /**
+     * Creates an exclusive gateway instance
+     *
+     * @return ExclusiveGateway
+     */
+    public function createExclusiveGatewayInstance()
+    {
+        return new ExclusiveGateway($this->getFactory());
+    }
+
+    /**
      * Create a gateway instance.
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface
