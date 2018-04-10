@@ -16,6 +16,17 @@ class ExclusiveGatewayTransition implements TransitionInterface
     use TransitionTrait;
 
     /**
+     * Initialize the tokens consumed property, the Exclusive Gateway consumes
+     * exactly one token from each transition.
+     *
+     */
+    protected function initExclusiveGatewayTransition()
+    {
+        $this->setTokensConsumedPerTransition(1);
+        $this->setTokensConsumedPerIncoming(1);
+    }
+
+    /**
      * Always true because any token that arrives triggers the gateway
      * outgoing flow transition.
      *

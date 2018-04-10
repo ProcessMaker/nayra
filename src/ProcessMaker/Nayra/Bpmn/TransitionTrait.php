@@ -13,6 +13,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
+ * Control the transition of tokens through states.
  *
  */
 trait TransitionTrait
@@ -22,28 +23,45 @@ trait TransitionTrait
         TraversableTrait,
         ObservableTrait;
 
+    /**
+     * Flow node owner of the transition.
+     *
+     * @var FlowNodeInterface $owner
+     */
     protected $owner;
 
     /**
-     * When the transition is activated one or more tokens could be consumed.
-     *  Default = 1
-     *  0 or -1 = Means no limit.
+     * How many tokens are consumed per transition.
+     * (0 or -1 = Means no limit)
      *
      * @var int $tokensConsumedPerTransition
      */
-    private $tokensConsumedPerTransition = 1;
+    private $tokensConsumedPerTransition = -1;
 
+    /**
+     * How many tokens are consumed per incoming.
+     * (0 or -1 = Means no limit)
+     *
+     * @var int $tokensConsumedPerIncoming
+     */
+    private $tokensConsumedPerIncoming = 1;
+
+    /**
+     * Initialize the transition.
+     *
+     * @param FlowNodeInterface $owner
+     */
     protected function initTransition(FlowNodeInterface $owner)
     {
         $this->owner = $owner;
         $owner->addTransition($this);
     }
 
-    public function getTokens()
-    {
-        return new Collection();
-    }
-
+    /**
+     * Evaluate true if all the incoming has at least one token.
+     *
+     * @return boolean
+     */
     protected function hasAllRequiredTokens()
     {
         return $this->incoming()->count() > 0 && $this->incoming()->find(function ($flow) {
@@ -51,13 +69,25 @@ trait TransitionTrait
             })->count() === 0;
     }
 
-    abstract public function assertCondition(TokenInterface $token);
-
+    /**
+     * Action executed when the transition condition evaluates to false.
+     *
+     * By default a transition does not do any action if the condition is false.
+     *
+     * @return boolean
+     */
     protected function conditionIsFalse()
     {
         return false;
     }
 
+    /**
+     * Do the transition of the selected tokens.
+     *
+     * @param CollectionInterface $consumeTokens
+     *
+     * @return boolean
+     */
     protected function doTransit(CollectionInterface $consumeTokens)
     {
         $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this);
@@ -75,31 +105,59 @@ trait TransitionTrait
         return true;
     }
 
+    /**
+     * Evaluate and execute the transition rule.
+     *
+     * @param ExecutionInstanceInterface $executionInstance
+     *
+     * @return boolean
+     */
     public function execute(ExecutionInstanceInterface $executionInstance)
     {
-        $consumeTokens = [];
         $hasAllRequiredTokens = $this->hasAllRequiredTokens();
         if ($hasAllRequiredTokens) {
-            $hasInputTokens = false;
-            $this->incoming()->find(function ($flow) use (&$consumeTokens, &$hasInputTokens, $executionInstance) {
-                $pendingTokens = $this->getTokensConsumedPerTransition();
-                $flow->origin()->getTokens()->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingTokens) {
-                    $hasInputTokens = true;
-                    $result = $pendingTokens !== 0
-                        && $this->assertCondition($token, $executionInstance);
-                    if ($result) {
-                        $consumeTokens[] = $token;
-                        $pendingTokens--;
-                    }
-                });
-            });
-            if ($consumeTokens || (!$hasInputTokens && $this->assertCondition(null, $executionInstance))) {
-                return $this->doTransit(new Collection($consumeTokens));
-            } else {
+            $consumeTokens = $this->evaluateConsumeTokens($executionInstance);
+            if ($consumeTokens === false) {
                 return $this->conditionIsFalse();
+            } else {
+                return $this->doTransit($consumeTokens);
             }
         }
         return false;
+    }
+
+    /**
+     * Evaluate the conditions to obtain the tokens that meet the transition condition.
+     *
+     * Returns false if the condition evaluates to false.
+     *
+     * @param ExecutionInstanceInterface $executionInstance
+     *
+     * @return boolean|\ProcessMaker\Nayra\Bpmn\Collection
+     */
+    protected function evaluateConsumeTokens(ExecutionInstanceInterface $executionInstance)
+    {
+        $consumeTokens = [];
+        $hasInputTokens = false;
+        $pendingTokens = $this->getTokensConsumedPerTransition();
+        $this->incoming()->find(function ($flow) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingTokens) {
+            $pendingIncomingTokens = $this->getTokensConsumedPerIncoming();
+            $flow->origin()->getTokens()->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingIncomingTokens, &$pendingTokens) {
+                $hasInputTokens = true;
+                $result = $pendingTokens !== 0 && $pendingIncomingTokens !== 0
+                    && $this->assertCondition($token, $executionInstance);
+                if ($result) {
+                    $consumeTokens[] = $token;
+                    $pendingIncomingTokens--;
+                    $pendingTokens--;
+                }
+            });
+        });
+        if ($consumeTokens || (!$hasInputTokens && $this->assertCondition(null, $executionInstance))) {
+            return new Collection($consumeTokens);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -123,5 +181,28 @@ trait TransitionTrait
     protected function getTokensConsumedPerTransition()
     {
         return $this->tokensConsumedPerTransition;
+    }
+
+    /**
+     * Set the number of tokens that will be consumed per incoming when a transition is activated.
+     *
+     * @param int $tokensConsumedPerIncoming
+     *
+     * @return $this
+     */
+    protected function setTokensConsumedPerIncoming($tokensConsumedPerIncoming)
+    {
+        $this->tokensConsumedPerIncoming = $tokensConsumedPerIncoming;
+        return $this;
+    }
+
+    /**
+     * Get the number of tokens that will be consumed per incoming when a transition is activated.
+     *
+     * @return int
+     */
+    protected function getTokensConsumedPerIncoming()
+    {
+        return $this->tokensConsumedPerIncoming;
     }
 }
