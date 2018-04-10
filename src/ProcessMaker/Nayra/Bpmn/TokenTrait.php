@@ -46,11 +46,11 @@ trait TokenTrait
     }
 
     /**
-     * Get token status.
+     * Get owner status for the current token.
      *
      * @return string
      */
-    public function getStatus()
+    public function getOwnerStatus()
     {
         return $this->getOwner()->getName();
     }

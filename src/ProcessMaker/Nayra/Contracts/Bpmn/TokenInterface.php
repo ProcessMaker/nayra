@@ -28,9 +28,25 @@ interface TokenInterface extends EntityInterface
     public function setOwner(StateInterface $owner);
 
     /**
-     * Get token status.
+     * Get owner status for the current token.
+     *
+     * @return string
+     */
+    public function getOwnerStatus();
+
+    /**
+     * Get token internal status.
      *
      * @return string
      */
     public function getStatus();
+
+    /**
+     * Set token internal status.
+     *
+     * @param string $status
+     *
+     * @return $this
+     */
+    public function setStatus($status);
 }

@@ -27,6 +27,6 @@ class CloseExceptionTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
     {
-        return $token->getProperty('STATUS') === ActivityInterface::TOKEN_STATE_COMPLETED;
+        return $token->getStatus() === ActivityInterface::TOKEN_STATE_COMPLETED;
     }
 }
