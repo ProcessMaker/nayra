@@ -29,7 +29,7 @@ class EngineTestCase extends TestCase
     protected $activityRepository;
 
     /**
-     * \ProcessMaker\Models\EventRepository
+     * @var \ProcessMaker\Models\EventRepository
      */
     protected $eventRepository;
 
