@@ -2,9 +2,9 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 
 class Collaboration implements CollaborationInterface
 {

@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface;
-use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\StartEventTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 

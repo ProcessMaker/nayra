@@ -3,7 +3,9 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
+ * Participant of a Collaboration.
  *
+ * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ParticipantInterface extends EntityInterface
 {
@@ -32,8 +34,19 @@ interface ParticipantInterface extends EntityInterface
     public function getInterfaces();
 
     /**
+     * Get Participant multiplicity for a given interaction.
      *
+     * @return array
      */
     public function getParticipantMultiplicity();
 
+    /**
+     * Set Participant multiplicity for a given interaction.
+     *
+     * @param int $maximum
+     * @param int $minimum
+     *
+     * @return $this
+     */
+    public function setParticipantMultiplicity($maximum, $minimum);
 }

@@ -2,8 +2,8 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Bpmn\ParticipantTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 
 /**
  * Activity implementation.

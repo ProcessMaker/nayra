@@ -1,6 +1,7 @@
 <?php
 
 namespace ProcessMaker\Nayra\Bpmn;
+
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
@@ -9,8 +10,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
  */
 trait ParticipantTrait
 {
-    use BaseTrait;
 
+    use BaseTrait;
     /**
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
      */
@@ -29,7 +30,10 @@ trait ParticipantTrait
     /**
      * @var array $participantMultiplicity
      */
-    private $participantMultiplicity;
+    private $participantMultiplicity = [
+        'maximum' => 1,
+        'minimum' => 0,
+    ];
 
     /**
      *
@@ -82,5 +86,20 @@ trait ParticipantTrait
     public function getParticipantMultiplicity()
     {
         return $this->participantMultiplicity;
+    }
+
+    /**
+     * Set Participant multiplicity for a given interaction.
+     *
+     * @param int $maximum
+     * @param int $minimum
+     *
+     * @return $this
+     */
+    public function setParticipantMultiplicity($maximum, $minimum)
+    {
+        $this->participantMultiplicity['maximum'] = $maximum;
+        $this->participantMultiplicity['minimum'] = $minimum;
+        return $this;
     }
 }

@@ -2,12 +2,8 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ItemAwareElementInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\RepositoryFactoryInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Application

@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Models;
 
-
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Repositories\ActivityRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ArtifactRepositoryInterface;

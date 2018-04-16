@@ -2,16 +2,10 @@
 
 namespace ProcessMaker\Models;
 
-
-use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
-use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
-use ProcessMaker\Nayra\Contracts\Repositories\EventRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryInterface;
 
 /**
  * FlowRepository

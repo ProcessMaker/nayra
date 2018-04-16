@@ -133,11 +133,13 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Add process A as participant of the collaboration
         $participant = new Participant();
         $participant->setProcess($processA);
+        $participant->setParticipantMultiplicity(1, 0);
         $collaboration->getParticipants()->push($participant);
 
         //Add process B as participant of the collaboration
         $participant = new Participant();
         $participant->setProcess($processB);
+        $participant->setParticipantMultiplicity(1, 0);
         $collaboration->getParticipants()->push($participant);
 
         //Create mmessage flow from intemediate events A to B
@@ -147,6 +149,5 @@ class IntermediateMessageEventTest extends EngineTestCase
         $messageFlow->setSource($eventA);
         $messageFlow->setTarget($eventB);
         $collaboration->getMessageFlows()->push($messageFlow);
-        $messageFlow->getSource();
     }
 }
