@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Repositories\EventRepositoryInterface;
@@ -43,9 +43,37 @@ class EventRepository implements EventRepositoryInterface
     }
 
     /**
+     * Create an intermediate throw event.
+     *
+     * @param array $properties
+     *
+     * @return IntermediateThrowEventInterface
+     */
+    public function createIntermediateThrowEventInstance($properties = [])
+    {
+        $event = new IntermediateThrowEvent($properties);
+        $event->setFactory($this->getFactory());
+        return $event;
+    }
+
+    /**
+     * Create an intermediate catch event.
+     *
+     * @param array $properties
+     *
+     * @return IntermediateCatchEventInterface
+     */
+    public function createIntermediateCatchEventInstance($properties = [])
+    {
+        $event = new IntermediateCatchEvent($properties);
+        $event->setFactory($this->getFactory());
+        return $event;
+    }
+
+    /**
      * Create a new event.
      *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface
      */
     public function createEventInstance()
     {
@@ -57,7 +85,7 @@ class EventRepository implements EventRepositoryInterface
      *
      * @param string $uid
      *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface
      */
     public function loadEventByUid($uid)
     {
@@ -67,12 +95,12 @@ class EventRepository implements EventRepositoryInterface
     /**
      * Create or update an event to a persistent storage.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface $event
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface $event
      * @param $saveChildElements
      *
      * @return $this
      */
-    public function store(EventNodeInterface $event, $saveChildElements = false)
+    public function store(EventInterface $event, $saveChildElements = false)
     {
 
     }

@@ -4,7 +4,7 @@ namespace Tests\Feature\Engine;
 
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 
 /**
@@ -135,7 +135,7 @@ class InclusiveGatewayTest extends EngineTestCase
 
         //Assertion: Verify the triggered engine events. Two activities are activated.
         $this->assertEvents([
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
@@ -175,7 +175,7 @@ class InclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
-            EventNodeInterface::EVENT_EVENT_TRIGGERED
+            EventInterface::EVENT_EVENT_TRIGGERED
         ]);
     }
 
@@ -205,7 +205,7 @@ class InclusiveGatewayTest extends EngineTestCase
 
         //Assertion: Verify the triggered engine events. One activity is activated.
         $this->assertEvents([
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
@@ -226,7 +226,7 @@ class InclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
         ]);
     }
 
@@ -250,7 +250,7 @@ class InclusiveGatewayTest extends EngineTestCase
 
         //Assertion: The correct events of the default transition should be triggered
         $this->assertEvents([
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
@@ -270,7 +270,7 @@ class InclusiveGatewayTest extends EngineTestCase
         $this->engine->runToNextState();
         //Assertion: The correct events of the default transition should be triggered
         $this->assertEvents([
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,

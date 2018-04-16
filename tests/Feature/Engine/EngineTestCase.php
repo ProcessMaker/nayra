@@ -3,12 +3,10 @@
 namespace Tests\Feature\Engine;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Bpmn\TestEngine;
 use ProcessMaker\Models\RepositoryFactory;
+use ProcessMaker\Models\ItemDefinitionFactory;
 
 /**
  * Test transitions
@@ -49,6 +47,16 @@ class EngineTestCase extends TestCase
     protected $flowRepository;
 
     /**
+     * @var \ProcessMaker\Models\RootElementRepository
+     */
+    protected $rootElementRepository;
+
+    /**
+     * @var \ProcessMaker\Models\MessageFlowRepository
+     */
+    protected $messageFlowRepository;
+
+    /**
      *
      * @var EngineInterface
      */
@@ -76,6 +84,8 @@ class EngineTestCase extends TestCase
         $this->eventRepository = $factory->getEventRepository();
         $this->flowRepository = $factory->getFlowRepository();
         $this->dataStoreRepository = $factory->getDataStoreRepository();
+        $this->rootElementRepository = $factory->getRootElementRepository();
+        $this->messageFlowRepository = $factory->getMessageFlowRepository();
 
         //Initialize a dispatcher
         $fakeDispatcher = $this->getMockBuilder(\Illuminate\Contracts\Events\Dispatcher::class)

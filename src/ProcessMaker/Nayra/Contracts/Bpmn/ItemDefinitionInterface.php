@@ -1,6 +1,6 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn;
+namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * An ItemDefinition is used to define the payload of the Message.
@@ -23,7 +23,7 @@ interface ItemDefinitionInterface
     /**
      * Get the concrete data structure to be used.
      *
-     * @return array
+     * @return mixed
      */
     public function getStructure();
 

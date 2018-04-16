@@ -52,4 +52,19 @@ interface EntityInterface
      * @return $this
      */
     public function setFactory(RepositoryFactoryInterface $factory);
+
+    /**
+     * Get the name of the element.
+     *
+     * @return string
+     */
+    //public function getName();
+
+    /**
+     *
+     *
+     * @return int
+     */
+    //public function getId();
+
 }

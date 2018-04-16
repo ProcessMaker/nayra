@@ -16,7 +16,7 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-trait EndEventTrait
+trait IntermediateCatchEventTrait
 {
 
     use FlowNodeTrait;

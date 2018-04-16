@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-interface MessageInterface extends EntityInterface
+interface MessageInterface
 {
 
     /**

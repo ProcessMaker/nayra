@@ -5,14 +5,14 @@ namespace ProcessMaker\Models;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\StartEventTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 
 /**
  * Start Event implementation.
  *
  * @package ProcessMaker\Models
  */
-class StartEvent implements EventNodeInterface
+class StartEvent implements EventInterface
 {
 
     use StartEventTrait,

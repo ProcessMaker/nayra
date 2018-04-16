@@ -8,7 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
  * EventInterface
  *
  */
-interface EventNodeInterface extends EntityInterface, FlowNodeInterface
+interface EventInterface extends FlowNodeInterface
 {
 
     /**

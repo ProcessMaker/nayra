@@ -5,7 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 use Illuminate\Contracts\Events\Dispatcher;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -170,7 +170,7 @@ trait ProcessTrait
     /**
      * @return $this
      */
-    public function addEvent(EventNodeInterface $event)
+    public function addEvent(EventInterface $event)
     {
         $event->setOwnerProcess($this);
         $this->events->push($event);

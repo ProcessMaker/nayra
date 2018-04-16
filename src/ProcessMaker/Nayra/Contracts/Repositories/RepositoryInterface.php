@@ -35,5 +35,5 @@ interface RepositoryInterface
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface
      */
-    public function create(ProcessInterface $process = null);
+    //public function create(ProcessInterface $process = null);
 }

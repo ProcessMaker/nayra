@@ -9,7 +9,7 @@ use ProcessMaker\Nayra\Bpmn\EndEventTrait;
  *
  * @package ProcessMaker\Models
  */
-class EndEvent implements \ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface
+class EndEvent implements \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface
 {
 
     use EndEventTrait,

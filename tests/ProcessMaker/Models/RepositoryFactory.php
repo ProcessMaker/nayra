@@ -123,4 +123,22 @@ class RepositoryFactory implements RepositoryFactoryInterface
     {
         return new TokenRepository($this);
     }
+
+    /**
+     *
+     * @return \ProcessMaker\Models\RootElementRepository
+     */
+    public function getRootElementRepository()
+    {
+        return new RootElementRepository($this);
+    }
+
+    /**
+     *
+     * @return \ProcessMaker\Models\MessageFlowRepository
+     */
+    public function getMessageFlowRepository()
+    {
+        return new MessageFlowRepository($this);
+    }
 }

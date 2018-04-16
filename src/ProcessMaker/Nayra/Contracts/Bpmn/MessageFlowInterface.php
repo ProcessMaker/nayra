@@ -8,7 +8,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface MessageFlowInterface
+interface MessageFlowInterface extends EntityInterface
 {
 
     /**
@@ -25,4 +25,14 @@ interface MessageFlowInterface
      * @return MessageInterface
      */
     public function getMessage();
+
+    /**
+     * @return FlowNodeInterface $source
+     */
+    public function setSource(FlowNodeInterface $source);
+
+    /**
+     * @param FlowNodeInterface $target
+     */
+    public function setTarget(FlowNodeInterface $target);
 }

@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
@@ -29,7 +29,7 @@ trait StartEventTrait
         $this->transition->attachEvent(
             TransitionInterface::EVENT_BEFORE_TRANSIT,
             function() {
-                $this->notifyEvent(EventNodeInterface::EVENT_EVENT_TRIGGERED, $this);
+                $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this);
             }
         );
     }

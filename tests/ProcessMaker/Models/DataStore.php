@@ -124,4 +124,9 @@ class DataStore implements DataStoreInterface
     {
         // TODO: Implement setStare() method.
     }
+
+    public function getItemSubject()
+    {
+        
+    }
 }
