@@ -3,7 +3,6 @@
 namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\ItemDefinition;
-use ProcessMaker\Nayra\Bpmn\Message;
 use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Repositories\RootElementRepositoryInterface;

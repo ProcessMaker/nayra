@@ -4,14 +4,17 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\IntermediateCatchEventTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 
 /**
  * IntermediateThrowEvent implementation.
  *
  * @package ProcessMaker\Models
  */
-class IntermediateCatchEvent implements IntermediateCatchEventInterface
+class IntermediateCatchEvent implements IntermediateCatchEventInterface, MessageListenerInterface
 {
 
     use IntermediateCatchEventTrait,
@@ -81,5 +84,11 @@ class IntermediateCatchEvent implements IntermediateCatchEventInterface
     public function isParallelMultiple()
     {
         return $this->parallelMultiple;
+    }
+
+    public function execute(MessageEventDefinitionInterface $message)
+    {
+        echo "listener...";
+        //echo print_r($message->getProperties(), true);
     }
 }

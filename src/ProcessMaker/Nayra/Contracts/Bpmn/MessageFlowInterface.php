@@ -21,6 +21,9 @@ interface MessageFlowInterface extends EntityInterface
      */
     public function getTarget();
 
+
+    public function setMessage(MessageInterface $message);
+
     /**
      * @return MessageInterface
      */
@@ -29,10 +32,22 @@ interface MessageFlowInterface extends EntityInterface
     /**
      * @return FlowNodeInterface $source
      */
-    public function setSource(FlowNodeInterface $source);
+    public function setSource(ThrowEventInterface $source);
 
     /**
      * @param FlowNodeInterface $target
      */
-    public function setTarget(FlowNodeInterface $target);
+    public function setTarget(CatchEventInterface $target);
+
+    /**
+     * Sets the collaboration
+     *
+     * @param CollaborationInterface $collaboration
+     */
+    public function setCollaboration(CollaborationInterface $collaboration);
+
+    /**
+     * @return CollaborationInterface
+     */
+    public function getCollaboration();
 }

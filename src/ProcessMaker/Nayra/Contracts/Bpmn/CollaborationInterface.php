@@ -53,5 +53,48 @@ interface CollaborationInterface extends EntityInterface
      */
     public function getMessageFlows();
 
-    //public function setMessageFlows(CollectionInterface $messageFlows);
+    public function addMessageFlow(MessageFlowInterface $messageFlow);
+
+    public function setMessageFlows(CollectionInterface $messageFlows);
+
+    /**
+     * Sends a message
+     *
+     * @param MessageInterface $message
+     *
+     * @return mixed
+     */
+    public function send(MessageEventDefinitionInterface $message);
+
+    /**
+     * Sends a message with a delay in miliseconds
+     *
+     * @param MessageInterface $message
+     * @param $delay
+     *
+     * @return mixed
+     */
+    public function delay(MessageEventDefinitionInterface $message, $delay);
+
+    /**
+     * Subscribes an element to the collaboration so that it can listen the messages sent
+     *
+     * @param MessageListenerInterface $element
+     * @param string $messageId
+     * @return mixed
+     * @internal param string $id
+     * @internal param MessageInterface $message
+     */
+    public function subscribe(MessageListenerInterface $element, string $messageId);
+
+    /**
+     * Unsuscribes an object to the collaboration, so that it won't listen to the messages sent
+     *
+     * @param MessageListenerInterface $element
+     * @param string $messageId
+     * @return mixed
+     * @internal param string $id
+     * @internal param MessageInterface $message
+     */
+    public function unsubscribe(MessageListenerInterface $element, string $messageId);
 }

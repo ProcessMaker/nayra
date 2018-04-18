@@ -4,7 +4,12 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 
 class Collaboration implements CollaborationInterface
 {
@@ -96,6 +101,11 @@ class Collaboration implements CollaborationInterface
         return $this->messageFlows;
     }
 
+    public function addMessageFlow(MessageFlowInterface $messageFlow)
+    {
+        $this->messageFlows->push($messageFlow);
+    }
+
     public function getParticipants()
     {
         return $this->participants;
@@ -108,7 +118,7 @@ class Collaboration implements CollaborationInterface
 
     public function getProperty($name, $default = null)
     {
-        
+
     }
 
     public function isClosed()
@@ -129,11 +139,51 @@ class Collaboration implements CollaborationInterface
 
     public function setProperties(array $properties)
     {
-        
+
     }
 
     public function setProperty($name, $value)
     {
 
+    }
+
+    private $subscribers = [];
+
+    public function send(MessageEventDefinitionInterface $message)
+    {
+        foreach ($this->subscribers as $subscriber) {
+            if ($subscriber['key'] === $message->getId()) {
+                $subscriber['node']->execute($message);
+            }
+        }
+    }
+
+    public function delay(MessageEventDefinitionInterface $message, $delay)
+    {
+        $initTime = time();
+        if ($delay + $initTime <= time()) {
+            $this->send($message);
+        }
+    }
+
+    public function subscribe(MessageListenerInterface $node, string $messageId)
+    {
+        $this->subscribers [] = [
+            'node' => $node,
+            'key' => $messageId
+        ];
+    }
+
+    public function unsubscribe(MessageListenerInterface $node, string $messageId)
+    {
+        $this->subscribers = array_filter($this->subscribers,
+            function ($e) use ($messageId) {
+                return $e['key'] !== $messageId;
+            });
+    }
+
+    public function setMessageFlows(CollectionInterface $messageFlows)
+    {
+        // TODO: Implement setMessageFlows() method.
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Models\Collaboration;
+use ProcessMaker\Models\Message;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 
@@ -12,7 +13,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
  */
 class IntermediateMessageEventTest extends EngineTestCase
 {
-
+    /**
+     * Returns an array of processes that contains message events
+     *
+     * @return array
+     */
     public function createMessageIntermediateEventProcesses()
     {
         $item = $this->rootElementRepository->createItemDefinitionInstance([
@@ -22,6 +27,7 @@ class IntermediateMessageEventTest extends EngineTestCase
             'structure' => 'String'
         ]);
         $message = $this->rootElementRepository->createMessageInstance();
+            $message->setId('MessageA');
             $message->setItem($item);
 
         //Process A
@@ -30,6 +36,8 @@ class IntermediateMessageEventTest extends EngineTestCase
         $activityA = $this->activityRepository->createActivityInstance();
         $eventA = $this->eventRepository->createIntermediateThrowEventInstance();
             $messageEventDefA = $this->rootElementRepository->createMessageEventDefinitionInstance();
+            $messageEventDefA->setId("MessageEvent1");
+
                 $messageEventDefA->setMessage($message);
             $eventA->getEventDefinitions()->push($messageEventDefA);
         $activityB = $this->activityRepository->createActivityInstance();
@@ -122,6 +130,9 @@ class IntermediateMessageEventTest extends EngineTestCase
         return [$processA, $processB];
     }
 
+    /**
+     * Tests that message events are working correctly
+     */
     public function testEvent()
     {
         //Create two processes
@@ -146,8 +157,14 @@ class IntermediateMessageEventTest extends EngineTestCase
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
         $messageFlow = $this->messageFlowRepository->createMessageFlowInstance();
+        $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($eventA);
         $messageFlow->setTarget($eventB);
-        $collaboration->getMessageFlows()->push($messageFlow);
+        $collaboration->addMessageFlow($messageFlow);
+
+        $eventA = $processA->getEvents()->item(1);
+        $eventB = $processB->getEvents()->item(1);
+
+        $collaboration->send($eventA->getEventDefinitions()->item(0));
     }
 }

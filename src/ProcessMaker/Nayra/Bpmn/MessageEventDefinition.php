@@ -12,6 +12,12 @@ use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
  */
 class MessageEventDefinition implements MessageEventDefinitionInterface
 {
+
+    /**
+     * @var string $id
+     */
+    private $id;
+
     /**
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface $message
      */
@@ -42,15 +48,49 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
         return $this->operation;
     }
 
+
+    /**
+     * Sets the message to be used in the message event definition
+     *
+     * @param MessageInterface $message
+     * @return $this
+     */
     public function setMessage(MessageInterface $message)
     {
         $this->message = $message;
         return $this;
     }
 
+    /**
+     * Sets the operation of the message event definition
+     *
+     * @param OperationInterface $operation
+     * @return $this
+     */
     public function setOperation(OperationInterface $operation)
     {
         $this->operation = $operation;
         return $this;
+    }
+
+    /**
+     * Returns the element's id
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Sets the element id
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function setId($value)
+    {
+        $this->id = $value;
     }
 }
