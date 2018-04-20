@@ -8,7 +8,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 
 class Collaboration implements CollaborationInterface

@@ -18,35 +18,19 @@ interface CollaborationInterface extends EntityInterface
     public function isClosed();
 
     /**
-     * Set a boolean value specifying whether Message Flows not modeled in the
-     * Collaboration can occur when the Collaboration is carried out.
-     *
-     * @param bool $isClosed
-     *
-     * @return bool
-     */
-    //public function setClosed($isClosed);
-
-    /**
      * @return ParticipantInterface[]
      */
     public function getParticipants();
-
-    //public function setParticipants(CollectionInterface $participants);
 
     /**
      * @return ConversationInterface[]
      */
     public function getConversations();
 
-    //public function setConversations(CollectionInterface $conversationNode);
-
     /**
      * @return CorrelationKeyInterface[]
      */
     public function getCorrelationKeys();
-
-    //public function setCorrelationKeys(CollectionInterface $correlationKeys);
 
     /**
      * @return MessageFlowInterface[]
@@ -81,20 +65,22 @@ interface CollaborationInterface extends EntityInterface
      *
      * @param MessageListenerInterface $element
      * @param string $messageId
-     * @return mixed
      * @internal param string $id
      * @internal param MessageInterface $message
+     *
+     * @return mixed
      */
-    public function subscribe(MessageListenerInterface $element, string $messageId);
+    public function subscribe(MessageListenerInterface $element, $messageId);
 
     /**
      * Unsuscribes an object to the collaboration, so that it won't listen to the messages sent
      *
      * @param MessageListenerInterface $element
      * @param string $messageId
-     * @return mixed
      * @internal param string $id
      * @internal param MessageInterface $message
+     *
+     * @return mixed
      */
-    public function unsubscribe(MessageListenerInterface $element, string $messageId);
+    public function unsubscribe(MessageListenerInterface $element, $messageId);
 }
