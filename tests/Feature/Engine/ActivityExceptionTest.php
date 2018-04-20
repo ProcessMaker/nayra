@@ -3,7 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 
 /**
  * Test an activity with exception.
@@ -62,7 +62,7 @@ class ActivityExceptionTest extends EngineTestCase
         $start->start();
         $this->engine->runToNextState();
         $this->assertEvents([
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
@@ -81,7 +81,7 @@ class ActivityExceptionTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
         ]);
 
         //Assertion: Finally the activity does not have tokens.

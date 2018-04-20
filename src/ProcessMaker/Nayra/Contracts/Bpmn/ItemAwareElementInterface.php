@@ -9,6 +9,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface ItemAwareElementInterface extends FlowElementInterface
 {
+
     /**
      * Get item state.
      *
@@ -24,4 +25,11 @@ interface ItemAwareElementInterface extends FlowElementInterface
      * @return $this
      */
     public function setState($state);
+
+    /**
+     * Get the items that are stored or conveyed by the ItemAwareElement.
+     *
+     * @return ItemDefinitionInterface
+     */
+    public function getItemSubject();
 }

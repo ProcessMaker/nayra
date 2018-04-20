@@ -4,7 +4,7 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 
 /**
  * Event Collection
@@ -16,11 +16,11 @@ class EventCollection extends Collection implements EventCollectionInterface
     /**
      * Add an element to the collection.
      *
-     * @param EventNodeInterface $element
+     * @param EventInterface $element
      *
      * @return $this
      */
-    public function add(EventNodeInterface $element)
+    public function add(EventInterface $element)
     {
         $this->push($element);
         return $this;

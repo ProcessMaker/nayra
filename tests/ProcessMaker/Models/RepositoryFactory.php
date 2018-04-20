@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Models;
 
-
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Repositories\ActivityRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ArtifactRepositoryInterface;
@@ -122,5 +120,23 @@ class RepositoryFactory implements RepositoryFactoryInterface
     public function getTokenRepository()
     {
         return new TokenRepository($this);
+    }
+
+    /**
+     *
+     * @return \ProcessMaker\Models\RootElementRepository
+     */
+    public function getRootElementRepository()
+    {
+        return new RootElementRepository($this);
+    }
+
+    /**
+     *
+     * @return \ProcessMaker\Models\MessageFlowRepository
+     */
+    public function getMessageFlowRepository()
+    {
+        return new MessageFlowRepository($this);
     }
 }

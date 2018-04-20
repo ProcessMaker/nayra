@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Repositories;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 
 /**
  * Repository for EventInterface
@@ -15,7 +15,7 @@ interface EventRepositoryInterface extends RepositoryInterface
     /**
      * Create an event instance.
      *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface
      */
     public function createEventInstance();
 
@@ -24,17 +24,17 @@ interface EventRepositoryInterface extends RepositoryInterface
      *
      * @param string $uid
      *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface
      */
     public function loadEventByUid($uid);
 
     /**
      * Create or update an event to a persistent storage.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface $event
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface $event
      * @param $saveChildElements
      *
      * @return $this
      */
-    public function store(EventNodeInterface $event, $saveChildElements=false);
+    public function store(EventInterface $event, $saveChildElements=false);
 }

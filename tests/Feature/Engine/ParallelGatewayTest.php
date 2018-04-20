@@ -3,7 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
@@ -134,7 +134,7 @@ class ParallelGatewayTest extends EngineTestCase
 
         //Assertion: Verify the triggered engine events. Two activities are activated.
         $this->assertEvents([
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
@@ -192,7 +192,7 @@ class ParallelGatewayTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
         ]);
     }
 
@@ -223,7 +223,7 @@ class ParallelGatewayTest extends EngineTestCase
 
         //Assertion: Verify the triggered engine events. Two activities are activated.
         $this->assertEvents([
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
@@ -281,7 +281,7 @@ class ParallelGatewayTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            EventNodeInterface::EVENT_EVENT_TRIGGERED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
         ]);
     }
 

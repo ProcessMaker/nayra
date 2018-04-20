@@ -13,18 +13,18 @@ interface EventCollectionInterface extends CollectionInterface
     /**
      * Add an element to the collection.
      *
-     * @param EventNodeInterface $element
+     * @param EventInterface $element
      *
      * @return $this
      */
-    public function add(EventNodeInterface $element);
+    public function add(EventInterface $element);
 
     /**
      * Get a item by index
      *
      * @param $index
      *
-     * @return EventNodeInterface
+     * @return EventInterface
      */
     public function item($index);
 }

@@ -72,7 +72,7 @@ interface ProcessInterface extends EntityInterface
     const ELEMENTS = [
         'activities' => ActivityInterface::TYPE,
         'gateways' => GatewayInterface::TYPE,
-        'events' => EventNodeInterface::TYPE,
+        'events' => EventInterface::TYPE,
         'artifacts' => ArtifactInterface::TYPE,
         'flows' => FlowInterface::TYPE,
         'dataStores' => DataStoreInterface::TYPE,
@@ -228,11 +228,11 @@ interface ProcessInterface extends EntityInterface
     /**
      * Add an event to the process.
      *
-     * @param EventNodeInterface $event
+     * @param EventInterface $event
      *
      * @return $this
      */
-    public function addEvent(EventNodeInterface $event);
+    public function addEvent(EventInterface $event);
 
     /**
      * Add a gateway to the process.
