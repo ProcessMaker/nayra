@@ -85,10 +85,4 @@ class IntermediateCatchEvent implements IntermediateCatchEventInterface, Message
     {
         return $this->parallelMultiple;
     }
-
-    public function execute(MessageEventDefinitionInterface $message)
-    {
-        echo "listener...";
-        //echo print_r($message->getProperties(), true);
-    }
 }

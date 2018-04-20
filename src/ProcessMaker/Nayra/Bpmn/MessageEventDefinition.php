@@ -28,6 +28,8 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
      */
     private $operation;
 
+    private $collaboration;
+
     /**
      * Get the message.
      *
