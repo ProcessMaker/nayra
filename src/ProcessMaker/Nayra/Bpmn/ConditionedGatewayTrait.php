@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionedTransitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -94,7 +95,7 @@ trait ConditionedGatewayTrait
     {
         $this->setFactory($factory);
         $flows = $this->getFlows();
-        $defaultFlow = $this->getProperty('default');
+        $defaultFlow = $this->getProperty(GatewayInterface::BPMN_PROPERTY_DEFAULT);
         foreach ($flows as $flow) {
             $isDefault = $defaultFlow === $flow;
             if ($isDefault || $flow->hasCondition()) {

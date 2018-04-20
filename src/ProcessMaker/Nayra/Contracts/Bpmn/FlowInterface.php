@@ -14,6 +14,13 @@ interface FlowInterface extends EntityInterface
      */
     const TYPE = 'bpmnFlow';
 
+    const BPMN_PROPERTY_CONDITION_EXPRESSION = 'conditionExpression';
+    const BPMN_PROPERTY_IS_DEFAULT = 'isDefault';
+    const BPMN_PROPERTY_SOURCE = 'source';
+    const BPMN_PROPERTY_TARGET = 'target';
+    const BPMN_PROPERTY_SOURCE_REF = 'sourceRef';
+    const BPMN_PROPERTY_TARGET_REF = 'targetRef';
+
     const TYPE_DEFAULT = 'DEFAULT';
     const TYPE_SEQUENCE = 'SEQUENCE';
     const TYPE_MESSAGE = 'MESSAGE';

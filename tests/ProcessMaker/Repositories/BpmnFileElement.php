@@ -7,6 +7,9 @@ use DOMElement;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 
 /**
@@ -31,63 +34,63 @@ class BpmnFileElement extends DOMElement
                 'getEventRepository',
                 'createStartEventInstance',
                 [
-                    'outgoing'  => ['n', [BpmnFileRepository::BPMN, 'outgoing']],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             'endEvent'     => [
                 'getEventRepository',
                 'createEndEventInstance',
                 [
-                    'outgoing' => ['n', [BpmnFileRepository::BPMN, 'outgoing']],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             'scriptTask'   => [
                 'getActivityRepository',
                 'createActivityInstance',
                 [
-                    'outgoing' => ['n', [BpmnFileRepository::BPMN, 'outgoing']],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
-            'outgoing'     => ['property', '', []],
-            'incoming'     => ['property', '', []],
+            FlowNodeInterface::BPMN_PROPERTY_OUTGOING     => [self::IS_PROPERTY, '', []],
+            FlowNodeInterface::BPMN_PROPERTY_INCOMING     => [self::IS_PROPERTY, '', []],
             'sequenceFlow' => [
                 'getFlowRepository',
                 'createFlowInstance',
                 [
-                    'source' => ['1', [BpmnFileRepository::BPMN, 'sourceRef']],
-                    'target' => ['1', [BpmnFileRepository::BPMN, 'targetRef']],
-                    'CONDITION' => ['1', [BpmnFileRepository::BPMN, 'conditionExpression']],
+                    FlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnFileRepository::BPMN, FlowInterface::BPMN_PROPERTY_SOURCE_REF]],
+                    FlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnFileRepository::BPMN, FlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                    FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => ['1', [BpmnFileRepository::BPMN, 'conditionExpression']],
                 ]
             ],
             'callActivity' => [
                 'getActivityRepository',
                 'createCallActivityInstance',
                 [
-                    'outgoing' => ['n', [BpmnFileRepository::BPMN, 'outgoing']],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             'parallelGateway' => [
                 'getGatewayRepository',
                 'createParallelGatewayInstance',
                 [
-                    'incoming' => ['n', [BpmnFileRepository::BPMN, 'incoming']],
-                    'outgoing' => ['n', [BpmnFileRepository::BPMN, 'outgoing']],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             'inclusiveGateway' => [
                 'getGatewayRepository',
                 'createInclusiveGatewayInstance',
                 [
-                    'incoming' => ['n', [BpmnFileRepository::BPMN, 'incoming']],
-                    'outgoing' => ['n', [BpmnFileRepository::BPMN, 'outgoing']],
-                    'default' => ['1', [BpmnFileRepository::BPMN, 'default']],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnFileRepository::BPMN, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
                 ]
             ],
             'conditionExpression' => [
                 'getRootElementRepository',
                 'createFormalExpressionInstance',
                 [
-                    'body'            => ['1', self::DOM_ELEMENT_BODY],
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
                 ]
             ],
             'script' => self::SKIP_ELEMENT
@@ -96,6 +99,7 @@ class BpmnFileElement extends DOMElement
 
     const DOM_ELEMENT_BODY = [null, '#text'];
     const SKIP_ELEMENT = null;
+    const IS_PROPERTY = 'isProperty';
 
     /**
      * Get a bpmn element from a dom element.
@@ -118,7 +122,7 @@ class BpmnFileElement extends DOMElement
             return null;
         }
         list($repository, $method, $mapProperties) = static::map[$this->namespaceURI][$this->localName];
-        if ($repository === 'property') {
+        if ($repository === self::IS_PROPERTY) {
             $bpmnElement = $this->ownerDocument->loadBpmElementById($this->nodeValue);
             $this->bpmn = $bpmnElement;
         } else {

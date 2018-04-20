@@ -14,6 +14,9 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
  */
 interface FlowNodeInterface extends FlowElementInterface
 {
+    const BPMN_PROPERTY_INCOMING = 'incoming';
+    const BPMN_PROPERTY_OUTGOING = 'outgoing';
+
     /**
      * Create a flow to a target node.
      *

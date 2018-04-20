@@ -2,11 +2,10 @@
 
 namespace ProcessMaker\Models;
 
-
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Bpmn\InclusiveGatewayTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 
 class InclusiveGateway implements GatewayInterface
@@ -33,14 +32,14 @@ class InclusiveGateway implements GatewayInterface
         FlowRepositoryInterface $flowRepository
     ) {
         $this->createFlowTo($target, $flowRepository, [
-            'CONDITION' => $condition,
-            'IS_DEFAULT' => $isDefault,
+            FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,
+            FlowInterface::BPMN_PROPERTY_IS_DEFAULT => $isDefault,
         ]);
         return $this;
     }
 
     /**
-     * Array map of custom event classes for the bpmn element.
+     * Array map of custom event classes for the BPMN element.
      *
      * @return array
      */

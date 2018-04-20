@@ -22,7 +22,7 @@ class Flow implements FlowInterface
      */
     public function getSource()
     {
-        return $this->getProperty('source');
+        return $this->getProperty(FlowInterface::BPMN_PROPERTY_SOURCE);
     }
 
     /**
@@ -32,7 +32,7 @@ class Flow implements FlowInterface
      */
     public function setSource(FlowNodeInterface $source)
     {
-        $this->setProperty('source', $source);
+        $this->setProperty(FlowInterface::BPMN_PROPERTY_SOURCE, $source);
         return $this;
     }
 
@@ -41,7 +41,7 @@ class Flow implements FlowInterface
      */
     public function getTarget()
     {
-        return $this->getProperty('target');
+        return $this->getProperty(FlowInterface::BPMN_PROPERTY_TARGET);
     }
 
     /**
@@ -51,7 +51,7 @@ class Flow implements FlowInterface
      */
     public function setTarget(FlowNodeInterface $target)
     {
-        $this->setProperty('target', $target);
+        $this->setProperty(FlowInterface::BPMN_PROPERTY_TARGET, $target);
         return $this;
     }
 
@@ -60,7 +60,7 @@ class Flow implements FlowInterface
      */
     public function getCondition()
     {
-        return $this->getProperty('CONDITION', function () {
+        return $this->getProperty(FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION, function () {
             return true;
         });
     }
@@ -70,7 +70,7 @@ class Flow implements FlowInterface
      */
     public function isDefault()
     {
-        return $this->getProperty('IS_DEFAULT', false);
+        return $this->getProperty(FlowInterface::BPMN_PROPERTY_IS_DEFAULT, false);
     }
 
     /**
@@ -78,6 +78,6 @@ class Flow implements FlowInterface
      */
     public function hasCondition()
     {
-        return $this->getProperty('CONDITION', null) !== null;
+        return $this->getProperty(FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION, null) !== null;
     }
 }
