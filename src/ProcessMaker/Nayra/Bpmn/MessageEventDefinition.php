@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
  */
 class MessageEventDefinition implements MessageEventDefinitionInterface
 {
-
     /**
      * @var string $id
      */

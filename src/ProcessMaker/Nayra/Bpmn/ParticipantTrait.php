@@ -36,7 +36,7 @@ trait ParticipantTrait
     ];
 
     /**
-     *
+     * Returns the process associated to the participant
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface
      */

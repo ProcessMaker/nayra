@@ -39,7 +39,7 @@ trait IntermediateCatchEventTrait
      */
     private $transition;
 
-    public $triggerPlace;
+    private $triggerPlace;
     /**
      * Build the transitions that define the element.
      *

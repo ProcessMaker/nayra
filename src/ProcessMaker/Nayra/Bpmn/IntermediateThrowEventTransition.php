@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Bpmn\TransitionTrait;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -14,7 +13,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class IntermediateThrowEventTransition implements TransitionInterface
 {
-
     use TransitionTrait;
 
     /**
@@ -26,7 +24,6 @@ class IntermediateThrowEventTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
     {
-  //      $collaboration->send($eventA->getEventDefinitions()->item(0));
         return true;
     }
 }

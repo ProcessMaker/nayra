@@ -13,7 +13,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class IntermediateCatchEventTransition implements TransitionInterface
 {
-
     use TransitionTrait;
 
     /**

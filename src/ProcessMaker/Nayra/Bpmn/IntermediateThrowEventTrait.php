@@ -46,10 +46,9 @@ trait IntermediateThrowEventTrait
     public function buildTransitions(RepositoryFactoryInterface $factory)
     {
         $this->setFactory($factory);
-        //$this->transition=new ExclusiveGatewayTransition($this);
+
         $this->transition=new IntermediateThrowEventTransition($this);
 
-        //@todo ¿es el mejor lugar para colocar el evento?
         $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, function()  {
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED, $this);
         });
@@ -67,12 +66,13 @@ trait IntermediateThrowEventTrait
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $event = $this->getFlows()[0]->getSource();
             $event->collaboration->send($event->getEventDefinitions()->item(0));
-
-        $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
+            $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
         });
+
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
         });
+
         return $incomingPlace;
     }
 
