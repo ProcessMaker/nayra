@@ -10,61 +10,20 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface ProcessInterface extends EntityInterface
+interface ProcessInterface extends CallableElementInterface
 {
 
     /**
      * Type of element.
      */
-    const TYPE = 'bpmnProcess';
-
+    const TYPE = 'process';
 
     /**
      * Properties.
      */
-    const PROPERTIES = [
-        'PRO_UID' => '',
-        'PRO_ID' => NULL,
-        'PRO_TITLE' => NULL,
-        'PRO_DESCRIPTION' => NULL,
-        'PRO_PARENT' => '0',
-        'PRO_TIME' => '1',
-        'PRO_TIMEUNIT' => 'DAYS',
-        'PRO_STATUS' => 'ACTIVE',
-        'PRO_TYPE_DAY' => '0',
-        'PRO_TYPE' => 'NORMAL',
-        'PRO_ASSIGNMENT' => 'FALSE',
-        'PRO_SHOW_MAP' => '1',
-        'PRO_SHOW_MESSAGE' => '1',
-        'PRO_SUBPROCESS' => '0',
-        'PRO_TRI_CREATE' => '',
-        'PRO_TRI_OPEN' => '',
-        'PRO_TRI_DELETED' => '',
-        'PRO_TRI_CANCELED' => '',
-        'PRO_TRI_PAUSED' => '',
-        'PRO_TRI_REASSIGNED' => '',
-        'PRO_TRI_UNPAUSED' => '',
-        'PRO_TYPE_PROCESS' => 'PUBLIC',
-        'PRO_SHOW_DELEGATE' => '1',
-        'PRO_SHOW_DYNAFORM' => '0',
-        'PRO_CATEGORY' => '',
-        'PRO_SUB_CATEGORY' => '',
-        'PRO_INDUSTRY' => '1',
-        'PRO_UPDATE_DATE' => NULL,
-        'PRO_CREATE_DATE' => NULL,
-        'PRO_CREATE_USER' => '',
-        'PRO_HEIGHT' => '5000',
-        'PRO_WIDTH' => '10000',
-        'PRO_TITLE_X' => '0',
-        'PRO_TITLE_Y' => '6',
-        'PRO_DEBUG' => '0',
-        'PRO_DYNAFORMS' => NULL,
-        'PRO_DERIVATION_SCREEN_TPL' => '',
-        'PRO_COST' => '0.00',
-        'PRO_UNIT_COST' => '',
-        'PRO_ITEE' => '0',
-        'PRO_ACTION_DONE' => NULL
-    ];
+    const BPMN_PROPERTY_IS_CLOSED = 'isClosed';
+    const BPMN_PROPERTY_IS_EXECUTABLE = 'isExecutable';
+    const BPMN_PROPERTY_PROCESS_TYPE = 'processType';
 
     /**
      * Child elements.

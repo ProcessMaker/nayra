@@ -34,4 +34,28 @@ class DefaultTransition implements TransitionInterface
         }
         return $executeDefaultTransition;
     }
+
+    /**
+     * If the condition is not met.
+     *
+     * @return boolean
+     */
+    protected function conditionIsFalse()
+    {
+        $this->collect();
+        return true;
+    }
+
+    /**
+     * Consume the input tokens.
+     *
+     */
+    private function collect()
+    {
+        return $this->incoming()->sum(function (Connection $flow) {
+            return $flow->origin()->getTokens()->sum(function (TokenInterface $token) {
+                return $token->getOwner()->consumeToken($token) ? 1 :0;
+            });
+        });
+    }
 }

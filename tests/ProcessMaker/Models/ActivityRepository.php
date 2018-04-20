@@ -2,10 +2,10 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
-use ProcessMaker\Nayra\Contracts\Repositories\ActivityRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ActivityRepositoryInterface;
 
 /**
  * ActivityRepository
@@ -40,6 +40,18 @@ class ActivityRepository implements ActivityRepositoryInterface
     public function createActivityWithExceptionInstance(ProcessInterface $process=null)
     {
         $activity = new ActivityWithException();
+        $activity->setFactory($this->getFactory());
+        return $activity;
+    }
+
+    /**
+     * Create a call activity instance.
+     *
+     * @return CallActivity
+     */
+    public function createCallActivityInstance()
+    {
+        $activity = new CallActivity();
         $activity->setFactory($this->getFactory());
         return $activity;
     }

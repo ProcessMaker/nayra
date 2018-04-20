@@ -3,33 +3,25 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreCollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 trait ProcessTrait
 {
-    use BaseTrait;
-
-    /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface $activities
-     */
-    protected $activities;
-    /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface $events
-     */
-    protected $events;
-    /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface $gateways
-     */
-    protected $gateways;
-
-    protected $dataStores;
-    protected $artifacts;
-    protected $flows;
-    protected $diagram;
+    use BaseTrait {
+        addProperty as baseAddProperty;
+    }
 
     /**
      * @var \Illuminate\Contracts\Events\Dispatcher
@@ -42,78 +34,95 @@ trait ProcessTrait
      */
     public function getActivities()
     {
-        return $this->activities;
+        return $this->getProperty('activities');
     }
 
     public function getDataStores()
     {
-        return $this->dataStores;
+        return $this->getProperty('dataStores');
     }
 
     public function getArtifacts()
     {
-        return $this->artifacts;
+        return $this->getProperty('artifacts');
     }
 
     public function getDiagram()
     {
-        return $this->diagram;
+        return $this->getProperty('diagram');
     }
 
     public function getEvents()
     {
-        return $this->events;
+        return $this->getProperty('events');
     }
 
     public function getFlows()
     {
-        return $this->flows;
+        return $this->getProperty('flows');
     }
 
     public function getGateways()
     {
-        return $this->gateways;
+        return $this->getProperty('gateways');
     }
 
-    public function setActivities(\ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface $activities)
+    public function setActivities(ActivityCollectionInterface $activities)
     {
-        $this->activities = $activities;
+        $this->setProperty('activities', $activities);
         return $this;
     }
 
-    public function setDataStores(\ProcessMaker\Nayra\Contracts\Bpmn\DataStoreCollectionInterface $dataStores)
+    public function setDataStores(DataStoreCollectionInterface $dataStores)
     {
-        $this->dataStores = $dataStores;
+        $this->setProperty('dataStores', $dataStores);
         return $this;
     }
 
-    public function setArtifacts(\ProcessMaker\Nayra\Contracts\Bpmn\ArtifactCollectionInterface $artifacts)
+    public function setArtifacts(ArtifactCollectionInterface $artifacts)
     {
-        $this->artifacts = $artifacts;
+        $this->setProperty('artifacts', $artifacts);
         return $this;
     }
 
-    public function setDiagram(\ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface $diagram)
+    public function setDiagram(DiagramInterface $diagram)
     {
-        $this->diagram = $diagram;
+        $this->setProperty('diagram', $diagram);
         return $this;
     }
 
-    public function setEvents(\ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface $events)
+    public function setEvents(EventCollectionInterface $events)
     {
-        $this->events = $events;
+        $this->setProperty('events', $events);
         return $this;
     }
 
-    public function setFlows(\ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface $flows)
+    public function setFlows(FlowCollectionInterface $flows)
     {
-        $this->flows = $flows;
+        $this->setProperty('flows', $flows);
         return $this;
     }
 
-    public function setGateways(\ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface $gateways)
+    public function setGateways(GatewayCollectionInterface $gateways)
     {
-        $this->gateways = $gateways;
+        $this->setProperty('gateways', $gateways);
+        return $this;
+    }
+
+    /**
+     * Add value to collection property and set the process as owner.
+     *
+     * @param $name
+     * @param $value
+     *
+     * @return $this
+     */
+    public function addProperty($name, $value)
+    {
+        $this->baseAddProperty($name, $value);
+        if($value instanceof FlowElementInterface) {
+            $value->setOwnerProcess($this);
+        }
         return $this;
     }
 
@@ -123,34 +132,34 @@ trait ProcessTrait
     public function getTransitions(RepositoryFactoryInterface $factory)
     {
         //Build the runtime elements
-        foreach($this->events as $event) {
+        foreach($this->getProperty('events') as $event) {
             $event->buildTransitions($factory);
         }
-        foreach($this->activities as $activity) {
+        foreach($this->getProperty('activities') as $activity) {
             $activity->buildTransitions($factory);
         }
-        foreach($this->gateways as $gateway) {
+        foreach($this->getProperty('gateways') as $gateway) {
             $gateway->buildTransitions($factory);
         }
         //Build the runtime flows
-        foreach($this->events as $event) {
+        foreach($this->getProperty('events') as $event) {
             $event->buildFlowTransitions($factory);
         }
-        foreach($this->activities as $activity) {
+        foreach($this->getProperty('activities') as $activity) {
             $activity->buildFlowTransitions($factory);
         }
-        foreach($this->gateways as $gateway) {
+        foreach($this->getProperty('gateways') as $gateway) {
             $gateway->buildFlowTransitions($factory);
         }
         //Get the transitions
         $transitions = [];
-        foreach($this->events as $event) {
+        foreach($this->getProperty('events') as $event) {
             $transitions = array_merge($transitions, $event->getTransitions());
         }
-        foreach($this->activities as $activity) {
+        foreach($this->getProperty('activities') as $activity) {
             $transitions = array_merge($transitions, $activity->getTransitions());
         }
-        foreach($this->gateways as $gateway) {
+        foreach($this->getProperty('gateways') as $gateway) {
             $transitions = array_merge($transitions, $gateway->getTransitions());
         }
         return new Collection($transitions);
@@ -162,8 +171,7 @@ trait ProcessTrait
     public function addActivity(ActivityInterface $activity)
     {
         $activity->setOwnerProcess($this);
-        //$activity->registerTransitions($this);
-        $this->activities->push($activity);
+        $this->getProperty('activities')->push($activity);
         return $this;
     }
 
@@ -173,7 +181,7 @@ trait ProcessTrait
     public function addEvent(EventInterface $event)
     {
         $event->setOwnerProcess($this);
-        $this->events->push($event);
+        $this->getProperty('events')->push($event);
         return $this;
     }
 
@@ -183,7 +191,7 @@ trait ProcessTrait
     public function addGateway(GatewayInterface $gateway)
     {
         $gateway->setOwnerProcess($this);
-        $this->gateways->push($gateway);
+        $this->getProperty('gateways')->push($gateway);
         return $this;
     }
 

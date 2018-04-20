@@ -18,6 +18,8 @@ interface GatewayInterface extends EntityInterface, FlowNodeInterface
      */
     const TYPE = 'bpmnGateway';
 
+    const BPMN_PROPERTY_DEFAULT = 'default';
+
     const TYPE_ = '';
     const TYPE_EXCLUSIVE = 'EXCLUSIVE';
     const TYPE_INCLUSIVE = 'INCLUSIVE';

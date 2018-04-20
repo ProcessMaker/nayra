@@ -64,7 +64,7 @@ trait IntermediateThrowEventTrait
         $incomingPlace=new State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-            $event = $this->getFlows()[0]->getSource();
+            $event = $this->getFlows()->item(0)->getSource();
             $event->collaboration->send($event->getEventDefinitions()->item(0));
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
         });

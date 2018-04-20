@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Models;
 
+use ProcessMaker\Nayra\Bpmn\DataStoreTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
@@ -12,7 +13,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
  */
 class DataStore implements DataStoreInterface
 {
-    use LocalPropertiesTrait;
+    use DataStoreTrait,
+        LocalPropertiesTrait;
 
     private $data = [];
 

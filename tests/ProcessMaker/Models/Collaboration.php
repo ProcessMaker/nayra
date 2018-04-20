@@ -4,17 +4,18 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 
 class Collaboration implements CollaborationInterface
 {
 
     use BaseTrait;
+
+    private $subscribers = [];
 
     /**
      * @var boolean $isClosed
@@ -147,8 +148,6 @@ class Collaboration implements CollaborationInterface
 
     }
 
-    private $subscribers = [];
-
     public function send(MessageEventDefinitionInterface $message)
     {
         foreach ($this->subscribers as $subscriber) {
@@ -166,7 +165,7 @@ class Collaboration implements CollaborationInterface
         }
     }
 
-    public function subscribe(MessageListenerInterface $node, string $messageId)
+    public function subscribe(MessageListenerInterface $node, $messageId)
     {
         $this->subscribers [] = [
             'node' => $node,
@@ -174,7 +173,7 @@ class Collaboration implements CollaborationInterface
         ];
     }
 
-    public function unsubscribe(MessageListenerInterface $node, string $messageId)
+    public function unsubscribe(MessageListenerInterface $node, $messageId)
     {
         $this->subscribers = array_filter($this->subscribers,
             function ($e) use ($messageId) {
@@ -185,5 +184,15 @@ class Collaboration implements CollaborationInterface
     public function setMessageFlows(CollectionInterface $messageFlows)
     {
         // TODO: Implement setMessageFlows() method.
+    }
+
+    public function getId()
+    {
+        // TODO: Implement getId() method.
+    }
+
+    public function setId($id)
+    {
+        // TODO: Implement setId() method.
     }
 }
