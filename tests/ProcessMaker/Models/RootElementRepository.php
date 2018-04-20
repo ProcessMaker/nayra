@@ -46,4 +46,14 @@ class RootElementRepository implements RootElementRepositoryInterface
     {
         return new MessageEventDefinition;
     }
+
+    /**
+     * Create a formal expression instance.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface
+     */
+    public function createFormalExpressionInstance()
+    {
+        return new FormalExpression();
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-interface FormalExpressionInterface
+use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+
+interface FormalExpressionInterface extends EntityInterface
 {
 
     /**

@@ -2,9 +2,9 @@
 
 namespace ProcessMaker\Models;
 
+use ProcessMaker\Nayra\Bpmn\FlowTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Bpmn\FlowTrait;
 
 /**
  * Flow implementation.
@@ -18,21 +18,11 @@ class Flow implements FlowInterface
         LocalProcessTrait;
 
     /**
-     * @var FlowNodeInterface
-     */
-    private $source;
-
-    /**
-     * @var FlowNodeInterface
-     */
-    private $target;
-
-    /**
      * @return FlowNodeInterface
      */
     public function getSource()
     {
-        return $this->source;
+        return $this->getProperty('source');
     }
 
     /**
@@ -42,7 +32,7 @@ class Flow implements FlowInterface
      */
     public function setSource(FlowNodeInterface $source)
     {
-        $this->source = $source;
+        $this->setProperty('source', $source);
         return $this;
     }
 
@@ -51,7 +41,7 @@ class Flow implements FlowInterface
      */
     public function getTarget()
     {
-        return $this->target;
+        return $this->getProperty('target');
     }
 
     /**
@@ -61,7 +51,7 @@ class Flow implements FlowInterface
      */
     public function setTarget(FlowNodeInterface $target)
     {
-        $this->target = $target;
+        $this->setProperty('target', $target);
         return $this;
     }
 

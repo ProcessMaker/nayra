@@ -136,4 +136,14 @@ class Collaboration implements CollaborationInterface
     {
 
     }
+
+    public function getId()
+    {
+        
+    }
+
+    public function setId($id)
+    {
+
+    }
 }

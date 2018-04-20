@@ -12,6 +12,8 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 interface EntityInterface
 {
 
+    const BPMN_PROPERTY_ID = 'id';
+
     /**
      *
      * @param array $properties
@@ -40,7 +42,7 @@ interface EntityInterface
      *
      * @return mixed
      */
-    public function getProperty($name, $default=null);
+    public function getProperty($name, $default = null);
 
     /**
      * @return \ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface
@@ -61,10 +63,25 @@ interface EntityInterface
     //public function getName();
 
     /**
+     * Get Entity ID
      *
-     *
-     * @return int
+     * @return mixed
      */
-    //public function getId();
+    public function getId();
 
+    /**
+     * Set Entity ID
+     *
+     * @return mixed
+     */
+    public function setId($id);
+
+    /**
+     * Load custom properties from an array.
+     *
+     * @param array $customProperties
+     *
+     * @return $this
+     */
+    public function loadCustomProperties(array $customProperties);
 }

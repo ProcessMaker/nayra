@@ -3,7 +3,6 @@
 namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\ProcessTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
@@ -28,5 +27,18 @@ class Process implements ProcessInterface
         $this->setFlows(new FlowCollection);
         $this->setArtifacts(new ArtifactCollection);
         $this->setDataStores(new DataStoreCollection);
+    }
+
+    /**
+     * Get custom property map.
+     *
+     * @return array
+     */
+    protected function customProperties()
+    {
+        return [
+            ProcessInterface::BPMN_PROPERTY_ID        => 'id',
+            ProcessInterface::BPMN_PROPERTY_IS_CLOSED => 'isClosed',
+        ];
     }
 }

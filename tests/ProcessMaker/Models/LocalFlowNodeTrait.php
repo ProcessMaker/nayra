@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Models;
 
-
+use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 
@@ -13,7 +13,6 @@ use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
  */
 trait LocalFlowNodeTrait
 {
-    private $flows=[];
 
     /**
      * @param FlowNodeInterface $target
@@ -27,7 +26,10 @@ trait LocalFlowNodeTrait
         $flow->setSource($this);
         $flow->setTarget($target);
         $flow->setProperties($properties);
-        $this->flows[] = $flow;
+        $this->addProperty('outgoing', $flow);
+        if (!empty($properties['IS_DEFAULT'])) {
+            $this->setProperty('default', $flow);
+        }
         return $this;
     }
 
@@ -38,6 +40,6 @@ trait LocalFlowNodeTrait
      */
     public function getFlows()
     {
-        return $this->flows;
+        return $this->getProperty('outgoing', new Collection);
     }
 }
