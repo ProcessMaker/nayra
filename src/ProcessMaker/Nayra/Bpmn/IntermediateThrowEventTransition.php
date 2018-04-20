@@ -2,24 +2,21 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\TransitionTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition rule for an activity.
+ * Transition rule to consume tokens in an End Event.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class ActivityTransition implements TransitionInterface
+class IntermediateThrowEventTransition implements TransitionInterface
 {
-
     use TransitionTrait;
 
     /**
-     * Condition required to transit the element.
+     * Condition required at end event.
      *
      * @param TokenInterface $token
      *
@@ -27,6 +24,6 @@ class ActivityTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
     {
-        return $token->getStatus() === ActivityInterface::TOKEN_STATE_COMPLETED;
+        return true;
     }
 }

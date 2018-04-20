@@ -153,7 +153,7 @@ trait ActivityTrait
      */
     public function complete(TokenInterface $token)
     {
-        $token->setProperty('STATUS', 'COMPLETED');
+        $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
         return $this;
     }
 

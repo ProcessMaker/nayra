@@ -2,8 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-
-use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -17,6 +16,17 @@ class InclusiveGatewayTransition implements TransitionInterface
 {
 
     use TransitionTrait;
+
+    /**
+     * Initialize the tokens consumed property, the Inclusive Gateway consumes
+     * a token from each incoming Sequence Flow that has a token.
+     *
+     */
+    protected function initExclusiveGatewayTransition()
+    {
+        $this->setTokensConsumedPerTransition(-1);
+        $this->setTokensConsumedPerIncoming(1);
+    }
 
     /**
      * Always true because the conditions are not defined in the gateway, but for each
@@ -54,6 +64,7 @@ class InclusiveGatewayTransition implements TransitionInterface
         $rule2 = $withoutToken->find(function($inFlow) {
                 $paths = $inFlow->origin()->paths(function(Connection $flow) use ($inFlow) {
                     return $flow!==$inFlow
+                        && $flow->origin() instanceof StateInterface
                         && $flow->originState()->getTokens()->count()>0;
                 }, function (Connection $flow) {
                     return $flow->origin()!==$this; //does not visit
@@ -63,6 +74,7 @@ class InclusiveGatewayTransition implements TransitionInterface
         $rule3 = $withToken->find(function($inFlow) {
                 return $inFlow->origin()->paths(function(Connection $flow) use ($inFlow) {
                         return $flow!==$inFlow
+                            && $flow->origin() instanceof StateInterface
                             && $flow->originState()->getTokens()->count()>0;
                     }, function (Connection $flow) {
                         return $flow->origin()!==$this; //does not visit

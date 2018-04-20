@@ -22,7 +22,8 @@ class ParallelGatewayTransition implements TransitionInterface
      */
     protected function initParallelGatewayTransition()
     {
-        $this->setTokensConsumedPerTransition(1);
+        $this->setTokensConsumedPerTransition(-1);
+        $this->setTokensConsumedPerIncoming(1);
     }
 
     /**

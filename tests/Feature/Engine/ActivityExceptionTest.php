@@ -72,7 +72,7 @@ class ActivityExceptionTest extends EngineTestCase
 
         //Assertion: The activity is in FAILING status.
         $token = $activity->getTokens()->item(0);
-        $this->assertEquals(ActivityInterface::TOKEN_STATE_FAILING, $token->getStatus());
+        $this->assertEquals(ActivityInterface::TOKEN_STATE_FAILING, $token->getOwnerStatus());
 
         //Complete the activity
         $token = $activity->getTokens()->item(0);
