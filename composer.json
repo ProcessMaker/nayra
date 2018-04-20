@@ -15,9 +15,7 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\Feature\\": "tests/Feature/",
-            "ProcessMaker\\": ["src/ProcessMaker/", "tests/unit/ProcessMaker/"],
-            "ProcessMaker\\Models\\": "tests/ProcessMaker/Models/",
-            "ProcessMaker\\Bpmn\\": "tests/ProcessMaker/Bpmn/"
+            "ProcessMaker\\": ["src/ProcessMaker/", "tests/unit/ProcessMaker/", "tests/ProcessMaker/"]
         }
     },
     "require": {
