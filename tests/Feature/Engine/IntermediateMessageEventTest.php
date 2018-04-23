@@ -4,10 +4,12 @@ namespace Tests\Feature\Engine;
 
 use ProcessMaker\Models\Collaboration;
 use ProcessMaker\Models\Message;
+use ProcessMaker\Models\Operation;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 
@@ -41,7 +43,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $eventA = $this->eventRepository->createIntermediateThrowEventInstance();
             $messageEventDefA = $this->rootElementRepository->createMessageEventDefinitionInstance();
             $messageEventDefA->setId("MessageEvent1");
-                $messageEventDefA->setMessage($message);
+                $messageEventDefA->setPayload($message);
             $eventA->getEventDefinitions()->push($messageEventDefA);
         $activityB = $this->activityRepository->createActivityInstance();
         $endA = $this->eventRepository->createEndEventInstance();
@@ -63,7 +65,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $activityC = $this->activityRepository->createActivityInstance();
         $eventB = $this->eventRepository->createIntermediateCatchEventInstance();
             $messageEventDefB = $this->rootElementRepository->createMessageEventDefinitionInstance();
-                $messageEventDefB->setMessage($message);
+                $messageEventDefB->setPayload($message);
             $eventB->getEventDefinitions()->push($messageEventDefB);
         $activityD = $this->activityRepository->createActivityInstance();
         $endB = $this->eventRepository->createEndEventInstance();
@@ -84,16 +86,19 @@ class IntermediateMessageEventTest extends EngineTestCase
 
     public function createSignalIntermediateEventProcesses()
     {
-        $signal = $this->signalRepository->createSignalInstance();
+        $signal = $this->rootElementRepository->createSignalInstance();
+        $signal->setId('Signal1');
+        $signal->setName('SignalName');
 
         //Process A
         $processA = $this->processRepository->createProcessInstance();
         $startA = $this->eventRepository->createStartEventInstance();
         $activityA = $this->activityRepository->createActivityInstance();
         $eventA = $this->eventRepository->createIntermediateThrowEventInstance();
-            $signalEventDefA = $this->eventDefinitionRepository->createSignalEventInstance();
-                $signalEventDefA->setSignal($signal);
-            $eventA->setEventDefinition($signalEventDefA);
+            $signalEventDefA = $this->rootElementRepository->createSignalEventDefinitionInstance();
+                $signalEventDefA->setId('signalEventDefA');
+                $signalEventDefA->setPayload($signal);
+            $eventA->getEventDefinitions()->push($signalEventDefA);
         $activityB = $this->activityRepository->createActivityInstance();
         $endA = $this->eventRepository->createEndEventInstance();
 
@@ -115,9 +120,10 @@ class IntermediateMessageEventTest extends EngineTestCase
         $startB = $this->eventRepository->createStartEventInstance();
         $activityC = $this->activityRepository->createActivityInstance();
         $eventB = $this->eventRepository->createIntermediateCatchEventInstance();
-            $signalEventDefB = $this->eventDefinitionRepository->createSignalEventInstance();
-                $signalEventDefB->setSignal($signal);
-            $eventB->setEventDefinition($signalEventDefB);
+            $signalEventDefB = $this->rootElementRepository->createSignalEventDefinitionInstance();
+                $signalEventDefB->setId('signalEventDefB');
+                $signalEventDefB->setPayload($signal);
+            $eventB->getEventDefinitions()->push($signalEventDefB);
         $activityD = $this->activityRepository->createActivityInstance();
         $endB = $this->eventRepository->createEndEventInstance();
 
@@ -133,6 +139,44 @@ class IntermediateMessageEventTest extends EngineTestCase
             ->addEvent($endB);
 
         return [$processA, $processB];
+    }
+
+    public function testProcessDefinitionForIntermediateMessages()
+    {
+        list($processA, $processB) = $this->createMessageIntermediateEventProcesses();
+        $eventA = $processA->getEvents()->item(1);
+        $eventB = $processB->getEvents()->item(1);
+
+        $eventDefA = $eventA->getEventDefinitions()->item(0);
+        $eventDefB = $eventB->getEventDefinitions()->item(0);
+
+        $message = $eventDefA->getPayload();
+        $signal = $eventDefB->getPayload();
+
+        $this->assertNotNull($message, 'Event Definition A should have a message');
+        $this->assertNotNull($signal, 'Event Definition B should have a signal');
+
+        $operation = new Operation();
+        $eventDefA->setOperation($operation);
+
+        $this->assertEquals($operation, $eventDefA->getOperation(),
+            'The Event Definition Operation must be equal to the assigned in the test.');
+    }
+
+    public function testProcessDefinitionForIntermediateSignals()
+    {
+        list($processA, $processB) = $this->createSignalIntermediateEventProcesses();
+        $eventA = $processA->getEvents()->item(1);
+        $eventB = $processB->getEvents()->item(1);
+
+        $eventDefA = $eventA->getEventDefinitions()->item(0);
+        $eventDefB = $eventB->getEventDefinitions()->item(0);
+
+        $message = $eventDefA->getPayload();
+        $signal = $eventDefB->getPayload();
+
+        $this->assertNotNull($message, 'Event Definition A should have a message');
+        $this->assertNotNull($signal, 'Event Definition B should have a signal');
     }
 
     /**
@@ -203,7 +247,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
         ]);
 
         $startA = $processA->getEvents()->item(0);
@@ -223,16 +267,124 @@ class IntermediateMessageEventTest extends EngineTestCase
 
         $this->engine->runToNextState();
 
-        //Assertion:
+        //Assertion: The throwing process must advances to activity B an the catching process to activity D
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+
+            //events triggered when the catching event runs
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+
+            //events triggered in the process with the throwing element:w
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+    }
+
+    /**
+     * Tests that the signal event works correctly
+     */
+    public function testSignalEvent()
+    {
+        //Create two processes
+        list($processA, $processB) = $this->createSignalIntermediateEventProcesses();
+
+        //Create a collaboration
+        $collaboration = new Collaboration;
+
+        //Add process A as participant of the collaboration
+        $participant = new Participant();
+        $participant->setProcess($processA);
+        $participant->setParticipantMultiplicity(1, 0);
+        $collaboration->getParticipants()->push($participant);
+
+        //Add process B as participant of the collaboration
+        $participant = new Participant();
+        $participant->setProcess($processB);
+        $participant->setParticipantMultiplicity(1, 0);
+        $collaboration->getParticipants()->push($participant);
+
+        //Create mmessage flow from intemediate events A to B
+        $eventA = $processA->getEvents()->item(1);
+        $eventB = $processB->getEvents()->item(1);
+        $messageFlow = $this->messageFlowRepository->createMessageFlowInstance();
+        $messageFlow->setCollaboration($collaboration);
+        $messageFlow->setSource($eventA);
+        $messageFlow->setTarget($eventB);
+        $collaboration->addMessageFlow($messageFlow);
+
+        $eventA = $processA->getEvents()->item(1);
+        $eventB = $processB->getEvents()->item(1);
+
+        $eventA->collaboration = $collaboration;
+        $eventB->collaboration = $collaboration;
+
+        $dataStoreA = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStoreA->putData('A', '1');
+
+        $dataStoreB = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStoreB->putData('B', '1');
+
+        $this->engine->createExecutionInstance($processA, $dataStoreA);
+        $this->engine->createExecutionInstance($processB, $dataStoreB);
+
+        $startC = $processB->getEvents()->item(0);
+        $activityC = $processB->getActivities()->item(0);
+
+        $startC->start();
+        $this->engine->runToNextState();
+
+        //Assertion: The first activity of the second flow must be activated
+        $this->assertEvents([
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        $tokenC = $activityC->getTokens($dataStoreB)->item(0);
+        $activityC->complete($tokenC);
+
+        $this->engine->runToNextState();
+
+        //Assertion: the second flows is stoppen in the catching event
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
+        ]);
+
+        $startA = $processA->getEvents()->item(0);
+        $activityA = $processA->getActivities()->item(0);
+
+        $startA->start();
+        $this->engine->runToNextState();
+
+        //Assertion: The activity must be activated
+        $this->assertEvents([
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        $tokenA = $activityA->getTokens($dataStoreA)->item(0);
+        $activityA->complete($tokenA);
+
+        $this->engine->runToNextState();
+
+        //Assertion: The throwing process must advances to activity B an the catching process to activity D
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //events triggered when the catching event runs
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+
+            //events triggered in the process with the throwing element:w
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,

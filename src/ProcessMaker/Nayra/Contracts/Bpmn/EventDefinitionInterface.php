@@ -20,7 +20,20 @@ interface EventDefinitionInterface
      * Sets the element id
      *
      * @param $value
-     * @return mixed
      */
     public function setId($value);
+
+    /**
+     * Returns the event definition payload (message, signal, etc.)
+     *
+     * @return mixed
+     */
+    public function getPayload();
+
+    /**
+     * Sets the payload (message, signal, etc.)
+     * @param mixed $value
+     *
+     */
+    public function setPayload($value);
 }

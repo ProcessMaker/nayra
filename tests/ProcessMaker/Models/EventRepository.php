@@ -70,6 +70,13 @@ class EventRepository implements EventRepositoryInterface
         return $event;
     }
 
+    public function createIntermediateThrowSignalInstance($propoerties = [])
+    {
+        $event = new SignalEvent();
+        $event->setFactory($this->getFactory());
+        return $event;
+    }
+
     /**
      * Create a new event.
      *

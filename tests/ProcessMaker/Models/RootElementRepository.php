@@ -5,6 +5,7 @@ namespace ProcessMaker\Models;
 use ProcessMaker\Nayra\Bpmn\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
+use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
 use ProcessMaker\Nayra\Contracts\Repositories\RootElementRepositoryInterface;
 
 /**
@@ -54,5 +55,25 @@ class RootElementRepository implements RootElementRepositoryInterface
     public function createFormalExpressionInstance()
     {
         return new FormalExpression();
+    }
+
+    /**
+     * Create a signal instance
+     *
+     * @return Signal
+     */
+    public function createSignalInstance()
+    {
+        return new Signal();
+    }
+
+    /**
+     * Create a signal event definition that is a container of signals
+     *
+     * @return SignalEventDefinition
+     */
+    public function createSignalEventDefinitionInstance()
+    {
+        return new SignalEventDefinition();
     }
 }

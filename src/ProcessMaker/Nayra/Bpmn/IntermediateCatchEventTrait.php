@@ -7,6 +7,7 @@ use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
@@ -51,9 +52,8 @@ trait IntermediateCatchEventTrait
         //$this->transition=new ExclusiveGatewayTransition($this);
         $this->transition=new IntermediateCatchEventTransition($this);
 
-        //@todo ¿es el mejor lugar para colocar el evento?
         $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, function()  {
-            $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED, $this);
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED, $this);
         });
 
         $this->triggerPlace = new  State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
@@ -71,10 +71,10 @@ trait IntermediateCatchEventTrait
 
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-            $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
         });
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-            $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED, $this, $token);
         });
         return $incomingPlace;
     }
@@ -98,8 +98,9 @@ trait IntermediateCatchEventTrait
      *
      * @param MessageEventDefinitionInterface $message
      */
-    public function execute(MessageEventDefinitionInterface $message)
+    public function execute($eventDefinition)
     {
+        // with a new token in the trigger place, the event catch element will be fired
         $this->triggerPlace->addNewToken();
     }
 }
