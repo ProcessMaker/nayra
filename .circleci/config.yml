@@ -16,4 +16,7 @@ jobs:
           key: composer-v1-{{ checksum "composer.lock" }}
           paths:
             - vendor
-      - run: ./vendor/bin/phpunit
+      - run: sudo docker-php-ext-enable xdebug
+      - run: ./vendor/bin/phpunit -d memory_limit=-1 --coverage-html coverage
+      - store_artifacts:
+          path: coverage
