@@ -17,9 +17,6 @@ class Participant implements ParticipantInterface
         //LocalProcessTrait,
         LocalPropertiesTrait;
 
-    private $collaboration;
-
-
     /**
      * Array map of custom event classes for the bpmn element.
      *

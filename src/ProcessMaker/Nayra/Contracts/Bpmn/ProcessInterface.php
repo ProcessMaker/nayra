@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -24,6 +25,7 @@ interface ProcessInterface extends CallableElementInterface
     const BPMN_PROPERTY_IS_CLOSED = 'isClosed';
     const BPMN_PROPERTY_IS_EXECUTABLE = 'isExecutable';
     const BPMN_PROPERTY_PROCESS_TYPE = 'processType';
+    const BPMN_PROPERTY_PARTICIPANT = 'participant';
 
     /**
      * Child elements.
@@ -201,4 +203,14 @@ interface ProcessInterface extends CallableElementInterface
      * @return $this
      */
     public function addGateway(GatewayInterface $gateway);
+
+    /**
+     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface[]
+     */
+    public function getInstances();
+
+    /**
+     * @return $this
+     */
+    public function addInstance(ExecutionInstanceInterface $instance);
 }

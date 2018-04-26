@@ -55,4 +55,14 @@ class RootElementRepository implements RootElementRepositoryInterface
     {
         return new FormalExpression();
     }
+
+    public function createCollaborationInstance()
+    {
+        return new Collaboration();
+    }
+
+    public function createParticipantInstance()
+    {
+        return new Participant();
+    }
 }

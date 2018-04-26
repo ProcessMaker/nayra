@@ -12,6 +12,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
@@ -92,15 +93,21 @@ trait IntermediateCatchEventTrait
         return $this;
     }
 
-
     /**
      * To implement the MessageListener interface
      *
      * @param MessageEventDefinitionInterface $message
      */
-    public function execute(MessageEventDefinitionInterface $message)
+    public function execute(MessageEventDefinitionInterface $message, ExecutionInstanceInterface $instance)
     {
-        $this->triggerPlace->addNewToken();
+        $this->triggerPlace->addNewToken($instance);
+    }
+
+    /**
+     * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
+     */
+    public function getTargetInstances(MessageEventDefinitionInterface $message, TokenInterface $token)
+    {
+        return $this->ownerProcess()->getInstances();
     }
 }
-

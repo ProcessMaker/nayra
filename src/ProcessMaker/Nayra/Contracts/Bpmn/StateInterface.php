@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * State of a node in which tokens can be received.
@@ -17,16 +18,21 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
     /**
      * Consume a token from the current state.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     *
      * @return bool
      */
-    public function consumeToken(TokenInterface $token);
+    public function consumeToken(TokenInterface $token/*, ExecutionInstanceInterface $instance*/);
 
     /**
      * Add a new token to the current state.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     *
      * @return bool
      */
-    public function addNewToken();
+    public function addNewToken(ExecutionInstanceInterface $instance);
 
     /**
      * Get the collection of tokens.

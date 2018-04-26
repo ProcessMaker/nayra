@@ -46,6 +46,7 @@ class ExecutionInstance implements ExecutionInstanceInterface
     public function __construct(EngineInterface $engine, ProcessInterface $process, DataStoreInterface $data)
     {
         $process->setDispatcher($engine->getDispatcher());
+        $process->addInstance($this);
         $this->process = $process;
         $this->dataStore = $data;
         $this->transitions = $process->getTransitions($engine->getRepositoryFactory());

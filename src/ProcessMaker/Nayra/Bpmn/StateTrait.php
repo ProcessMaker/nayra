@@ -10,6 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Trait to implement state of a node in which tokens can be received.
@@ -54,14 +55,15 @@ trait StateTrait
      *
      * @return bool
      */
-    public function consumeToken(TokenInterface $token)
+    public function consumeToken(TokenInterface $token/*, ExecutionInstanceInterface $instance*/)
     {
         $tokenIndex = $this->tokens->indexOf($token);
-        if ($tokenIndex !== false) {
+        $valid = $tokenIndex !== false;// && $token->getInstance() === $instance;
+        if ($valid) {
             $this->tokens->splice($tokenIndex, 1);
             $this->notifyEvent(StateInterface::EVENT_TOKEN_CONSUMED, $token);
         }
-        return $tokenIndex !== false;
+        return $valid;
     }
 
     /**
@@ -69,11 +71,11 @@ trait StateTrait
      *
      * @return bool
      */
-    public function addNewToken()
+    public function addNewToken(ExecutionInstanceInterface $instance)
     {
         $token = $this->getFactory()->getTokenRepository()->createTokenInstance($this);
         $token->setOwner($this);
-        //new TokenTrait($this);
+        $token->setInstance($instance);
         $this->tokens->push($token);
         $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token);
         return true;

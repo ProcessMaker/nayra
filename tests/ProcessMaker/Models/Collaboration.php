@@ -4,11 +4,13 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 class Collaboration implements CollaborationInterface
 {
@@ -21,11 +23,6 @@ class Collaboration implements CollaborationInterface
      * @var boolean $isClosed
      */
     private $isClosed;
-
-    /**
-     * @var ParticipantInterface[] $participants
-     */
-    private $participants;
 
     /**
      * @var TODO_MessageFlowInterface[] $messageFlows
@@ -74,7 +71,6 @@ class Collaboration implements CollaborationInterface
 
     protected function initCollaboration()
     {
-        $this->participants = new Collection;
         $this->artifacts = new Collection;
         $this->choreographies = new Collection;
         $this->conversationAssociations = new Collection;
@@ -109,17 +105,10 @@ class Collaboration implements CollaborationInterface
 
     public function getParticipants()
     {
-        return $this->participants;
-    }
-
-    public function getProperties()
-    {
-
-    }
-
-    public function getProperty($name, $default = null)
-    {
-
+        if ($this->getProperty(CollaborationInterface::BPMN_PROPERTY_PARTICIPANT)===null) {
+            $this->setProperty(CollaborationInterface::BPMN_PROPERTY_PARTICIPANT, new Collection);
+        }
+        return $this->getProperty(CollaborationInterface::BPMN_PROPERTY_PARTICIPANT);
     }
 
     public function isClosed()
@@ -138,30 +127,34 @@ class Collaboration implements CollaborationInterface
 
     }
 
-    public function setProperties(array $properties)
-    {
-
-    }
-
-    public function setProperty($name, $value)
-    {
-
-    }
-
-    public function send(MessageEventDefinitionInterface $message)
+    public function send(MessageEventDefinitionInterface $message, TokenInterface $token)
     {
         foreach ($this->subscribers as $subscriber) {
             if ($subscriber['key'] === $message->getId()) {
-                $subscriber['node']->execute($message);
+                foreach ($this->getInstancesFor($subscriber['node'], $message, $token) as $instance) {
+                    $subscriber['node']->execute($message, $instance);
+                }
             }
         }
+    }
+
+    /**
+     *
+     * @param MessageEventDefinitionInterface $message
+     * @param type $node
+     *
+     * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
+     */
+    private function getInstancesFor(CatchEventInterface $node, MessageEventDefinitionInterface $message, TokenInterface $token)
+    {
+        return $node->getTargetInstances($message, $token);
     }
 
     public function delay(MessageEventDefinitionInterface $message, $delay)
     {
         $initTime = time();
         if ($delay + $initTime <= time()) {
-            $this->send($message);
+            $this->send($message, null);
         }
     }
 
@@ -186,13 +179,4 @@ class Collaboration implements CollaborationInterface
         // TODO: Implement setMessageFlows() method.
     }
 
-    public function getId()
-    {
-        // TODO: Implement getId() method.
-    }
-
-    public function setId($id)
-    {
-        // TODO: Implement setId() method.
-    }
 }

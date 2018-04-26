@@ -10,6 +10,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface CallActivityInterface extends ActivityInterface
 {
+    const BPMN_PROPERTY_CALLED_ELEMENT = 'calledElement';
 
     /**
      * Get the element to be called.

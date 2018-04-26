@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+
 /**
  * Behavior that must implement objects that listen to message notifications
  *
@@ -15,5 +17,5 @@ interface MessageListenerInterface
      * @param MessageEventDefinitionInterface $message
      * @return mixed
      */
-    public function execute(MessageEventDefinitionInterface $message);
+    public function execute(MessageEventDefinitionInterface $message, ExecutionInstanceInterface $instance);
 }

@@ -88,18 +88,18 @@ trait TransitionTrait
      *
      * @return boolean
      */
-    protected function doTransit(CollectionInterface $consumeTokens)
+    protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
         $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this);
 
-        $consumeTokens->find(function (TokenInterface $token) {
-            $token->getOwner()->consumeToken($token);
+        $consumeTokens->find(function (TokenInterface $token) use ($executionInstance) {
+            $token->getOwner()->consumeToken($token, $executionInstance);
         });
 
         $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this);
 
-        $this->outgoing()->find(function (ConnectionInterface $flow) {
-            return $flow->targetState()->addNewToken();
+        $this->outgoing()->find(function (ConnectionInterface $flow) use ($executionInstance) {
+            return $flow->targetState()->addNewToken($executionInstance);
         });
 
         return true;
@@ -120,7 +120,7 @@ trait TransitionTrait
             if ($consumeTokens === false) {
                 return $this->conditionIsFalse();
             } else {
-                return $this->doTransit($consumeTokens);
+                return $this->doTransit($consumeTokens, $executionInstance);
             }
         }
         return false;

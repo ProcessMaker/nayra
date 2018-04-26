@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Token of a process instance.
@@ -49,4 +50,20 @@ interface TokenInterface extends EntityInterface
      * @return $this
      */
     public function setStatus($status);
+
+    /**
+     * Set the owner execution instance of the token.
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return $this
+     */
+    public function setInstance(ExecutionInstanceInterface $instance);
+
+    /**
+     * Get the owner execution instance of the token.
+     *
+     * @return ExecutionInstanceInterface $instance
+     */
+    public function getInstance();
 }

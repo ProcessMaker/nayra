@@ -90,7 +90,12 @@ trait BaseTrait
     public function setProperties(array $properties)
     {
         foreach($properties as $name => $value) {
-            $this->properties[$name] = $value;
+            $setter = 'set' . $name;
+            if (method_exists($this, $setter)) {
+                $this->$setter($value);
+            } else {
+                $this->properties[$name] = $value;
+            }
         }
         return $this;
     }
