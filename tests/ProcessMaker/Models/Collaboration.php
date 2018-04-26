@@ -4,6 +4,7 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
+use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
@@ -14,6 +15,8 @@ class Collaboration implements CollaborationInterface
 {
 
     use BaseTrait;
+
+    private $id;
 
     private $subscribers = [];
 
@@ -148,16 +151,34 @@ class Collaboration implements CollaborationInterface
 
     }
 
-    public function send(MessageEventDefinitionInterface $message)
+    /**
+     * Sends a message
+     *
+     * @param mixed $message
+     *
+     */
+    public function send($message)
     {
+        $isBroadcast = is_a($message, SignalEventDefinition::class);
         foreach ($this->subscribers as $subscriber) {
-            if ($subscriber['key'] === $message->getId()) {
+            $subscriberPayload = $subscriber['node']->getEventDefinitions()->item(0);
+            if (!$isBroadcast && $subscriber['key'] === $message->getId()
+                 || ($isBroadcast && is_a($subscriberPayload, SignalEventDefinition::class))
+            ) {
                 $subscriber['node']->execute($message);
             }
         }
     }
 
-    public function delay(MessageEventDefinitionInterface $message, $delay)
+    /**
+     * Sends a message with a delay in miliseconds
+     *
+     * @param mixed $message
+     * @param $delay
+     *
+     * @return mixed
+     */
+    public function delay($message, $delay)
     {
         $initTime = time();
         if ($delay + $initTime <= time()) {
@@ -165,6 +186,16 @@ class Collaboration implements CollaborationInterface
         }
     }
 
+    /**
+     * Subscribes an element to the collaboration so that it can listen the messages sent
+     *
+     * @param MessageListenerInterface $element
+     * @param string $messageId
+     * @internal param string $id
+     * @internal param MessageInterface $message
+     *
+     * @return mixed
+     */
     public function subscribe(MessageListenerInterface $node, $messageId)
     {
         $this->subscribers [] = [
@@ -173,6 +204,16 @@ class Collaboration implements CollaborationInterface
         ];
     }
 
+    /**
+     * Unsuscribes an object to the collaboration, so that it won't listen to the messages sent
+     *
+     * @param MessageListenerInterface $element
+     * @param string $messageId
+     * @internal param string $id
+     * @internal param MessageInterface $message
+     *
+     * @return mixed
+     */
     public function unsubscribe(MessageListenerInterface $node, $messageId)
     {
         $this->subscribers = array_filter($this->subscribers,
@@ -188,11 +229,11 @@ class Collaboration implements CollaborationInterface
 
     public function getId()
     {
-        // TODO: Implement getId() method.
+        return $this->id;
     }
 
     public function setId($id)
     {
-        // TODO: Implement setId() method.
+        $this->id = $id;
     }
 }

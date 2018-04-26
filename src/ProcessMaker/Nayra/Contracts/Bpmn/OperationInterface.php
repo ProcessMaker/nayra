@@ -9,6 +9,10 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface OperationInterface extends EntityInterface
 {
+    const BPMN_PROPERTY_IMPLEMENTATION = 'implementation';
+    const BPMN_PROPERTY_IN_MESSAGE ='inMessage';
+    const BPMN_PROPERTY_OUT_MESSAGE ='outMessage';
+    const BPMN_PROPERTY_ERRORS ='errors';
 
     /**
      * This attribute allows to reference a concrete artifact in the underlying

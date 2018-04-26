@@ -12,8 +12,8 @@ interface MessageListenerInterface
     /**
      * Method to be called when a message event arrives
      *
-     * @param MessageEventDefinitionInterface $message
+     * @param mixed $message
      * @return mixed
      */
-    public function execute(MessageEventDefinitionInterface $message);
+    public function execute($message);
 }
