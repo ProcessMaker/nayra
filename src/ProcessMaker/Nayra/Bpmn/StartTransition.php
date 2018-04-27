@@ -40,6 +40,16 @@ class StartTransition implements TransitionInterface
 
     public function hasAllRequiredTokens()
     {
-        return true;
+        // if the start event is a normal event, always return true, otherwise check for the presence of
+        //the trigger count by counting the number of tokens
+
+        if ($this->owner->getEventDefinitions()->count() === 0) {
+            return true;
+        }
+        else {
+            return $this->incoming()->count() > 0 && $this->incoming()->find(function ($flow) {
+                    return $flow->origin()->getTokens()->count() === 0;
+                })->count() === 0;
+        }
     }
 }
