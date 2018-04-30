@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/20100501/BPMN20.xsd"
+                   id="CallActivity_ProcessTest"
+                   targetNamespace="http://dsg.wiai.uniba.de/betsy/bpmn/callActivity_Process">
+    <bpmn2:collaboration id="collaboration">
+        <bpmn2:participant id="Participant_2" name="Pool" processRef="CallActivity_Process"/>
+        <bpmn2:participant id="Participant_1" name="Pool 2" processRef="CalledProcess"/>
+    </bpmn2:collaboration>
+    <bpmn2:process id="CallActivity_Process" isExecutable="true">
+        <bpmn2:startEvent id="StartEvent_2">
+            <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+        </bpmn2:startEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="StartEvent_2" targetRef="ScriptTask_4"/>
+
+        <bpmn2:scriptTask id="ScriptTask_4" name="Start">
+            <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_6</bpmn2:outgoing>
+            <bpmn2:script>CREATE_LOG_FILE</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_6" name="" sourceRef="ScriptTask_4" targetRef="CallActivity_1"/>
+
+        <bpmn2:callActivity id="CallActivity_1" name="Call" calledElement="CalledProcess">
+            <bpmn2:incoming>SequenceFlow_6</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_7</bpmn2:outgoing>
+        </bpmn2:callActivity>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_7" name="" sourceRef="CallActivity_1" targetRef="ScriptTask_5"/>
+
+        <bpmn2:scriptTask id="ScriptTask_5" name="End">
+            <bpmn2:incoming>SequenceFlow_7</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_4</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task2</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_4" name="" sourceRef="ScriptTask_5" targetRef="EndEvent_1"/>
+
+        <bpmn2:endEvent id="EndEvent_1">
+            <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
+        </bpmn2:endEvent>
+    </bpmn2:process>
+    <bpmn2:process id="CalledProcess" isExecutable="true">
+        <bpmn2:startEvent id="StartEvent_1">
+            <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+        </bpmn2:startEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_2" name="" sourceRef="StartEvent_1" targetRef="ScriptTask_1"/>
+
+        <bpmn2:scriptTask id="ScriptTask_1" name="Called">
+            <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
+            <bpmn2:script>CREATE_MARKER_FILE</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_5" name="" sourceRef="ScriptTask_1" targetRef="EndEvent_2"/>
+
+        <bpmn2:endEvent id="EndEvent_2">
+            <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
+        </bpmn2:endEvent>
+    </bpmn2:process>
+</bpmn2:definitions>

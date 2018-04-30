@@ -5,6 +5,7 @@ namespace Tests\Feature\Engine;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Test transitions
@@ -271,7 +272,8 @@ class ExclusiveGatewayTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            EventInterface::EVENT_EVENT_TRIGGERED
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
     }
 
@@ -374,6 +376,7 @@ class ExclusiveGatewayTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
     }
 }

@@ -3,13 +3,14 @@
 namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\EndEventTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 
 /**
  * End event implementation.
  *
  * @package ProcessMaker\Models
  */
-class EndEvent implements \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface
+class EndEvent implements EndEventInterface
 {
 
     use EndEventTrait,

@@ -10,20 +10,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
  */
 class ItemDefinition implements ItemDefinitionInterface
 {
-    /**
-     * @var string
-     */
-    private $itemKind;
 
-    /**
-     * @var mixed
-     */
-    private $structure;
-
-    /**
-     * @var boolean
-     */
-    private $isCollection;
+    use BaseTrait;
 
     /**
      * Get the nature of the Item. Possible values are physical
@@ -33,7 +21,7 @@ class ItemDefinition implements ItemDefinitionInterface
      */
     public function getItemKind()
     {
-        return $this->itemKind;
+        return $this->getProperty(ItemDefinitionInterface::BPMN_PROPERTY_ITEM_KIND);
     }
 
     /**
@@ -43,7 +31,7 @@ class ItemDefinition implements ItemDefinitionInterface
      */
     public function getStructure()
     {
-        return $this->structure;
+        return $this->getProperty(ItemDefinitionInterface::BPMN_PROPERTY_STRUCTURE);
     }
 
     /**
@@ -53,6 +41,6 @@ class ItemDefinition implements ItemDefinitionInterface
      */
     public function isCollection()
     {
-        return $this->isCollection;
+        return $this->getProperty(ItemDefinitionInterface::BPMN_PROPERTY_IS_COLLECTION);
     }
 }

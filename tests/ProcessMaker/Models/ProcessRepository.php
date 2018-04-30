@@ -2,8 +2,8 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
 
 /**
@@ -24,6 +24,16 @@ class ProcessRepository implements ProcessRepositoryInterface
     public function createProcessInstance()
     {
         return new Process;
+    }
+
+    /**
+     * Create a process.
+     *
+     * @return Process
+     */
+    public function createCustomProcessInstance()
+    {
+        return new CustomProcess;
     }
 
     /**

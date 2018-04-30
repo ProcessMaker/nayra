@@ -153,7 +153,12 @@ class IntermediateMessageEventTest extends EngineTestCase
         $message = $eventDefA->getPayload();
         $signal = $eventDefB->getPayload();
 
+        //Assertion: Validate message element
         $this->assertNotNull($message, 'Event Definition A should have a message');
+        $this->assertEquals('item', $message->getItem()->getId());
+        $this->assertEquals(true, $message->getItem()->isCollection());
+        $this->assertEquals(ItemDefinitionInterface::ITEM_KIND_INFORMATION, $message->getItem()->getItemKind());
+        $this->assertEquals('String', $message->getItem()->getStructure());
         $this->assertNotNull($signal, 'Event Definition B should have a signal');
 
         $operation = new Operation();

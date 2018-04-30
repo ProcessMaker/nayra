@@ -34,6 +34,13 @@ interface FlowNodeInterface extends FlowElementInterface
     public function getFlows();
 
     /**
+     * Get the incoming flows.
+     *
+     * @return FlowCollectionInterface
+     */
+    public function getIncomingFlows();
+
+    /**
      * Add a transition rule for the node element.
      *
      * @param TransitionInterface $transition

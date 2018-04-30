@@ -4,17 +4,15 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\EndTransition;
 use ProcessMaker\Nayra\Bpmn\State;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
-use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
  * End event behavior's implementation.
@@ -52,7 +50,7 @@ trait IntermediateCatchEventTrait
         //$this->transition=new ExclusiveGatewayTransition($this);
         $this->transition=new IntermediateCatchEventTransition($this);
 
-        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, function()  {
+        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function()  {
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED, $this);
         });
 
@@ -92,16 +90,26 @@ trait IntermediateCatchEventTrait
         return $this;
     }
 
-
     /**
      * To implement the MessageListener interface
      *
-     * @param MessageEventDefinitionInterface $message
+     * @param EventDefinitionInterface $message
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return $this
      */
-    public function execute($eventDefinition)
+    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance)
     {
         // with a new token in the trigger place, the event catch element will be fired
-        $this->triggerPlace->addNewToken();
+        $this->triggerPlace->addNewToken($instance);
+        return $this;
+    }
+
+    /**
+     * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
+     */
+    public function getTargetInstances(EventDefinitionInterface $message, TokenInterface $token)
+    {
+        return $this->getOwnerProcess()->getInstances();
     }
 }
-

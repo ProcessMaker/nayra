@@ -9,6 +9,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface ParticipantInterface extends EntityInterface
 {
+    const BPMN_PROPERTY_PROCESS = 'process';
+    const BPMN_PROPERTY_PROCESS_REF = 'processRef';
+    const BPMN_PROPERTY_PARTICIPANT_MULTIPICITY = 'participantMultiplicity';
 
     /**
      * Get the Process that the Participant uses in the Collaboration.
@@ -25,13 +28,6 @@ interface ParticipantInterface extends EntityInterface
      * @return $this
      */
     public function setProcess(ProcessInterface $process);
-
-    /**
-     * Get Interfaces that a Participant supports.
-     *
-     * @return array
-     */
-    public function getInterfaces();
 
     /**
      * Get Participant multiplicity for a given interaction.

@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -24,20 +25,13 @@ interface ProcessInterface extends CallableElementInterface
     const BPMN_PROPERTY_IS_CLOSED = 'isClosed';
     const BPMN_PROPERTY_IS_EXECUTABLE = 'isExecutable';
     const BPMN_PROPERTY_PROCESS_TYPE = 'processType';
+    const BPMN_PROPERTY_PARTICIPANT = 'participant';
 
     /**
-     * Child elements.
+     * Events defined for Activity
      */
-    const ELEMENTS = [
-        'activities' => ActivityInterface::TYPE,
-        'gateways' => GatewayInterface::TYPE,
-        'events' => EventInterface::TYPE,
-        'artifacts' => ArtifactInterface::TYPE,
-        'flows' => FlowInterface::TYPE,
-        'dataStores' => DataStoreInterface::TYPE,
-    ];
+    const EVENT_PROCESS_COMPLETED = 'ProcessCompleted';
 
-    
     /**
      * Get Diagram of the process.
      *
@@ -201,4 +195,20 @@ interface ProcessInterface extends CallableElementInterface
      * @return $this
      */
     public function addGateway(GatewayInterface $gateway);
+
+    /**
+     * Get the loaded process instances.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface[]
+     */
+    public function getInstances();
+
+    /**
+     * Add process instance reference.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     *
+     * @return $this
+     */
+    public function addInstance(ExecutionInstanceInterface $instance);
 }

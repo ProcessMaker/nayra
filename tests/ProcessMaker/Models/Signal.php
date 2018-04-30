@@ -30,7 +30,7 @@ class Signal implements SignalInterface
      * Sets the id of the message
      * @param string $value
      */
-    public function setId(string $value)
+    public function setId($value)
     {
         $this->id = $value;
     }
@@ -50,7 +50,7 @@ class Signal implements SignalInterface
      *
      * @param string $value
      */
-    public function setName(string $value)
+    public function setName($value)
     {
         $this->name = $value;
     }

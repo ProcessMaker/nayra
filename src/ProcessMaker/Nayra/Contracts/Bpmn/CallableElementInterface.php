@@ -19,12 +19,18 @@ interface CallableElementInterface extends EntityInterface
      *
      * @return EngineInterface
      */
-    //public function setEngine(EngineInterface $engine);
+    public function setEngine(EngineInterface $engine);
 
     /**
      * Get the engine that controls the elements.
      *
      * @return EngineInterface
      */
-    //public function getEngine();
+    public function getEngine();
+
+    /**
+     * Call and create an instance of the callable element.
+     *
+     */
+    public function call();
 }

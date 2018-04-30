@@ -2,9 +2,9 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Bpmn\TransitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Bpmn\TransitionTrait;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -21,7 +21,7 @@ class StartTransition implements TransitionInterface
     protected function initStartTransition()
     {
         $this->attachEvent(
-            TransitionInterface::EVENT_AFTER_TRANSIT,
+            TransitionInterface::EVENT_AFTER_CONSUME,
             function() {
                 $this->startCount--;
             }

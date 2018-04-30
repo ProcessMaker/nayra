@@ -9,6 +9,11 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface ItemDefinitionInterface
 {
+    const BPMN_PROPERTY_ID = 'id';
+    const BPMN_PROPERTY_ITEM_KIND = 'itemKind';
+    const BPMN_PROPERTY_STRUCTURE = 'structure';
+    const BPMN_PROPERTY_IS_COLLECTION = 'isCollection';
+
     const ITEM_KIND_PHYSICAL = 'physical';
     const ITEM_KIND_INFORMATION = 'information';
 

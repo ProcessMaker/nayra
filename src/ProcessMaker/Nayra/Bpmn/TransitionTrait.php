@@ -85,22 +85,25 @@ trait TransitionTrait
      * Do the transition of the selected tokens.
      *
      * @param CollectionInterface $consumeTokens
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
      *
      * @return boolean
      */
-    protected function doTransit(CollectionInterface $consumeTokens)
+    protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
-        $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this);
+        $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this, $consumeTokens);
 
-        $consumeTokens->find(function (TokenInterface $token) {
-            $token->getOwner()->consumeToken($token);
+        $consumeTokens->find(function (TokenInterface $token) use ($executionInstance) {
+            $token->getOwner()->consumeToken($token, $executionInstance);
         });
 
-        $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this);
+        $this->notifyEvent(TransitionInterface::EVENT_AFTER_CONSUME, $this, $consumeTokens);
 
-        $this->outgoing()->find(function (ConnectionInterface $flow) {
-            return $flow->targetState()->addNewToken();
+        $this->outgoing()->find(function (ConnectionInterface $flow) use ($executionInstance) {
+            return $flow->targetState()->addNewToken($executionInstance);
         });
+
+        $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this, $consumeTokens);
 
         return true;
     }
@@ -120,7 +123,7 @@ trait TransitionTrait
             if ($consumeTokens === false) {
                 return $this->conditionIsFalse();
             } else {
-                return $this->doTransit($consumeTokens);
+                return $this->doTransit($consumeTokens, $executionInstance);
             }
         }
         return false;

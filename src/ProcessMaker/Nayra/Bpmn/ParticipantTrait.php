@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
@@ -12,10 +13,6 @@ trait ParticipantTrait
 {
 
     use BaseTrait;
-    /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
-     */
-    private $process;
 
     /**
      * @var mixed[] $interfaces
@@ -28,12 +25,14 @@ trait ParticipantTrait
     private $endPoints;
 
     /**
-     * @var array $participantMultiplicity
+     * Initialize the default values for the participant element.
+     *
      */
-    private $participantMultiplicity = [
-        'maximum' => 1,
-        'minimum' => 0,
-    ];
+    protected function initParticipant()
+    {
+        $default = ['maximum' => 1, 'minimum' => 0];
+        $this->setProperty(ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY, $default);
+    }
 
     /**
      * Returns the process associated to the participant
@@ -42,7 +41,7 @@ trait ParticipantTrait
      */
     public function getProcess()
     {
-        return $this->process;
+        return $this->getProperty(ParticipantInterface::BPMN_PROPERTY_PROCESS);
     }
 
     /**
@@ -54,28 +53,9 @@ trait ParticipantTrait
      */
     public function setProcess(ProcessInterface $process)
     {
-        $this->process = $process;
+        $this->setProperty(ParticipantInterface::BPMN_PROPERTY_PROCESS, $process);
+        $process->addProperty(ProcessInterface::BPMN_PROPERTY_PARTICIPANT, $this);
         return $this;
-    }
-
-    /**
-     *
-     *
-     * @return mixed[]
-     */
-    public function getInterfaces()
-    {
-        return $this->interfaces;
-    }
-
-    /**
-     *
-     *
-     * @return mixed[]
-     */
-    public function getEndPoints()
-    {
-        return $this->endPoints;
     }
 
     /**
@@ -85,7 +65,7 @@ trait ParticipantTrait
      */
     public function getParticipantMultiplicity()
     {
-        return $this->participantMultiplicity;
+        return $this->getProperty(ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY);
     }
 
     /**
@@ -98,8 +78,7 @@ trait ParticipantTrait
      */
     public function setParticipantMultiplicity($maximum, $minimum)
     {
-        $this->participantMultiplicity['maximum'] = $maximum;
-        $this->participantMultiplicity['minimum'] = $minimum;
-        return $this;
+        $value = ['maximum' => $maximum, 'minimum' => $minimum];
+        return $this->setProperty(ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY, $value);
     }
 }

@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\EndTransition;
 use ProcessMaker\Nayra\Bpmn\State;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
@@ -48,8 +49,8 @@ trait EndEventTrait
         $this->endState->connectTo($this->transition);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_AFTER_TRANSIT,
-            function () {
-                $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED);
+            function (TransitionInterface $transition, CollectionInterface $consumeTokens) {
+                $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
             }
         );
     }

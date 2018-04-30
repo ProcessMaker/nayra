@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+
 /**
  * Trait to implements bpmn events handling.
  *
@@ -37,5 +39,6 @@ trait BpmnEventsTrait
         $this->getOwnerProcess()->getDispatcher()->dispatch($event, $payload);
         array_unshift($arguments, $event);
         call_user_func_array([$this, 'internalNotifyEvent'], $arguments);
+        call_user_func_array([$this->getOwnerProcess(), 'notifyEvent'], $arguments);
     }
 }

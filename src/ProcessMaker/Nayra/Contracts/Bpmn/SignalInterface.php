@@ -20,7 +20,7 @@ interface SignalInterface
      * Sets the id of the message
      * @param string $value
      */
-    public function setId(string $value);
+    public function setId($value);
 
     /**
      * Returns the name of the message
@@ -33,5 +33,5 @@ interface SignalInterface
      * Sets the name of the signal
      * @param string $value
      */
-    public function setName(string $value);
+    public function setName($value);
 }

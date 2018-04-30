@@ -64,13 +64,13 @@ trait EngineTrait
      * @param ProcessInterface $process
      * @param DataStoreInterface $data
      *
-     * @return int
+     * @return ExecutionInstanceInterface
      */
     public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data)
     {
         $executionInstance = new ExecutionInstance($this, $process, $data);
         $this->executionInstances[] = $executionInstance;
-        return count($this->executionInstances) - 1;
+        return $executionInstance;
     }
 
     /**

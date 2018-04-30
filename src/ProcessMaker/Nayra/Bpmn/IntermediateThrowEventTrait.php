@@ -49,7 +49,7 @@ trait IntermediateThrowEventTrait
 
         $this->transition=new IntermediateThrowEventTransition($this);
 
-        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, function()  {
+        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function()  {
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED, $this);
         });
     }
@@ -65,7 +65,7 @@ trait IntermediateThrowEventTrait
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $event = $this->getFlows()->item(0)->getSource();
-            $event->collaboration->send($event->getEventDefinitions()->item(0));
+            $event->collaboration->send($event->getEventDefinitions()->item(0), $token);
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
         });
 

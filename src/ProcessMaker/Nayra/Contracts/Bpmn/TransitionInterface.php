@@ -12,6 +12,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 interface TransitionInterface extends ConnectionNodeInterface
 {
     const EVENT_BEFORE_TRANSIT = 'BeforeTransit';
+    const EVENT_AFTER_CONSUME = 'AfterConsume';
     const EVENT_AFTER_TRANSIT = 'AfterTransit';
 
     /**

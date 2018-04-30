@@ -5,7 +5,27 @@ namespace ProcessMaker\Repositories;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use ProcessMaker\Models\ActivityRepository;
+use ProcessMaker\Models\DataStoreRepository;
+use ProcessMaker\Models\EventRepository;
+use ProcessMaker\Models\FlowRepository;
+use ProcessMaker\Models\GatewayRepository;
+use ProcessMaker\Models\ProcessRepository;
+use ProcessMaker\Models\RootElementRepository;
+use ProcessMaker\Models\TokenRepository;
+use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ActivityRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ArtifactRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\DataStoreRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\DiagramRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\EventRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\GatewayRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ShapeRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 
 /**
  * Description of BpmnFileRepository
@@ -15,13 +35,12 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
 {
     const BPMN = 'http://www.omg.org/spec/BPMN/20100524/MODEL';
 
-    /**
-     *
-     * @var DOMXPath $xpath
-     */
-    private $xpath;
-
     private $bpmnElements = [];
+
+    /**
+     * @var EngineInterface
+     */
+    private $engine;
 
     /**
      *
@@ -34,6 +53,36 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
         $this->registerNodeClass(DOMElement::class, BpmnFileElement::class);
     }
 
+    /**
+     * Set the engine used.
+     *
+     * @param EngineInterface $engine
+     *
+     * @return $this
+     */
+    public function setEngine(EngineInterface $engine)
+    {
+        $this->engine = $engine;
+        return $this;
+    }
+
+    /**
+     * Get the used engine.
+     *
+     * @return EngineInterface
+     */
+    public function getEngine()
+    {
+        return $this->engine;
+    }
+
+    /**
+     * Find a element by id.
+     *
+     * @param string $id
+     *
+     * @return BpmnFileElement
+     */
     public function findElementById($id)
     {
         $xpath = new DOMXPath($this);
@@ -41,11 +90,24 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
         return $nodes ? $nodes->item(0) : null;
     }
 
+    /**
+     * Set the BPMN instance by id.
+     *
+     * @param string $id
+     * @param EntityInterface $bpmn
+     */
     public function setBpmnElementById($id, $bpmn)
     {
         $this->bpmnElements[$id] = $bpmn;
     }
 
+    /**
+     * Load a BPMN element.
+     *
+     * @param string $id
+     *
+     * @return EntityInterface
+     */
     public function loadBpmElementById($id)
     {
         $this->bpmnElements[$id] = isset($this->bpmnElements[$id])
@@ -53,6 +115,13 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
         return $this->bpmnElements[$id];
     }
 
+    /**
+     * Verify if the BPMN element identified by id was previously loaded.
+     *
+     * @param string $id
+     *
+     * @return boolean
+     */
     public function hasBpmnInstance($id)
     {
         return isset($this->bpmnElements[$id]);
@@ -63,7 +132,7 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      */
     public function getProcessRepository()
     {
-        return new \ProcessMaker\Models\ProcessRepository($this);
+        return new ProcessRepository($this);
     }
 
     /**
@@ -71,7 +140,7 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      */
     public function getActivityRepository()
     {
-        return new \ProcessMaker\Models\ActivityRepository($this);
+        return new ActivityRepository($this);
     }
 
     /**
@@ -79,7 +148,7 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      */
     public function getGatewayRepository()
     {
-        return new \ProcessMaker\Models\GatewayRepository($this);
+        return new GatewayRepository($this);
     }
 
     /**
@@ -87,7 +156,7 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      */
     public function getEventRepository()
     {
-        return new \ProcessMaker\Models\EventRepository($this);
+        return new EventRepository($this);
     }
 
     /**
@@ -111,7 +180,7 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      */
     public function getFlowRepository()
     {
-        return new \ProcessMaker\Models\FlowRepository($this);
+        return new FlowRepository($this);
     }
 
     /**
@@ -127,7 +196,7 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      */
     public function getDataStoreRepository()
     {
-        return new \ProcessMaker\Models\DataStoreRepository($this);
+        return new DataStoreRepository($this);
     }
 
     /**
@@ -135,15 +204,15 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      */
     public function getTokenRepository()
     {
-        return new \ProcessMaker\Models\TokenRepository($this);
+        return new TokenRepository($this);
     }
 
     /**
      *
-     * @return \ProcessMaker\Models\RootElementRepository
+     * @return RootElementRepository
      */
     public function getRootElementRepository()
     {
-        return new \ProcessMaker\Models\RootElementRepository($this);
+        return new RootElementRepository($this);
     }
 }

@@ -45,4 +45,9 @@ interface CatchEventInterface extends EventInterface
      * @return EventDefinitionInterface[]
      */
     public function getEventDefinitions();
+
+    /**
+     * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
+     */
+    public function getTargetInstances(EventDefinitionInterface $message, TokenInterface $token);
 }

@@ -10,7 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
  *
  * @package ProcessMaker\Models
  */
-class Process implements ProcessInterface
+class CustomProcess implements ProcessInterface
 {
 
     use ProcessTrait,
@@ -32,6 +32,8 @@ class Process implements ProcessInterface
 
     protected function getBpmnEventClasses()
     {
-        return [];
+        return [
+            ProcessInterface::EVENT_PROCESS_COMPLETED => ProcessCompletedEvent::class
+        ];
     }
 }

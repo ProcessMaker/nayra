@@ -3,30 +3,56 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 trait ProcessTrait
 {
-    use BaseTrait {
+    use BaseTrait, ObservableTrait {
         addProperty as baseAddProperty;
+        notifyEvent as public;
     }
 
     /**
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     private $dispatcher;
+
+    /**
+     * @var ExecutionInstanceInterface[]
+     */
+    private $instances;
+
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Engine\EngineInterface
+     */
+    private $engine;
+
+    /**
+     * Initialize the process element.
+     *
+     */
+    protected function initProcessTrait()
+    {
+        $this->instances = new Collection;
+    }
 
     /**
      *
@@ -162,6 +188,22 @@ trait ProcessTrait
         foreach($this->getProperty('gateways') as $gateway) {
             $transitions = array_merge($transitions, $gateway->getTransitions());
         }
+        //Prepare the base events
+        $this->attachEvent(EventInterface::EVENT_EVENT_TRIGGERED, function (EventInterface $event) {
+            if (!($event instanceof EndEventInterface)) return;
+            foreach ($this->getInstances() as $instance) {
+                if ($instance->getTokens()->count() !== 0) continue;
+                $this->notifyEvent(ProcessInterface::EVENT_PROCESS_COMPLETED, $this, $instance, $event);
+                $arguments = [$this, $instance, $event];
+                $bpmnEvents = $this->getBpmnEventClasses();
+                if (isset($bpmnEvents[ProcessInterface::EVENT_PROCESS_COMPLETED])) {
+                    $payload = new $bpmnEvents[ProcessInterface::EVENT_PROCESS_COMPLETED]($this, $arguments);
+                } else {
+                    $payload = ["object" => $this, "arguments" => $arguments];
+                }
+                $this->getDispatcher()->dispatch(ProcessInterface::EVENT_PROCESS_COMPLETED, $payload);
+            }
+        });
         return new Collection($transitions);
     }
 
@@ -212,5 +254,67 @@ trait ProcessTrait
     {
         $this->dispatcher = $dispatcher;
         return $this;
+    }
+
+    /**
+     * Get the loaded process instances.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface[]
+     */
+    public function getInstances()
+    {
+        return $this->instances;
+    }
+
+    /**
+     * Add process instance reference.
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return $this
+     */
+    public function addInstance(ExecutionInstanceInterface $instance)
+    {
+        $this->instances->push($instance);
+        return $this;
+    }
+
+    /**
+     * Set the engine that controls the elements.
+     *
+     * @param EngineInterface $engine
+     *
+     * @return EngineInterface
+     */
+    public function setEngine(EngineInterface $engine)
+    {
+        $this->engine = $engine;
+        return $this;
+    }
+
+    /**
+     * Get the engine that controls the elements.
+     *
+     * @return EngineInterface
+     */
+    public function getEngine()
+    {
+        return $this->engine;
+    }
+
+    /**
+     * Create an instance of the callable element and start it.
+     *
+     */
+    public function call()
+    {
+        $dataStore = $this->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+        $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);
+        $this->getEvents()->find(function(FlowNodeInterface $event){
+            if ($event->getIncomingFlows()->count()===0) {
+                $event->start();
+            }
+        });
+        return $instance;
     }
 }

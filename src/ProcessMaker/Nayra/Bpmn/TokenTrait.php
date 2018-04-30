@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Trait for a token.
@@ -18,6 +19,11 @@ trait TokenTrait
      * @var StateInterface
      */
     private $owner;
+
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     */
+    private $instance;
 
     public function initToken(StateInterface $owner)
     {
@@ -53,5 +59,28 @@ trait TokenTrait
     public function getOwnerStatus()
     {
         return $this->getOwner()->getName();
+    }
+
+    /**
+     * Set the owner execution instance of the token.
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return $this
+     */
+    public function setInstance(ExecutionInstanceInterface $instance)
+    {
+        $this->instance = $instance;
+        return $this;
+    }
+
+    /**
+     * Get the owner execution instance of the token.
+     *
+     * @return ExecutionInstanceInterface $instance
+     */
+    public function getInstance()
+    {
+        return $this->instance;
     }
 }

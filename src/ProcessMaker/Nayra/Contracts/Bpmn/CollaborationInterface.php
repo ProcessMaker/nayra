@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+
 /**
  * A collaboration is a collection of participants and the messages they exchange.
  *
@@ -9,6 +11,8 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface CollaborationInterface extends EntityInterface
 {
+    const BPMN_PROPERTY_PARTICIPANT = 'participant';
+
     /**
      * Get a boolean value specifying whether Message Flows not modeled in the
      * Collaboration can occur when the Collaboration is carried out.
@@ -21,11 +25,6 @@ interface CollaborationInterface extends EntityInterface
      * @return ParticipantInterface[]
      */
     public function getParticipants();
-
-    /**
-     * @return ConversationInterface[]
-     */
-    public function getConversations();
 
     /**
      * @return CorrelationKeyInterface[]
@@ -44,20 +43,20 @@ interface CollaborationInterface extends EntityInterface
     /**
      * Sends a message
      *
-     * @param mixed $message
-     *
+     * @param EventDefinitionInterface $message
+     * @param TokenInterface $token
      */
-    public function send($message);
+    public function send(EventDefinitionInterface $message, TokenInterface $token);
 
     /**
      * Sends a message with a delay in miliseconds
      *
-     * @param mixed $message
-     * @param $delay
+     * @param EventDefinitionInterface $message
+     * @param int $delay
      *
      * @return mixed
      */
-    public function delay($message, $delay);
+    public function delay(EventDefinitionInterface $message, $delay);
 
     /**
      * Subscribes an element to the collaboration so that it can listen the messages sent
