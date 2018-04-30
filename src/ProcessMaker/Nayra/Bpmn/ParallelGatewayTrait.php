@@ -68,7 +68,7 @@ trait ParallelGatewayTrait
         $outgoingPlace = new State($this, GatewayInterface::TOKEN_STATE_OUTGOING);
         $outgoingTransition = new Transition($this);
         $outgoingTransition->attachEvent(
-            TransitionInterface::EVENT_AFTER_TRANSIT,
+            TransitionInterface::EVENT_AFTER_CONSUME,
             function(TransitionInterface $transition)  {
                 $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this, $transition);
             }

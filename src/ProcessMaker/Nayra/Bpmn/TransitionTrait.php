@@ -90,17 +90,19 @@ trait TransitionTrait
      */
     protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
-        $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this);
+        $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this, $consumeTokens);
 
         $consumeTokens->find(function (TokenInterface $token) use ($executionInstance) {
             $token->getOwner()->consumeToken($token, $executionInstance);
         });
 
-        $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this);
+        $this->notifyEvent(TransitionInterface::EVENT_AFTER_CONSUME, $this, $consumeTokens);
 
         $this->outgoing()->find(function (ConnectionInterface $flow) use ($executionInstance) {
             return $flow->targetState()->addNewToken($executionInstance);
         });
+
+        $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this, $consumeTokens);
 
         return true;
     }

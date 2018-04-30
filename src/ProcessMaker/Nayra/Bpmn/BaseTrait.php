@@ -29,7 +29,7 @@ trait BaseTrait
      */
     public function __construct(...$args)
     {
-        $this->callInits($args);
+        $this->bootElement($args);
     }
 
     /**
@@ -37,7 +37,7 @@ trait BaseTrait
      *
      * @param $args
      */
-    private function callInits($args)
+    protected function bootElement($args)
     {
         $reflection = new ReflectionClass($this);
         foreach ($reflection->getMethods() as $method) {
@@ -140,50 +140,6 @@ trait BaseTrait
         $this->properties[$name] = isset($this->properties[$name]) ? $this->properties[$name] : new Collection;
         $this->properties[$name]->push($value);
         return $this;
-    }
-
-    /**
-     * Load custom properties from an array.
-     *
-     * @param array $customProperties
-     *
-     * @return $this
-     */
-    public function loadCustomProperties(array $customProperties)
-    {
-        $properties = [];
-        foreach ($customProperties as $name => $value) {
-            $internalName = $this->getInternalPropertyName($name);
-            $properties[$internalName] = $value;
-        }
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * Get the map of custom properties.
-     *
-     * @return array
-     */
-    protected function customProperties()
-    {
-        return [];
-    }
-
-    /**
-     * Get the property internal name for a custom property.
-     *
-     * @param string $customName
-     *
-     * @return string
-     */
-    private function getInternalPropertyName($customName)
-    {
-        $map = $this->customProperties();
-        if ($map && array_key_exists($customName, $map)) {
-            return $map[$customName];
-        }
-        return $customName;
     }
 
     /**

@@ -49,7 +49,7 @@ trait IntermediateThrowEventTrait
 
         $this->transition=new IntermediateThrowEventTransition($this);
 
-        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, function()  {
+        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function()  {
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED, $this);
         });
     }

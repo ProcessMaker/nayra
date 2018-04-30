@@ -2,9 +2,10 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
@@ -32,6 +33,12 @@ trait FlowNodeTrait
      * @var TransitionInterface[]
      */
     private $transitions = [];
+
+    protected function initFlowNode()
+    {
+        $this->setProperty(FlowNodeInterface::BPMN_PROPERTY_OUTGOING, new Collection);
+        $this->setProperty(FlowNodeInterface::BPMN_PROPERTY_INCOMING, new Collection);
+    }
 
     /**
      * Get tokens in the task for the $dataStore.

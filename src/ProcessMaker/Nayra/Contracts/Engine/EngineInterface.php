@@ -65,7 +65,7 @@ interface EngineInterface
      * @param ProcessInterface $process
      * @param DataStoreInterface $data
      *
-     * @return int
+     * @return ExecutionInstanceInterface
      */
     public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data);
 

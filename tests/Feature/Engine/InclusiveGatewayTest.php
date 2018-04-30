@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Engine;
 
-use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Test transitions
@@ -175,7 +175,8 @@ class InclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
-            EventInterface::EVENT_EVENT_TRIGGERED
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
     }
 
@@ -227,6 +228,7 @@ class InclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
     }
 

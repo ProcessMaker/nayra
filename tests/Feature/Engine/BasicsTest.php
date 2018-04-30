@@ -3,6 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
@@ -24,7 +25,7 @@ class BasicsTest extends EngineTestCase
      */
     private function createSimpleProcessInstance()
     {
-        $process = $this->processRepository->createProcessInstance();
+        $process = $this->processRepository->createCustomProcessInstance();
         //elements
         $start = $this->eventRepository->createStartEventInstance();
         $activity = $this->activityRepository->createActivityInstance();
@@ -79,6 +80,7 @@ class BasicsTest extends EngineTestCase
             'ActivityCompleted',
             'ActivityClosed',
             'EventTriggered',
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
 
         //Assertion: Verify the activity has no tokens
@@ -129,4 +131,3 @@ class BasicsTest extends EngineTestCase
         $this->assertEquals($diagram, $process->getDiagram());
     }
 }
-

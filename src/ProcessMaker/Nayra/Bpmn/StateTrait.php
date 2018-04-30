@@ -55,13 +55,14 @@ trait StateTrait
      *
      * @return bool
      */
-    public function consumeToken(TokenInterface $token/*, ExecutionInstanceInterface $instance*/)
+    public function consumeToken(TokenInterface $token)
     {
         $tokenIndex = $this->tokens->indexOf($token);
         $valid = $tokenIndex !== false;// && $token->getInstance() === $instance;
         if ($valid) {
             $this->tokens->splice($tokenIndex, 1);
             $this->notifyEvent(StateInterface::EVENT_TOKEN_CONSUMED, $token);
+            $token->getInstance()->removeToken($token);
         }
         return $valid;
     }
@@ -76,6 +77,7 @@ trait StateTrait
         $token = $this->getFactory()->getTokenRepository()->createTokenInstance($this);
         $token->setOwner($this);
         $token->setInstance($instance);
+        $instance->addToken($token);
         $this->tokens->push($token);
         $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token);
         return true;

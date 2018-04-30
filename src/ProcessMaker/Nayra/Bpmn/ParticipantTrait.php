@@ -2,8 +2,8 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Participant class
@@ -23,6 +23,12 @@ trait ParticipantTrait
      * @var mixed[] $endPoints
      */
     private $endPoints;
+
+    protected function initParticipant()
+    {
+        $default = ['maximum' => 1, 'minimum' => 0];
+        $this->setProperty(ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY, $default);
+    }
 
     /**
      * Returns the process associated to the participant
@@ -49,34 +55,13 @@ trait ParticipantTrait
     }
 
     /**
-     *
-     *
-     * @return mixed[]
-     */
-    public function getInterfaces()
-    {
-        return $this->interfaces;
-    }
-
-    /**
-     *
-     *
-     * @return mixed[]
-     */
-    public function getEndPoints()
-    {
-        return $this->endPoints;
-    }
-
-    /**
      * Get Participant multiplicity for a given interaction.
      *
      * @return array
      */
     public function getParticipantMultiplicity()
     {
-        $default = ['maximum' => 1, 'minimum' => 0];
-        return $this->getProperty(ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY, $default);
+        return $this->getProperty(ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY);
     }
 
     /**

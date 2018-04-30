@@ -2,9 +2,10 @@
 
 namespace ProcessMaker\Nayra\Engine;
 
-
+use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
@@ -37,6 +38,11 @@ class ExecutionInstance implements ExecutionInstanceInterface
     private $transitions;
 
     /**
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface[]
+     */
+    private $tokens;
+
+    /**
      * ExecutionInstance constructor.
      *
      * @param EngineInterface $engine
@@ -50,6 +56,7 @@ class ExecutionInstance implements ExecutionInstanceInterface
         $this->process = $process;
         $this->dataStore = $data;
         $this->transitions = $process->getTransitions($engine->getRepositoryFactory());
+        $this->tokens = new Collection;
     }
 
     /**
@@ -90,5 +97,37 @@ class ExecutionInstance implements ExecutionInstanceInterface
     public function close()
     {
         return true;
+    }
+
+    /**
+     * Add a token to the current instance.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     *
+     * @return $this
+     */
+    public function addToken(TokenInterface $token)
+    {
+        $this->tokens->push($token);
+        return $this;
+    }
+
+    /**
+     * Remove a token to the current instance.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     *
+     * @return $this
+     */
+    public function removeToken(TokenInterface $token)
+    {
+        $tokenIndex = $this->tokens->indexOf($token);
+        $this->tokens->splice($tokenIndex, 1);
+        return $this;
+    }
+
+    public function getTokens()
+    {
+        return $this->tokens;
     }
 }

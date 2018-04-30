@@ -89,7 +89,7 @@ trait InclusiveGatewayTrait
                 $condition
             );
         }
-        $outgoingTransition->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, function(TransitionInterface $transition)  {
+        $outgoingTransition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function(TransitionInterface $transition)  {
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this);
         });
         $this->transition->connectTo($outgoingPlace);

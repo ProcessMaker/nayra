@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -28,8 +29,8 @@ trait StartEventTrait
         $this->transition = new StartTransition($this);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_BEFORE_TRANSIT,
-            function() {
-                $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this);
+            function(TransitionInterface $transition, CollectionInterface $consumeTokens) {
+                $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
             }
         );
     }

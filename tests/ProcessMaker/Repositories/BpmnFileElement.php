@@ -5,6 +5,8 @@ namespace ProcessMaker\Repositories;
 use DOMAttr;
 use DOMElement;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
@@ -13,7 +15,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 
 /**
  * Description of BpmnFileElement
@@ -37,6 +38,7 @@ class BpmnFileElement extends DOMElement
                 'getEventRepository',
                 'createStartEventInstance',
                 [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
@@ -44,6 +46,7 @@ class BpmnFileElement extends DOMElement
                 'getEventRepository',
                 'createEndEventInstance',
                 [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
@@ -51,6 +54,7 @@ class BpmnFileElement extends DOMElement
                 'getActivityRepository',
                 'createActivityInstance',
                 [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
@@ -69,6 +73,7 @@ class BpmnFileElement extends DOMElement
                 'getActivityRepository',
                 'createCallActivityInstance',
                 [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT => ['1', [BpmnFileRepository::BPMN, CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT]],
                 ]
@@ -145,6 +150,10 @@ class BpmnFileElement extends DOMElement
             $this->bpmn = $bpmnElement;
         } else {
             $bpmnElement = $this->ownerDocument->$repository()->$method();
+            $bpmnElement->setFactory($this->ownerDocument);
+            if ($bpmnElement instanceof CallableElementInterface) {
+                $bpmnElement->setEngine($this->ownerDocument->getEngine());
+            }
             if ($id) {
                 $this->ownerDocument->setBpmnElementById($id, $bpmnElement);
             }
@@ -152,7 +161,6 @@ class BpmnFileElement extends DOMElement
             foreach ($this->attributes as $attribute) {
                 $properties[$attribute->name] = $attribute->value;
             }
-            //$bpmnElement->loadCustomProperties($properties);
             foreach ($this->attributes as $attribute) {
                 $this->setBpmnPropertyRef($attribute, $mapProperties, $bpmnElement);
             }

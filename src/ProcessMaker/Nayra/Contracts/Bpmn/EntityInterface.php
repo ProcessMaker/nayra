@@ -75,13 +75,4 @@ interface EntityInterface
      * @return mixed
      */
     public function setId($id);
-
-    /**
-     * Load custom properties from an array.
-     *
-     * @param array $customProperties
-     *
-     * @return $this
-     */
-    public function loadCustomProperties(array $customProperties);
 }

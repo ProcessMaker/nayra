@@ -19,10 +19,6 @@ class CallActivity implements CallActivityInterface
         LocalFlowNodeTrait,
         LocalProcessTrait,
         LocalPropertiesTrait;
-    /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
-     */
-    private $calledElement;
 
     /**
      * Configure the activity to go to a FAILING status when activated.
@@ -30,9 +26,20 @@ class CallActivity implements CallActivityInterface
      */
     public function initActivity()
     {
-        $this->attachEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-                           function ($self, TokenInterface $token) {
-        });
+        $this->attachEvent(
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            function ($self, TokenInterface $token) {
+                $instance = $this->getCalledElement()->call();
+                $this->getCalledElement()->attachEvent(
+                    ProcessInterface::EVENT_PROCESS_COMPLETED,
+                    function ($self, $closedInstance) use($token, $instance) {
+                        if ($closedInstance===$instance) {
+                            $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
+                        }
+                    }
+                );
+            }
+        );
     }
 
     /**
@@ -49,12 +56,12 @@ class CallActivity implements CallActivityInterface
 
     public function getCalledElement()
     {
-        return $this->calledElement;
+        return $this->getProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT);
     }
 
     public function setCalledElement(ProcessInterface $callableElement)
     {
-        $this->calledElement = $callableElement;
+        $this->setProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT, $callableElement);
         return $this;
     }
 }

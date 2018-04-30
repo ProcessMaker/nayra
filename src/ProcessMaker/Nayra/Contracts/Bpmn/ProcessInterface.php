@@ -28,6 +28,11 @@ interface ProcessInterface extends CallableElementInterface
     const BPMN_PROPERTY_PARTICIPANT = 'participant';
 
     /**
+     * Events defined for Activity
+     */
+    const EVENT_PROCESS_COMPLETED = 'ProcessCompleted';
+
+    /**
      * Child elements.
      */
     const ELEMENTS = [
@@ -205,11 +210,15 @@ interface ProcessInterface extends CallableElementInterface
     public function addGateway(GatewayInterface $gateway);
 
     /**
+     * Get the loaded process instances.
+     *
      * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface[]
      */
     public function getInstances();
 
     /**
+     * Add process instance reference.
+     *
      * @return $this
      */
     public function addInstance(ExecutionInstanceInterface $instance);

@@ -48,21 +48,20 @@ interface CollaborationInterface extends EntityInterface
     /**
      * Sends a message
      *
-     * @param MessageInterface $message
+     * @param mixed $message
      *
-     * @return mixed
      */
-    public function send(MessageEventDefinitionInterface $message, TokenInterface $token);
+    public function send(EventDefinitionInterface $message, TokenInterface $token);
 
     /**
      * Sends a message with a delay in miliseconds
      *
-     * @param MessageInterface $message
+     * @param mixed $message
      * @param $delay
      *
      * @return mixed
      */
-    public function delay(MessageEventDefinitionInterface $message, $delay);
+    public function delay(EventDefinitionInterface $message, $delay);
 
     /**
      * Subscribes an element to the collaboration so that it can listen the messages sent

@@ -30,13 +30,6 @@ interface ParticipantInterface extends EntityInterface
     public function setProcess(ProcessInterface $process);
 
     /**
-     * Get Interfaces that a Participant supports.
-     *
-     * @return array
-     */
-    public function getInterfaces();
-
-    /**
      * Get Participant multiplicity for a given interaction.
      *
      * @return array

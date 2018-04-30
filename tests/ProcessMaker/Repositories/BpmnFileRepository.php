@@ -5,6 +5,7 @@ namespace ProcessMaker\Repositories;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -24,6 +25,11 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
     private $bpmnElements = [];
 
     /**
+     * @var \ProcessMaker\Nayra\Contracts\Engine\EngineInterface
+     */
+    private $engine;
+
+    /**
      *
      * @param string $version
      * @param string $encoding
@@ -32,6 +38,17 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
     {
         parent::__construct($version, $encoding);
         $this->registerNodeClass(DOMElement::class, BpmnFileElement::class);
+    }
+
+    public function setEngine(EngineInterface $engine)
+    {
+        $this->engine = $engine;
+        return $this;
+    }
+
+    public function getEngine()
+    {
+        return $this->engine;
     }
 
     public function findElementById($id)

@@ -27,16 +27,26 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
      */
     private $operation;
 
-    private $collaboration;
-
     /**
      * Get the message.
      *
      * @return MessageInterface
      */
-    public function getMessage()
+    public function getPayload()
     {
         return $this->message;
+    }
+
+    /**
+     * Sets the message to be used in the message event definition
+     *
+     * @param MessageInterface $message
+     * @return $this
+     */
+    public function setPayload($message)
+    {
+        $this->message = $message;
+        return $this;
     }
 
     /**
@@ -47,19 +57,6 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
     public function getOperation()
     {
         return $this->operation;
-    }
-
-
-    /**
-     * Sets the message to be used in the message event definition
-     *
-     * @param MessageInterface $message
-     * @return $this
-     */
-    public function setMessage(MessageInterface $message)
-    {
-        $this->message = $message;
-        return $this;
     }
 
     /**

@@ -23,7 +23,7 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
      *
      * @return bool
      */
-    public function consumeToken(TokenInterface $token/*, ExecutionInstanceInterface $instance*/);
+    public function consumeToken(TokenInterface $token);
 
     /**
      * Add a new token to the current state.

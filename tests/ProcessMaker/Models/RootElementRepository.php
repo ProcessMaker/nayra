@@ -5,6 +5,7 @@ namespace ProcessMaker\Models;
 use ProcessMaker\Nayra\Bpmn\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
+use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
 use ProcessMaker\Nayra\Contracts\Repositories\RootElementRepositoryInterface;
 
 /**
@@ -21,9 +22,11 @@ class RootElementRepository implements RootElementRepositoryInterface
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface
      */
-    public function createItemDefinitionInstance()
+    public function createItemDefinitionInstance(array $properties=[])
     {
-        return new ItemDefinition();
+        $item = new ItemDefinition();
+        $item ->setProperties($properties);
+        return $item;
     }
 
     /**
@@ -64,5 +67,25 @@ class RootElementRepository implements RootElementRepositoryInterface
     public function createParticipantInstance()
     {
         return new Participant();
+    }
+
+    /**
+     * Create a signal instance
+     *
+     * @return Signal
+     */
+    public function createSignalInstance()
+    {
+        return new Signal();
+    }
+
+    /**
+     * Create a signal event definition that is a container of signals
+     *
+     * @return SignalEventDefinition
+     */
+    public function createSignalEventDefinitionInstance()
+    {
+        return new SignalEventDefinition();
     }
 }

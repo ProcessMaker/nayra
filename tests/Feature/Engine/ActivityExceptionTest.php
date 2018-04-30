@@ -4,6 +4,7 @@ namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Test an activity with exception.
@@ -82,6 +83,7 @@ class ActivityExceptionTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
 
         //Assertion: Finally the activity does not have tokens.

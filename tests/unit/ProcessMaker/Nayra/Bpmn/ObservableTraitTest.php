@@ -27,11 +27,11 @@ class ObservableTraitTest extends TestCase
         $transition = new ActivityTransition($dummyGateway);
 
         //Assertion: once attached to an event the observer count should be incremented by one
-        $transition->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, [$this,'dummyFunction']);
-        $this->assertCount(1, $transition->getObservers()[TransitionInterface::EVENT_AFTER_TRANSIT]);
+        $transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, [$this,'dummyFunction']);
+        $this->assertCount(1, $transition->getObservers()[TransitionInterface::EVENT_AFTER_CONSUME]);
 
         //Assertion: once attached to an event the observer count should be reduced by one
-        $transition->detachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, [$this, 'dummyFunction']);
-        $this->assertCount(0, $transition->getObservers()[TransitionInterface::EVENT_AFTER_TRANSIT]);
+        $transition->detachEvent(TransitionInterface::EVENT_AFTER_CONSUME, [$this, 'dummyFunction']);
+        $this->assertCount(0, $transition->getObservers()[TransitionInterface::EVENT_AFTER_CONSUME]);
     }
 }

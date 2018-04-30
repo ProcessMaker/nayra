@@ -5,6 +5,7 @@ namespace Tests\Feature\Engine;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -22,6 +23,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
     {
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->load(__DIR__ . '/files/ParallelGateway.bpmn');
 
         //Load a process from a bpmn repository by Id
@@ -113,6 +115,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
     }
 
@@ -124,6 +127,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
     {
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->load(__DIR__ . '/files/InclusiveGateway_Default.bpmn');
 
         //Load a process from a bpmn repository by Id
@@ -210,6 +214,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
     }
 }
