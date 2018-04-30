@@ -8,6 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -18,7 +19,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 trait StartEventTrait
 {
 
-    use FlowNodeTrait;
+    use CatchEventTrait;
     /**
      *
      * @var StartTransition
@@ -68,14 +69,15 @@ trait StartEventTrait
      * Method to be called when a message event arrives
      *
      * @param EventDefinitionInterface $message
+     * @param ExecutionInstanceInterface $instance
      *
-     * @return mixed
+     * @return $this
      */
-    public function execute(EventDefinitionInterface $message)
+    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance)
     {
         $this->start();
 
         // with a new token in the trigger place, the event catch element will be fired
-        $this->triggerPlace->addNewToken();
+        $this->triggerPlace->addNewToken($instance);
     }
 }
