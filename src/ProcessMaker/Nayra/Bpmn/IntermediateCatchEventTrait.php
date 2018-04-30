@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\EndTransition;
-use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
@@ -21,8 +19,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
  */
 trait IntermediateCatchEventTrait
 {
-
-    use FlowNodeTrait;
+     use CatchEventTrait;
 
     /**
      * Receive tokens.
@@ -104,12 +101,5 @@ trait IntermediateCatchEventTrait
         $this->triggerPlace->addNewToken($instance);
         return $this;
     }
-
-    /**
-     * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
-     */
-    public function getTargetInstances(EventDefinitionInterface $message, TokenInterface $token)
-    {
-        return $this->getOwnerProcess()->getInstances();
-    }
 }
+
