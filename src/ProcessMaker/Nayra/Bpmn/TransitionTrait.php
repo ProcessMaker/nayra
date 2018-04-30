@@ -85,6 +85,7 @@ trait TransitionTrait
      * Do the transition of the selected tokens.
      *
      * @param CollectionInterface $consumeTokens
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
      *
      * @return boolean
      */

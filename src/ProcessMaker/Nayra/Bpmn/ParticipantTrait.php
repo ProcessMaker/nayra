@@ -24,6 +24,10 @@ trait ParticipantTrait
      */
     private $endPoints;
 
+    /**
+     * Initialize the default values for the participant element.
+     *
+     */
     protected function initParticipant()
     {
         $default = ['maximum' => 1, 'minimum' => 0];

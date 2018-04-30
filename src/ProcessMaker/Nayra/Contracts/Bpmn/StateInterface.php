@@ -19,7 +19,6 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
      * Consume a token from the current state.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      *
      * @return bool
      */

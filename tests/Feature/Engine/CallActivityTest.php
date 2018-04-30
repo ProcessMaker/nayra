@@ -8,14 +8,14 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
- * Test transitions
+ * Test call activity element.
  *
  */
 class CallActivityTest extends EngineTestCase
 {
 
     /**
-     * Test a parallel gateway with two outgoing flows.
+     * Test a call activity collaboration.
      *
      */
     public function testCallActivity()

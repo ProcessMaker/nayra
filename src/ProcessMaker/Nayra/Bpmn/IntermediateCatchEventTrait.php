@@ -94,11 +94,15 @@ trait IntermediateCatchEventTrait
      * To implement the MessageListener interface
      *
      * @param EventDefinitionInterface $message
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return $this
      */
     public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance)
     {
         // with a new token in the trigger place, the event catch element will be fired
         $this->triggerPlace->addNewToken($instance);
+        return $this;
     }
 
     /**

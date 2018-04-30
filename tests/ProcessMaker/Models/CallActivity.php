@@ -33,7 +33,7 @@ class CallActivity implements CallActivityInterface
                 $this->getCalledElement()->attachEvent(
                     ProcessInterface::EVENT_PROCESS_COMPLETED,
                     function ($self, $closedInstance) use($token, $instance) {
-                        if ($closedInstance===$instance) {
+                        if ($closedInstance === $instance) {
                             $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
                         }
                     }

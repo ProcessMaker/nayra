@@ -45,6 +45,10 @@ trait ProcessTrait
      */
     private $engine;
 
+    /**
+     * Initialize the process element.
+     *
+     */
     protected function initProcessTrait()
     {
         $this->instances = new Collection;
@@ -264,6 +268,8 @@ trait ProcessTrait
 
     /**
      * Add process instance reference.
+     *
+     * @param ExecutionInstanceInterface $instance
      *
      * @return $this
      */

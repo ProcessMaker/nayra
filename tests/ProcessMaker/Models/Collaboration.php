@@ -26,49 +26,14 @@ class Collaboration implements CollaborationInterface
     private $isClosed;
 
     /**
-     * @var TODO_MessageFlowInterface[] $messageFlows
+     * @var MessageFlowInterface[] $messageFlows
      */
     private $messageFlows;
 
     /**
-     * @var TODO_ArtifactInterface[] $artifacts
-     */
-    private $artifacts;
-
-    /**
-     * @var TODO_ConversationNodeInterface[] $conversationNodes
-     */
-    private $conversationNodes;
-
-    /**
-     * @var TODO_ConversationAssociationInterface[] $conversationAssociations
-     */
-    private $conversationAssociations;
-
-    /**
-     * @var TODO_ParticipantAssociationInterface[] $participantAssociations
-     */
-    private $participantAssociations;
-
-    /**
-     * @var TODO_MessageFlowAssociationInterface[] $messageFlowAssociations
-     */
-    private $messageFlowAssociations;
-
-    /**
-     * @var TODO_CorrelationKeyInterface[] $correlationKeys
+     * @var CorrelationKeyInterface[] $correlationKeys
      */
     private $correlationKeys;
-
-    /**
-     * @var TODO_choreographyInterface[] $choreographies
-     */
-    private $choreographies;
-
-    /**
-     * @var TODO_ConversationLinkInterface[] $conversationLinks
-     */
-    private $conversationLinks;
 
     protected function initCollaboration()
     {
@@ -81,58 +46,81 @@ class Collaboration implements CollaborationInterface
         $this->messageFlowAssociations = new Collection;
         $this->messageFlows = new Collection;
         $this->participantAssociations = new Collection;
-        $this->participants = new Collection;
+        $this->setProperty(CollaborationInterface::BPMN_PROPERTY_PARTICIPANT, new Collection);
     }
 
-    public function getConversations()
-    {
-        return $this->conversationNodes;
-    }
-
+    /**
+     * Get correlation keys.
+     *
+     * @return CorrelationKeyInterface[]
+     */
     public function getCorrelationKeys()
     {
         return $this->correlationKeys;
     }
 
+    /**
+     * Get message flows.
+     *
+     * @return MessageFlowInterface[]
+     */
     public function getMessageFlows()
     {
         return $this->messageFlows;
     }
 
+    /**
+     * Add a message flow.
+     *
+     * @param MessageFlowInterface $messageFlow
+     *
+     * @return $this
+     */
     public function addMessageFlow(MessageFlowInterface $messageFlow)
     {
         $this->messageFlows->push($messageFlow);
+        return $this;
     }
 
+    /**
+     * Get participants.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface[]
+     */
     public function getParticipants()
     {
-        if ($this->getProperty(CollaborationInterface::BPMN_PROPERTY_PARTICIPANT)===null) {
-            $this->setProperty(CollaborationInterface::BPMN_PROPERTY_PARTICIPANT, new Collection);
-        }
         return $this->getProperty(CollaborationInterface::BPMN_PROPERTY_PARTICIPANT);
     }
 
+    /**
+     * Get a boolean value specifying whether Message Flows not modeled in the
+     * Collaboration can occur when the Collaboration is carried out.
+     *
+     * @return bool
+     */
     public function isClosed()
     {
         return $this->isClosed;
     }
 
+    /**
+     * Set if the collaboration is closed.
+     *
+     * @param boolean $isClosed
+     *
+     * @return $this
+     */
     public function setClosed($isClosed)
     {
         $this->isClosed = $isClosed;
         return $this;
     }
 
-    public function setFactory(\ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface $factory)
-    {
-
-    }
-
     /**
      * Sends a message
      *
      * @param EventDefinitionInterface $message
-     *
+     * @param TokenInterface $token
      */
     public function send(EventDefinitionInterface $message, TokenInterface $token)
     {
@@ -150,9 +138,11 @@ class Collaboration implements CollaborationInterface
     }
 
     /**
+     * Get instances related to the catch event node.
      *
-     * @param EventDefinitionInterface $message
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface $node
+     * @param EventDefinitionInterface $message
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
      *
      * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
      */
@@ -162,7 +152,7 @@ class Collaboration implements CollaborationInterface
     }
 
     /**
-     * Sends a message with a delay in miliseconds
+     * Sends a message with a delay in milliseconds
      *
      * @param EventDefinitionInterface $message
      * @param $delay
@@ -178,7 +168,7 @@ class Collaboration implements CollaborationInterface
     /**
      * Subscribes an element to the collaboration so that it can listen the messages sent
      *
-     * @param MessageListenerInterface $element
+     * @param MessageListenerInterface $node
      * @param string $messageId
      * @internal param string $id
      * @internal param MessageInterface $message
@@ -210,8 +200,16 @@ class Collaboration implements CollaborationInterface
             });
     }
 
+    /**
+     * Set message flows collection.
+     *
+     * @param CollectionInterface $messageFlows
+     *
+     * @return $this
+     */
     public function setMessageFlows(CollectionInterface $messageFlows)
     {
-        // TODO: Implement setMessageFlows() method.
+        $this->messageFlows = $messageFlows;
+        return $this;
     }
 }

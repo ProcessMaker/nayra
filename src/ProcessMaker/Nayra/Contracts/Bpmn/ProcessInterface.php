@@ -33,19 +33,6 @@ interface ProcessInterface extends CallableElementInterface
     const EVENT_PROCESS_COMPLETED = 'ProcessCompleted';
 
     /**
-     * Child elements.
-     */
-    const ELEMENTS = [
-        'activities' => ActivityInterface::TYPE,
-        'gateways' => GatewayInterface::TYPE,
-        'events' => EventInterface::TYPE,
-        'artifacts' => ArtifactInterface::TYPE,
-        'flows' => FlowInterface::TYPE,
-        'dataStores' => DataStoreInterface::TYPE,
-    ];
-
-    
-    /**
      * Get Diagram of the process.
      *
      * @return DiagramInterface
@@ -218,6 +205,8 @@ interface ProcessInterface extends CallableElementInterface
 
     /**
      * Add process instance reference.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      *
      * @return $this
      */

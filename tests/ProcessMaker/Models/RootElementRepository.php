@@ -20,6 +20,8 @@ class RootElementRepository implements RootElementRepositoryInterface
     /**
      * Create a new instance.
      *
+     * @param array $properties
+     *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface
      */
     public function createItemDefinitionInstance(array $properties=[])
@@ -59,6 +61,11 @@ class RootElementRepository implements RootElementRepositoryInterface
         return new FormalExpression();
     }
 
+    /**
+     * Create a collaboration instance.
+     *
+     * @return \ProcessMaker\Models\Collaboration
+     */
     public function createCollaborationInstance()
     {
         return new Collaboration();

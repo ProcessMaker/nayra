@@ -58,7 +58,7 @@ trait StateTrait
     public function consumeToken(TokenInterface $token)
     {
         $tokenIndex = $this->tokens->indexOf($token);
-        $valid = $tokenIndex !== false;// && $token->getInstance() === $instance;
+        $valid = $tokenIndex !== false;
         if ($valid) {
             $this->tokens->splice($tokenIndex, 1);
             $this->notifyEvent(StateInterface::EVENT_TOKEN_CONSUMED, $token);
@@ -69,6 +69,8 @@ trait StateTrait
 
     /**
      * Add a new token instance to the state.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      *
      * @return bool
      */

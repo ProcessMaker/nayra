@@ -27,11 +27,6 @@ interface CollaborationInterface extends EntityInterface
     public function getParticipants();
 
     /**
-     * @return ConversationInterface[]
-     */
-    public function getConversations();
-
-    /**
      * @return CorrelationKeyInterface[]
      */
     public function getCorrelationKeys();
@@ -48,16 +43,16 @@ interface CollaborationInterface extends EntityInterface
     /**
      * Sends a message
      *
-     * @param mixed $message
-     *
+     * @param EventDefinitionInterface $message
+     * @param TokenInterface $token
      */
     public function send(EventDefinitionInterface $message, TokenInterface $token);
 
     /**
      * Sends a message with a delay in miliseconds
      *
-     * @param mixed $message
-     * @param $delay
+     * @param EventDefinitionInterface $message
+     * @param int $delay
      *
      * @return mixed
      */
