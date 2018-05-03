@@ -156,17 +156,4 @@ trait ActivityTrait
         $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
         return $this;
     }
-
-    /**
-     * Get tokens in the activity.
-     *
-     * @return CollectionInterface
-     */
-    public function getTokens()
-    {
-        $tokens = $this->activeState->getTokens()->toArray();
-        $tokens = array_merge($tokens, $this->failingState->getTokens()->toArray());
-        $tokens = array_merge($tokens, $this->closedState->getTokens()->toArray());
-        return new Collection($tokens);
-    }
 }

@@ -61,11 +61,11 @@ class CallActivityTest extends EngineTestCase
         //Assertion: Expects that $calledProcess has one instance
         $this->assertEquals(1, $calledProcess->getInstances()->count());
 
-        //Assertion: Expects that $subtask owned by the $calledProcess has one token
-        $this->assertEquals(1, $subtask->getTokens($instance)->count());
-
         //Get instance of the process called by the CallActivity
-        $instance = $calledProcess->getInstances()->item(0);
+        $subInstance = $calledProcess->getInstances()->item(0);
+
+        //Assertion: Expects that $subtask owned by the $calledProcess has one token
+        $this->assertEquals(1, $subtask->getTokens($subInstance)->count());
 
         //Assertion: $process is started, first activity completed and starts the subtask.
         $this->assertEvents([
@@ -79,7 +79,7 @@ class CallActivityTest extends EngineTestCase
         ]);
 
         //Complete the subtask
-        $token = $subtask->getTokens($instance)->item(0);
+        $token = $subtask->getTokens($subInstance)->item(0);
         $subtask->complete($token);
         $this->engine->runToNextState();
 
@@ -94,7 +94,7 @@ class CallActivityTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
-        //Complete the subtask
+        //Complete the last task
         $token = $endTask->getTokens($instance)->item(0);
         $endTask->complete($token);
         $this->engine->runToNextState();

@@ -40,9 +40,9 @@ class DefaultTransition implements TransitionInterface
      *
      * @return boolean
      */
-    protected function conditionIsFalse()
+    protected function conditionIsFalse(ExecutionInstanceInterface $executionInstance)
     {
-        $this->collect();
+        $this->collect($executionInstance);
         return true;
     }
 
@@ -50,10 +50,10 @@ class DefaultTransition implements TransitionInterface
      * Consume the input tokens.
      *
      */
-    private function collect()
+    private function collect(ExecutionInstanceInterface $executionInstance)
     {
-        return $this->incoming()->sum(function (Connection $flow) {
-            return $flow->origin()->getTokens()->sum(function (TokenInterface $token) {
+        return $this->incoming()->sum(function (Connection $flow) use ($executionInstance) {
+            return $flow->origin()->getTokens($executionInstance)->sum(function (TokenInterface $token) {
                 return $token->getOwner()->consumeToken($token) ? 1 :0;
             });
         });

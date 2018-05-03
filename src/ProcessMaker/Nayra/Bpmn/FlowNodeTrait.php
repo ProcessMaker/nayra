@@ -4,10 +4,10 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -34,6 +34,13 @@ trait FlowNodeTrait
      */
     private $transitions = [];
 
+    /**
+     * States that define the behavior of the node.
+     *
+     * @var StateInterface[]
+     */
+    private $states = [];
+
     protected function initFlowNode()
     {
         $this->setProperty(FlowNodeInterface::BPMN_PROPERTY_OUTGOING, new Collection);
@@ -41,17 +48,17 @@ trait FlowNodeTrait
     }
 
     /**
-     * Get tokens in the task for the $dataStore.
+     * Get tokens in the element.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface $dataStore
      *
      * @return CollectionInterface
      */
-    public function getTokens(DataStoreInterface $dataStore)
+    public function getTokens(ExecutionInstanceInterface $instance)
     {
         $tokens = [];
-        foreach ($this->inputs as $input) {
-            $tokens = array_merge($tokens, $input->getTokens()->toArray());
+        foreach($this->getStates() as $state) {
+            $tokens = array_merge($tokens, $state->getTokens($instance)->toArray());
         }
         return new Collection($tokens);
     }
@@ -115,5 +122,28 @@ trait FlowNodeTrait
         foreach($flows as $flow) {
             $this->buildConnectionTo($flow->getTarget());
         }
+    }
+
+    /**
+     * Add a state for the node element.
+     *
+     * @param StateInterface $state
+     *
+     * @return $this
+     */
+    public function addState(StateInterface $state)
+    {
+        $this->states[] = $state;
+        return $this;
+    }
+
+    /**
+     * Get the states of the node element.
+     *
+     * @return StateInterface[]
+     */
+    public function getStates()
+    {
+        return $this->states;
     }
 }

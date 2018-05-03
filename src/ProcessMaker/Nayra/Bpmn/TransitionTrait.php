@@ -62,10 +62,10 @@ trait TransitionTrait
      *
      * @return boolean
      */
-    protected function hasAllRequiredTokens()
+    protected function hasAllRequiredTokens(ExecutionInstanceInterface $instance)
     {
-        return $this->incoming()->count() > 0 && $this->incoming()->find(function ($flow) {
-                return $flow->origin()->getTokens()->count() === 0;
+        return $this->incoming()->count() > 0 && $this->incoming()->find(function ($flow) use ($instance) {
+                return $flow->origin()->getTokens($instance)->count() === 0;
             })->count() === 0;
     }
 
@@ -117,11 +117,11 @@ trait TransitionTrait
      */
     public function execute(ExecutionInstanceInterface $executionInstance)
     {
-        $hasAllRequiredTokens = $this->hasAllRequiredTokens();
+        $hasAllRequiredTokens = $this->hasAllRequiredTokens($executionInstance);
         if ($hasAllRequiredTokens) {
             $consumeTokens = $this->evaluateConsumeTokens($executionInstance);
             if ($consumeTokens === false) {
-                return $this->conditionIsFalse();
+                return $this->conditionIsFalse($executionInstance);
             } else {
                 return $this->doTransit($consumeTokens, $executionInstance);
             }
@@ -145,7 +145,7 @@ trait TransitionTrait
         $pendingTokens = $this->getTokensConsumedPerTransition();
         $this->incoming()->find(function ($flow) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingTokens) {
             $pendingIncomingTokens = $this->getTokensConsumedPerIncoming();
-            $flow->origin()->getTokens()->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingIncomingTokens, &$pendingTokens) {
+            $flow->origin()->getTokens($executionInstance)->find(function (TokenInterface $token) use (&$consumeTokens, &$hasInputTokens, $executionInstance, &$pendingIncomingTokens, &$pendingTokens) {
                 $hasInputTokens = true;
                 $result = $pendingTokens !== 0 && $pendingIncomingTokens !== 0
                     && $this->assertCondition($token, $executionInstance);
