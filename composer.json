@@ -1,15 +1,9 @@
 {
-    "name": "processmaker/processmaker-re",
-    "description": "Runtime environment for ProcessMaker",
-    "authors": [
-        {
-            "name": "David Callizaya",
-            "email": "david.callizaya@processmaker.com"
-        }
-    ],
+    "name": "processmaker/nayra",
+    "description": "BPMN compliant engine",
     "autoload": {
         "psr-4": {
-          "ProcessMaker\\": "src/ProcessMaker/"
+            "ProcessMaker\\": "src/ProcessMaker/"
         }
     },
     "autoload-dev": {
