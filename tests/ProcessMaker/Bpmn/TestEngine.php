@@ -2,12 +2,11 @@
 
 namespace ProcessMaker\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Engine\EngineTrait;
 use ProcessMaker\Models\RepositoryFactory;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
-use Illuminate\Contracts\Events\Dispatcher;
 
 /**
  * Test implementation for EngineInterface.
@@ -25,18 +24,18 @@ class TestEngine implements EngineInterface
     private $repositoryFactory;
 
     /**
-     * @var \Illuminate\Contracts\Events\Dispatcher $dispatcher
+     * @var EventBusInterface $dispatcher
      */
     protected $dispatcher;
 
-    public function __construct(RepositoryFactoryInterface $repository, Dispatcher $dispatcher)
+    public function __construct(RepositoryFactoryInterface $repository, EventBusInterface $dispatcher)
     {
         $this->repositoryFactory = new RepositoryFactory();
         $this->dispatcher = $dispatcher;
     }
 
     /**
-     * @return \Illuminate\Contracts\Events\Dispatcher
+     * @return EventBusInterface
      */
     public function getDispatcher()
     {
@@ -44,11 +43,11 @@ class TestEngine implements EngineInterface
     }
 
     /**
-     * @param \Illuminate\Contracts\Events\Dispatcher $dispatcher
+     * @param EventBusInterface $dispatcher
      *
      * @return $this
      */
-    public function setDispatcher(\Illuminate\Contracts\Events\Dispatcher $dispatcher)
+    public function setDispatcher(EventBusInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
         return $this;

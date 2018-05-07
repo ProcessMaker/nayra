@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use Illuminate\Contracts\Events\Dispatcher;
+use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -156,7 +156,7 @@ interface ProcessInterface extends CallableElementInterface
     /**
      * Get the dispatcher of the process.
      *
-     * @return \Illuminate\Contracts\Events\Dispatcher
+     * @return \ProcessMaker\Nayra\Contracts\EventBusInterface
      */
     public function getDispatcher();
 
@@ -167,7 +167,7 @@ interface ProcessInterface extends CallableElementInterface
      *
      * @return $this
      */
-    public function setDispatcher(Dispatcher $dispatcher);
+    public function setDispatcher(EventBusInterface $dispatcher);
 
     /**
      * Add an activity to the process.

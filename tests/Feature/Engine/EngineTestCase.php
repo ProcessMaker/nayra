@@ -7,6 +7,7 @@ use ProcessMaker\Bpmn\TestEngine;
 use ProcessMaker\Models\ItemDefinitionFactory;
 use ProcessMaker\Models\RepositoryFactory;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\EventBusInterface;
 
 /**
  * Test transitions
@@ -88,8 +89,9 @@ class EngineTestCase extends TestCase
         $this->messageFlowRepository = $factory->getMessageFlowRepository();
 
         //Initialize a dispatcher
-        $fakeDispatcher = $this->getMockBuilder(\Illuminate\Contracts\Events\Dispatcher::class)
+        $fakeDispatcher = $this->getMockBuilder(EventBusInterface::class)
             ->getMock();
+
         $fakeDispatcher->expects($this->any())
             ->method('dispatch')
             ->will($this->returnCallback(function($event, $payload) {

@@ -12,9 +12,6 @@
             "ProcessMaker\\": ["src/ProcessMaker/", "tests/unit/ProcessMaker/", "tests/ProcessMaker/"]
         }
     },
-    "require": {
-        "illuminate/events": "v5.4.36"
-    },
     "require-dev": {
         "phpunit/phpunit": "^5.7"
     }
