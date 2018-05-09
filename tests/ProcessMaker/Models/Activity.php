@@ -19,16 +19,6 @@ class Activity implements ActivityInterface
         LocalPropertiesTrait;
 
     /**
-     * Called when activated.
-     *
-     * @throws ActivityWorkException
-     */
-    public function work()
-    {
-
-    }
-
-    /**
      * Array map of custom event classes for the bpmn element.
      *
      * @return array

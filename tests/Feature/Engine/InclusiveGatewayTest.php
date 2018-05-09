@@ -121,7 +121,7 @@ class InclusiveGatewayTest extends EngineTestCase
 
         //Load the process
         $process = $this->createProcessWithInclusiveGateway();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
@@ -146,7 +146,7 @@ class InclusiveGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity A
-        $tokenA = $activityA->getTokens($dataStore)->item(0);
+        $tokenA = $activityA->getTokens($instance)->item(0);
         $activityA->complete($tokenA);
 
         //the run to next state should go false when the max steps is reached.
@@ -162,7 +162,7 @@ class InclusiveGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity B
-        $tokenB = $activityB->getTokens($dataStore)->item(0);
+        $tokenB = $activityB->getTokens($instance)->item(0);
         $activityB->complete($tokenB);
         $this->engine->runToNextState();
 
@@ -193,7 +193,7 @@ class InclusiveGatewayTest extends EngineTestCase
         $dataStore->putData('A', '0');
         $dataStore->putData('B', '1');
         $process = $this->createProcessWithInclusiveGateway();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
@@ -215,7 +215,7 @@ class InclusiveGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity B
-        $tokenB = $activityB->getTokens($dataStore)->item(0);
+        $tokenB = $activityB->getTokens($instance)->item(0);
         $activityB->complete($tokenB);
         $this->engine->runToNextState();
 

@@ -50,14 +50,14 @@ class ActivityExceptionTest extends EngineTestCase
 
         //Load a simple process with activity exception.
         $process = $this->createSimpleProcessInstance();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get references to the start event and activity.
         $start = $process->getEvents()->item(0);
         $activity = $process->getActivities()->item(0);
 
         //Assertion: Initially the activity does not have tokens.
-        $this->assertEquals(0, $activity->getTokens($dataStore)->count());
+        $this->assertEquals(0, $activity->getTokens($instance)->count());
 
         //Trigger start event
         $start->start();
@@ -69,14 +69,14 @@ class ActivityExceptionTest extends EngineTestCase
         ]);
 
         //Assertion: The activity has one token.
-        $this->assertEquals(1, $activity->getTokens()->count());
+        $this->assertEquals(1, $activity->getTokens($instance)->count());
 
         //Assertion: The activity is in FAILING status.
-        $token = $activity->getTokens()->item(0);
+        $token = $activity->getTokens($instance)->item(0);
         $this->assertEquals(ActivityInterface::TOKEN_STATE_FAILING, $token->getOwnerStatus());
 
         //Complete the activity
-        $token = $activity->getTokens()->item(0);
+        $token = $activity->getTokens($instance)->item(0);
         $activity->complete($token);
         $this->engine->runToNextState();
         $this->assertEvents([
@@ -87,6 +87,6 @@ class ActivityExceptionTest extends EngineTestCase
         ]);
 
         //Assertion: Finally the activity does not have tokens.
-        $this->assertEquals(0, $activity->getTokens($dataStore)->count());
+        $this->assertEquals(0, $activity->getTokens($instance)->count());
     }
 }

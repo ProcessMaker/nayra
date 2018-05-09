@@ -9,10 +9,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
- * Test load of process from BPMN files.
+ * Test transitions
  *
  */
-class LoadFromBPMNFileTest extends EngineTestCase
+class LoadSaveInstancesTest extends EngineTestCase
 {
 
     /**

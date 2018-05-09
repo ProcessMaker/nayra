@@ -119,7 +119,7 @@ class ParallelGatewayTest extends EngineTestCase
 
         //Load the process
         $process = $this->createProcessWithParallelGateway();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
@@ -145,7 +145,7 @@ class ParallelGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity A
-        $tokenA = $activityA->getTokens($dataStore)->item(0);
+        $tokenA = $activityA->getTokens($instance)->item(0);
         $activityA->complete($tokenA);
 
         //the run to next state should go false when the max steps is reached.
@@ -161,7 +161,7 @@ class ParallelGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity B
-        $tokenB = $activityB->getTokens($dataStore)->item(0);
+        $tokenB = $activityB->getTokens($instance)->item(0);
         $activityB->complete($tokenB);
         $this->engine->runToNextState();
 
@@ -178,15 +178,15 @@ class ParallelGatewayTest extends EngineTestCase
         ]);
 
         //Assertion: ActivityC has one token.
-        $this->assertEquals(1, $activityC->getTokens($dataStore)->count());
+        $this->assertEquals(1, $activityC->getTokens($instance)->count());
 
         //Completes the Activity C
-        $tokenC = $activityC->getTokens($dataStore)->item(0);
+        $tokenC = $activityC->getTokens($instance)->item(0);
         $activityC->complete($tokenC);
         $this->engine->runToNextState();
 
         //Assertion: ActivityC has no tokens.
-        $this->assertEquals(0, $activityC->getTokens($dataStore)->count());
+        $this->assertEquals(0, $activityC->getTokens($instance)->count());
 
         //Assertion: ActivityC was completed and closed, then the process has ended.
         $this->assertEvents([
@@ -209,7 +209,7 @@ class ParallelGatewayTest extends EngineTestCase
 
         //Load the process
         $process = $this->createParallelDivergingInclusiveConverging();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
@@ -235,7 +235,7 @@ class ParallelGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity A
-        $tokenA = $activityA->getTokens($dataStore)->item(0);
+        $tokenA = $activityA->getTokens($instance)->item(0);
         $activityA->complete($tokenA);
 
         //the run to next state should go false when the max steps is reached.
@@ -251,7 +251,7 @@ class ParallelGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity B
-        $tokenB = $activityB->getTokens($dataStore)->item(0);
+        $tokenB = $activityB->getTokens($instance)->item(0);
         $activityB->complete($tokenB);
         $this->engine->runToNextState();
 
@@ -268,15 +268,15 @@ class ParallelGatewayTest extends EngineTestCase
         ]);
 
         //Assertion: ActivityC has one token.
-        $this->assertEquals(1, $activityC->getTokens($dataStore)->count());
+        $this->assertEquals(1, $activityC->getTokens($instance)->count());
 
         //Completes the Activity C
-        $tokenC = $activityC->getTokens($dataStore)->item(0);
+        $tokenC = $activityC->getTokens($instance)->item(0);
         $activityC->complete($tokenC);
         $this->engine->runToNextState();
 
         //Assertion: ActivityC has no tokens.
-        $this->assertEquals(0, $activityC->getTokens($dataStore)->count());
+        $this->assertEquals(0, $activityC->getTokens($instance)->count());
 
         //Assertion: ActivityC was completed and closed, then the process has ended.
         $this->assertEvents([
