@@ -228,8 +228,8 @@ class IntermediateMessageEventTest extends EngineTestCase
         $dataStoreB = $this->dataStoreRepository->createDataStoreInstance();
         $dataStoreB->putData('B', '1');
 
-        $this->engine->createExecutionInstance($processA, $dataStoreA);
-        $this->engine->createExecutionInstance($processB, $dataStoreB);
+        $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
+        $instanceB = $this->engine->createExecutionInstance($processB, $dataStoreB);
 
         $startC = $processB->getEvents()->item(0);
         $activityC = $processB->getActivities()->item(0);
@@ -243,7 +243,7 @@ class IntermediateMessageEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
-        $tokenC = $activityC->getTokens($dataStoreB)->item(0);
+        $tokenC = $activityC->getTokens($instanceB)->item(0);
         $activityC->complete($tokenC);
 
         $this->engine->runToNextState();
@@ -267,7 +267,7 @@ class IntermediateMessageEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
-        $tokenA = $activityA->getTokens($dataStoreA)->item(0);
+        $tokenA = $activityA->getTokens($instanceA)->item(0);
         $activityA->complete($tokenA);
 
         $this->engine->runToNextState();
@@ -334,8 +334,8 @@ class IntermediateMessageEventTest extends EngineTestCase
         $dataStoreB = $this->dataStoreRepository->createDataStoreInstance();
         $dataStoreB->putData('B', '1');
 
-        $this->engine->createExecutionInstance($processA, $dataStoreA);
-        $this->engine->createExecutionInstance($processB, $dataStoreB);
+        $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
+        $instanceB = $this->engine->createExecutionInstance($processB, $dataStoreB);
 
         $startC = $processB->getEvents()->item(0);
         $activityC = $processB->getActivities()->item(0);
@@ -349,7 +349,7 @@ class IntermediateMessageEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
-        $tokenC = $activityC->getTokens($dataStoreB)->item(0);
+        $tokenC = $activityC->getTokens($instanceB)->item(0);
         $activityC->complete($tokenC);
 
         $this->engine->runToNextState();
@@ -373,7 +373,7 @@ class IntermediateMessageEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
-        $tokenA = $activityA->getTokens($dataStoreA)->item(0);
+        $tokenA = $activityA->getTokens($instanceA)->item(0);
         $activityA->complete($tokenA);
 
         $this->engine->runToNextState();

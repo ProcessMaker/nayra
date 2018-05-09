@@ -165,7 +165,7 @@ class ExclusiveGatewayTest extends EngineTestCase
 
         //Load the process
         $process = $this->createProcessWithExclusiveGateway();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
@@ -186,7 +186,7 @@ class ExclusiveGatewayTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
-        $tokenB = $activityB->getTokens($dataStore)->item(0);
+        $tokenB = $activityB->getTokens($instance)->item(0);
         $activityB->complete($tokenB);
 
         //the run to next state should go false when the max steps is reached.
@@ -238,7 +238,7 @@ class ExclusiveGatewayTest extends EngineTestCase
 
         //Load the process
         $process = $this->createProcessWithExclusiveGatewayAndDefaultTransition();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
@@ -260,7 +260,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity C
-        $tokenC = $activityC->getTokens($dataStore)->item(0);
+        $tokenC = $activityC->getTokens($instance)->item(0);
         $activityC->complete($tokenC);
 
         //the run to next state should go false when the max steps is reached.
@@ -291,7 +291,7 @@ class ExclusiveGatewayTest extends EngineTestCase
 
         //Load the process
         $process = $this->createParallelDivergingExclusiveConverging();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
@@ -317,7 +317,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity A
-        $tokenA = $activityA->getTokens($dataStore)->item(0);
+        $tokenA = $activityA->getTokens($instance)->item(0);
         $activityA->complete($tokenA);
 
         //the run to next state should go false when the max steps is reached.
@@ -337,7 +337,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         ]);
 
         //Completes the Activity B
-        $tokenB = $activityB->getTokens($dataStore)->item(0);
+        $tokenB = $activityB->getTokens($instance)->item(0);
         $activityB->complete($tokenB);
         $this->engine->runToNextState();
 
@@ -353,20 +353,20 @@ class ExclusiveGatewayTest extends EngineTestCase
         ]);
 
         //Assertion: ActivityC has two tokens.
-        $this->assertEquals(2, $activityC->getTokens($dataStore)->count());
+        $this->assertEquals(2, $activityC->getTokens($instance)->count());
 
         //Completes the Activity C for the first token
-        $tokenC = $activityC->getTokens($dataStore)->item(0);
+        $tokenC = $activityC->getTokens($instance)->item(0);
         $activityC->complete($tokenC);
         $this->engine->runToNextState();
 
         //Completes the Activity C for the next token
-        $tokenC = $activityC->getTokens($dataStore)->item(0);
+        $tokenC = $activityC->getTokens($instance)->item(0);
         $activityC->complete($tokenC);
         $this->engine->runToNextState();
 
         //Assertion: ActivityC has no tokens.
-        $this->assertEquals(0, $activityC->getTokens($dataStore)->count());
+        $this->assertEquals(0, $activityC->getTokens($instance)->count());
 
         //Assertion: ActivityC was completed and closed per each token, then the end event was triggered twice.
         $this->assertEvents([

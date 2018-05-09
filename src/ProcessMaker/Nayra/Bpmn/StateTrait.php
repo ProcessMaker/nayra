@@ -7,10 +7,11 @@ use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\ObservableTrait;
 use ProcessMaker\Nayra\Bpmn\TraversableTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Exceptions\UnableConsumeTokenException;
 
 /**
  * Trait to implement state of a node in which tokens can be received.
@@ -40,18 +41,21 @@ trait StateTrait
     /**
      * Initialize the state object.
      *
-     * @param EntityInterface $owner
+     * @param FlowNodeInterface $owner
      * @param string $name
      */
-    protected function initState(EntityInterface $owner, $name)
+    protected function initState(FlowNodeInterface $owner, $name)
     {
         $this->tokens = new Collection();
         $this->setFactory($owner->getFactory());
         $this->setName($name);
+        $owner->addState($this);
     }
 
     /**
      * Consume a token in the current state.
+     *
+     * @param TokenInterface $token
      *
      * @return bool
      */
@@ -79,6 +83,7 @@ trait StateTrait
         $token = $this->getFactory()->getTokenRepository()->createTokenInstance($this);
         $token->setOwner($this);
         $token->setInstance($instance);
+        $token->setStatus($this->getName());
         $instance->addToken($token);
         $this->tokens->push($token);
         $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token);
@@ -88,11 +93,15 @@ trait StateTrait
     /**
      * Collection of tokens.
      *
+     * @param ExecutionInstanceInterface $instance
+     *
      * @return CollectionInterface
      */
-    public function getTokens()
+    public function getTokens(ExecutionInstanceInterface $instance)
     {
-        return $this->tokens;
+        return $this->tokens->find(function(TokenInterface $token) use ($instance) {
+                return $token->getInstance() === $instance;
+            });
     }
 
     /**

@@ -21,6 +21,7 @@ class DefaultTransition implements TransitionInterface
      *
      * @param TokenInterface $token
      * @param ExecutionInstanceInterface $executionInstance
+     *
      * @return bool
      */
     public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
@@ -38,22 +39,27 @@ class DefaultTransition implements TransitionInterface
     /**
      * If the condition is not met.
      *
+     * @param ExecutionInstanceInterface $executionInstance
+     *
      * @return boolean
      */
-    protected function conditionIsFalse()
+    protected function conditionIsFalse(ExecutionInstanceInterface $executionInstance)
     {
-        $this->collect();
+        $this->collect($executionInstance);
         return true;
     }
 
     /**
      * Consume the input tokens.
      *
+     * @param ExecutionInstanceInterface $executionInstance
+     *
+     * @return int
      */
-    private function collect()
+    private function collect(ExecutionInstanceInterface $executionInstance)
     {
-        return $this->incoming()->sum(function (Connection $flow) {
-            return $flow->origin()->getTokens()->sum(function (TokenInterface $token) {
+        return $this->incoming()->sum(function (Connection $flow) use ($executionInstance) {
+            return $flow->origin()->getTokens($executionInstance)->sum(function (TokenInterface $token) {
                 return $token->getOwner()->consumeToken($token) ? 1 :0;
             });
         });

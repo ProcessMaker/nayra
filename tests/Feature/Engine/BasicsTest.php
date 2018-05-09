@@ -52,14 +52,14 @@ class BasicsTest extends EngineTestCase
         //Load the process
         $process = $this->createSimpleProcessInstance();
         //Create a process instance with the data store
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get references to start event and activity
         $start = $process->getEvents()->item(0);
         $activity = $process->getActivities()->item(0);
 
         //Assertion: Verify the activity has no tokens
-        $this->assertEquals(0, $activity->getTokens($dataStore)->count());
+        $this->assertEquals(0, $activity->getTokens($instance)->count());
 
         //Trigger start event
         $start->start();
@@ -70,10 +70,10 @@ class BasicsTest extends EngineTestCase
         ]);
 
         //Assertion: Verify the activity has one token
-        $this->assertEquals(1, $activity->getTokens($dataStore)->count());
+        $this->assertEquals(1, $activity->getTokens($instance)->count());
 
         //Complete the activity
-        $token = $activity->getTokens($dataStore)->item(0);
+        $token = $activity->getTokens($instance)->item(0);
         $activity->complete($token);
         $this->engine->runToNextState();
         $this->assertEvents([
@@ -84,7 +84,7 @@ class BasicsTest extends EngineTestCase
         ]);
 
         //Assertion: Verify the activity has no tokens
-        $this->assertEquals(0, $activity->getTokens($dataStore)->count());
+        $this->assertEquals(0, $activity->getTokens($instance)->count());
     }
 
     /**
@@ -107,14 +107,14 @@ class BasicsTest extends EngineTestCase
         $end = $process->getEvents()->item(1);
 
         //Assertion: no tokens are returned from the end event
-        $this->assertCount(0, $end->getTokens($dataStore));
+        $this->assertCount(0, $end->getTokens($instance));
 
         //Assertion: neither targets nor origins should be null
         $this->assertNotNull($start->getTransitions()[0]->outgoing()->item(0)->target());
         $this->assertNotNull($start->getTransitions()[0]->outgoing()->item(0)->origin());
 
         //Assertion: the start event should not have tokens
-        $this->assertCount(0, $start->getTokens($dataStore));
+        $this->assertCount(0, $start->getTokens($instance));
 
         //Try to add and invalid flow to the end event
         try {

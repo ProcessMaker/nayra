@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -74,4 +74,26 @@ interface FlowNodeInterface extends FlowElementInterface
      */
     public function buildFlowTransitions(RepositoryFactoryInterface $factory);
 
+    /**
+     * Add a state for the node element.
+     *
+     * @param StateInterface $state
+     *
+     * @return $this
+     */
+    public function addState(StateInterface $state);
+
+    /**
+     * Get the states of the node element.
+     *
+     * @return StateInterface[]
+     */
+    public function getStates();
+
+    /**
+     * Get tokens in the activity.
+     *
+     * @return CollectionInterface
+     */
+    public function getTokens(ExecutionInstanceInterface $instance);
 }

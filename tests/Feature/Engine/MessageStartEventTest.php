@@ -119,8 +119,8 @@ class MessageStartEventTest extends EngineTestCase
         $dataStoreB = $this->dataStoreRepository->createDataStoreInstance();
         $dataStoreB->putData('B', '1');
 
-        $this->engine->createExecutionInstance($processA, $dataStoreA);
-        $this->engine->createExecutionInstance($processB, $dataStoreB);
+        $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
+        $instanceB = $this->engine->createExecutionInstance($processB, $dataStoreB);
 
         // we start the process A
         $startA = $processA->getEvents()->item(0);
@@ -137,7 +137,7 @@ class MessageStartEventTest extends EngineTestCase
 
         // we finish the first activity so that a new event should be created in the second process
 
-        $tokenA = $activityA1->getTokens($dataStoreA)->item(0);
+        $tokenA = $activityA1->getTokens($instanceA)->item(0);
         $activityA1->complete($tokenA);
         $this->engine->runToNextState();
 
