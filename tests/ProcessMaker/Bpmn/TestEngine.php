@@ -2,11 +2,11 @@
 
 namespace ProcessMaker\Bpmn;
 
+use ProcessMaker\Models\RepositoryFactory;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Engine\EngineTrait;
-use ProcessMaker\Models\RepositoryFactory;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Engine\EngineTrait;
 
 /**
  * Test implementation for EngineInterface.
@@ -15,7 +15,6 @@ use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
  */
 class TestEngine implements EngineInterface
 {
-
     use EngineTrait;
 
     /**
