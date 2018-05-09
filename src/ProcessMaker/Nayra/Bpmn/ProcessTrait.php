@@ -2,7 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use Illuminate\Contracts\Events\Dispatcher;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
@@ -21,6 +20,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 trait ProcessTrait
@@ -31,7 +31,7 @@ trait ProcessTrait
     }
 
     /**
-     * @var \Illuminate\Contracts\Events\Dispatcher
+     * @var \ProcessMaker\Nayra\Contracts\EventBusInterface
      */
     private $dispatcher;
 
@@ -238,7 +238,7 @@ trait ProcessTrait
     }
 
     /**
-     * @return \Illuminate\Contracts\Events\Dispatcher
+     * @return \ProcessMaker\Nayra\Contracts\EventBusInterface
      */
     public function getDispatcher()
     {
@@ -250,7 +250,7 @@ trait ProcessTrait
      *
      * @return $this
      */
-    public function setDispatcher(Dispatcher $dispatcher)
+    public function setDispatcher(EventBusInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
         return $this;

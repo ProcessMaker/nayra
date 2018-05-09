@@ -6,6 +6,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ObservableInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -32,14 +33,14 @@ interface EngineInterface
     /**
      * Dispatcher of events used by the engine.
      *
-     * @param \Illuminate\Contracts\Events\Dispatcher $dispatcher
+     * @param EventBusInterface $dispatcher
      *
      * @return $this
      */
-    public function setDispatcher(\Illuminate\Contracts\Events\Dispatcher $dispatcher);
+    public function setDispatcher(EventBusInterface $dispatcher);
 
     /**
-     * @return \Illuminate\Contracts\Events\Dispatcher
+     * @return EventBusInterface
      */
     public function getDispatcher();
 
