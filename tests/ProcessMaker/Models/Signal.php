@@ -54,4 +54,26 @@ class Signal implements SignalInterface
     {
         $this->name = $value;
     }
+
+    /**
+     * Sets the message flow to which this signal pertains
+     *
+     * @param $messageFlow
+     *
+     * @return mixed
+     */
+    public function setMessageFlow($messageFlow)
+    {
+        $this->messageFlow = $messageFlow;
+    }
+
+    /**
+     * Returns the message flow to which this signal pertains
+     *
+     * @return mixed
+     */
+    public function getMessageFlow()
+    {
+        return $this->messageFlow;
+    }
 }

@@ -57,6 +57,7 @@ class MessageFlow implements MessageFlowInterface
     public function setTarget(CatchEventInterface $target)
     {
         $eventDef = $this->getSource()->getEventDefinitions()->item(0);
+        $eventDef->getPayload()->setMessageFlow($this);
         $this->getCollaboration()->unsubscribe($target, $eventDef->getId());
         $this->getCollaboration()->subscribe($target, $eventDef->getId());
         $this->target = $target;
