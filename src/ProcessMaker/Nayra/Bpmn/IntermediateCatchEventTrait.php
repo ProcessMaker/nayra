@@ -95,8 +95,12 @@ trait IntermediateCatchEventTrait
      *
      * @return $this
      */
-    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance)
+    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
     {
+        if ($instance === null) {
+            return $this;
+        }
+
         // with a new token in the trigger place, the event catch element will be fired
         $this->triggerPlace->addNewToken($instance);
         return $this;

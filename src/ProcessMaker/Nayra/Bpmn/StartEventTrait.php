@@ -73,11 +73,18 @@ trait StartEventTrait
      *
      * @return $this
      */
-    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance)
+    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
     {
-        $this->start();
+        $startInstance = $instance;
+
+        //if it is and start event
+        if ($instance === null) {
+            $process = $this->getOwnerProcess();
+            $startInstance = $process->getEngine()->createExecutionInstance($process, $process->getDataStores()->item(0));
+            $this->start();
+        }
 
         // with a new token in the trigger place, the event catch element will be fired
-        $this->triggerPlace->addNewToken($instance);
+        $this->triggerPlace->addNewToken($startInstance);
     }
 }

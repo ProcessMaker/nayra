@@ -126,13 +126,19 @@ class Collaboration implements CollaborationInterface
     {
         $isBroadcast = is_a($message, SignalEventDefinition::class);
         foreach ($this->subscribers as $subscriber) {
+            $subscriberPayload = $subscriber['node']->getEventDefinitions()->item(0);
             foreach ($this->getInstancesFor($subscriber['node'], $message, $token) as $instance) {
-                $subscriberPayload = $subscriber['node']->getEventDefinitions()->item(0);
                 if (!$isBroadcast && $subscriber['key'] === $message->getId()
                      || ($isBroadcast && is_a($subscriberPayload, SignalEventDefinition::class))
                 ) {
                     $subscriber['node']->execute($message, $instance);
                 }
+            }
+            //for start events that doesn't have instances
+            if (!$isBroadcast && $subscriber['key'] === $message->getId()
+                || ($isBroadcast && is_a($subscriberPayload, SignalEventDefinition::class))
+            ) {
+                $subscriber['node']->execute($message, null);
             }
         }
     }

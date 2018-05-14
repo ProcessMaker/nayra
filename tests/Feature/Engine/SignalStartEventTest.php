@@ -10,17 +10,14 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 
-/**
- * Test the message start event
- */
-class MessageStartEventTest extends EngineTestCase
+class SignalStartEventTest extends EngineTestCase
 {
     /**
-     * Returns an array of processes where the second process has a message start event
+     * Creates a process with a throwing signal and other with a start signal event
      *
      * @return array
      */
-    public function createMessageStartEventProcesses()
+    public function createSignalStartEventProcesses()
     {
         $item = $this->rootElementRepository->createItemDefinitionInstance([
             'id' => 'item',
@@ -28,9 +25,10 @@ class MessageStartEventTest extends EngineTestCase
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
             'structure' => 'String'
         ]);
-        $message = $this->rootElementRepository->createMessageInstance();
-        $message->setId('MessageA');
-        $message->setItem($item);
+
+        $signal = $this->rootElementRepository->createMessageInstance();
+        $signal->setId('SignalA');
+        $signal->setItem($item);
 
         //Process A
         $processA = $this->processRepository->createProcessInstance();
@@ -38,10 +36,10 @@ class MessageStartEventTest extends EngineTestCase
         $startA = $this->eventRepository->createStartEventInstance();
         $activityA1 = $this->activityRepository->createActivityInstance();
         $eventA = $this->eventRepository->createIntermediateThrowEventInstance();
-        $messageEventDefA = $this->rootElementRepository->createMessageEventDefinitionInstance();
-        $messageEventDefA->setId("MessageEvent1");
-        $messageEventDefA->setPayload($message);
-        $eventA->getEventDefinitions()->push($messageEventDefA);
+        $signalEventDefA = $this->rootElementRepository->createSignalEventDefinitionInstance();
+        $signalEventDefA->setId("signalEvent1");
+        $signalEventDefA->setPayload($signal);
+        $eventA->getEventDefinitions()->push($signalEventDefA);
         $activityA2 = $this->activityRepository->createActivityInstance();
         $endA = $this->eventRepository->createEndEventInstance();
 
@@ -60,31 +58,33 @@ class MessageStartEventTest extends EngineTestCase
         $processB = $this->processRepository->createProcessInstance();
         $processB->setEngine($this->engine);
         $activityB1 = $this->activityRepository->createActivityInstance();
-        $messageEventDefB = $this->rootElementRepository->createMessageEventDefinitionInstance();
-        $messageEventDefB->setPayload($message);
+        $signalEventDefB= $this->rootElementRepository->createSignalEventDefinitionInstance();
+        $signalEventDefB->setPayload($signal);
 
-        $messageStartEventB = $this->eventRepository->createStartEventInstance();
-        $messageStartEventB->getEventDefinitions()->push($messageEventDefB);
+        $signalStartEventB = $this->eventRepository->createStartEventInstance();
+        $signalStartEventB->getEventDefinitions()->push($signalEventDefB);
 
         $endB = $this->eventRepository->createEndEventInstance();
 
-        $messageStartEventB->createFlowTo($activityB1, $this->flowRepository);
+        $signalStartEventB->createFlowTo($activityB1, $this->flowRepository);
         $activityB1->createFlowTo($endB, $this->flowRepository);
 
         $processB->addActivity($activityB1)
-            ->addEvent($messageStartEventB)
+            ->addEvent($signalStartEventB)
             ->addEvent($endB);
 
         return [$processA, $processB];
+
     }
 
+
     /**
-     * Tests the start of a process when it receives a message
+     * Tests the start of a process when it receives a signal
      */
-    public function testMessageStartEvent()
+    public function testSignalStartEvent()
     {
         //Create two processes
-        list($processA, $processB) = $this->createMessageStartEventProcesses();
+        list($processA, $processB) = $this->createSignalStartEventProcesses();
 
         //Create a collaboration
         $collaboration = new Collaboration;
@@ -103,18 +103,15 @@ class MessageStartEventTest extends EngineTestCase
 
         //Create message flow from intermediate events A to B
         $eventA = $processA->getEvents()->item(1);
-        $messageStartEventB = $processB->getEvents()->item(0);
+        $signalStartEventB = $processB->getEvents()->item(0);
         $messageFlow = $this->messageFlowRepository->createMessageFlowInstance();
         $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($eventA);
-        $messageFlow->setTarget($messageStartEventB);
+        $messageFlow->setTarget($signalStartEventB);
         $collaboration->addMessageFlow($messageFlow);
 
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
-
-        $eventA->collaboration = $collaboration;
-        $eventB->collaboration = $collaboration;
 
         $dataStoreA = $this->dataStoreRepository->createDataStoreInstance();
         $dataStoreA->putData('A', '1');
@@ -147,7 +144,6 @@ class MessageStartEventTest extends EngineTestCase
         ]);
 
         // we finish the first activity so that a new event should be created in the second process
-
         $tokenA = $activityA1->getTokens($instanceA)->item(0);
         $activityA1->complete($tokenA);
         $this->engine->runToNextState();
@@ -158,14 +154,14 @@ class MessageStartEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
-            //events triggered when the catching event runs
+            //Events triggered when the catching event runs
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
 
-            //Actibity activated in the first process
+            //Next activity should be activated in the first process
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
 
-            //It must be triggered the start event of the second process
+            //It must trigger the start event of the second process
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);

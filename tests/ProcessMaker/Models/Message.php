@@ -3,6 +3,7 @@
 namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -27,6 +28,11 @@ class Message implements MessageInterface
      * @var ItemDefinitionInterface $item
      */
     private $item;
+
+    /**
+     * @var MessageFlowInterface $messageFlow
+     */
+    private $messageFlow;
 
     /**
      * @return RepositoryFactoryInterface
@@ -93,5 +99,27 @@ class Message implements MessageInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Sets the message flow to which this signal pertains
+     *
+     * @param $messageFlow
+     *
+     * @return mixed
+     */
+    public function setMessageFlow($messageFlow)
+    {
+        $this->messageFlow = $messageFlow;
+    }
+
+    /**
+     * Returns the message flow to which this signal pertains
+     *
+     * @return mixed
+     */
+    public function getMessageFlow()
+    {
+        return $this->messageFlow;
     }
 }
