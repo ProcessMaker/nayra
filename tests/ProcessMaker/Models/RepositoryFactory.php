@@ -139,13 +139,4 @@ class RepositoryFactory implements RepositoryFactoryInterface
     {
         return new MessageFlowRepository($this);
     }
-
-    /**
-     *
-     * @return \ProcessMaker\Models\DataStoreCollectionRepository
-     */
-    public function getDataStoreCollectionRepository()
-    {
-        return new DataStoreCollectionRepository($this);
-    }
 }

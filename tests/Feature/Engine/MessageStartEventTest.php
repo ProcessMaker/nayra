@@ -3,6 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Models\Collaboration;
+use ProcessMaker\Models\DataStoreCollection;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
@@ -121,10 +122,10 @@ class MessageStartEventTest extends EngineTestCase
         $dataStoreB = $this->dataStoreRepository->createDataStoreInstance();
         $dataStoreB->putData('B', '1');
 
-        $dataStoreCollectionA = $this->dataStoreCollectionRepository->createDataStoreCollectionInstance();
+        $dataStoreCollectionA = new DataStoreCollection();
         $dataStoreCollectionA->add($dataStoreA);
 
-        $dataStoreCollectionB = $this->dataStoreCollectionRepository->createDataStoreCollectionInstance();
+        $dataStoreCollectionB = new DataStoreCollection();
         $dataStoreCollectionB->add($dataStoreB);
 
         $processA->setDataStores($dataStoreCollectionA);
