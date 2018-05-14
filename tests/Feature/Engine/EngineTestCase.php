@@ -58,6 +58,11 @@ class EngineTestCase extends TestCase
     protected $messageFlowRepository;
 
     /**
+     * @var \ProcessMaker\Models\DataStoreCollectionRepository
+     */
+    protected $dataStoreCollectionRepository;
+
+    /**
      *
      * @var EngineInterface
      */
@@ -87,6 +92,7 @@ class EngineTestCase extends TestCase
         $this->dataStoreRepository = $factory->getDataStoreRepository();
         $this->rootElementRepository = $factory->getRootElementRepository();
         $this->messageFlowRepository = $factory->getMessageFlowRepository();
+        $this->dataStoreCollectionRepository = $factory->getDataStoreCollectionRepository();
 
         //Initialize a dispatcher
         $fakeDispatcher = $this->getMockBuilder(EventBusInterface::class)

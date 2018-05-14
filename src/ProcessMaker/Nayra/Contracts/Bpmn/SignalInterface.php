@@ -35,16 +35,14 @@ interface SignalInterface
      */
     public function setName($value);
 
-
-        /**
+    /**
      * Sets the message flow to which this message pertains
      *
-     * @param $messageFlow
+     * @param MessageFlowInterface $messageFlow
      *
      * @return mixed
      */
-    public function setMessageFlow($messageFlow);
-
+    public function setMessageFlow(MessageFlowInterface $messageFlow);
 
     /**
      * Returns the message flow to which this message pertains

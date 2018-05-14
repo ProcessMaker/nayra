@@ -33,6 +33,7 @@ class MessageStartEventTest extends EngineTestCase
 
         //Process A
         $processA = $this->processRepository->createProcessInstance();
+        $processA->setEngine($this->engine);
         $startA = $this->eventRepository->createStartEventInstance();
         $activityA1 = $this->activityRepository->createActivityInstance();
         $eventA = $this->eventRepository->createIntermediateThrowEventInstance();
@@ -56,6 +57,7 @@ class MessageStartEventTest extends EngineTestCase
 
         //Process B
         $processB = $this->processRepository->createProcessInstance();
+        $processB->setEngine($this->engine);
         $activityB1 = $this->activityRepository->createActivityInstance();
         $messageEventDefB = $this->rootElementRepository->createMessageEventDefinitionInstance();
         $messageEventDefB->setPayload($message);
@@ -119,8 +121,16 @@ class MessageStartEventTest extends EngineTestCase
         $dataStoreB = $this->dataStoreRepository->createDataStoreInstance();
         $dataStoreB->putData('B', '1');
 
+        $dataStoreCollectionA = $this->dataStoreCollectionRepository->createDataStoreCollectionInstance();
+        $dataStoreCollectionA->add($dataStoreA);
+
+        $dataStoreCollectionB = $this->dataStoreCollectionRepository->createDataStoreCollectionInstance();
+        $dataStoreCollectionB->add($dataStoreB);
+
+        $processA->setDataStores($dataStoreCollectionA);
+        $processB->setDataStores($dataStoreCollectionB);
+
         $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
-        $instanceB = $this->engine->createExecutionInstance($processB, $dataStoreB);
 
         // we start the process A
         $startA = $processA->getEvents()->item(0);
@@ -147,10 +157,6 @@ class MessageStartEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
-            //It must be triggered the start event of the second process
-            EventInterface::EVENT_EVENT_TRIGGERED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-
             //events triggered when the catching event runs
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
@@ -158,6 +164,9 @@ class MessageStartEventTest extends EngineTestCase
             //Actibity activated in the first process
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
 
+            //It must be triggered the start event of the second process
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
     }
 }

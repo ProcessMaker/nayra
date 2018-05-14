@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Models;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 
 class Signal implements SignalInterface
@@ -58,13 +59,14 @@ class Signal implements SignalInterface
     /**
      * Sets the message flow to which this signal pertains
      *
-     * @param $messageFlow
+     * @param MessageFlowInterface $messageFlow
      *
-     * @return mixed
+     * @return $this
      */
-    public function setMessageFlow($messageFlow)
+    public function setMessageFlow(MessageFlowInterface $messageFlow)
     {
         $this->messageFlow = $messageFlow;
+        return $this;
     }
 
     /**
