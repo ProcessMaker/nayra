@@ -32,9 +32,11 @@ class InclusiveGatewayTransition implements TransitionInterface
      * Always true because the conditions are not defined in the gateway, but for each
      * outgoing flow transition.
      *
+     * @param TokenInterface|null $token
+     * @param ExecutionInstanceInterface $executionInstance
      * @return bool
      */
-    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
         return true;
     }

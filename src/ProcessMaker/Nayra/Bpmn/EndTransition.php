@@ -21,11 +21,28 @@ class EndTransition implements TransitionInterface
      * Condition required at end event.
      *
      * @param TokenInterface $token
+     * @param ExecutionInstanceInterface $executionInstance
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
         return true;
+    }
+
+    protected function hasAllRequiredTokens(ExecutionInstanceInterface $instance)
+    {
+        $numberOfPlacesThatCanBeEmpty = 0;
+
+        // if the start event is a normal event just on place must be count
+        if ($this->owner->getEventDefinitions()->count() === 0) {
+            $numberOfPlacesThatCanBeEmpty = 1;
+        }
+
+        return $this->incoming()->count() > 0
+                && $this->incoming()
+                        ->find(function ($flow) use ($instance) {
+                            return $flow->origin()->getTokens($instance)->count() === 0;})
+                        ->count() === $numberOfPlacesThatCanBeEmpty;
     }
 }

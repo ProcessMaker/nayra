@@ -29,7 +29,7 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
      *
      * @return mixed
      */
-    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
         $condition = $this->condition;
         return $condition($executionInstance->getDataStore()->getData());

@@ -29,5 +29,5 @@ interface TransitionInterface extends ConnectionNodeInterface
      * @param ExecutionInstanceInterface $executionInstance
      * @return mixed
      */
-    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance);
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance);
 }

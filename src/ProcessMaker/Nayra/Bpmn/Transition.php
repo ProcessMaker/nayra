@@ -23,7 +23,7 @@ class Transition implements TransitionInterface
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
         return true;
     }
