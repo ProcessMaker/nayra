@@ -2,13 +2,14 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\EndTransition;
-use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
@@ -19,8 +20,7 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
  */
 trait EndEventTrait
 {
-
-    use FlowNodeTrait;
+    use CatchEventTrait;
 
     /**
      * Receive tokens.
@@ -53,6 +53,9 @@ trait EndEventTrait
                 $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
             }
         );
+
+        $this->triggerPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
+        $this->triggerPlace->connectTo($this->transition);
     }
 
     /**
@@ -76,5 +79,22 @@ trait EndEventTrait
     protected function buildConnectionTo(FlowNodeInterface $target)
     {
         throw new InvalidSequenceFlowException('An end event cannot have outgoing flows.');
+    }
+
+    /**
+     * Method to be called when a message event arrives
+     *
+     * @param EventDefinitionInterface $message
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return $this
+     */
+    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
+    {
+        //the instance will be null just in start events, so we don't process it
+        if ($instance !== null) {
+            // with a new token in the trigger place, the event catch element will be fired
+            $this->triggerPlace->addNewToken($instance);
+        }
     }
 }
