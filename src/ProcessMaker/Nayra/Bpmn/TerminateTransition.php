@@ -40,7 +40,7 @@ class TerminateTransition implements TransitionInterface
      *
      * @param ExecutionInstanceInterface $executionInstance
      *
-     * @return boolean|\ProcessMaker\Nayra\Bpmn\Collection
+     * @return \ProcessMaker\Nayra\Bpmn\Collection
      */
     protected function evaluateConsumeTokens(ExecutionInstanceInterface $executionInstance)
     {

@@ -100,9 +100,9 @@ trait EndEventTrait
     }
 
     /**
-     * Return true if the event has a TerminateEventDefinition
+     * Find a TerminateEventDefinition whit in the event definitions
      *
-     * @return TerminateEventDefinition
+     * @return TerminateEventDefinition|null
      */
     private function findTerminateEventDefinition()
     {
