@@ -24,7 +24,7 @@ class DefaultTransition implements TransitionInterface
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
         $executeDefaultTransition = true;
         foreach($this->owner->getConditionedTransitions() as $transition) {

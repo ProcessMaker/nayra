@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
@@ -54,7 +55,7 @@ trait EndEventTrait
             }
         );
 
-        $this->triggerPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
+        $this->triggerPlace = new State($this, CatchEventInterface::TOKEN_STATE_EVENT_CATCH);
         $this->triggerPlace->connectTo($this->transition);
     }
 

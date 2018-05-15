@@ -30,7 +30,7 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
      *
      * @return mixed
      */
-    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
         $result = false;
         $myIndex = $this->owner->getConditionedTransitions()->indexOf($this);

@@ -12,6 +12,7 @@ interface CatchEventInterface extends EventInterface
     const BPMN_PROPERTY_PARALLEL_MULTIPLE = 'parallelMultiple';
     const BPMN_PROPERTY_EVENT_DEFINITIONS = 'eventDefinitions';
 
+    const TOKEN_STATE_EVENT_CATCH = 'EVENT_CATCH';
     /**
      * Get EventDefinitions that are triggers expected for a catch Event.
      *

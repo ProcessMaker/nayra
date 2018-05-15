@@ -25,7 +25,7 @@ class ExceptionTransition implements TransitionInterface
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
         return $token->getStatus() === ActivityInterface::TOKEN_STATE_FAILING;
     }

@@ -33,7 +33,7 @@ class StartTransition implements TransitionInterface
         $this->startCount++;
     }
 
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token= null, ExecutionInstanceInterface $executionInstance)
     {
         return $this->startCount > 0;
     }

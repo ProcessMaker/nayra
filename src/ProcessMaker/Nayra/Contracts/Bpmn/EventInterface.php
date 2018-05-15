@@ -36,7 +36,7 @@ interface EventInterface extends FlowNodeInterface
      * Token states defined for Event
      */
     const TOKEN_STATE_ACTIVE = 'ACTIVE';
-    
+
     /**
      * Get Process of the event.
      *

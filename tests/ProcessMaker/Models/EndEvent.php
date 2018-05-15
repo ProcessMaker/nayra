@@ -12,7 +12,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
  *
  * @package ProcessMaker\Models
  */
-class EndEvent implements EndEventInterface, CatchEventInterface, MessageListenerInterface
+class EndEvent implements EndEventInterface, MessageListenerInterface
 {
 
     use EndEventTrait,
