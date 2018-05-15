@@ -7,6 +7,7 @@ use ProcessMaker\Nayra\Bpmn\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\TerminateEventDefinition;
 use ProcessMaker\Nayra\Contracts\Repositories\RootElementRepositoryInterface;
 
 /**
@@ -105,5 +106,10 @@ class RootElementRepository implements RootElementRepositoryInterface
     public function createConditionalEventDefinitionInstance()
     {
         return new ConditionalEventDefinition();
+    }
+
+    public function createTerminateEventDefinitionInstance()
+    {
+        return new TerminateEventDefinition();
     }
 }

@@ -30,12 +30,4 @@ interface ThrowEventInterface extends EventInterface
      * @return InputSetInterface
      */
     public function getInputSet();
-
-    /**
-     * Get the event EventDefinitions that are results expected for a throw
-     * Event.
-     *
-     * @return EventDefinitionInterface[]
-     */
-    public function getEventDefinitions();
 }

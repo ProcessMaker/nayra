@@ -113,7 +113,7 @@ class ExecutionInstance implements ExecutionInstanceInterface
     }
 
     /**
-     * Remove a token to the current instance.
+     * Remove a token from the current instance.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
      *
@@ -126,6 +126,11 @@ class ExecutionInstance implements ExecutionInstanceInterface
         return $this;
     }
 
+    /**
+     * Get all tokens from the current instance.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     */
     public function getTokens()
     {
         return $this->tokens;

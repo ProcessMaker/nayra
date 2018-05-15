@@ -58,4 +58,11 @@ interface ExecutionInstanceInterface
      * @return $this
      */
     public function removeToken(TokenInterface $token);
+
+    /**
+     * Get all tokens from the current instance.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     */
+    public function getTokens();
 }
