@@ -20,12 +20,14 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  */
 class EndEvent implements EndEventInterface, ThrowEventInterface
 {
-
     use EndEventTrait,
         LocalFlowNodeTrait,
         LocalProcessTrait,
         LocalPropertiesTrait;
 
+    private $dataInputs;
+    private $dataInputAssociations;
+    private $inputSet;
     /**
      * Array map of custom event classes for the bpmn element.
      *
@@ -37,11 +39,13 @@ class EndEvent implements EndEventInterface, ThrowEventInterface
     }
 
     /**
-     * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
+     * @param EventDefinitionInterface $message
+     * @param TokenInterface $token
+     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface[]
      */
     public function getTargetInstances(EventDefinitionInterface $message, TokenInterface $token)
     {
-        // TODO: Implement getTargetInstances() method.
+        return $this->getOwnerProcess()->getInstances();
     }
 
     /**
@@ -51,7 +55,7 @@ class EndEvent implements EndEventInterface, ThrowEventInterface
      */
     public function getDataInputs()
     {
-        // TODO: Implement getDataInputs() method.
+        return $this->dataInputs;
     }
 
     /**
@@ -61,7 +65,7 @@ class EndEvent implements EndEventInterface, ThrowEventInterface
      */
     public function getDataInputAssociations()
     {
-        // TODO: Implement getDataInputAssociations() method.
+        return $this->getDataInputAssociations();
     }
 
     /**
@@ -71,6 +75,6 @@ class EndEvent implements EndEventInterface, ThrowEventInterface
      */
     public function getInputSet()
     {
-        // TODO: Implement getInputSet() method.
+        return $this->inputSet;
     }
 }
