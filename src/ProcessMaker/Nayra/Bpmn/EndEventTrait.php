@@ -2,15 +2,13 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
@@ -21,7 +19,7 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
  */
 trait EndEventTrait
 {
-    use CatchEventTrait;
+    use ThrowEventTrait;
 
     /**
      * Receive tokens.
@@ -46,7 +44,13 @@ trait EndEventTrait
     {
         $this->setFactory($factory);
         $this->endState = new State($this, EventInterface::TOKEN_STATE_ACTIVE);
-        $this->transition = new EndTransition($this);
+        $terminate = $this->findTerminateEventDefinition();
+        if ($terminate) {
+            $this->transition = new TerminateTransition($this);
+            $this->transition->setTerminateEventDefinition($terminate);
+        } else {
+            $this->transition = new EndTransition($this);
+        }
         $this->endState->connectTo($this->transition);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_AFTER_TRANSIT,
@@ -54,9 +58,6 @@ trait EndEventTrait
                 $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
             }
         );
-
-        $this->triggerPlace = new State($this, CatchEventInterface::TOKEN_STATE_EVENT_CATCH);
-        $this->triggerPlace->connectTo($this->transition);
     }
 
     /**
@@ -67,6 +68,22 @@ trait EndEventTrait
     public function getInputPlace()
     {
         $this->addInput($this->endState);
+
+        //if the element has event definition and those event definition have a payload we notify them
+        //of the triggered event
+        if ($this->getEventDefinitions()->count() > 0
+            && method_exists($this->getEventDefinitions()->item(0), 'getPayload')) {
+            $this->endState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
+                $collaboration = $this->getEventDefinitions()->item(0)->getPayload()->getMessageFlow()->getCollaboration();
+                $collaboration->send($this->getEventDefinitions()->item(0), $token);
+                $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
+            });
+
+            $this->endState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+                $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
+            });
+        }
+
         return $this->endState;
     }
 
@@ -83,19 +100,17 @@ trait EndEventTrait
     }
 
     /**
-     * Method to be called when a message event arrives
+     * Return true if the event has a TerminateEventDefinition
      *
-     * @param EventDefinitionInterface $message
-     * @param ExecutionInstanceInterface $instance
-     *
-     * @return $this
+     * @return TerminateEventDefinition
      */
-    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
+    private function findTerminateEventDefinition()
     {
-        //the instance will be null just in start events, so we don't process it
-        if ($instance !== null) {
-            // with a new token in the trigger place, the event catch element will be fired
-            $this->triggerPlace->addNewToken($instance);
+        foreach ($this->getEventDefinitions() as $eventDefinition) {
+            if ($eventDefinition instanceof TerminateEventDefinition) {
+                return $eventDefinition;
+            }
         }
+        return null;
     }
 }

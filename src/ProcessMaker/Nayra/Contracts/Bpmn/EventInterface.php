@@ -11,10 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 interface EventInterface extends FlowNodeInterface
 {
 
-    /**
-     * Type of element.
-     */
-    const TYPE = 'bpmnEvent';
+    const BPMN_PROPERTY_EVENT_DEFINITIONS = 'eventDefinitions';
 
     const TYPE_START = 'START';
     const TYPE_INTERMEDIATE = 'INTERMEDIATE';
@@ -50,6 +47,12 @@ interface EventInterface extends FlowNodeInterface
      * @return ProcessInterface
      */
     public function setProcess(ProcessInterface $process);
-    
 
+    /**
+     * Get the event EventDefinitions that are results expected for a throw
+     * Event.
+     *
+     * @return EventDefinitionInterface[]
+     */
+    public function getEventDefinitions();
 }

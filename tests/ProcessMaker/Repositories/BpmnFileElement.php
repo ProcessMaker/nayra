@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
@@ -52,6 +53,7 @@ class BpmnFileElement extends DOMElement
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    EndEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
                 ]
             ],
             'scriptTask'   => [
@@ -133,6 +135,15 @@ class BpmnFileElement extends DOMElement
                 'createFormalExpressionInstance',
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            'extensionElements' => self::SKIP_ELEMENT,
+            'inputSet' => self::SKIP_ELEMENT,
+            'outputSet' => self::SKIP_ELEMENT,
+            'terminateEventDefinition' => [
+                'getRootElementRepository',
+                'createTerminateEventDefinitionInstance',
+                [
                 ]
             ],
         ]

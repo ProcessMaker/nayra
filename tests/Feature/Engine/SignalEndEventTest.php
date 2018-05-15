@@ -7,9 +7,11 @@ use ProcessMaker\Models\DataStoreCollection;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 
 class SignalEndEventTest extends EngineTestCase
 {
@@ -36,7 +38,7 @@ class SignalEndEventTest extends EngineTestCase
         $processA->setEngine($this->engine);
         $startA = $this->eventRepository->createStartEventInstance();
         $activityA1 = $this->activityRepository->createActivityInstance();
-        $eventA = $this->eventRepository->createIntermediateThrowEventInstance();
+        $eventA = $this->eventRepository->createIntermediateCatchEventInstance();
         $signalEventDefA = $this->rootElementRepository->createSignalEventDefinitionInstance();
         $signalEventDefA->setId("signalEvent1");
         $signalEventDefA->setPayload($signal);
@@ -111,8 +113,8 @@ class SignalEndEventTest extends EngineTestCase
         $signalEndEventB = $processB->getEvents()->item(1);
         $messageFlow = $this->messageFlowRepository->createMessageFlowInstance();
         $messageFlow->setCollaboration($collaboration);
-        $messageFlow->setSource($eventA);
-        $messageFlow->setTarget($signalEndEventB);
+        $messageFlow->setSource($signalEndEventB);
+        $messageFlow->setTarget($eventA);
         $collaboration->addMessageFlow($messageFlow);
 
         $eventA = $processA->getEvents()->item(1);
@@ -140,6 +142,30 @@ class SignalEndEventTest extends EngineTestCase
         $startB = $processB->getEvents()->item(0);
         $activityB1 = $processB->getActivities()->item(0);
 
+        // we start the process A
+        $startA = $processA->getEvents()->item(0);
+        $activityA1 = $processA->getActivities()->item(0);
+
+        $startA->start();
+        $this->engine->runToNextState();
+
+        //Assertion: The activity must be activated
+        $this->assertEvents([
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // we finish the first activity so that the catch signal is activated
+        $tokenA = $activityA1->getTokens($instanceA)->item(0);
+        $activityA1->complete($tokenA);
+        $this->engine->runToNextState();
+
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES
+            ]);
+
         $startB->start();
         $this->engine->runToNextState();
 
@@ -157,41 +183,21 @@ class SignalEndEventTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-        ]);
 
-        // we start the process A
-        $startA = $processA->getEvents()->item(0);
-        $activityA1 = $processA->getActivities()->item(0);
-
-        $startA->start();
-        $this->engine->runToNextState();
-
-        //Assertion: The activity must be activated
-        $this->assertEvents([
-            EventInterface::EVENT_EVENT_TRIGGERED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-        ]);
-
-        // we finish the first activity so that a new event should be created in the second process
-        $tokenA = $activityA1->getTokens($instanceA)->item(0);
-        $activityA1->complete($tokenA);
-        $this->engine->runToNextState();
-
-        //Assertion: The processA activity should be finished and a the instance of processB should end
-        $this->assertEvents([
-            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            // the throw token of the end is sent
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
-            //Events triggered when the catching event runs
+            // the Process A catching signal is activated
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+
+            // the Process B end throw event must consume its tokens
+            IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+
+            //The end event of process B is triggered and Process P is completed
             EventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_COMPLETED,
-
-            IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
-            IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
-
-            //Next activity should be activated in the first process
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
     }
 }
