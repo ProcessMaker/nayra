@@ -6,7 +6,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
@@ -26,6 +25,11 @@ trait StartEventTrait
      */
     private $transition;
 
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    private $triggerPlace = [];
+
     public function buildTransitions(RepositoryFactoryInterface $factory)
     {
         $this->setFactory($factory);
@@ -37,8 +41,10 @@ trait StartEventTrait
             }
         );
 
-        $this->triggerPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
-        $this->triggerPlace->connectTo($this->transition);
+        foreach($this->getEventDefinitions() as $index => $eventDefinition) {
+            $this->triggerPlace[$index] = new State($this, $eventDefinition->getId());
+            $this->triggerPlace[$index]->connectTo($this->transition);
+        }
     }
 
     public function getInputPlace()
@@ -59,32 +65,45 @@ trait StartEventTrait
         return $this;
     }
 
+    /**
+     * Start event.
+     *
+     * @return $this;
+     */
     public function start()
     {
         $this->transition->start();
+        return $this;
     }
-
 
     /**
      * Method to be called when a message event arrives
      *
-     * @param EventDefinitionInterface $message
+     * @param EventDefinitionInterface $event
      * @param ExecutionInstanceInterface $instance
      *
      * @return $this
      */
-    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
+    public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null)
     {
-        $startInstance = $instance;
-
-        //if it is and start event
-        if ($instance === null) {
-            $process = $this->getOwnerProcess();
-            $startInstance = $process->getEngine()->createExecutionInstance($process, $process->getDataStores()->item(0));
-            $this->start();
+        $start = $this->getEventDefinitions()->count() === 0;
+        $index = -1;
+        foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
+            if ($eventDefinition->assertsRule($event, $this, $instance)) {
+                $start = true;
+                break;
+            }
         }
-
-        // with a new token in the trigger place, the event catch element will be fired
-        $this->triggerPlace->addNewToken($startInstance);
+        if ($start) {
+            if ($instance === null) {
+                $process = $this->getOwnerProcess();
+                $dataStorage = $process->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+                $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
+            }
+            $this->start();
+            // with a new token in the trigger place, the event catch element will be fired
+            $index < 0 ?: $this->triggerPlace[$index]->addNewToken($instance);
+        }
+        return $this;
     }
 }

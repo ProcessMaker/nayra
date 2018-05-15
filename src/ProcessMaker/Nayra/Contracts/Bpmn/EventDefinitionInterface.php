@@ -2,13 +2,17 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+
 /**
  * EventDefinition interface.
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface EventDefinitionInterface
+interface EventDefinitionInterface extends EntityInterface
 {
+
     /**
      * Returns the element's id
      *
@@ -24,16 +28,13 @@ interface EventDefinitionInterface
     public function setId($value);
 
     /**
-     * Returns the event definition payload (message, signal, etc.)
+     * Assert the event definition rule for trigger the event.
      *
-     * @return mixed
-     */
-    public function getPayload();
-
-    /**
-     * Sets the payload (message, signal, etc.)
-     * @param mixed $value
+     * @param EventDefinitionInterface $event
+     * @param FlowNodeInterface $target
+     * @param ExecutionInstanceInterface $instance
      *
+     * @return boolean
      */
-    public function setPayload($value);
+    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null);
 }

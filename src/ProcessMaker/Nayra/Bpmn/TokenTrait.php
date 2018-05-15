@@ -68,7 +68,7 @@ trait TokenTrait
      *
      * @return $this
      */
-    public function setInstance(ExecutionInstanceInterface $instance)
+    public function setInstance(ExecutionInstanceInterface $instance = null)
     {
         $this->instance = $instance;
         return $this;

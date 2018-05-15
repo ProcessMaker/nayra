@@ -29,9 +29,9 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
      *
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      *
-     * @return bool
+     * @return TokenInterface
      */
-    public function addNewToken(ExecutionInstanceInterface $instance);
+    public function addNewToken(ExecutionInstanceInterface $instance = null);
 
     /**
      * Get the collection of tokens.
@@ -40,7 +40,7 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
      *
      * @return CollectionInterface
      */
-    public function getTokens(ExecutionInstanceInterface $instance);
+    public function getTokens(ExecutionInstanceInterface $instance = null);
 
     /**
      * Get state name

@@ -36,41 +36,6 @@ interface EventInterface extends FlowNodeInterface
      * Token states defined for Event
      */
     const TOKEN_STATE_ACTIVE = 'ACTIVE';
-
-    /**
-     * Properties.
-     */
-    const PROPERTIES = [
-        'EVN_UID' => '',
-        'EVN_NAME' => NULL,
-        'EVN_TYPE' => 'END',
-        'EVN_MARKER' => 'EMPTY',
-        'EVN_IS_INTERRUPTING' => '1',
-        'EVN_ATTACHED_TO' => '',
-        'EVN_CANCEL_ACTIVITY' => '0',
-        'EVN_ACTIVITY_REF' => '',
-        'EVN_WAIT_FOR_COMPLETION' => '1',
-        'EVN_ERROR_NAME' => NULL,
-        'EVN_ERROR_CODE' => NULL,
-        'EVN_ESCALATION_NAME' => NULL,
-        'EVN_ESCALATION_CODE' => NULL,
-        'EVN_CONDITION' => NULL,
-        'EVN_MESSAGE' => NULL,
-        'EVN_OPERATION_NAME' => NULL,
-        'EVN_OPERATION_IMPLEMENTATION_REF' => NULL,
-        'EVN_TIME_DATE' => NULL,
-        'EVN_TIME_CYCLE' => NULL,
-        'EVN_TIME_DURATION' => NULL,
-        'EVN_BEHAVIOR' => 'CATCH'
-    ];
-
-    /**
-     * Child elements.
-     */
-    const ELEMENTS = [
-
-    ];
-
     
     /**
      * Get Process of the event.

@@ -8,13 +8,16 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Description of BpmnFileElement
@@ -40,6 +43,7 @@ class BpmnFileElement extends DOMElement
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
                 ]
             ],
             'endEvent'     => [
@@ -115,6 +119,20 @@ class BpmnFileElement extends DOMElement
                 'createParticipantInstance',
                 [
                     ParticipantInterface::BPMN_PROPERTY_PROCESS => ['1', [BpmnFileRepository::BPMN, ParticipantInterface::BPMN_PROPERTY_PROCESS_REF]],
+                ]
+            ],
+            'conditionalEventDefinition' => [
+                'getRootElementRepository',
+                'createConditionalEventDefinitionInstance',
+                [
+                    ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION => ['1', [BpmnFileRepository::BPMN, ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION]],
+                ]
+            ],
+            'condition' => [
+                'getRootElementRepository',
+                'createFormalExpressionInstance',
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
                 ]
             ],
         ]

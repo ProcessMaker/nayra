@@ -2,11 +2,16 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 class SignalEventDefinition implements SignalEventDefinitionInterface
 {
+
+    use BaseTrait;
     /**
      * @var string $id
      */
@@ -54,5 +59,19 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
     public function getPayload()
     {
         return $this->signal;
+    }
+
+    /**
+     * Assert the event definition rule for trigger the event.
+     *
+     * @param EventDefinitionInterface $event
+     * @param FlowNodeInterface $target
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return boolean
+     */
+    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null)
+    {
+        return true;
     }
 }

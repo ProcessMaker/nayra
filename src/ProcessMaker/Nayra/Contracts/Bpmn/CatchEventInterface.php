@@ -9,6 +9,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface CatchEventInterface extends EventInterface
 {
+    const BPMN_PROPERTY_PARALLEL_MULTIPLE = 'parallelMultiple';
+    const BPMN_PROPERTY_EVENT_DEFINITIONS = 'eventDefinitions';
+
     /**
      * Get EventDefinitions that are triggers expected for a catch Event.
      *

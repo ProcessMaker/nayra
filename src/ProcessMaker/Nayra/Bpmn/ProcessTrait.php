@@ -8,16 +8,17 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreCollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
@@ -305,13 +306,18 @@ trait ProcessTrait
     /**
      * Create an instance of the callable element and start it.
      *
+     * @param DataStoreInterface $dataStore
+     *
+     * @return ExecutionInstanceInterface
      */
-    public function call()
+    public function call(DataStoreInterface $dataStore = null)
     {
-        $dataStore = $this->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+        if (empty($dataStore)) {
+            $dataStore = $this->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+        }
         $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);
-        $this->getEvents()->find(function(FlowNodeInterface $event){
-            if ($event->getIncomingFlows()->count()===0) {
+        $this->getEvents()->find(function(EventInterface $event){
+            if ($event instanceof StartEventInterface && $event->getEventDefinitions()->count() === 0) {
                 $event->start();
             }
         });

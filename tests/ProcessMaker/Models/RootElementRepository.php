@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Models;
 
+use ProcessMaker\Nayra\Bpmn\ConditionalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
@@ -94,5 +95,15 @@ class RootElementRepository implements RootElementRepositoryInterface
     public function createSignalEventDefinitionInstance()
     {
         return new SignalEventDefinition();
+    }
+
+    /**
+     * Create a signal event definition that is a container of signals
+     *
+     * @return ConditionalEventDefinition
+     */
+    public function createConditionalEventDefinitionInstance()
+    {
+        return new ConditionalEventDefinition();
     }
 }

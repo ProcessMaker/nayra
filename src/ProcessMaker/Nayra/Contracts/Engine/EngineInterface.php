@@ -3,9 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ObservableInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -76,4 +74,20 @@ interface EngineInterface
      * @return bool
      */
     public function closeExecutionInstances();
+
+    /**
+     * Get the engine data store used for global evaluations.
+     *
+     * @return DataStoreInterface
+     */
+    public function getDataStore();
+
+    /**
+     * Set the engine data store used for global evaluations.
+     *
+     * @param DataStoreInterface $dataStore
+     *
+     * @return $this
+     */
+    public function setDataStore(DataStoreInterface $dataStore);
 }
