@@ -25,4 +25,20 @@ interface MessageEventDefinitionInterface extends EventDefinitionInterface
      * @return $this
      */
     public function setOperation(OperationInterface $operation);
+
+    /**
+     * Returns the event definition payload (message, signal, etc.)
+     *
+     * @return mixed
+     */
+    public function getPayload();
+
+    /**
+     * Sets the payload (message, signal, etc.)
+     *
+     * @param mixed $value
+     *
+     * @return $this
+     */
+    public function setPayload($value);
 }

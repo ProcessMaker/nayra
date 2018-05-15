@@ -24,13 +24,21 @@ trait EngineTrait
     private $executionInstances = [];
 
     /**
-     * Execute all the active transitions.
+     * Engine data store.
+     *
+     * @var DataStoreInterface $dataStore
+     */
+    private $dataStore;
+
+    /**
+     * Execute all the process transitions.
      *
      * @return bool
      */
     public function step()
     {
         $sum = 0;
+        //Execute trnsitions per instance
         foreach ($this->executionInstances as $executionInstance) {
             $sum += $executionInstance->getTransitions()->sum(function (TransitionInterface $transition) use ($executionInstance) {
                     $result = $transition->execute($executionInstance) ? 1 : 0;
@@ -85,5 +93,28 @@ trait EngineTrait
                 return !$executionInstance->close();
             });
         return count($this->executionInstances) === 0;
+    }
+
+    /**
+     * Get the engine data store used for global evaluations.
+     *
+     * @return DataStoreInterface
+     */
+    public function getDataStore()
+    {
+        return $this->dataStore;
+    }
+
+    /**
+     * Set the engine data store used for global evaluations.
+     *
+     * @param DataStoreInterface $dataStore
+     *
+     * @return $this
+     */
+    public function setDataStore(DataStoreInterface $dataStore)
+    {
+        $this->dataStore = $dataStore;
+        return $this;
     }
 }

@@ -2,9 +2,12 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * MessageEventDefinition class
@@ -12,6 +15,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
  */
 class MessageEventDefinition implements MessageEventDefinitionInterface
 {
+    use BaseTrait;
+
     /**
      * @var string $id
      */
@@ -90,5 +95,19 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
     public function setId($value)
     {
         $this->id = $value;
+    }
+
+    /**
+     * Assert the event definition rule for trigger the event.
+     *
+     * @param EventDefinitionInterface $event
+     * @param FlowNodeInterface $target
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return boolean
+     */
+    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null)
+    {
+        return true;
     }
 }

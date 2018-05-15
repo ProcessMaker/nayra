@@ -12,6 +12,8 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 interface TokenInterface extends EntityInterface
 {
 
+    const BPMN_PROPERTY_MESSAGE = 'message';
+
     /**
      * Get the owner of the token.
      *
@@ -58,7 +60,7 @@ interface TokenInterface extends EntityInterface
      *
      * @return $this
      */
-    public function setInstance(ExecutionInstanceInterface $instance);
+    public function setInstance(ExecutionInstanceInterface $instance = null);
 
     /**
      * Get the owner execution instance of the token.

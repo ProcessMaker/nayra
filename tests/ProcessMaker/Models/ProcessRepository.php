@@ -23,7 +23,9 @@ class ProcessRepository implements ProcessRepositoryInterface
      */
     public function createProcessInstance()
     {
-        return new Process;
+        $process = new Process;
+        $process->setFactory($this->getFactory());
+        return $process;
     }
 
     /**

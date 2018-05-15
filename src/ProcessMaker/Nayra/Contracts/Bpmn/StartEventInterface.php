@@ -7,7 +7,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface StartEventInterface extends EventInterface
+interface StartEventInterface extends CatchEventInterface
 {
 
 }
