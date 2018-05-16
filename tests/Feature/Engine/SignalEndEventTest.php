@@ -6,13 +6,12 @@ use ProcessMaker\Models\Collaboration;
 use ProcessMaker\Models\DataStoreCollection;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 
 class SignalEndEventTest extends EngineTestCase
 {
@@ -182,7 +181,7 @@ class SignalEndEventTest extends EngineTestCase
 
             // the throw token of the end is sent
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
-            EventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
+            SignalEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
 
             // the Process A catching message is activated
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,

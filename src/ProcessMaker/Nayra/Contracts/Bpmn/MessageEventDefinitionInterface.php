@@ -10,6 +10,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 interface MessageEventDefinitionInterface extends EventDefinitionInterface
 {
 
+    const EVENT_THROW_EVENT_DEFINITION = 'ThrowMessageEvent';
+    const EVENT_CATCH_EVENT_DEFINITION = 'CatchMessageEvent';
+
     /**
      * Get the Operation that is used by the Message Event.
      *
@@ -32,13 +35,4 @@ interface MessageEventDefinitionInterface extends EventDefinitionInterface
      * @return mixed
      */
     public function getPayload();
-
-    /**
-     * Sets the payload (message, signal, etc.)
-     *
-     * @param mixed $value
-     *
-     * @return $this
-     */
-    public function setPayload($value);
 }

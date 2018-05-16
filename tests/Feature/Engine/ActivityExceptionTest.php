@@ -3,6 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
@@ -82,7 +83,9 @@ class ActivityExceptionTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            EventInterface::EVENT_EVENT_TRIGGERED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
 

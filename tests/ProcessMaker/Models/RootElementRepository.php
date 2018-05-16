@@ -3,6 +3,7 @@
 namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\ConditionalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\ErrorEventDefinition;
 use ProcessMaker\Nayra\Bpmn\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
@@ -108,8 +109,33 @@ class RootElementRepository implements RootElementRepositoryInterface
         return new ConditionalEventDefinition();
     }
 
+    /**
+     * Create a TerminateEventDefinition.
+     *
+     * @return TerminateEventDefinition
+     */
     public function createTerminateEventDefinitionInstance()
     {
         return new TerminateEventDefinition();
+    }
+
+    /**
+     * Create a ErrorEventDefinition.
+     *
+     * @return ErrorEventDefinition
+     */
+    public function createErrorEventDefinitionInstance()
+    {
+        return new ErrorEventDefinition();
+    }
+
+    /**
+     * Create a error instance
+     *
+     * @return Error
+     */
+    public function createErrorInstance()
+    {
+        return new Error();
     }
 }

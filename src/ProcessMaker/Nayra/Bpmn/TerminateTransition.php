@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\TransitionTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -19,9 +20,9 @@ class TerminateTransition implements TransitionInterface
     use TransitionTrait;
 
     /**
-     * @var \ProcessMaker\Nayra\Bpmn\TerminateEventDefinition $terminate
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface $terminate
      */
-    private $terminate;
+    private $eventDefinition;
 
     /**
      * Condition required to terminate the token.
@@ -32,7 +33,7 @@ class TerminateTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
-        return $this->terminate->assertsRule($this->terminate, $this->owner, $executionInstance);
+        return $this->eventDefinition->assertsRule($this->eventDefinition, $this->owner, $executionInstance);
     }
 
     /**
@@ -54,12 +55,12 @@ class TerminateTransition implements TransitionInterface
     }
 
     /**
-     * Set the terminate event definition.
+     * Set the event definition that terminates the process.
      *
-     * @param \ProcessMaker\Nayra\Bpmn\TerminateEventDefinition $terminate
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface $eventDefinition
      */
-    public function setTerminateEventDefinition(TerminateEventDefinition $terminate)
+    public function setEventDefinition(EventDefinitionInterface $eventDefinition)
     {
-        $this->terminate = $terminate;
+        $this->eventDefinition = $eventDefinition;
     }
 }

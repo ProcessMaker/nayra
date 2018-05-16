@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
@@ -65,8 +68,8 @@ class BasicsTest extends EngineTestCase
         $start->start();
         $this->engine->runToNextState();
         $this->assertEvents([
-            'EventTriggered',
-            'ActivityActivated',
+            StartEventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         //Assertion: Verify the activity has one token
@@ -77,9 +80,11 @@ class BasicsTest extends EngineTestCase
         $activity->complete($token);
         $this->engine->runToNextState();
         $this->assertEvents([
-            'ActivityCompleted',
-            'ActivityClosed',
-            'EventTriggered',
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
 

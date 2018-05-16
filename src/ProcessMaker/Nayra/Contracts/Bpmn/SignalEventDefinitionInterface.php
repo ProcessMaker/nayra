@@ -10,6 +10,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 interface SignalEventDefinitionInterface extends EventDefinitionInterface
 {
 
+    const EVENT_THROW_EVENT_DEFINITION = 'ThrowSignalEvent';
+    const EVENT_CATCH_EVENT_DEFINITION = 'CatchSignalEvent';
+
     /**
      * Returns the event definition payload (message, signal, etc.)
      *

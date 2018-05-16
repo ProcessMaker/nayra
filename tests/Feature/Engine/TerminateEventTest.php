@@ -6,6 +6,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -66,6 +68,9 @@ class TerminateEventTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
+            ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            TerminateEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
+            ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);

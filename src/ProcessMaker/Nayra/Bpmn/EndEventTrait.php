@@ -3,11 +3,11 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -33,7 +33,7 @@ trait EndEventTrait
     /**
      * Close the tokens.
      *
-     * @var EndTransition
+     * @var EndTransition|TerminateTransition
      */
     private $transition;
 
@@ -49,7 +49,7 @@ trait EndEventTrait
         $terminate = $this->findTerminateEventDefinition();
         if ($terminate) {
             $this->transition = new TerminateTransition($this);
-            $this->transition->setTerminateEventDefinition($terminate);
+            $this->transition->setEventDefinition($terminate);
         } else {
             $this->transition = new EndTransition($this);
         }
@@ -73,20 +73,22 @@ trait EndEventTrait
 
         //if the element has event definition and those event definition have a payload we notify them
         //of the triggered event
-        if ($this->getEventDefinitions()->count() > 0
-            && method_exists($this->getEventDefinitions()->item(0), 'getPayload')) {
-
-            $this->endState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-                $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
-                $collaboration = $this->getEventDefinitions()->item(0)->getPayload()->getMessageFlow()->getCollaboration();
-                $this->notifyEvent(EventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION, $this, $token);
-                $collaboration->send($this->getEventDefinitions()->item(0), $token);
-            });
-
-            $this->endState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-                $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
-            });
-        }
+        $this->endState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
+            $this->notifyEvent(ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
+            foreach($this->getEventDefinitions() as $eventDefinition) {
+                $eventDefinitionClass = get_class($eventDefinition);
+                $payload = method_exists($eventDefinition, 'getPayload') ? $eventDefinition->getPayload() : null;
+                $this->notifyEvent($eventDefinitionClass::EVENT_THROW_EVENT_DEFINITION, $this, $token, $payload);
+                $messageFlow = $payload ? $payload->getMessageFlow() : false;
+                if ($messageFlow) {
+                    $collaboration = $messageFlow->getCollaboration();
+                    $collaboration->send($eventDefinition, $token);
+                }
+            }
+        });
+        $this->endState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+            $this->notifyEvent(ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
+        });
 
         return $this->endState;
     }
@@ -106,12 +108,13 @@ trait EndEventTrait
     /**
      * Find a TerminateEventDefinition whit in the event definitions
      *
-     * @return TerminateEventDefinition|null
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface|null
      */
     private function findTerminateEventDefinition()
     {
         foreach ($this->getEventDefinitions() as $eventDefinition) {
-            if ($eventDefinition instanceof TerminateEventDefinition) {
+            if ($eventDefinition instanceof TerminateEventDefinitionInterface
+                || $eventDefinition instanceof ErrorEventDefinitionInterface) {
                 return $eventDefinition;
             }
         }

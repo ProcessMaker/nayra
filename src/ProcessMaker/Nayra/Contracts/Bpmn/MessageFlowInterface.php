@@ -11,6 +11,11 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 interface MessageFlowInterface extends EntityInterface
 {
 
+    const BPMN_PROPERTY_SOURCE = 'source';
+    const BPMN_PROPERTY_TARGET = 'target';
+    const BPMN_PROPERTY_SOURCE_REF = 'sourceRef';
+    const BPMN_PROPERTY_TARGET_REF = 'targetRef';
+
     /**
      * @return InteractionNodeInterface
      */

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/20100501/BPMN20.xsd"
+                   id="Error_EndEvent_TopLevelTest"
+                   targetNamespace="http://dsg.wiai.uniba.de/betsy/bpmn/error_EndEvent_TopLevel">
+
+    <bpmn2:error id="error" name="End Event Error" errorCode="ERR-1"/>
+
+    <bpmn2:process id="Error_EndEvent_TopLevel" isExecutable="true">
+
+        <bpmn2:startEvent id="StartEvent_1" name="Start">
+            <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+        </bpmn2:startEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_2" name="" sourceRef="StartEvent_1" targetRef="start"/>
+
+        <bpmn2:scriptTask id="start" name="Start">
+            <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_9</bpmn2:outgoing>
+            <bpmn2:script>CREATE_LOG_FILE</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_9" name="" sourceRef="start" targetRef="end"/>
+
+        <bpmn2:scriptTask id="end" name="End">
+            <bpmn2:incoming>SequenceFlow_9</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_10</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task1</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_10" name="" sourceRef="end" targetRef="EndEvent_2"/>
+
+        <bpmn2:endEvent id="EndEvent_2">
+            <bpmn2:incoming>SequenceFlow_10</bpmn2:incoming>
+            <bpmn2:errorEventDefinition id="TerminateEventDefinition_1" errorRef="error"/>
+        </bpmn2:endEvent>
+
+    </bpmn2:process>
+</bpmn2:definitions>

@@ -11,12 +11,14 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
@@ -54,6 +56,14 @@ class BpmnFileElement extends DOMElement
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     EndEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                ]
+            ],
+            'task'   => [
+                'getActivityRepository',
+                'createActivityInstance',
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             'scriptTask'   => [
@@ -144,6 +154,27 @@ class BpmnFileElement extends DOMElement
                 'getRootElementRepository',
                 'createTerminateEventDefinitionInstance',
                 [
+                ]
+            ],
+            'errorEventDefinition' => [
+                'getRootElementRepository',
+                'createErrorEventDefinitionInstance',
+                [
+                    ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR => ['1', [BpmnFileRepository::BPMN, ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF]],
+                ]
+            ],
+            'error' => [
+                'getRootElementRepository',
+                'createErrorInstance',
+                [
+                ]
+            ],
+            'messageFlow' => [
+                'getMessageFlowRepository',
+                'createMessageFlowInstance',
+                [
+                    MessageFlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnFileRepository::BPMN, MessageFlowInterface::BPMN_PROPERTY_SOURCE_REF]],
+                    MessageFlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnFileRepository::BPMN, MessageFlowInterface::BPMN_PROPERTY_TARGET_REF]],
                 ]
             ],
         ]
@@ -239,7 +270,9 @@ class BpmnFileElement extends DOMElement
             } else if ($isThisProperty && $multiplicity == '1') {
                 $id = $node->value;
                 $ref = $this->ownerDocument->loadBpmElementById($id);
-                $bpmnElement->setProperty($name, $ref);
+                $setter = 'set' . $name;
+                method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($ref)
+                    : $bpmnElement->setProperty($name, $ref);
                 return;
             }
         }

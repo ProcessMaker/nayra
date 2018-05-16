@@ -3,14 +3,11 @@
 namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\EndEventTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataInputAssociationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InputSetInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
@@ -18,7 +15,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  *
  * @package ProcessMaker\Models
  */
-class EndEvent implements EndEventInterface, ThrowEventInterface
+class EndEvent implements EndEventInterface
 {
     use EndEventTrait,
         LocalFlowNodeTrait,
