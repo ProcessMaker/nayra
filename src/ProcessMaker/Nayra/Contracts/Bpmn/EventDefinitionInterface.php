@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 interface EventDefinitionInterface extends EntityInterface
 {
-    const EVENT_THROW_EVENT_DEFINITION = 'EventDefinitionThrow';
 
     /**
      * Returns the element's id

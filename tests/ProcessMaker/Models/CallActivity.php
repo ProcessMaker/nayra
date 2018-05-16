@@ -5,6 +5,7 @@ namespace ProcessMaker\Models;
 use ProcessMaker\Nayra\Bpmn\ActivitySubProcessTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
@@ -35,6 +36,14 @@ class CallActivity implements CallActivityInterface
                     function ($self, $closedInstance) use($token, $instance) {
                         if ($closedInstance === $instance) {
                             $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
+                        }
+                    }
+                );
+                $this->getCalledElement()->attachEvent(
+                    ErrorEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
+                    function ($element, $innerToken, $errorEvent) use($token, $instance) {
+                        if ($innerToken->getInstance() === $instance) {
+                            $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
                         }
                     }
                 );

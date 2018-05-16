@@ -4,9 +4,10 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
-class TerminateEventDefinition implements EventDefinitionInterface
+class TerminateEventDefinition implements TerminateEventDefinitionInterface
 {
 
     use BaseTrait;

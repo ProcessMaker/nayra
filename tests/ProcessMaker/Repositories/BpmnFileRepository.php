@@ -10,6 +10,7 @@ use ProcessMaker\Models\DataStoreRepository;
 use ProcessMaker\Models\EventRepository;
 use ProcessMaker\Models\FlowRepository;
 use ProcessMaker\Models\GatewayRepository;
+use ProcessMaker\Models\MessageFlowRepository;
 use ProcessMaker\Models\ProcessRepository;
 use ProcessMaker\Models\RootElementRepository;
 use ProcessMaker\Models\TokenRepository;
@@ -214,5 +215,14 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
     public function getRootElementRepository()
     {
         return new RootElementRepository($this);
+    }
+
+    /**
+     *
+     * @return \ProcessMaker\Models\MessageFlowRepository
+     */
+    public function getMessageFlowRepository()
+    {
+        return new MessageFlowRepository($this);
     }
 }
