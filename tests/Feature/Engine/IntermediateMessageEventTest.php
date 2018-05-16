@@ -276,17 +276,17 @@ class IntermediateMessageEventTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //events triggered when the catching event runs
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-
-            //events triggered in the process with the throwing element:w
+            EventInterface::EVENT_EVENT_TRIGGERED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);
     }
 
@@ -382,17 +382,17 @@ class IntermediateMessageEventTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //events triggered when the catching event runs
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-
-            //events triggered in the process with the throwing element:w
+            EventInterface::EVENT_EVENT_TRIGGERED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);
     }
 }

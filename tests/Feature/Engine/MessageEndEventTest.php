@@ -14,14 +14,14 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 
-class SignalEndEventTest extends EngineTestCase
+class MessageEndEventTest extends EngineTestCase
 {
     /**
-     * Creates a process with a throwing signal and other with an end signal event
+     * Creates a process with a throwing message and other with an end message event
      *
      * @return array
      */
-    public function createSignalStartEventProcesses()
+    public function createMessageStartEventProcesses()
     {
         $item = $this->rootElementRepository->createItemDefinitionInstance([
             'id' => 'item',
@@ -30,9 +30,9 @@ class SignalEndEventTest extends EngineTestCase
             'structure' => 'String'
         ]);
 
-        $signal = $this->rootElementRepository->createMessageInstance();
-        $signal->setId('SignalA');
-        $signal->setItem($item);
+        $message = $this->rootElementRepository->createMessageInstance();
+        $message->setId('MessageA');
+        $message->setItem($item);
 
         //Process A
         $processA = $this->processRepository->createProcessInstance();
@@ -40,10 +40,10 @@ class SignalEndEventTest extends EngineTestCase
         $startA = $this->eventRepository->createStartEventInstance();
         $activityA1 = $this->activityRepository->createActivityInstance();
         $eventA = $this->eventRepository->createIntermediateCatchEventInstance();
-        $signalEventDefA = $this->rootElementRepository->createSignalEventDefinitionInstance();
-        $signalEventDefA->setId("signalEvent1");
-        $signalEventDefA->setPayload($signal);
-        $eventA->getEventDefinitions()->push($signalEventDefA);
+        $messageEventDefA = $this->rootElementRepository->createMessageEventDefinitionInstance();
+        $messageEventDefA->setId("messageEvent1");
+        $messageEventDefA->setPayload($message);
+        $eventA->getEventDefinitions()->push($messageEventDefA);
         $activityA2 = $this->activityRepository->createActivityInstance();
         $endA = $this->eventRepository->createEndEventInstance();
 
@@ -64,30 +64,30 @@ class SignalEndEventTest extends EngineTestCase
 
         $startB = $this->eventRepository->createStartEventInstance();
         $activityB1 = $this->activityRepository->createActivityInstance();
-        $signalEventDefB= $this->rootElementRepository->createSignalEventDefinitionInstance();
-        $signalEventDefB->setPayload($signal);
+        $messageEventDefB= $this->rootElementRepository->createMessageEventDefinitionInstance();
+        $messageEventDefB->setPayload($message);
 
-        $signalEndEventB = $this->eventRepository->createEndEventInstance();
-        $signalEndEventB->getEventDefinitions()->push($signalEventDefB);
+        $messageEndEventB = $this->eventRepository->createEndEventInstance();
+        $messageEndEventB->getEventDefinitions()->push($messageEventDefB);
 
         $startB->createFlowTo($activityB1, $this->flowRepository);
-        $activityB1->createFlowTo($signalEndEventB, $this->flowRepository);
+        $activityB1->createFlowTo($messageEndEventB, $this->flowRepository);
 
         $processB->addActivity($activityB1)
             ->addEvent($startB)
-            ->addEvent($signalEndEventB);
+            ->addEvent($messageEndEventB);
 
         return [$processA, $processB];
     }
 
 
     /**
-     * Tests the signal end event of a process
+     * Tests the message end event of a process
      */
-    public function testSignalEndEvent()
+    public function testMessageEndEvent()
     {
         //Create two processes
-        list($processA, $processB) = $this->createSignalStartEventProcesses();
+        list($processA, $processB) = $this->createMessageStartEventProcesses();
 
         //Create a collaboration
         $collaboration = new Collaboration;
@@ -106,10 +106,10 @@ class SignalEndEventTest extends EngineTestCase
 
         //Create message flow from intermediate events A to B
         $eventA = $processA->getEvents()->item(1);
-        $signalEndEventB = $processB->getEvents()->item(1);
+        $messageEndEventB = $processB->getEvents()->item(1);
         $messageFlow = $this->messageFlowRepository->createMessageFlowInstance();
         $messageFlow->setCollaboration($collaboration);
-        $messageFlow->setSource($signalEndEventB);
+        $messageFlow->setSource($messageEndEventB);
         $messageFlow->setTarget($eventA);
         $collaboration->addMessageFlow($messageFlow);
 
@@ -151,7 +151,7 @@ class SignalEndEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
-        // we finish the first activity so that the catch signal is activated
+        // we finish the first activity so that the catch message is activated
         $tokenA = $activityA1->getTokens($instanceA)->item(0);
         $activityA1->complete($tokenA);
         $this->engine->runToNextState();
@@ -160,7 +160,7 @@ class SignalEndEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES
-            ]);
+        ]);
 
         $startB->start();
         $this->engine->runToNextState();
