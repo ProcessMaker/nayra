@@ -2,7 +2,9 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
@@ -51,8 +53,19 @@ trait IntermediateCatchEventTrait
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED, $this);
         });
 
+        $this->transition->attachEvent(
+            TransitionInterface::EVENT_AFTER_TRANSIT,
+            function (TransitionInterface $transition, CollectionInterface $consumeTokens) {
+                $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
+            }
+        );
+
         $this->triggerPlace = new  State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
         $this->triggerPlace->connectTo($this->transition);
+
+        $this->triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH, $this, $token);
+        });
     }
 
     /**
@@ -65,9 +78,11 @@ trait IntermediateCatchEventTrait
         $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
 
         $incomingPlace->connectTo($this->transition);
+
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
         });
+
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED, $this, $token);
         });

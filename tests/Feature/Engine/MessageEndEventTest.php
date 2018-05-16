@@ -6,11 +6,13 @@ use ProcessMaker\Models\Collaboration;
 use ProcessMaker\Models\DataStoreCollection;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 
 class MessageEndEventTest extends EngineTestCase
 {
@@ -180,16 +182,17 @@ class MessageEndEventTest extends EngineTestCase
 
             // the throw token of the end is sent
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
 
             // the Process A catching message is activated
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
 
             // the Process B end throw event must consume its tokens
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
-
-            //The end event of process B is triggered and Process P is completed
             EventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
