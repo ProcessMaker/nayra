@@ -30,6 +30,19 @@ class EventRepository implements EventRepositoryInterface
     }
 
     /**
+     * Create an intermediate timer event
+     *
+     * @param array $properties
+     * @return StartEvent
+     */
+    public function createIntermediateTimerEventInstance($properties = [])
+    {
+        $event = new IntermediateTimerEvent($properties);
+        $event->setFactory($this->getFactory());
+        return $event;
+    }
+
+    /**
      * Create an end event.
      *
      * @param array $properties
