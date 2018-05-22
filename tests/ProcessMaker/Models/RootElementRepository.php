@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\TerminateEventDefinition;
+use ProcessMaker\Nayra\Bpmn\TimerEventDefinition;
 use ProcessMaker\Nayra\Contracts\Repositories\RootElementRepositoryInterface;
 
 /**
@@ -137,5 +138,15 @@ class RootElementRepository implements RootElementRepositoryInterface
     public function createErrorInstance()
     {
         return new Error();
+    }
+
+    /**
+     * Create a TimerEventDefinition.
+     *
+     * @return TimerEventDefinition
+     */
+    public function createTimerEventDefinitionInstance()
+    {
+        return new TimerEventDefinition();
     }
 }

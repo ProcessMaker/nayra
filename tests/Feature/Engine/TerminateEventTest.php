@@ -18,10 +18,10 @@ class TerminateEventTest extends EngineTestCase
 {
 
     /**
-     * Test conditional start event
+     * Test terminate end event
      *
      */
-    public function testConditionalStartEvent()
+    public function testTerminateEndEvent()
     {
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnFileRepository();

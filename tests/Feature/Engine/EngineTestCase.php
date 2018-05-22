@@ -4,9 +4,12 @@ namespace Tests\Feature\Engine;
 
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
-use ProcessMaker\Models\ItemDefinitionFactory;
 use ProcessMaker\Models\RepositoryFactory;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 
 /**
@@ -71,6 +74,20 @@ class EngineTestCase extends TestCase
     protected $firedEvents = [];
 
     /**
+     * Event listeners
+     *
+     * @var array
+     */
+    protected $listeners = [];
+
+    /**
+     * Scheduled jobs.
+     *
+     * @var array $jobs
+     */
+    protected $jobs = [];
+
+    /**
      * Initialize the engine and the factories.
      *
      */
@@ -96,14 +113,87 @@ class EngineTestCase extends TestCase
             ->method('dispatch')
             ->will($this->returnCallback(function($event, $payload) {
                 $this->firedEvents[] = $event;
+                if (empty($this->listeners[$event])) {
+                    return;
+                }
+                foreach($this->listeners[$event] as $listener) {
+                    call_user_func_array($listener, $payload);
+                }
+            }));
+
+        $fakeDispatcher->expects($this->any())
+            ->method('listen')
+            ->will($this->returnCallback(function($event, $listener) {
+                $this->listeners[$event][] = $listener;
             }));
 
         //Initialize the engine
         $this->engine = new TestEngine($factory, $fakeDispatcher);
         $this->engine->setRepositoryFactory($factory);
         $this->engine->setDispatcher($fakeDispatcher);
+
+        //Mock a job manager
+        $this->jobManager = $this->getMockBuilder(JobManagerInterface::class)
+            ->getMock();
+
+        $this->jobManager->expects($this->any())
+            ->method('scheduleDate')
+            ->will($this->returnCallback(function($date, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+                    $this->jobs[] = [
+                        'timer' => $date,
+                        'eventDefinition' => $timerDefinition,
+                        'element' => $element,
+                        'token' => $token,
+                    ];
+                }));
+
+        $this->jobManager->expects($this->any())
+            ->method('scheduleCycle')
+            ->will($this->returnCallback(function($cycle, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+                    $this->jobs[] = [
+                        'timer' => $cycle,
+                        'eventDefinition' => $timerDefinition,
+                        'element' => $element,
+                        'token' => $token,
+                    ];
+                }));
+
+        $this->jobManager->expects($this->any())
+            ->method('scheduleDuration')
+            ->will($this->returnCallback(function($duration, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+                    $this->jobs[] = [
+                        'timer' => $duration,
+                        'eventDefinition' => $timerDefinition,
+                        'element' => $element,
+                        'token' => $token,
+                    ];
+                }));
+
+        //Link the jobs manager with the engine
+        $this->engine->getDispatcher()->listen(
+            JobManagerInterface::EVENT_SCHEDULE_DATE,
+            function(TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+                $this->jobManager->schedule($timerDefinition, $element, $token);
+            }
+        );
+        $this->engine->getDispatcher()->listen(
+            JobManagerInterface::EVENT_SCHEDULE_CYCLE,
+            function(TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+                $this->jobManager->schedule($timerDefinition, $element, $token);
+            }
+        );
+        $this->engine->getDispatcher()->listen(
+            JobManagerInterface::EVENT_SCHEDULE_DURATION,
+            function(TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+                $this->jobManager->schedule($timerDefinition, $element, $token);
+            }
+        );
     }
 
+    /**
+     * Tear down the test case.
+     *
+     */
     protected function tearDown()
     {
         $this->engine->closeExecutionInstances();
@@ -123,5 +213,69 @@ class EngineTestCase extends TestCase
             'Expected event was not fired'
         );
         $this->firedEvents = [];
+    }
+
+    /**
+     * Assert that a date timer was scheduled.
+     *
+     * @param string $date
+     * @param FlowElementInterface $element
+     * @param TokenInterface $token
+     */
+    protected function assertScheduledDateTimer($date, FlowElementInterface $element, TokenInterface $token = null)
+    {
+        $found = false;
+        foreach ($this->jobs as $job) {
+            if (isset($job['date']) && $job['date'] === $date && $job['element'] === $element && $job['token'] === $token) {
+                $found = true;
+            }
+        }
+        $this->assertTrue($found);
+    }
+
+    /**
+     * Assert that a cyclic timer was scheduled.
+     *
+     * @param string $cycle
+     * @param FlowElementInterface $element
+     * @param TokenInterface $token
+     */
+    protected function assertScheduledCyclicTimer($cycle, FlowElementInterface $element, TokenInterface $token = null)
+    {
+        $found = false;
+        foreach ($this->jobs as $job) {
+            if (isset($job['cycle']) && $job['cycle'] === $cycle && $job['element'] === $element && $job['token'] === $token) {
+                $found = true;
+            }
+        }
+        $this->assertTrue($found);
+    }
+
+    /**
+     * Assert that a duration timer was scheduled.
+     *
+     * @param string $duration
+     * @param FlowElementInterface $element
+     * @param TokenInterface $token
+     */
+    protected function assertScheduledDurationTimer($duration, FlowElementInterface $element, TokenInterface $token = null)
+    {
+        $found = false;
+        foreach ($this->jobs as $job) {
+            if (isset($job['duration']) && $job['duration'] === $duration && $job['element'] === $element && $job['token'] === $token) {
+                $found = true;
+            }
+        }
+        $this->assertTrue($found);
+    }
+
+    /**
+     * Helper to dispatch a job from the JobManager mock
+     *
+     */
+    protected function dispatchJob()
+    {
+        $job = array_shift($this->jobs);
+        return $job ? $job['element']->execute($job['timer'], $job['token']->getInstance()) : null;
     }
 }

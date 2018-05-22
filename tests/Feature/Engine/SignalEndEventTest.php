@@ -6,6 +6,7 @@ use ProcessMaker\Models\Collaboration;
 use ProcessMaker\Models\DataStoreCollection;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
@@ -161,6 +162,7 @@ class SignalEndEventTest extends EngineTestCase
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES
             ]);
 
+        //Start the process B
         $startB->start();
         $this->engine->runToNextState();
 
@@ -170,6 +172,7 @@ class SignalEndEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
+        //Complete the activity
         $tokenB = $activityB1->getTokens($instanceB)->item(0);
         $activityB1->complete($tokenB);
         $this->engine->runToNextState();
@@ -180,7 +183,7 @@ class SignalEndEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
 
             // the throw token of the end is sent
-            IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             SignalEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
 
             // the Process A catching message is activated
