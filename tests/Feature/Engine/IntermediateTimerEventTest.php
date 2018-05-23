@@ -46,7 +46,117 @@ class IntermediateTimerEventTest extends EngineTestCase
     }
 
 
-    public function testIntermediateTimerEvent()
+    public function testIntermediateTimerEventWithDuration()
+    {
+        //Create a data store with data.
+        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+
+        //Load the process
+        $process = $this->createStartTimerEventProcess();
+
+        //Get references to the process elements
+        $start = $process->getEvents()->item(0);
+        $activityA = $process->getActivities()->item(0);
+        $activityB = $process->getActivities()->item(1);
+        $timerEvent = $process->getEvents()->item(1);
+
+        $this->addTimerEventDefinition($timerEvent, "duration");
+
+        //create an instance of the process
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        //run the process
+        $start->start();
+        $this->engine->runToNextState();
+
+        //Complete the first task
+        $token = $activityA->getTokens($instance)->item(0);
+        $activityA->complete($token);
+        $this->engine->runToNextState();
+
+        //Assertion: one token should arrive to the intermediate timer event
+        $this->assertTrue($timerEvent->getTokens($instance)->count() === 1);
+
+        //Assertion: verify that the event schedule duration is sent to the job manager
+        $this->assertEvents([
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
+            JobManagerInterface::EVENT_SCHEDULE_DURATION,
+        ]);
+
+        //force the dispatch of the required job simulation and execute call
+        $timerEvent->execute($timerEvent->getEventDefinitions()->item(0), $instance);
+        $this->engine->runToNextState();
+
+        //Assertion: the process should continue to the next task
+        $this->assertEvents([
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+        ]);
+    }
+
+    public function testIntermediateTimerEventWithCycle()
+    {
+        //Create a data store with data.
+        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+
+        //Load the process
+        $process = $this->createStartTimerEventProcess();
+
+        //Get references to the process elements
+        $start = $process->getEvents()->item(0);
+        $activityA = $process->getActivities()->item(0);
+        $activityB = $process->getActivities()->item(1);
+        $timerEvent = $process->getEvents()->item(1);
+
+        $this->addTimerEventDefinition($timerEvent, "cycle");
+
+        //create an instance of the process
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        //run the process
+        $start->start();
+        $this->engine->runToNextState();
+
+        //Complete the first task
+        $token = $activityA->getTokens($instance)->item(0);
+        $activityA->complete($token);
+        $this->engine->runToNextState();
+
+        //Assertion: one token should arrive to the intermediate timer event
+        $this->assertTrue($timerEvent->getTokens($instance)->count() === 1);
+
+        //Assertion: verify that the event schedule duration is sent to the job manager
+        $this->assertEvents([
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
+            JobManagerInterface::EVENT_SCHEDULE_CYCLE,
+        ]);
+
+        //force the dispatch of the required job simulation and execute call
+        $timerEvent->execute($timerEvent->getEventDefinitions()->item(0), $instance);
+        $this->engine->runToNextState();
+
+        //Assertion: the process should continue to the next task
+        $this->assertEvents([
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+        ]);
+    }
+
+    public function testIntermediateTimerEventWithDate()
     {
         //Create a data store with data.
         $dataStore = $this->dataStoreRepository->createDataStoreInstance();
@@ -65,34 +175,33 @@ class IntermediateTimerEventTest extends EngineTestCase
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
-        //start the process
+        //run the process
         $start->start();
-
         $this->engine->runToNextState();
 
-        //Assertion: Verify the triggered engine events. Two activities are activated.
-        $this->assertEvents([
-            EventInterface::EVENT_EVENT_TRIGGERED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
-        ]);
-
+        //Complete the first task
         $token = $activityA->getTokens($instance)->item(0);
         $activityA->complete($token);
         $this->engine->runToNextState();
 
-        //Assertion: Verify that the timer event send the schedule event
+        //Assertion: one token should arrive to the intermediate timer event
+        $this->assertTrue($timerEvent->getTokens($instance)->count() === 1);
+
+        //Assertion: verify that the event schedule duration is sent to the job manager
         $this->assertEvents([
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
-            JobManagerInterface::EVENT_SCHEDULE_DURATION,
+            JobManagerInterface::EVENT_SCHEDULE_DATE,
         ]);
 
-        //timer event execution
+        //force the dispatch of the required job simulation and execute call
         $timerEvent->execute($timerEvent->getEventDefinitions()->item(0), $instance);
         $this->engine->runToNextState();
 
-        //Assertion: Verify that the timer event is triggered
+        //Assertion: the process should continue to the next task
         $this->assertEvents([
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
@@ -101,6 +210,7 @@ class IntermediateTimerEventTest extends EngineTestCase
             EventInterface::EVENT_EVENT_TRIGGERED,
         ]);
     }
+
 
     /**
      * Adds a test timer event definition for the timer event passed
