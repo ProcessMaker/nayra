@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Engine;
 
-use DateTime;
 use DateInterval;
+use DatePeriod;
+use DateTime;
+use Exception;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -51,9 +53,10 @@ class StartTimerEventTest extends EngineTestCase
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->loadBpmElementById('Process');
         $startEvent = $bpmnRepository->loadBpmElementById('_9');
+        $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
-        $this->assertScheduledCyclicTimer('R/PT1M', $startEvent);
+        $this->assertScheduledCyclicTimer('R4/2018-05-01T00:00:00Z/PT1M', $startEvent);
 
         //Force to dispatch the requersted job
         $this->dispatchJob();
@@ -115,20 +118,20 @@ class StartTimerEventTest extends EngineTestCase
         $environmentData = $bpmnRepository->getDataStoreRepository()->createDataStoreInstance();
         $this->engine->setDataStore($environmentData);
         $everyMinute = '1M';
-        $calculatedCycle = 'R/PT' . $everyMinute;
+        $calculatedCycle = 'R4/2018-05-01T00:00:00Z/PT' . $everyMinute;
         $environmentData->putData('calculatedCycle', $calculatedCycle);
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->loadBpmElementById('Process');
         $startEvent = $bpmnRepository->loadBpmElementById('_9');
+        $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
-        var_dump($this->jobs);
         $this->assertScheduledCyclicTimer($calculatedCycle, $startEvent);
 
         //Assertion: The calculated value should conform to the ISO-8601 format for date and time representations.
         $value = $this->jobs[0]['timer'];
-        $this->assertValidInterval($value);
+        $this->assertValidCycle($value);
 
         //Force to dispatch the requersted job
         $this->dispatchJob();
@@ -142,20 +145,46 @@ class StartTimerEventTest extends EngineTestCase
     /**
      * Validate if the string has a valid ISO8601 date time representation
      *
-     * @param string $date
+     * @param string $expression
      */
-    private function assertValidDate($date)
+    private function assertValidDate($expression)
     {
-        $this->assertTrue(new DateTime($date) !== false);
+        try {
+            $date = new DateTime($expression);
+        } catch (Exception $e) {
+            $date = false;
+        }
+        $this->assertTrue($date !== false, "Failed asserting that $expression is a valid date timer");
+
     }
 
     /**
-     * Validate if the string has a valid ISO8601 interval (cycle or duration) representation
+     * Validate if the string has a valid ISO8601 cycle representation
      *
-     * @param string $interval
+     * @param string $expression
      */
-    private function assertValidInterval($interval)
+    private function assertValidCycle($expression)
     {
-        $this->assertTrue(new DateInterval($interval) !== false);
+        try {
+            $cycle = new DatePeriod($expression);
+        } catch (Exception $e) {
+            $cycle = false;
+        }
+        $this->assertTrue($cycle !== false, "Failed asserting that $expression is a valid cyclic timer");
+    }
+
+    /**
+     * Validate if the string has a valid ISO8601 duration representation
+     *
+     * @param string $expression
+     */
+    private function assertValidDuration($expression)
+    {
+        try {
+            $duration = new DateInterval($expression);
+        } catch (Exception $e) {
+            $duration = false;
+        }
+        $this->assertTrue($duration !== false, "Failed asserting that $expression is a valid duration timer");
     }
 }

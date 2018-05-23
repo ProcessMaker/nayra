@@ -15,7 +15,7 @@
       <outgoing>_11</outgoing>
       <outputSet/>
       <timerEventDefinition id="_9_ED_1">
-        <timeCycle><![CDATA[R/PT1M]]></timeCycle>
+        <timeCycle><![CDATA[R4/2018-05-01T00:00:00Z/PT1M]]></timeCycle>
       </timerEventDefinition>
     </startEvent>
     <endEvent id="_12" name="End Event">
@@ -45,17 +45,17 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_13" id="Yaoqiang-_13">
-        <di:waypoint x="286.409090909091" y="163.95454545454547"/>
-        <di:waypoint x="339.415548823932" y="163.95454545454547"/>
+        <di:waypoint x="285.9545454545455" y="163.95454545454547"/>
+        <di:waypoint x="339.9610033693865" y="163.95454545454547"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.96" width="6.0" x="309.91" y="154.48"/>
+          <dc:Bounds height="18.96" width="6.0" x="309.96" y="154.48"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_11" id="Yaoqiang-_11">
-        <di:waypoint x="121.40263299424998" y="163.95454545454547"/>
-        <di:waypoint x="201.409090909091" y="163.95454545454547"/>
+        <di:waypoint x="120.94808753970449" y="163.95454545454547"/>
+        <di:waypoint x="200.9545454545455" y="163.95454545454547"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.96" width="6.0" x="158.41" y="154.48"/>
+          <dc:Bounds height="18.96" width="6.0" x="157.95" y="154.48"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

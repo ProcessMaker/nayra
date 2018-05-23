@@ -44,6 +44,8 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      * Get the duration expression for the timer event definition.
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface
+     *
+     * @codeCoverageIgnore Until intermediate timer event implementation
      */
     public function getTimeDuration()
     {
@@ -74,7 +76,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         $this->scheduleTimeDate($engine, $element);
         $this->scheduleTimeCycle($engine, $element);
-        $this->scheduleTimeDuration($engine, $element);
     }
 
     /**
@@ -124,7 +125,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         $expression = $this->getTimeCycle();
         if ($expression) {
-            $cycle = $expression();
+            $cycle = $expression($this->getDataFrom($engine, $token));
             $engine->getDispatcher()->dispatch(
                 JobManagerInterface::EVENT_SCHEDULE_CYCLE,
                 $cycle,
@@ -141,12 +142,14 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
      * @param TokenInterface $token
+     *
+     * @codeCoverageIgnore Until intermediate timer event implementation
      */
     private function scheduleTimeDuration(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
         $expression = $this->getTimeDuration();
         if ($expression) {
-            $duration = $expression();
+            $duration = $expression($this->getDataFrom($engine, $token));
             $engine->getDispatcher()->dispatch(
                 JobManagerInterface::EVENT_SCHEDULE_DURATION,
                 $duration,
