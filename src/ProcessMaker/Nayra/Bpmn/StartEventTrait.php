@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 
 /**
  * Implementation of the behavior of a start event.
@@ -105,5 +106,19 @@ trait StartEventTrait
             $index < 0 ?: $this->triggerPlace[$index]->addNewToken($instance);
         }
         return $this;
+    }
+
+    /**
+     * Register catch events.
+     *
+     * @param EngineInterface $engine
+     */
+    public function registerCatchEvents(EngineInterface $engine)
+    {
+        foreach ($this->getEventDefinitions() as $eventDefinition) {
+            if (is_callable([$eventDefinition, 'registerCatchEvents'])) {
+                $eventDefinition->registerCatchEvents($engine, $this);
+            }
+        }
     }
 }

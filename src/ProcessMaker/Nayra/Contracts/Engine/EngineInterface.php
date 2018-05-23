@@ -59,6 +59,15 @@ interface EngineInterface
     public function step();
 
     /**
+     * Load a process into the engine
+     *
+     * @param ProcessInterface $process
+     *
+     * @return $this
+     */
+    public function loadProcess(ProcessInterface $process);
+
+    /**
      * Create an execution instance of a process.
      *
      * @param ProcessInterface $process

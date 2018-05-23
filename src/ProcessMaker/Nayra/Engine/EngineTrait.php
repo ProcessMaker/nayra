@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Engine;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -24,6 +25,13 @@ trait EngineTrait
     private $executionInstances = [];
 
     /**
+     * Loaded processes.
+     *
+     * @var ProcessInterface[]
+     */
+    private $processes = [];
+
+    /**
      * Engine data store.
      *
      * @var DataStoreInterface $dataStore
@@ -38,7 +46,7 @@ trait EngineTrait
     public function step()
     {
         $sum = 0;
-        //Execute trnsitions per instance
+        //Execute transitions per instance
         foreach ($this->executionInstances as $executionInstance) {
             $sum += $executionInstance->getTransitions()->sum(function (TransitionInterface $transition) use ($executionInstance) {
                     $result = $transition->execute($executionInstance) ? 1 : 0;
@@ -76,6 +84,7 @@ trait EngineTrait
      */
     public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data)
     {
+        $this->loadProcess($process);
         $executionInstance = new ExecutionInstance($this, $process, $data);
         $this->executionInstances[] = $executionInstance;
         return $executionInstance;
@@ -116,5 +125,30 @@ trait EngineTrait
     {
         $this->dataStore = $dataStore;
         return $this;
+    }
+
+    /**
+     * Load a process into the engine
+     *
+     * @param ProcessInterface $process
+     *
+     * @return $this
+     */
+    public function loadProcess(ProcessInterface $process)
+    {
+        if (!in_array($process, $this->processes)) {
+            $this->processes[] = $process;
+            $this->registerCatchEvents($process);
+        }
+        return $this;
+    }
+
+    private function registerCatchEvents(ProcessInterface $process)
+    {
+        foreach ($process->getEvents() as $event) {
+            if ($event instanceof CatchEventInterface) {
+                $event->registerCatchEvents($this);
+            }
+        }
     }
 }

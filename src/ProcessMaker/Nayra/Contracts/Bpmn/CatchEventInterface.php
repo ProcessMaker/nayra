@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+
 /**
  * CatchEvent interface.
  *
@@ -23,4 +25,6 @@ interface CatchEventInterface extends EventInterface
      * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
      */
     public function getTargetInstances(EventDefinitionInterface $message, TokenInterface $token);
+
+    public function registerCatchEvents(EngineInterface $engine);
 }
