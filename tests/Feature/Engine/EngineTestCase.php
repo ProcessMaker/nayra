@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
 use ProcessMaker\Models\RepositoryFactory;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateTimerEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
@@ -117,7 +119,7 @@ class EngineTestCase extends TestCase
                     return;
                 }
                 foreach($this->listeners[$event] as $listener) {
-                    call_user_func_array($listener, $payload);
+                    call_user_func_array($listener, $payload['arguments']);
                 }
             }));
 
@@ -173,19 +175,19 @@ class EngineTestCase extends TestCase
         $this->engine->getDispatcher()->listen(
             JobManagerInterface::EVENT_SCHEDULE_DATE,
             function(TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
-                $this->jobManager->schedule($timerDefinition, $element, $token);
+                $this->jobManager->scheduleDate("2018-05-22T20:47:38+00:00", $timerDefinition, $element, $token);
             }
         );
         $this->engine->getDispatcher()->listen(
             JobManagerInterface::EVENT_SCHEDULE_CYCLE,
             function(TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
-                $this->jobManager->schedule($timerDefinition, $element, $token);
+                $this->jobManager->scheduleCycle("PT36H", $timerDefinition, $element, $token);
             }
         );
         $this->engine->getDispatcher()->listen(
             JobManagerInterface::EVENT_SCHEDULE_DURATION,
             function(TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
-                $this->jobManager->schedule($timerDefinition, $element, $token);
+                $this->jobManager->scheduleDuration("00:20:00", $timerDefinition, $element, $token);
             }
         );
     }

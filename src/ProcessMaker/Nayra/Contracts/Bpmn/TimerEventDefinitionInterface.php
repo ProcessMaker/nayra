@@ -36,4 +36,25 @@ interface TimerEventDefinitionInterface extends EventDefinitionInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface
      */
     public function getTimeDuration();
+
+    /**
+     * Set the date expression for the timer event definition.
+     *
+     * @param FormalExpressionInterface $timeExpression
+     */
+    public function setTimeDate(FormalExpressionInterface $timeExpression);
+
+    /**
+     * Set the cycle expression for the timer event definition.
+     *
+     * @param FormalExpressionInterface $timeExpression
+     */
+    public function setTimeCycle(FormalExpressionInterface $timeExpression);
+
+    /**
+     * Set the duration expression for the timer event definition.
+     *
+     * @param FormalExpressionInterface $timeExpression
+     */
+    public function setTimeDuration(FormalExpressionInterface $timeExpression);
 }

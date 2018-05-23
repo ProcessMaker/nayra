@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
@@ -15,6 +16,9 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
 {
     use BaseTrait;
 
+    private $timeDate;
+    private $timeCycle;
+    private $timeDuration;
 
     /**
      * Get the date expression for the timer event definition.
@@ -58,5 +62,35 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null)
     {
         return true;
+    }
+
+    /**
+     * Set the date expression for the timer event definition.
+     *
+     * @param FormalExpressionInterface $timeExpression
+     */
+    public function setTimeDate(FormalExpressionInterface $timeExpression)
+    {
+        $this->timeDate = $timeExpression;
+    }
+
+    /**
+     * Set the cycle expression for the timer event definition.
+     *
+     * @param FormalExpressionInterface $timeExpression
+     */
+    public function setTimeCycle(FormalExpressionInterface $timeExpression)
+    {
+        $this->timeCycle = $timeExpression;
+    }
+
+    /**
+     * Set the duration expression for the timer event definition.
+     *
+     * @param FormalExpressionInterface $timeExpression
+     */
+    public function setTimeDuration(FormalExpressionInterface $timeExpression)
+    {
+        $this->timeDuration = $timeExpression;
     }
 }

@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Models\FormalExpression;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateTimerEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 
 class IntermediateTimerEventTest extends EngineTestCase
 {
@@ -18,26 +21,17 @@ class IntermediateTimerEventTest extends EngineTestCase
     {
         $process = $this->processRepository->createProcessInstance();
 
-        /*** @todo use the correct time definition ******/
-        $item = $this->rootElementRepository->createItemDefinitionInstance([
-            'id' => 'item',
-            'isCollection' => true,
-            'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
-            'structure' => 'String'
-        ]);
-        $message = $this->rootElementRepository->createMessageInstance();
-        $message->setId('MessageA');
-        $message->setItem($item);
+        $formalExpression = $this->rootElementRepository->createFormalExpressionInstance();
+        $formalExpression->setId('formalExpression');
+        $timerEventDefinition = $this->rootElementRepository->createTimerEventDefinitionInstance();
+        $timerEventDefinition->setId("TimerEventDefinition");
+        $timerEventDefinition->setTimeDuration($formalExpression);
 
-        $timerMessageDefinition = $this->rootElementRepository->createMessageEventDefinitionInstance();
-        $timerMessageDefinition->setId("MessageEvent1");
-        $timerMessageDefinition->setPayload(null);
-        /******/
 
         //elements
         $start = $this->eventRepository->createStartEventInstance();
-        $timerEvent = $this->eventRepository->createIntermediateTimerEventInstance();
-        $timerEvent->getEventDefinitions()->push($timerMessageDefinition);
+        $timerEvent = $this->eventRepository->createIntermediateCatchEventInstance();
+        $timerEvent->getEventDefinitions()->push($timerEventDefinition);
         $activityA = $this->activityRepository->createActivityInstance();
         $activityB = $this->activityRepository->createActivityInstance();
 
@@ -96,8 +90,8 @@ class IntermediateTimerEventTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            IntermediateTimerEventInterface::EVENT_TIMER_TOKEN_ARRIVES,
-            IntermediateTimerEventInterface::EVENT_TIMER_SCHEDULE_SENT,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
+            JobManagerInterface::EVENT_SCHEDULE_DURATION,
         ]);
 
         //timer event execution
@@ -106,9 +100,9 @@ class IntermediateTimerEventTest extends EngineTestCase
 
         //Assertion: Verify that the timer event is triggered
         $this->assertEvents([
-            IntermediateTimerEventInterface::EVENT_TIMER_TOKEN_TIMER,
-            IntermediateTimerEventInterface::EVENT_TIMER_TOKEN_CONSUMED,
-            IntermediateTimerEventInterface::EVENT_TIMER_TOKEN_PASSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
         ]);

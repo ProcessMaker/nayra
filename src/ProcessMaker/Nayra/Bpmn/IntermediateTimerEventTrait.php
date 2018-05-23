@@ -12,6 +12,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 trait IntermediateTimerEventTrait
@@ -75,8 +76,10 @@ trait IntermediateTimerEventTrait
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $this->notifyEvent(IntermediateTimerEventInterface::EVENT_TIMER_TOKEN_ARRIVES, $this, $token);
-            //@todo send the resto of the parameters
-            $this->notifyEvent(IntermediateTimerEventInterface::EVENT_TIMER_SCHEDULE_SENT, $this, $token);
+
+            foreach ($this->getEventDefinitions() as $eventDefinition) {
+                $this->notifyEvent(JobManagerInterface::EVENT_SCHEDULE_DURATION, $eventDefinition, $this, $token);
+            }
         });
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
