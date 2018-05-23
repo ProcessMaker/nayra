@@ -2,10 +2,10 @@
 
 namespace ProcessMaker\Nayra\Contracts\Engine;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Job manager required for scheduling timer events.

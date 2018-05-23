@@ -139,8 +139,8 @@ class EngineTestCase extends TestCase
         $this->jobManager->expects($this->any())
             ->method('scheduleDate')
             ->will($this->returnCallback(function($date, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
-                echo "SCHEDULE $date\n";
                     $this->jobs[] = [
+                        'repeat' => false,
                         'timer' => $date,
                         'eventDefinition' => $timerDefinition,
                         'element' => $element,
@@ -151,8 +151,8 @@ class EngineTestCase extends TestCase
         $this->jobManager->expects($this->any())
             ->method('scheduleCycle')
             ->will($this->returnCallback(function($cycle, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
-                echo "SCHEDULE $cycle\n";
                     $this->jobs[] = [
+                        'repeat' => true,
                         'timer' => $cycle,
                         'eventDefinition' => $timerDefinition,
                         'element' => $element,
@@ -163,8 +163,8 @@ class EngineTestCase extends TestCase
         $this->jobManager->expects($this->any())
             ->method('scheduleDuration')
             ->will($this->returnCallback(function($duration, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
-                echo "SCHEDULE $duration\n";
                     $this->jobs[] = [
+                        'repeat' => false,
                         'timer' => $duration,
                         'eventDefinition' => $timerDefinition,
                         'element' => $element,
@@ -283,6 +283,9 @@ class EngineTestCase extends TestCase
     protected function dispatchJob()
     {
         $job = array_shift($this->jobs);
+        if ($job && $job['repeat']) {
+            $this->jobs[] = $job;
+        }
         $instance = $job['token'] ? $job['token']->getInstance() : null;
         return $job ? $job['element']->execute($job['eventDefinition'], $instance) : null;
     }
