@@ -16,10 +16,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
 {
     use BaseTrait;
 
-    private $timeDate;
-    private $timeCycle;
-    private $timeDuration;
-
     /**
      * Get the date expression for the timer event definition.
      *
@@ -71,7 +67,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      */
     public function setTimeDate(FormalExpressionInterface $timeExpression)
     {
-        $this->timeDate = $timeExpression;
+        $this->setProperty(self::BPMN_PROPERTY_TIME_DATE, $timeExpression);
     }
 
     /**
@@ -81,7 +77,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      */
     public function setTimeCycle(FormalExpressionInterface $timeExpression)
     {
-        $this->timeCycle = $timeExpression;
+        $this->setProperty(self::BPMN_PROPERTY_TIME_CYCLE, $timeExpression);
     }
 
     /**
@@ -91,6 +87,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      */
     public function setTimeDuration(FormalExpressionInterface $timeExpression)
     {
-        $this->timeDuration = $timeExpression;
+        $this->setProperty(self::BPMN_PROPERTY_TIME_DURATION, $timeExpression);
     }
 }

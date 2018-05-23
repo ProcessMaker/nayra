@@ -83,12 +83,7 @@ trait IntermediateCatchEventTrait
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
-
-            foreach ($this->getEventDefinitions() as $eventDefinition) {
-                if (is_a($eventDefinition, TimerEventDefinitionInterface::class)) {
-                    $this->notifyEvent(JobManagerInterface::EVENT_SCHEDULE_DURATION, $eventDefinition, $this, $token);
-                }
-            }
+            $this->notifyTimerEvents($this->getEventDefinitions(), $token);
         });
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
@@ -127,6 +122,27 @@ trait IntermediateCatchEventTrait
         // with a new token in the trigger place, the event catch element will be fired
         $this->triggerPlace->addNewToken($instance);
         return $this;
+    }
+
+    private function notifyTimerEvents(CollectionInterface $eventDefinitions, TokenInterface $token)
+    {
+        foreach ($eventDefinitions as $eventDefinition) {
+            if (!is_a($eventDefinition, TimerEventDefinitionInterface::class)) {
+                continue;
+            }
+
+            if (!empty($eventDefinition->getTimeDuration())) {
+                $this->notifyEvent(JobManagerInterface::EVENT_SCHEDULE_DURATION, $eventDefinition, $this, $token);
+            }
+
+            if (!empty($eventDefinition->getTimeCycle())) {
+                $this->notifyEvent(JobManagerInterface::EVENT_SCHEDULE_CYCLE, $eventDefinition, $this, $token);
+            }
+
+            if (!empty($eventDefinition->getTimeDate())) {
+                $this->notifyEvent(JobManagerInterface::EVENT_SCHEDULE_DATE, $eventDefinition, $this, $token);
+            }
+        }
     }
 }
 
