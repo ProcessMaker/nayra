@@ -2,12 +2,12 @@
 
 namespace ProcessMaker\Models;
 
+use DateInterval;
 use DatePeriod;
 use DateTime;
 use Exception;
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
-
 
 /**
  * FormalExpression implementation
@@ -56,7 +56,7 @@ class FormalExpression implements FormalExpressionInterface
     public function __invoke($data)
     {
         $expression = $this->getProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY);
-        if ($this->isDateExpression() || $this->isIntervalExpression()) {
+        if ($this->isDateExpression() || $this->isCycleExpression() || $this->isDurationExpression()) {
             return $expression;
         }
         $test = new TestBetsy($data, $expression);
@@ -80,15 +80,31 @@ class FormalExpression implements FormalExpressionInterface
     }
 
     /**
-     * Verify if the expression is an interval.
+     * Verify if the expression is a cycle.
      *
      * @return boolean
      */
-    private function isIntervalExpression()
+    private function isCycleExpression()
     {
         $expression = $this->getProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY);
         try {
             $interval = new DatePeriod($expression);
+        } catch (Exception $e) {
+            return false;
+        }
+        return $interval !== false;
+    }
+
+    /**
+     * Verify if the expression is a duration.
+     *
+     * @return boolean
+     */
+    private function isDurationExpression()
+    {
+        $expression = $this->getProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY);
+        try {
+            $interval = new DateInterval($expression);
         } catch (Exception $e) {
             return false;
         }
