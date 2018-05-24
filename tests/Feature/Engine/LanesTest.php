@@ -3,6 +3,9 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
@@ -14,7 +17,8 @@ class LanesTest extends EngineTestCase
 {
 
     /**
-     * Test loading a collaboration with a single participant with two lanes.
+     * Test loading a collaboration with a single participant with two lanes
+     * and a child lane set with two lanes.
      *
      */
     public function testLoadingLanes()
@@ -31,11 +35,26 @@ class LanesTest extends EngineTestCase
         $this->assertNotEmpty($process->getLaneSets());
 
         //Assertion: The loaded process has one LaneSet
-        $this->assertNotEmpty(1, $process->getLaneSets()->count());
+        $this->assertEquals(1, $process->getLaneSets()->count());
 
-        //Assertion: The loaded LaneSet has two lanes
-        $laneSet = $process->getLaneSets();
-        $this->assertNotEmpty(2, $laneSet->getLanes()->count());
+        //Assertion: The loaded LaneSet has three lanes
+        $laneSet = $process->getLaneSets()->item(0);
+        $this->assertEquals(3, $laneSet->getLanes()->count());
+
+        //Assertion: The first lane has 3 flow nodes
+        $firstLane = $laneSet->getLanes()->item(0);
+        $this->assertEquals(3, $firstLane->getFlowNodes()->count());
+
+        //Assertion: The second lane has 3 flow nodes
+        $secondLane = $laneSet->getLanes()->item(1);
+        $this->assertEquals(3, $secondLane->getFlowNodes()->count());
+
+        //Assertion: The third lane has one child lane with two lanes
+        $thirdLane = $laneSet->getLanes()->item(2);
+        $this->assertEquals(1, $thirdLane->getChildLaneSets()->count());
+
+        $childLaneSet = $thirdLane->getChildLaneSets()->item(0);
+        $this->assertEquals(2, $childLaneSet->getLanes()->count());
     }
 
     /**
@@ -74,6 +93,27 @@ class LanesTest extends EngineTestCase
         //Complete the Task D
         $taksD = $bpmnRepository->loadBpmElementById('_9');
         $this->completeTask($taksD, $instance);
+
+        //Assertion: All the process was executed
+        $this->assertEvents([
+            StartEventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_COMPLETED,
+        ]);
     }
 
     /**
