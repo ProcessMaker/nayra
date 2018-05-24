@@ -125,6 +125,12 @@ trait IntermediateCatchEventTrait
         return $this;
     }
 
+    /**
+     * If there are timer event definitions, register them to send the corresponding timer events
+     *
+     * @param CollectionInterface $eventDefinitions
+     * @param TokenInterface $token
+     */
     private function notifyTimerEvents(CollectionInterface $eventDefinitions, TokenInterface $token)
     {
         foreach ($eventDefinitions as $eventDefinition) {
@@ -133,33 +139,16 @@ trait IntermediateCatchEventTrait
             }
 
             $eventDefinition->registerCatchEvents($this->getOwnerProcess()->getEngine(), $this, $token);
-
-//            if (!empty($eventDefinition->getTimeDuration())) {
-//                $expression = $eventDefinition->getTimeDuration();
-//                if ($expression) {
-//                    $duration = call_user_func($expression, $this->getOwnerProcess()->getEngine(), $token);
-//                    $this->notifyEvent($duration, JobManagerInterface::EVENT_SCHEDULE_DURATION, $eventDefinition, $this, $token);
-//                }
-//            }
-//
-//            if (!empty($eventDefinition->getTimeCycle())) {
-//                $expression = $eventDefinition->getTimeCycle();
-//                if ($expression) {
-//                    $cycle = call_user_func($expression, $this->getOwnerProcess()->getEngine(), $token);
-//                    $this->notifyEvent($cycle, JobManagerInterface::EVENT_SCHEDULE_CYCLE, $eventDefinition, $this, $token);
-//                }
-//            }
-//
-//            if (!empty($eventDefinition->getTimeDate())) {
-//                $expression = $eventDefinition->getTimeDate();
-//                if ($expression) {
-//                    $date = call_user_func($expression, $this->getOwnerProcess()->getEngine(), $token);
-//                    $this->notifyEvent($date, JobManagerInterface::EVENT_SCHEDULE_DATE, $eventDefinition, $this, $token);
-//                }
-//            }
         }
     }
 
+    /**
+     * Register catch events.
+     *
+     * @param EngineInterface $engine
+     *
+     * @return $this
+     */
     public function registerCatchEvents(EngineInterface $engine)
     {
         return $this;

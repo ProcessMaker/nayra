@@ -112,6 +112,8 @@ trait StartEventTrait
      * Register catch events.
      *
      * @param EngineInterface $engine
+     *
+     * @return $this
      */
     public function registerCatchEvents(EngineInterface $engine)
     {
@@ -120,5 +122,6 @@ trait StartEventTrait
                 $eventDefinition->registerCatchEvents($engine, $this);
             }
         }
+        return $this;
     }
 }
