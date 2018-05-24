@@ -30,6 +30,13 @@ class ActivityRepository implements ActivityRepositoryInterface
         return $activity;
     }
 
+    public function createScriptTaskInstance(ProcessInterface $process=null)
+    {
+        $activity = new ScriptTask();
+        $activity->setFactory($this->getFactory());
+        return $activity;
+    }
+
     /**
      * Create an activity instance.
      *

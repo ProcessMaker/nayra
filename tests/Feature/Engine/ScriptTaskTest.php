@@ -5,7 +5,6 @@ namespace Tests\Feature\Engine;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
@@ -14,14 +13,18 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
  */
 class ScriptTaskTest extends EngineTestCase
 {
+
+    const TEST_PROPERTY = 'scriptTestTaskProp';
+
     public function testProcessWithOneScriptTask()
     {
         //Load a process with the configuration:w
         //start->Task1->scriptTask1->End
         $process = $this->getProcessWithOneScriptTask();
+        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
 
         //create an instance of the process
-        $instance = $process->createInstance();
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
@@ -50,26 +53,30 @@ class ScriptTaskTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
 
-        $this->assertScriptTaskExecuted($scriptTask);
+        //$this->assertScriptTaskExecuted($scriptTask);
+        $this->assertEquals($scriptTask->getProperty(self::TEST_PROPERTY), 1);
     }
 
     public function testProcessWithScriptTasksOnly()
     {
         //Load a process with the configuration:w
-        //start->Task1->scriptTask1->End
+        //start->ScriptTask1->scriptTask2->End
         $process = $this->getProcessWithOnlyScriptTasks();
+        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
 
         //create an instance of the process
-        $instance = $process->createInstance();
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
-        $activity1 = $process->getActivities()->item(0);
-        $scriptTask = $process->getActivities()->item(1);
+        $scriptTask1 = $process->getActivities()->item(0);
+        $scriptTask2 = $process->getActivities()->item(1);
 
         //start the process an instance of the process
         $start->start();
@@ -84,11 +91,111 @@ class ScriptTaskTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
 
-        $this->assertScriptTaskExecuted($scriptTask);
+        $this->assertEquals($scriptTask1->getProperty(self::TEST_PROPERTY), 1);
+        $this->assertEquals($scriptTask2->getProperty(self::TEST_PROPERTY), 1);
+    }
+
+    public function testScriptTaskThatFails()
+    {
+        //Load a process with the configuration:w
+        //start->Task1->scriptTask1->End
+        $process = $this->getProcessWithOneScriptTask();
+        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+
+        //create an instance of the process
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        //Get References
+        $start = $process->getEvents()->item(0);
+        $activity1 = $process->getActivities()->item(0);
+        $scriptTask = $process->getActivities()->item(1);
+
+        //set an script that evaluates with an error
+        $scriptTask->setScript('throw new Exception ("test exception");');
+
+        //start the process an instance of the process
+        $start->start();
+        $this->engine->runToNextState();
+
+        //Assert: that the process is stared and the first activity activated
+        $this->assertEvents([
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        //complete the first activity (that is a manual one)
+        $token = $activity1->getTokens($instance)->item(0);
+        $activity1->complete($token);
+        $this->engine->runToNextState();
+
+        $scriptToken = $scriptTask->getTokens($instance)->item(0);
+        $this->assertEquals($scriptToken->getStatus(), ActivityInterface::TOKEN_STATE_FAILING);
+    }
+
+    private function getProcessWithOneScriptTask()
+    {
+        $process = $this->processRepository->createProcessInstance();
+        $process->setEngine($this->engine);
+
+        //elements
+        $start = $this->eventRepository->createStartEventInstance();
+        $activityA = $this->activityRepository->createActivityInstance();
+        $scriptTask = $this->activityRepository->createScriptTaskInstance();
+        $scriptTask->setScriptFormat('text/php');
+        $scriptTask->setScript('$this->setProperty("' . self::TEST_PROPERTY . '", 1);');
+
+        $end = $this->eventRepository->createEndEventInstance();
+        $process
+            ->addActivity($activityA)
+            ->addActivity($scriptTask);
+        $process
+            ->addEvent($start)
+            ->addEvent($end);
+
+        //flows
+        $start->createFlowTo($activityA, $this->flowRepository);
+        $activityA->createFlowTo($scriptTask, $this->flowRepository);
+        $scriptTask->createFlowTo($end, $this->flowRepository);
+
+        return $process;
+    }
+
+    private function getProcessWithOnlyScriptTasks()
+    {
+        $process = $this->processRepository->createProcessInstance();
+        $process->setEngine($this->engine);
+
+        //elements
+        $start = $this->eventRepository->createStartEventInstance();
+        $scriptTask1 = $this->activityRepository->createScriptTaskInstance();
+        $scriptTask2 = $this->activityRepository->createScriptTaskInstance();
+
+        $scriptTask1->setScriptFormat('text/php');
+        $scriptTask1->setScript('$this->setProperty("scriptTestTaskProp", 1);');
+
+        $scriptTask2->setScriptFormat('text/php');
+        $scriptTask2->setScript('$this->setProperty("scriptTestTaskProp", 1);');
+
+        $end = $this->eventRepository->createEndEventInstance();
+        $process
+            ->addActivity($scriptTask1)
+            ->addActivity($scriptTask2);
+        $process
+            ->addEvent($start)
+            ->addEvent($end);
+
+        //flows
+        $start->createFlowTo($scriptTask1, $this->flowRepository);
+        $scriptTask1->createFlowTo($scriptTask2, $this->flowRepository);
+        $scriptTask2->createFlowTo($end, $this->flowRepository);
+
+        return $process;
     }
 }
 
