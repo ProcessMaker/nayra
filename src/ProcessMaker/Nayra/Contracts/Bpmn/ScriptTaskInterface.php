@@ -15,30 +15,28 @@ interface ScriptTaskInterface extends ActivityInterface
     /**
      * Sets the script format of the script task
      *
-     * @param $scriptFormat
-     * @return mixed
+     * @param string $scriptFormat
      */
     public function setScriptFormat($scriptFormat);
 
     /**
      * Sets the script of the script task
      *
-     * @param $script
-     * @return mixed
+     * @param string $script
      */
     public function setScript($script);
 
     /**
      * Returns the script format of the script task
      *
-     * @param $stringFormat
+     * @return string
      */
     public function getScriptFormat();
 
     /**
      * Returns de Script of the script task
      *
-     * @param $script
+     * @return $string
      */
     public function getScript();
 }

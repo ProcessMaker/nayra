@@ -13,7 +13,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
  */
 class ScriptTaskTest extends EngineTestCase
 {
-
+    // String with the name of the property that will be set/and read to test that a script task has been executed.
+    // The testing script will set the property with this name of the ScriptTask to which it pertains
     const TEST_PROPERTY = 'scriptTestTaskProp';
 
     /**
@@ -61,7 +62,6 @@ class ScriptTaskTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
 
-        //$this->assertScriptTaskExecuted($scriptTask);
         $this->assertEquals($scriptTask->getProperty(self::TEST_PROPERTY), 1);
     }
 
@@ -101,7 +101,12 @@ class ScriptTaskTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_COMPLETED,
         ]);
 
+        // Assertion: The first script task should be executed.
+        // This is done by testing that the TEST_PROPERTY of the scriptTask1 was set
         $this->assertEquals($scriptTask1->getProperty(self::TEST_PROPERTY), 1);
+
+        // Assertion: The second script task should be executed.
+        // This is done by testing that the TEST_PROPERTY of the scriptTask2 was set
         $this->assertEquals($scriptTask2->getProperty(self::TEST_PROPERTY), 1);
     }
 
@@ -141,6 +146,8 @@ class ScriptTaskTest extends EngineTestCase
         $this->engine->runToNextState();
 
         $scriptToken = $scriptTask->getTokens($instance)->item(0);
+
+        //Assertion: Verify that the token was set to a failed state
         $this->assertEquals($scriptToken->getStatus(), ActivityInterface::TOKEN_STATE_FAILING);
     }
 

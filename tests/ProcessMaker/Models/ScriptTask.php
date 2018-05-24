@@ -70,8 +70,7 @@ class ScriptTask implements ScriptTaskInterface
     /**
      * Sets the script format of the script task
      *
-     * @param $scriptFormat
-     * @return mixed
+     * @param string $scriptFormat
      */
     public function setScriptFormat($scriptFormat)
     {
@@ -81,8 +80,7 @@ class ScriptTask implements ScriptTaskInterface
     /**
      * Sets the script of the script task
      *
-     * @param $script
-     * @return mixed
+     * @param string $script
      */
     public function setScript($script)
     {
@@ -92,7 +90,7 @@ class ScriptTask implements ScriptTaskInterface
     /**
      * Returns the script format of the script task
      *
-     * @param $stringFormat
+     * @return string
      */
     public function getScriptFormat()
     {
@@ -102,7 +100,7 @@ class ScriptTask implements ScriptTaskInterface
     /**
      * Returns de Script of the script task
      *
-     * @param $script
+     * @return $string
      */
     public function getScript()
     {
@@ -112,12 +110,11 @@ class ScriptTask implements ScriptTaskInterface
     /**
      * Script runner fot testing purposes that just evaluates the sent php code
      *
-     * @param $instance
-     * @param $script
-     *
-     * @return boolean
+     * @param TokenInterface $token
+     * @param string $script
+     * @return bool
      */
-    private function runScript($token, $script)
+    private function runScript(TokenInterface $token, $script)
     {
         $result = true;
         try {
