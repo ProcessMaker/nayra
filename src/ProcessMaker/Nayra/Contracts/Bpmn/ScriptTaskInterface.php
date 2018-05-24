@@ -2,7 +2,11 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-
+/**
+ * Defines the interface to be used by the ScriptTasks
+ *
+ * @package ProcessMaker\Nayra\Contracts\Bpmn
+ */
 interface ScriptTaskInterface extends ActivityInterface
 {
     const BPMN_PROPERTY_SCRIPT_FORMAT = 'scriptFormat';

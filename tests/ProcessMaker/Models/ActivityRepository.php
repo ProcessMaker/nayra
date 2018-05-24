@@ -30,6 +30,13 @@ class ActivityRepository implements ActivityRepositoryInterface
         return $activity;
     }
 
+    /**
+     * Creates a ScriptTask
+     *
+     * @param ProcessInterface|null $process
+     *
+     * @return ScriptTask
+     */
     public function createScriptTaskInstance(ProcessInterface $process=null)
     {
         $activity = new ScriptTask();

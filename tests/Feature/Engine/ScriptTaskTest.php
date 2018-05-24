@@ -8,7 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
- * Test transitions
+ * Tests for the ScriptTask element
  *
  */
 class ScriptTaskTest extends EngineTestCase
@@ -16,10 +16,12 @@ class ScriptTaskTest extends EngineTestCase
 
     const TEST_PROPERTY = 'scriptTestTaskProp';
 
+    /**
+     * Tests the a process with the sequence start->Task1->scriptTask1->End executes correctly
+     */
     public function testProcessWithOneScriptTask()
     {
-        //Load a process with the configuration:w
-        //start->Task1->scriptTask1->End
+        //Load a process
         $process = $this->getProcessWithOneScriptTask();
         $dataStore = $this->dataStoreRepository->createDataStoreInstance();
 
@@ -63,10 +65,12 @@ class ScriptTaskTest extends EngineTestCase
         $this->assertEquals($scriptTask->getProperty(self::TEST_PROPERTY), 1);
     }
 
+    /**
+     * Tests that a process with the sequence start->ScriptTask1->scriptTask2->End runs correctly
+     */
     public function testProcessWithScriptTasksOnly()
     {
-        //Load a process with the configuration:w
-        //start->ScriptTask1->scriptTask2->End
+        //Load a process
         $process = $this->getProcessWithOnlyScriptTasks();
         $dataStore = $this->dataStoreRepository->createDataStoreInstance();
 
@@ -101,10 +105,12 @@ class ScriptTaskTest extends EngineTestCase
         $this->assertEquals($scriptTask2->getProperty(self::TEST_PROPERTY), 1);
     }
 
+    /**
+     * Tests that when a script fails, the ScriptTask token is set to failed status
+     */
     public function testScriptTaskThatFails()
     {
-        //Load a process with the configuration:w
-        //start->Task1->scriptTask1->End
+        //Load a process
         $process = $this->getProcessWithOneScriptTask();
         $dataStore = $this->dataStoreRepository->createDataStoreInstance();
 
@@ -138,6 +144,10 @@ class ScriptTaskTest extends EngineTestCase
         $this->assertEquals($scriptToken->getStatus(), ActivityInterface::TOKEN_STATE_FAILING);
     }
 
+    /**
+     * Generates a process with the following elements: start->Task1->scriptTask1->End
+     * @return \ProcessMaker\Models\Process
+     */
     private function getProcessWithOneScriptTask()
     {
         $process = $this->processRepository->createProcessInstance();
@@ -166,6 +176,10 @@ class ScriptTaskTest extends EngineTestCase
         return $process;
     }
 
+    /**
+     * Generates a process with the following elements: start->scriptTask1->scriptTask2->End
+     * @return \ProcessMaker\Models\Process
+     */
     private function getProcessWithOnlyScriptTasks()
     {
         $process = $this->processRepository->createProcessInstance();

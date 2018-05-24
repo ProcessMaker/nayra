@@ -4,6 +4,7 @@ namespace ProcessMaker\Models;
 
 use Exception;
 use ProcessMaker\Nayra\Bpmn\ActivitySubProcessTrait;
+use ProcessMaker\Nayra\Bpmn\ActivityTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
@@ -18,13 +19,13 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 class ScriptTask implements ScriptTaskInterface
 {
 
-    use ActivitySubProcessTrait,
+    use ActivityTrait,
         LocalFlowNodeTrait,
         LocalProcessTrait,
         LocalPropertiesTrait;
 
     /**
-     * Configure the activity to go to a FAILING status when activated.
+     * Configure the activity to evaluate script tasks
      *
      */
     public function initActivity()
