@@ -11,6 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -118,6 +119,18 @@ trait IntermediateCatchEventTrait
 
         // with a new token in the trigger place, the event catch element will be fired
         $this->triggerPlace->addNewToken($instance);
+        return $this;
+    }
+
+    /**
+     * Register catch events.
+     *
+     * @param EngineInterface $engine
+     *
+     * @return $this
+     */
+    public function registerCatchEvents(EngineInterface $engine)
+    {
         return $this;
     }
 }

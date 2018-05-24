@@ -21,6 +21,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 
 /**
  * Description of BpmnFileElement
@@ -175,6 +176,36 @@ class BpmnFileElement extends DOMElement
                 [
                     MessageFlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnFileRepository::BPMN, MessageFlowInterface::BPMN_PROPERTY_SOURCE_REF]],
                     MessageFlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnFileRepository::BPMN, MessageFlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                ]
+            ],
+            'timerEventDefinition' => [
+                'getRootElementRepository',
+                'createTimerEventDefinitionInstance',
+                [
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => ['1', [BpmnFileRepository::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => ['1', [BpmnFileRepository::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => ['1', [BpmnFileRepository::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION]],
+                ]
+            ],
+            TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => [
+                'getRootElementRepository',
+                'createFormalExpressionInstance',
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => [
+                'getRootElementRepository',
+                'createFormalExpressionInstance',
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => [
+                'getRootElementRepository',
+                'createFormalExpressionInstance',
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
                 ]
             ],
         ]
