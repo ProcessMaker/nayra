@@ -55,6 +55,15 @@ class LanesTest extends EngineTestCase
 
         $childLaneSet = $thirdLane->getChildLaneSets()->item(0);
         $this->assertEquals(2, $childLaneSet->getLanes()->count());
+
+        //Assertion: Verify the name of the lane set.
+        $this->assertEquals('Process Lane Set', $laneSet->getName());
+
+        //Assertion: Verify the name of the lanes.
+        $this->assertEquals('Lane 1', $firstLane->getName());
+        $this->assertEquals('Lane 2', $secondLane->getName());
+        $this->assertEquals('Lane 3', $thirdLane->getName());
+
     }
 
     /**
