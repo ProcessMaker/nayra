@@ -326,11 +326,9 @@ trait ProcessTrait
     }
 
     /**
-     * Set the lane sets of the process
+     * Get the lane sets of the process.
      *
-     * @param CollectionInterface $laneSets
-     *
-     * @return $this
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface[]
      */
     public function getLaneSets()
     {
