@@ -37,4 +37,18 @@ interface ProcessRepositoryInterface extends RepositoryInterface
      * @return $this
      */
     public function store(ProcessInterface $process, $saveChildElements=false);
+
+    /**
+     * Create a lane set instance.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface
+     */
+    public function createLaneSetInstance();
+
+    /**
+     * Create a lane instance.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\LaneInterface
+     */
+    public function createLaneInstance();
 }

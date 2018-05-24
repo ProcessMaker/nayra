@@ -26,6 +26,7 @@ interface ProcessInterface extends CallableElementInterface
     const BPMN_PROPERTY_IS_EXECUTABLE = 'isExecutable';
     const BPMN_PROPERTY_PROCESS_TYPE = 'processType';
     const BPMN_PROPERTY_PARTICIPANT = 'participant';
+    const BPMN_PROPERTY_LANE_SET = 'laneSet';
 
     /**
      * Events defined for Activity
@@ -211,4 +212,11 @@ interface ProcessInterface extends CallableElementInterface
      * @return $this
      */
     public function addInstance(ExecutionInstanceInterface $instance);
+
+    /**
+     * Get lane sets of the process.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface[]
+     */
+    public function getLaneSets();
 }

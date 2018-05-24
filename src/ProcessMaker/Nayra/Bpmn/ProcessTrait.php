@@ -53,6 +53,7 @@ trait ProcessTrait
     protected function initProcessTrait()
     {
         $this->instances = new Collection;
+        $this->setLaneSets(new Collection);
     }
 
     /**
@@ -322,5 +323,28 @@ trait ProcessTrait
             }
         });
         return $instance;
+    }
+
+    /**
+     * Get the lane sets of the process.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface[]
+     */
+    public function getLaneSets()
+    {
+        return $this->getProperty(ProcessInterface::BPMN_PROPERTY_LANE_SET);
+    }
+
+    /**
+     * Set the lane sets of the process
+     *
+     * @param CollectionInterface $laneSets
+     *
+     * @return $this
+     */
+    public function setLaneSets(CollectionInterface $laneSets)
+    {
+        $this->setProperty(ProcessInterface::BPMN_PROPERTY_LANE_SET, $laneSets);
+        return $this;
     }
 }
