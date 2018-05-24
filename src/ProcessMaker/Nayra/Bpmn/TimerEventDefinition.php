@@ -1,5 +1,7 @@
 <?php
+
 namespace ProcessMaker\Nayra\Bpmn;
+
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;

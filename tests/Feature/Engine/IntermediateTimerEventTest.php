@@ -47,6 +47,9 @@ class IntermediateTimerEventTest extends EngineTestCase
     }
 
 
+    /**
+     * Tests that a intermediate timer event that uses duration, sends the events to schedules the job
+     */
     public function testIntermediateTimerEventWithDuration()
     {
         //Create a data store with data.
@@ -102,6 +105,9 @@ class IntermediateTimerEventTest extends EngineTestCase
         ]);
     }
 
+    /**
+     * Tests that a intermediate timer event that uses cycles, sends the events to schedules the job
+     */
     public function testIntermediateTimerEventWithCycle()
     {
         //Create a data store with data.
@@ -157,6 +163,9 @@ class IntermediateTimerEventTest extends EngineTestCase
         ]);
     }
 
+    /**
+     * Tests that a intermediate timer event that uses dates, sends the events to schedules the job
+     */
     public function testIntermediateTimerEventWithDate()
     {
         //Create a data store with data.
