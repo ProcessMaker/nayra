@@ -117,8 +117,11 @@ class StartTimerEventTest extends EngineTestCase
         //Create a default environment data
         $environmentData = $bpmnRepository->getDataStoreRepository()->createDataStoreInstance();
         $this->engine->setDataStore($environmentData);
+
+        //Calculate a iso8601 string for a cyclic timer of 1 minute from 2018-05-01 at 00:00 UTC
         $everyMinute = '1M';
-        $calculatedCycle = 'R4/2018-05-01T00:00:00Z/PT' . $everyMinute;
+        $fromDate = '2018-05-01T00:00:00Z';
+        $calculatedCycle = 'R4/' . $fromDate . '/PT' . $everyMinute;
         $environmentData->putData('calculatedCycle', $calculatedCycle);
 
         //Load a process from a bpmn repository by Id

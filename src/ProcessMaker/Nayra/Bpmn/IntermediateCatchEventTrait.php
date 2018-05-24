@@ -122,6 +122,13 @@ trait IntermediateCatchEventTrait
         return $this;
     }
 
+    /**
+     * Register catch events.
+     *
+     * @param EngineInterface $engine
+     *
+     * @return $this
+     */
     public function registerCatchEvents(EngineInterface $engine)
     {
         return $this;

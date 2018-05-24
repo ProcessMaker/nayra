@@ -10,6 +10,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 /**
  * Job manager required for scheduling timer events.
  *
+ * This interface also defines the different types of schedules that a timer
+ * event could use.
  */
 interface JobManagerInterface
 {
