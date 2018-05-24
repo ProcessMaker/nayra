@@ -12,6 +12,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
@@ -131,18 +132,37 @@ trait IntermediateCatchEventTrait
                 continue;
             }
 
-            if (!empty($eventDefinition->getTimeDuration())) {
-                $this->notifyEvent(JobManagerInterface::EVENT_SCHEDULE_DURATION, $eventDefinition, $this, $token);
-            }
+            $eventDefinition->registerCatchEvents($this->getOwnerProcess()->getEngine(), $this, $token);
 
-            if (!empty($eventDefinition->getTimeCycle())) {
-                $this->notifyEvent(JobManagerInterface::EVENT_SCHEDULE_CYCLE, $eventDefinition, $this, $token);
-            }
-
-            if (!empty($eventDefinition->getTimeDate())) {
-                $this->notifyEvent(JobManagerInterface::EVENT_SCHEDULE_DATE, $eventDefinition, $this, $token);
-            }
+//            if (!empty($eventDefinition->getTimeDuration())) {
+//                $expression = $eventDefinition->getTimeDuration();
+//                if ($expression) {
+//                    $duration = call_user_func($expression, $this->getOwnerProcess()->getEngine(), $token);
+//                    $this->notifyEvent($duration, JobManagerInterface::EVENT_SCHEDULE_DURATION, $eventDefinition, $this, $token);
+//                }
+//            }
+//
+//            if (!empty($eventDefinition->getTimeCycle())) {
+//                $expression = $eventDefinition->getTimeCycle();
+//                if ($expression) {
+//                    $cycle = call_user_func($expression, $this->getOwnerProcess()->getEngine(), $token);
+//                    $this->notifyEvent($cycle, JobManagerInterface::EVENT_SCHEDULE_CYCLE, $eventDefinition, $this, $token);
+//                }
+//            }
+//
+//            if (!empty($eventDefinition->getTimeDate())) {
+//                $expression = $eventDefinition->getTimeDate();
+//                if ($expression) {
+//                    $date = call_user_func($expression, $this->getOwnerProcess()->getEngine(), $token);
+//                    $this->notifyEvent($date, JobManagerInterface::EVENT_SCHEDULE_DATE, $eventDefinition, $this, $token);
+//                }
+//            }
         }
+    }
+
+    public function registerCatchEvents(EngineInterface $engine)
+    {
+        return $this;
     }
 }
 

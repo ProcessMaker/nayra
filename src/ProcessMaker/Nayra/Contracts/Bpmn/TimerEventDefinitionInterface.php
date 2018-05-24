@@ -40,21 +40,21 @@ interface TimerEventDefinitionInterface extends EventDefinitionInterface
     /**
      * Set the date expression for the timer event definition.
      *
-     * @param FormalExpressionInterface $timeExpression
+     * @param Callable $timeExpression
      */
-    public function setTimeDate(FormalExpressionInterface $timeExpression);
+    public function setTimeDate(callable $timeExpression);
 
     /**
      * Set the cycle expression for the timer event definition.
      *
-     * @param FormalExpressionInterface $timeExpression
+     * @param Callable $timeExpression
      */
-    public function setTimeCycle(FormalExpressionInterface $timeExpression);
+    public function setTimeCycle(callable $timeExpression);
 
     /**
      * Set the duration expression for the timer event definition.
      *
-     * @param FormalExpressionInterface $timeExpression
+     * @param Callable $timeExpression
      */
-    public function setTimeDuration(FormalExpressionInterface $timeExpression);
+    public function setTimeDuration(callable $timeExpression);
 }

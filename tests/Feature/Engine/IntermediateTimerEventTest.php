@@ -20,6 +20,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function createStartTimerEventProcess()
     {
         $process = $this->processRepository->createProcessInstance();
+        $process->setEngine($this->engine);
 
         //elements
         $start = $this->eventRepository->createStartEventInstance();
@@ -229,13 +230,13 @@ class IntermediateTimerEventTest extends EngineTestCase
         $timerEventDefinition->setId("TimerEventDefinition");
         switch ($type) {
             case "duration":
-                $timerEventDefinition->setTimeDuration($formalExpression);
+                $timerEventDefinition->setTimeDuration(function ($data) {return '1H';});
                 break;
             case "cycle":
-                $timerEventDefinition->setTimeCycle($formalExpression);
+                $timerEventDefinition->setTimeCycle(function ($data) { return 'R4/2018-05-01T00:00:00Z/PT1M';});
                 break;
             default:
-                $timerEventDefinition->setTimeDate($formalExpression);
+                $timerEventDefinition->setTimeDate(function ($data) {return '2018-05-01T14:30:00';});
         }
 
         $timerEvent->getEventDefinitions()->push($timerEventDefinition);
