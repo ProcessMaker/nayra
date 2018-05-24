@@ -58,13 +58,15 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         return true;
     }
+
     /**
      * Register in catch events.
      *
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
+     * @param TokenInterface $token
      */
-    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, $token)
+    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
         $this->scheduleTimeDuration($engine, $element, $token);
         $this->scheduleTimeDate($engine, $element, $token);
@@ -131,8 +133,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
      * @param TokenInterface $token
-     *
-     * @codeCoverageIgnore Until intermediate timer event implementation
      */
     private function scheduleTimeDuration(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
@@ -152,7 +152,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     /**
      * Set the date expression for the timer event definition.
      *
-     * @param Callable $timeExpression
+     * @param callable $timeExpression
      */
     public function setTimeDate(callable $timeExpression)
     {
@@ -162,7 +162,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     /**
      * Set the cycle expression for the timer event definition.
      *
-     * @param Callable $timeExpression
+     * @param callable $timeExpression
      */
     public function setTimeCycle(callable $timeExpression)
     {
@@ -172,7 +172,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     /**
      * Set the duration expression for the timer event definition.
      *
-     * @param Callable $timeExpression
+     * @param callable $timeExpression
      */
     public function setTimeDuration(callable $timeExpression)
     {
