@@ -18,8 +18,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LaneInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 
@@ -39,6 +42,7 @@ class BpmnFileElement extends DOMElement
                     'activities' => ['n', ActivityInterface::class],
                     'gateways' => ['n', GatewayInterface::class],
                     'events' => ['n', EventInterface::class],
+                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [BpmnFileRepository::BPMN, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
                 ]
             ],
             'startEvent'   => [
@@ -208,6 +212,29 @@ class BpmnFileElement extends DOMElement
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
                 ]
             ],
+            'laneSet' => [
+                'getProcessRepository',
+                'createLaneSetInstance',
+                [
+                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnFileRepository::BPMN, LaneSetInterface::BPMN_PROPERTY_LANE]],
+                ]
+            ],
+            'lane' => [
+                'getProcessRepository',
+                'createLaneInstance',
+                [
+                    LaneInterface::BPMN_PROPERTY_FLOW_NODE => ['n', [BpmnFileRepository::BPMN, LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF]],
+                    LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => ['n', [BpmnFileRepository::BPMN, LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET]],
+                ]
+            ],
+            LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF => [self::IS_PROPERTY, '', []],
+            LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => [
+                'getProcessRepository',
+                'createLaneSetInstance',
+                [
+                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnFileRepository::BPMN, LaneSetInterface::BPMN_PROPERTY_LANE]],
+                ]
+            ],
         ]
     ];
 
@@ -247,10 +274,6 @@ class BpmnFileElement extends DOMElement
             }
             if ($id) {
                 $this->ownerDocument->setBpmnElementById($id, $bpmnElement);
-            }
-            $properties = [];
-            foreach ($this->attributes as $attribute) {
-                $properties[$attribute->name] = $attribute->value;
             }
             foreach ($this->attributes as $attribute) {
                 $this->setBpmnPropertyRef($attribute, $mapProperties, $bpmnElement);
@@ -307,7 +330,9 @@ class BpmnFileElement extends DOMElement
                 return;
             }
         }
-        $bpmnElement->setProperty($node->name, $node->value);
+        $setter = 'set' . $node->name;
+        method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($node->value)
+            : $bpmnElement->setProperty($node->name, $node->value);
     }
 
     private function setBpmnBody($mapProperties, EntityInterface $bpmnElement)

@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Models;
 
+use ProcessMaker\Nayra\Bpmn\Lane;
+use ProcessMaker\Nayra\Bpmn\LaneSet;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
@@ -73,5 +75,29 @@ class ProcessRepository implements ProcessRepositoryInterface
     public function create(ProcessInterface $process = null)
     {
         return new Process;
+    }
+
+    /**
+     * Create a lane set instance.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface
+     */
+    public function createLaneSetInstance()
+    {
+        $laneSet = new LaneSet;
+        $laneSet->setFactory($this->getFactory());
+        return $laneSet;
+    }
+
+    /**
+     * Create a lane instance.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\LaneInterface
+     */
+    public function createLaneInstance()
+    {
+        $lane = new Lane;
+        $lane->setFactory($this->getFactory());
+        return $lane;
     }
 }
