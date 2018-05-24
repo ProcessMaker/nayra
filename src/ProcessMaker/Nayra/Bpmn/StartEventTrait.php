@@ -119,7 +119,7 @@ trait StartEventTrait
     {
         foreach ($this->getEventDefinitions() as $eventDefinition) {
             if (is_callable([$eventDefinition, 'registerCatchEvents'])) {
-                $eventDefinition->registerCatchEvents($engine, $this);
+                $eventDefinition->registerCatchEvents($engine, $this, null);
             }
         }
         return $this;

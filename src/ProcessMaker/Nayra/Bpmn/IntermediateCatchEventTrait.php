@@ -9,10 +9,12 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -82,6 +84,7 @@ trait IntermediateCatchEventTrait
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
+            $this->notifyTimerEvents($this->getEventDefinitions(), $token);
         });
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
@@ -120,6 +123,23 @@ trait IntermediateCatchEventTrait
         // with a new token in the trigger place, the event catch element will be fired
         $this->triggerPlace->addNewToken($instance);
         return $this;
+    }
+
+    /**
+     * If there are timer event definitions, register them to send the corresponding timer events
+     *
+     * @param CollectionInterface $eventDefinitions
+     * @param TokenInterface $token
+     */
+    private function notifyTimerEvents(CollectionInterface $eventDefinitions, TokenInterface $token)
+    {
+        foreach ($eventDefinitions as $eventDefinition) {
+            if (!is_a($eventDefinition, TimerEventDefinitionInterface::class)) {
+                continue;
+            }
+
+            $eventDefinition->registerCatchEvents($this->getOwnerProcess()->getEngine(), $this, $token);
+        }
     }
 
     /**

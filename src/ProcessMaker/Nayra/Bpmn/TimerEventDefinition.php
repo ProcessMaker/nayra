@@ -5,12 +5,12 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
-
 /**
  * MessageEventDefinition class
  *
@@ -18,8 +18,6 @@ use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 class TimerEventDefinition implements TimerEventDefinitionInterface
 {
     use BaseTrait;
-
-
     /**
      * Get the date expression for the timer event definition.
      *
@@ -29,7 +27,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         return $this->getProperty(self::BPMN_PROPERTY_TIME_DATE);
     }
-
     /**
      * Get the cycle expression for the timer event definition.
      *
@@ -39,7 +36,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         return $this->getProperty(self::BPMN_PROPERTY_TIME_CYCLE);
     }
-
     /**
      * Get the duration expression for the timer event definition.
      *
@@ -51,7 +47,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         return $this->getProperty(self::BPMN_PROPERTY_TIME_DURATION);
     }
-
     /**
      * Assert the event definition rule for trigger the event.
      *
@@ -71,13 +66,14 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      *
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
+     * @param TokenInterface $token
      */
-    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element)
+    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
-        $this->scheduleTimeDate($engine, $element);
-        $this->scheduleTimeCycle($engine, $element);
+        $this->scheduleTimeDuration($engine, $element, $token);
+        $this->scheduleTimeDate($engine, $element, $token);
+        $this->scheduleTimeCycle($engine, $element, $token);
     }
-
     /**
      * Get the data store.
      *
@@ -91,7 +87,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
         $dataStore = $token ? $token->getInstance()->getDataStore() : $engine->getDataStore();
         return $dataStore ? $dataStore->getData() : [];
     }
-
     /**
      * Schedule as timeDate.
      *
@@ -113,7 +108,6 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
             );
         }
     }
-
     /**
      * Schedule as timeDate.
      *
@@ -135,15 +129,12 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
             );
         }
     }
-
     /**
      * Schedule as timeDuration.
      *
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
      * @param TokenInterface $token
-     *
-     * @codeCoverageIgnore Until intermediate timer event implementation
      */
     private function scheduleTimeDuration(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
@@ -159,4 +150,35 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
             );
         }
     }
+
+    /**
+     * Set the date expression for the timer event definition.
+     *
+     * @param callable $timeExpression
+     */
+    public function setTimeDate(callable $timeExpression)
+    {
+        $this->setProperty(self::BPMN_PROPERTY_TIME_DATE, $timeExpression);
+    }
+
+    /**
+     * Set the cycle expression for the timer event definition.
+     *
+     * @param callable $timeExpression
+     */
+    public function setTimeCycle(callable $timeExpression)
+    {
+        $this->setProperty(self::BPMN_PROPERTY_TIME_CYCLE, $timeExpression);
+    }
+
+    /**
+     * Set the duration expression for the timer event definition.
+     *
+     * @param callable $timeExpression
+     */
+    public function setTimeDuration(callable $timeExpression)
+    {
+        $this->setProperty(self::BPMN_PROPERTY_TIME_DURATION, $timeExpression);
+    }
 }
+
