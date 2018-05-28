@@ -27,7 +27,7 @@ interface GatewayInterface extends FlowNodeInterface
     /**
      * Token states defined for Gateway
      */
-    const TOKEN_STATE_INCOMMING = 'INCOMMING';
+    const TOKEN_STATE_INCOMING = 'INCOMING';
     const TOKEN_STATE_OUTGOING = 'OUTGOING';
 
     /**

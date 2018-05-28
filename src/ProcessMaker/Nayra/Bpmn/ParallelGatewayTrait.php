@@ -45,7 +45,7 @@ trait ParallelGatewayTrait
      * @return StateInterface
      */
     public function getInputPlace() {
-        $incomingPlace=new State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
+        $incomingPlace=new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES, $this, $token);

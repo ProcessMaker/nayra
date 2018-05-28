@@ -63,7 +63,7 @@ trait IntermediateCatchEventTrait
             }
         );
 
-        $this->triggerPlace = new  State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
+        $this->triggerPlace = new  State($this, GatewayInterface::TOKEN_STATE_INCOMING);
         $this->triggerPlace->connectTo($this->transition);
 
         $this->triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
@@ -78,7 +78,7 @@ trait IntermediateCatchEventTrait
      */
     public function getInputPlace()
     {
-        $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
+        $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
 
         $incomingPlace->connectTo($this->transition);
 
