@@ -40,6 +40,8 @@ interface GatewayInterface extends FlowNodeInterface
     /**
      * Get Process of the gateway.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
+     *
      * @return ProcessInterface
      */
     public function setProcess(ProcessInterface $process);
@@ -48,6 +50,9 @@ interface GatewayInterface extends FlowNodeInterface
      * Create a flow to a target node.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     * @param callable $condition
+     * @param bool $isDefault
+     * @param \ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface $flowRepository
      *
      * @return $this
      */

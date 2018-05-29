@@ -14,7 +14,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -110,7 +109,7 @@ trait IntermediateCatchEventTrait
      * To implement the MessageListener interface
      *
      * @param EventDefinitionInterface $message
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return $this
      */

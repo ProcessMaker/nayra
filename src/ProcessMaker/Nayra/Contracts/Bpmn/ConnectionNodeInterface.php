@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
+use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
  * Connection node (States and transitions) that define the behavior of
@@ -10,7 +11,7 @@ use ProcessMaker\Nayra\Bpmn\Collection;
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface ConnectionNodeInterface
+interface ConnectionNodeInterface extends EntityInterface
 {
 
     /**

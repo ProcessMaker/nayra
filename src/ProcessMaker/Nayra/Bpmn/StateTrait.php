@@ -38,6 +38,11 @@ trait StateTrait
     private $name;
 
     /**
+     * @var FlowNodeInterface $owner
+     */
+    private $owner;
+
+    /**
      * Initialize the state object.
      *
      * @param FlowNodeInterface $owner
@@ -49,6 +54,7 @@ trait StateTrait
         $this->setFactory($owner->getFactory());
         $this->setName($name);
         $owner->addState($this);
+        $this->setOwner($owner);
     }
 
     /**
@@ -73,13 +79,16 @@ trait StateTrait
     /**
      * Add a new token instance to the state.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
+     * @param array $properties
      *
      * @return TokenInterface
      */
-    public function addNewToken(ExecutionInstanceInterface $instance = null)
+    public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = [])
     {
-        $token = $this->getFactory()->getTokenRepository()->createTokenInstance($this);
+        $token = $this->getFactory()->getTokenRepository()->createTokenInstance();
+        $token->setOwner($this);
+        $token->setProperties($properties);
         $token->setOwner($this);
         $token->setInstance($instance);
         $token->setStatus($this->getName());
@@ -90,9 +99,29 @@ trait StateTrait
     }
 
     /**
+     * Add a new token instance to the state.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     * @param boolean $skipEvents
+     *
+     * @return TokenInterface
+     */
+    public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token, $skipEvents = false)
+    {
+        $token->setOwner($this);
+        $token->setInstance($instance);
+        $token->setStatus($this->getName());
+        $instance->addToken($token);
+        $this->tokens->push($token);
+        $skipEvents ?: $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token);
+        return $token;
+    }
+
+    /**
      * Collection of tokens.
      *
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return CollectionInterface
      */
@@ -123,6 +152,18 @@ trait StateTrait
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Set the owner node.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $owner
+     * @return $this
+     */
+    public function setOwner(FlowNodeInterface $owner)
+    {
+        $this->owner = $owner;
         return $this;
     }
 }

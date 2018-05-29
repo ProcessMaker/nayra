@@ -28,8 +28,8 @@ interface EntityInterface
 
     /**
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      *
      * @return $this
      */
@@ -37,12 +37,22 @@ interface EntityInterface
 
     /**
      *
-     * @param $name
+     * @param string $name
      * @param mixed $default
      *
      * @return mixed
      */
     public function getProperty($name, $default = null);
+
+    /**
+     * Add value to collection property.
+     *
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return $this
+     */
+    public function addProperty($name, $value);
 
     /**
      * @return \ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface
@@ -71,6 +81,8 @@ interface EntityInterface
 
     /**
      * Set Entity ID
+     *
+     * @param string $id
      *
      * @return mixed
      */

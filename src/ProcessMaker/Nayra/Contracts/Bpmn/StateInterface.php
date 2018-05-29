@@ -27,16 +27,28 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
     /**
      * Add a new token to the current state.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
+     * @param array $properties
      *
      * @return TokenInterface
      */
-    public function addNewToken(ExecutionInstanceInterface $instance = null);
+    public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = []);
+
+    /**
+     * Add a new token to the current state.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     * @param bool $skipEvents
+     *
+     * @return bool
+     */
+    public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token, $skipEvents = false);
 
     /**
      * Get the collection of tokens.
      *
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return CollectionInterface
      */

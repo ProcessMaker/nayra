@@ -35,7 +35,7 @@ trait BaseTrait
     /**
      * Call the initFunctions defined in traits.
      *
-     * @param $args
+     * @param array $args
      */
     protected function bootElement($args)
     {
@@ -94,7 +94,7 @@ trait BaseTrait
             if (method_exists($this, $setter)) {
                 $this->$setter($value);
             } else {
-                $this->properties[$name] = $value;
+                $this->setProperty($name, $value);
             }
         }
         return $this;
@@ -103,8 +103,8 @@ trait BaseTrait
     /**
      * Set a property.
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      *
      * @return $this
      */
@@ -117,7 +117,7 @@ trait BaseTrait
     /**
      * Get a property.
      *
-     * @param $name
+     * @param string $name
      * @param mixed $default
      *
      * @return mixed
@@ -130,8 +130,8 @@ trait BaseTrait
     /**
      * Add value to collection property.
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      *
      * @return $this
      */
