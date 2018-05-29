@@ -286,12 +286,15 @@ trait ProcessTrait
         foreach($this->getProperty('gateways') as $gateway) {
             $transitions = array_merge($transitions, $gateway->getTransitions());
         }
-        //Prepare the base events
+        //Catch the conclusion of a process
         $this->attachEvent(EventInterface::EVENT_EVENT_TRIGGERED, function (EventInterface $event, TransitionInterface $transition, CollectionInterface $tokens) {
-            if (!($event instanceof EndEventInterface)) return;
-            if ($tokens->count() === 0) return;
+            if ($tokens->count() === 0 || !$event instanceof EndEventInterface) {
+                return;
+            }
             $instance = $tokens->item(0)->getInstance();
-            if ($instance->getTokens()->count() !== 0) return;
+            if ($instance->getTokens()->count() !== 0) {
+                return;
+            }
             $this->notifyEvent(ProcessInterface::EVENT_PROCESS_COMPLETED, $this, $instance, $event);
             $arguments = [$this, $instance, $event];
             $bpmnEvents = $this->getBpmnEventClasses();

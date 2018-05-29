@@ -37,7 +37,7 @@ trait BaseTrait
      *
      * @param array $args
      */
-    protected function bootElement($args)
+    protected function bootElement(array $args)
     {
         $reflection = new ReflectionClass($this);
         foreach ($reflection->getMethods() as $method) {

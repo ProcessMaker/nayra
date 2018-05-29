@@ -44,6 +44,9 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      */
     private $engine;
 
+    /**
+     * @var \ProcessMaker\Models\ExecutionInstanceRepository $executionInstanceRepository
+     */
     private $executionInstanceRepository;
 
     /**

@@ -8,7 +8,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterfa
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
 /**
- * Token Repository.
+ * Execution Instance Repository.
  *
  * @package ProcessMaker\Models
  */
@@ -30,8 +30,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function createExecutionInstance()
     {
-        $instance = new ExecutionInstance();
-        return $instance;
+        return new ExecutionInstance();
     }
 
     /**
@@ -76,7 +75,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     }
 
     /**
-     * Helper to set the test data to be loaded.
+     * Set the test data to be loaded.
      *
      * @param array $data
      */

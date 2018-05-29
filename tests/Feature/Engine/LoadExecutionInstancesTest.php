@@ -10,7 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
- * Test load and save execution instances
+ * Test to load execution instances
  *
  */
 class LoadExecutionInstancesTest extends EngineTestCase
