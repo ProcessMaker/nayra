@@ -78,6 +78,16 @@ interface EngineInterface
     public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data);
 
     /**
+     * Load an execution instance from the storage.
+     *
+     * @param string $id
+     * @param DataStoreInterface $data
+     *
+     * @return ExecutionInstanceInterface
+     */
+    public function loadExecutionInstance($id);
+
+    /**
      * Close all the execution instances.
      *
      * @return bool

@@ -140,5 +140,11 @@ class RepositoryFactory implements RepositoryFactoryInterface
         return new MessageFlowRepository($this);
     }
 
-
+    /**
+     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface
+     */
+    public function getExecutionInstanceRepository()
+    {
+        return new ExecutionInstanceRepository($this);
+    }
 }

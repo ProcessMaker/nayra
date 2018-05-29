@@ -8,6 +8,7 @@ use DOMXPath;
 use ProcessMaker\Models\ActivityRepository;
 use ProcessMaker\Models\DataStoreRepository;
 use ProcessMaker\Models\EventRepository;
+use ProcessMaker\Models\ExecutionInstanceRepository;
 use ProcessMaker\Models\FlowRepository;
 use ProcessMaker\Models\GatewayRepository;
 use ProcessMaker\Models\MessageFlowRepository;
@@ -42,6 +43,8 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
      * @var EngineInterface
      */
     private $engine;
+
+    private $executionInstanceRepository;
 
     /**
      *
@@ -224,5 +227,16 @@ class BpmnFileRepository extends DOMDocument implements RepositoryFactoryInterfa
     public function getMessageFlowRepository()
     {
         return new MessageFlowRepository($this);
+    }
+
+    /**
+     * @return \ProcessMaker\Models\ExecutionInstanceRepository
+     */
+    public function getExecutionInstanceRepository()
+    {
+        if (empty($this->executionInstanceRepository)) {
+            $this->executionInstanceRepository = new ExecutionInstanceRepository($this);
+        }
+        return $this->executionInstanceRepository;
     }
 }
