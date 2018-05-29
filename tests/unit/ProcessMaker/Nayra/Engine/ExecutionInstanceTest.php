@@ -9,6 +9,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 
+/**
+ * Execution Instance tests
+ *
+ */
 class ExecutionInstanceTest extends TestCase
 {
 
@@ -25,7 +29,8 @@ class ExecutionInstanceTest extends TestCase
         $mockProcess = $this->getMockForAbstractClass(ProcessInterface::class);
         $mockStore = $this->getMockForAbstractClass(DataStoreInterface::class);
 
-        $instance = new ExecutionInstance($engine, $mockProcess, $mockStore);
+        $instance = new ExecutionInstance();
+        $instance->linkTo($engine, $mockProcess, $mockStore);
 
         //Assertion: the getProcess method should return the same injected process
         $this->assertEquals($mockProcess, $instance->getProcess());

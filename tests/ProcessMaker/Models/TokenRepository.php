@@ -2,11 +2,8 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
-
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 
 /**
@@ -21,13 +18,12 @@ class TokenRepository implements TokenRepositoryInterface
     /**
      * Create a token instance.
      *
-     * @param StateInterface $owner
-     *
      * @return TokenInterface
      */
-    public function createTokenInstance(StateInterface $owner)
+    public function createTokenInstance()
     {
-        return new Token($owner);
+        $token = new Token();
+        return $token;
     }
 
     /**
@@ -46,24 +42,12 @@ class TokenRepository implements TokenRepositoryInterface
      * Create or update a activity to a persistent storage.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
-     * @param $saveChildElements
+     * @param bool $saveChildElements
      *
      * @return $this
      */
     public function store(TokenInterface $token, $saveChildElements = false)
     {
         // TODO: Implement store() method.
-    }
-
-    /**
-     * Create an instance of the entity.
-     *
-     * @param string $uid
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface
-     */
-    public function create(ProcessInterface $process = null)
-    {
-
     }
 }

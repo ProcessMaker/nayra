@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
@@ -11,7 +12,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-interface ExecutionInstanceInterface
+interface ExecutionInstanceInterface extends EntityInterface
 {
     /**
      * Get the process executed.
@@ -65,4 +66,40 @@ interface ExecutionInstanceInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
      */
     public function getTokens();
+
+    /**
+     * Link the instance to a engine, process and data store.
+     *
+     * @param EngineInterface $engine
+     * @param ProcessInterface $process
+     * @param DataStoreInterface $data
+     */
+    public function linkTo(EngineInterface $engine, ProcessInterface $process, DataStoreInterface $data);
+
+    /**
+     * Set the process executed.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
+     *
+     * @return $this
+     */
+    public function setProcess(ProcessInterface $process);
+
+    /**
+     * Set the data context.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface $dataStore
+     *
+     * @return $this
+     */
+    public function setDataStore(DataStoreInterface $dataStore);
+
+    /**
+     * Link the instance to an engine.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\EngineInterface $engine
+     *
+     * @return $this
+     */
+    public function linkToEngine(EngineInterface $engine);
 }
