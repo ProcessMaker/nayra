@@ -5,6 +5,7 @@ namespace ProcessMaker\Models;
 use ProcessMaker\Nayra\Bpmn\ActivitySubProcessTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -25,7 +26,7 @@ class CallActivity implements CallActivityInterface
      * Configure the activity to go to a FAILING status when activated.
      *
      */
-    public function initActivity()
+    protected function initActivity()
     {
         $this->attachEvent(
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
@@ -35,7 +36,9 @@ class CallActivity implements CallActivityInterface
                     ProcessInterface::EVENT_PROCESS_COMPLETED,
                     function ($self, $closedInstance) use($token, $instance) {
                         if ($closedInstance === $instance) {
-                            $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
+                            if ($token->getStatus() !== ActivityInterface::TOKEN_STATE_FAILING) {
+                                $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
+                            }
                         }
                     }
                 );
@@ -63,12 +66,24 @@ class CallActivity implements CallActivityInterface
         ];
     }
 
+    /**
+     * Get the called element by the activity.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface
+     */
     public function getCalledElement()
     {
         return $this->getProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT);
     }
 
-    public function setCalledElement(ProcessInterface $callableElement)
+    /**
+     * Set the called element by the activity.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface $callableElement
+     *
+     * @return $this
+     */
+    public function setCalledElement(CallableElementInterface $callableElement)
     {
         $this->setProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT, $callableElement);
         return $this;

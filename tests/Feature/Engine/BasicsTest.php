@@ -121,6 +121,27 @@ class BasicsTest extends EngineTestCase
         //Assertion: the start event should not have tokens
         $this->assertCount(0, $start->getTokens($instance));
 
+        //Assertion: the set/get methods of the diagram should work
+        $diagram = $this->getMockForAbstractClass(DiagramInterface::class);
+        $process->setDiagram($diagram);
+        $this->assertEquals($diagram, $process->getDiagram());
+    }
+
+    /**
+     * Tests that a process structure has been configured incorrectly
+     */
+    public function testProcessIncorrectConfiguration()
+    {
+        //Create a data store
+        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+
+        //Load the process
+        $process = $this->createSimpleProcessInstance();
+
+        //Get reference to end event and activity
+        $end = $process->getEvents()->item(1);
+        $activity = $process->getActivities()->item(0);
+
         //Try to add and invalid flow to the end event
         try {
             $end->createFlowTo($activity, $this->flowRepository);
@@ -129,10 +150,5 @@ class BasicsTest extends EngineTestCase
         catch (InvalidSequenceFlowException $e) {
             $this->assertNotNull($e->getMessage());
         }
-
-        //Assertion: the set/get methods of the diagram should work
-        $diagram = $this->getMockForAbstractClass(DiagramInterface::class);
-        $process->setDiagram($diagram);
-        $this->assertEquals($diagram, $process->getDiagram());
     }
 }

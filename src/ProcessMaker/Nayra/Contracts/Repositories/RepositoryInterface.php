@@ -27,13 +27,4 @@ interface RepositoryInterface
      * @return $this
      */
     public function setFactory(RepositoryFactoryInterface $factory);
-
-    /**
-     * Create an instance of the entity.
-     *
-     * @param ProcessInterface|null $process
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface
-     */
-    //public function create(ProcessInterface $process = null);
 }

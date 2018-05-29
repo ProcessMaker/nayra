@@ -85,8 +85,32 @@ trait EngineTrait
     public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data)
     {
         $this->loadProcess($process);
-        $executionInstance = new ExecutionInstance($this, $process, $data);
+        $this->getRepositoryFactory()->getExecutionInstanceRepository();
+        $executionInstance = new ExecutionInstance();
+        $process->addInstance($executionInstance);
+        $executionInstance->setProcess($process);
+        $executionInstance->setDataStore($data);
+        $executionInstance->linkToEngine($this);
         $this->executionInstances[] = $executionInstance;
+        return $executionInstance;
+    }
+
+    /**
+     * Load an execution instance from the storage.
+     *
+     * @param string $id
+     * @param DataStoreInterface $data
+     *
+     * @return ExecutionInstanceInterface
+     */
+    public function loadExecutionInstance($id)
+    {
+        $repository = $this->getRepositoryFactory()->getExecutionInstanceRepository();
+        $executionInstance = $repository->loadExecutionInstanceByUid($id);
+        
+        $executionInstance->linkToEngine($this);
+        $this->executionInstances[] = $executionInstance;
+
         return $executionInstance;
     }
 
@@ -143,6 +167,11 @@ trait EngineTrait
         return $this;
     }
 
+    /**
+     * Register the catch events of the process.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
+     */
     private function registerCatchEvents(ProcessInterface $process)
     {
         foreach ($process->getEvents() as $event) {

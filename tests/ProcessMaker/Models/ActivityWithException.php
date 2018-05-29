@@ -21,10 +21,10 @@ class ActivityWithException implements ActivityInterface
      * Configure the activity to go to a FAILING status when activated.
      *
      */
-    public function initActivity()
+    protected function initActivity()
     {
         $this->attachEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, function ($self, TokenInterface $token) {
-            $token->setProperty('STATUS', ActivityInterface::TOKEN_STATE_FAILING);
+            $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
         });
     }
 

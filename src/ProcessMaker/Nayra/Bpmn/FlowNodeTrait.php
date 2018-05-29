@@ -3,9 +3,9 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
@@ -41,6 +41,10 @@ trait FlowNodeTrait
      */
     private $states = [];
 
+    /**
+     * Initialize flow node.
+     *
+     */
     protected function initFlowNode()
     {
         $this->setProperty(FlowNodeInterface::BPMN_PROPERTY_OUTGOING, new Collection);
@@ -50,9 +54,9 @@ trait FlowNodeTrait
     /**
      * Get tokens in the element.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface $dataStore
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      *
-     * @return CollectionInterface
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface[]
      */
     public function getTokens(ExecutionInstanceInterface $instance)
     {
@@ -145,5 +149,23 @@ trait FlowNodeTrait
     public function getStates()
     {
         return $this->states;
+    }
+
+    /**
+     * Load tokens from array.
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     *
+     * @return $this
+     */
+    public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token)
+    {
+        foreach ($this->getStates() as $state) {
+            if ($state->getName() === $token->getStatus()) {
+                $state->addToken($instance, $token, true);
+            }
+        }
+        return $this;
     }
 }

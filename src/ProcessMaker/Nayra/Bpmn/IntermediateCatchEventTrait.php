@@ -14,7 +14,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -63,7 +62,7 @@ trait IntermediateCatchEventTrait
             }
         );
 
-        $this->triggerPlace = new  State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
+        $this->triggerPlace = new  State($this, GatewayInterface::TOKEN_STATE_INCOMING);
         $this->triggerPlace->connectTo($this->transition);
 
         $this->triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
@@ -78,7 +77,7 @@ trait IntermediateCatchEventTrait
      */
     public function getInputPlace()
     {
-        $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMMING);
+        $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
 
         $incomingPlace->connectTo($this->transition);
 
@@ -110,7 +109,7 @@ trait IntermediateCatchEventTrait
      * To implement the MessageListener interface
      *
      * @param EventDefinitionInterface $message
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return $this
      */

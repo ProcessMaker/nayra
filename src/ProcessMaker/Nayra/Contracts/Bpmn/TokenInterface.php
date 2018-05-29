@@ -13,6 +13,7 @@ interface TokenInterface extends EntityInterface
 {
 
     const BPMN_PROPERTY_MESSAGE = 'message';
+    const BPMN_PROPERTY_STATUS = 'status';
 
     /**
      * Get the owner of the token.
@@ -56,7 +57,7 @@ interface TokenInterface extends EntityInterface
     /**
      * Set the owner execution instance of the token.
      *
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return $this
      */

@@ -18,9 +18,18 @@ class CloseExceptionTransition implements TransitionInterface
     use TransitionTrait;
 
     /**
+     * Initialize transition.
+     *
+     */
+    protected function initActivityTransition()
+    {
+        $this->setPreserveToken(true);
+    }
+
+    /**
      * Condition required to transit an activity in FAILING state.
      *
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      * @param ExecutionInstanceInterface $executionInstance
      *
      * @return bool

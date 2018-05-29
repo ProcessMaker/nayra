@@ -19,11 +19,16 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
+/**
+ * Process base implementation.
+ *
+ */
 trait ProcessTrait
 {
     use BaseTrait, ObservableTrait {
@@ -47,6 +52,11 @@ trait ProcessTrait
     private $engine;
 
     /**
+     * @var \ProcessMaker\Nayra\Contracts\Engine\TransitionInterface[] $transitions
+     */
+    private $transitions = null;
+
+    /**
      * Initialize the process element.
      *
      */
@@ -65,72 +75,151 @@ trait ProcessTrait
         return $this->getProperty('activities');
     }
 
+    /**
+     * Get data stores.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataStoreCollectionInterface
+     */
     public function getDataStores()
     {
         return $this->getProperty('dataStores');
     }
 
+    /**
+     * Get artifacts.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ArtifactCollectionInterface
+     */
     public function getArtifacts()
     {
         return $this->getProperty('artifacts');
     }
 
+    /**
+     * Get diagram
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface
+     */
     public function getDiagram()
     {
         return $this->getProperty('diagram');
     }
 
+    /**
+     * Get events.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface
+     */
     public function getEvents()
     {
         return $this->getProperty('events');
     }
 
+    /**
+     * Get flows.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface
+     */
     public function getFlows()
     {
         return $this->getProperty('flows');
     }
 
+    /**
+     * Get gateways.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface
+     */
     public function getGateways()
     {
         return $this->getProperty('gateways');
     }
 
+    /**
+     * Set activities collection.
+     *
+     * @param ActivityCollectionInterface $activities
+     *
+     * @return $this
+     */
     public function setActivities(ActivityCollectionInterface $activities)
     {
         $this->setProperty('activities', $activities);
         return $this;
     }
 
+    /**
+     * Set data stores collection.
+     *
+     * @param DataStoreCollectionInterface $dataStores
+     *
+     * @return $this
+     */
     public function setDataStores(DataStoreCollectionInterface $dataStores)
     {
         $this->setProperty('dataStores', $dataStores);
         return $this;
     }
 
+    /**
+     * Set artifacts collection.
+     *
+     * @param ArtifactCollectionInterface $artifacts
+     *
+     * @return $this
+     */
     public function setArtifacts(ArtifactCollectionInterface $artifacts)
     {
         $this->setProperty('artifacts', $artifacts);
         return $this;
     }
 
+    /**
+     * Set diagram.
+     *
+     * @param DiagramInterface $diagram
+     *
+     * @return $this
+     */
     public function setDiagram(DiagramInterface $diagram)
     {
         $this->setProperty('diagram', $diagram);
         return $this;
     }
 
+    /**
+     * Set events collection.
+     *
+     * @param EventCollectionInterface $events
+     *
+     * @return $this
+     */
     public function setEvents(EventCollectionInterface $events)
     {
         $this->setProperty('events', $events);
         return $this;
     }
 
+    /**
+     * Set flows collection.
+     *
+     * @param FlowCollectionInterface $flows
+     *
+     * @return $this
+     */
     public function setFlows(FlowCollectionInterface $flows)
     {
         $this->setProperty('flows', $flows);
         return $this;
     }
 
+    /**
+     * Get gateways collection.
+     *
+     * @param GatewayCollectionInterface $gateways
+     *
+     * @return $this
+     */
     public function setGateways(GatewayCollectionInterface $gateways)
     {
         $this->setProperty('gateways', $gateways);
@@ -140,8 +229,8 @@ trait ProcessTrait
     /**
      * Add value to collection property and set the process as owner.
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      *
      * @return $this
      */
@@ -155,10 +244,17 @@ trait ProcessTrait
     }
 
     /**
+     * Get transitions of the process.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface $factory
+     *
      * @return CollectionInterface
      */
     public function getTransitions(RepositoryFactoryInterface $factory)
     {
+        if ($this->transitions) {
+            return $this->transitions;
+        }
         //Build the runtime elements
         foreach($this->getProperty('events') as $event) {
             $event->buildTransitions($factory);
@@ -190,26 +286,33 @@ trait ProcessTrait
         foreach($this->getProperty('gateways') as $gateway) {
             $transitions = array_merge($transitions, $gateway->getTransitions());
         }
-        //Prepare the base events
-        $this->attachEvent(EventInterface::EVENT_EVENT_TRIGGERED, function (EventInterface $event) {
-            if (!($event instanceof EndEventInterface)) return;
-            foreach ($this->getInstances() as $instance) {
-                if ($instance->getTokens()->count() !== 0) continue;
-                $this->notifyEvent(ProcessInterface::EVENT_PROCESS_COMPLETED, $this, $instance, $event);
-                $arguments = [$this, $instance, $event];
-                $bpmnEvents = $this->getBpmnEventClasses();
-                if (isset($bpmnEvents[ProcessInterface::EVENT_PROCESS_COMPLETED])) {
-                    $payload = new $bpmnEvents[ProcessInterface::EVENT_PROCESS_COMPLETED]($this, $arguments);
-                } else {
-                    $payload = ["object" => $this, "arguments" => $arguments];
-                }
-                $this->getDispatcher()->dispatch(ProcessInterface::EVENT_PROCESS_COMPLETED, $payload);
+        //Catch the conclusion of a process
+        $this->attachEvent(EventInterface::EVENT_EVENT_TRIGGERED, function (EventInterface $event, TransitionInterface $transition, CollectionInterface $tokens) {
+            if ($tokens->count() === 0 || !$event instanceof EndEventInterface) {
+                return;
             }
+            $instance = $tokens->item(0)->getInstance();
+            if ($instance->getTokens()->count() !== 0) {
+                return;
+            }
+            $this->notifyEvent(ProcessInterface::EVENT_PROCESS_COMPLETED, $this, $instance, $event);
+            $arguments = [$this, $instance, $event];
+            $bpmnEvents = $this->getBpmnEventClasses();
+            if (isset($bpmnEvents[ProcessInterface::EVENT_PROCESS_COMPLETED])) {
+                $payload = new $bpmnEvents[ProcessInterface::EVENT_PROCESS_COMPLETED]($this, $arguments);
+            } else {
+                $payload = ["object" => $this, "arguments" => $arguments];
+            }
+            $this->getDispatcher()->dispatch(ProcessInterface::EVENT_PROCESS_COMPLETED, $payload);
         });
-        return new Collection($transitions);
+        $this->transitions = new Collection($transitions);
+        return $this->transitions;
     }
 
     /**
+     * Add an activity.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface $activity
      * @return $this
      */
     public function addActivity(ActivityInterface $activity)
@@ -220,6 +323,10 @@ trait ProcessTrait
     }
 
     /**
+     * Add an event
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface $event
+     *
      * @return $this
      */
     public function addEvent(EventInterface $event)
@@ -230,6 +337,10 @@ trait ProcessTrait
     }
 
     /**
+     * Add a gateway
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface $gateway
+     *
      * @return $this
      */
     public function addGateway(GatewayInterface $gateway)
@@ -240,6 +351,8 @@ trait ProcessTrait
     }
 
     /**
+     * @param \ProcessMaker\Nayra\Contracts\EventBusInterface $dispatcher
+     *
      * @return \ProcessMaker\Nayra\Contracts\EventBusInterface
      */
     public function getDispatcher()
@@ -248,7 +361,7 @@ trait ProcessTrait
     }
 
     /**
-     * @param Dispatcher $dispatcher
+     * @param \ProcessMaker\Nayra\Contracts\EventBusInterface $dispatcher
      *
      * @return $this
      */
@@ -307,7 +420,7 @@ trait ProcessTrait
     /**
      * Create an instance of the callable element and start it.
      *
-     * @param DataStoreInterface $dataStore
+     * @param DataStoreInterface|null $dataStore
      *
      * @return ExecutionInstanceInterface
      */

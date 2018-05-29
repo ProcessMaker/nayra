@@ -49,32 +49,20 @@ class ProcessRepository implements ProcessRepositoryInterface
      */
     public function loadProcessByUid($uid)
     {
-
+        return $this->getFactory()->loadBpmElementById($uid);
     }
 
     /**
      * Create or update a process to a persistent storage.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
-     * @param $saveChildElements
+     * @param bool $saveChildElements
      *
      * @return $this
      */
     public function store(ProcessInterface $process, $saveChildElements = false)
     {
 
-    }
-
-    /**
-     * Create an instance of the entity.
-     *
-     * @param ProcessInterface|null $process
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface
-     */
-    public function create(ProcessInterface $process = null)
-    {
-        return new Process;
     }
 
     /**

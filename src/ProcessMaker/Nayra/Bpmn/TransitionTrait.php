@@ -47,6 +47,11 @@ trait TransitionTrait
     private $tokensConsumedPerIncoming = 1;
 
     /**
+     * @var boolean
+     */
+    private $preserveToken = false;
+
+    /**
      * Initialize the transition.
      *
      * @param FlowNodeInterface $owner
@@ -94,15 +99,21 @@ trait TransitionTrait
     protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
         $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this, $consumeTokens);
-
+        $consumedTokensCount = $consumeTokens->count();
         $consumeTokens->find(function (TokenInterface $token) use ($executionInstance) {
             $token->getOwner()->consumeToken($token, $executionInstance);
         });
 
         $this->notifyEvent(TransitionInterface::EVENT_AFTER_CONSUME, $this, $consumeTokens);
 
-        $this->outgoing()->find(function (ConnectionInterface $flow) use ($executionInstance) {
-            return $flow->targetState()->addNewToken($executionInstance);
+        $this->outgoing()->find(function (ConnectionInterface $flow) use ($consumeTokens, $executionInstance, $consumedTokensCount) {
+            if ($this->preserveToken && $consumedTokensCount==1) {
+                $consumeTokens->find(function (TokenInterface $token) use ($flow, $executionInstance) {
+                    $flow->targetState()->addToken($executionInstance, $token);
+                });
+            } else {
+                $flow->targetState()->addNewToken($executionInstance);
+            }
         });
 
         $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this, $consumeTokens);
@@ -209,5 +220,13 @@ trait TransitionTrait
     protected function getTokensConsumedPerIncoming()
     {
         return $this->tokensConsumedPerIncoming;
+    }
+
+    /**
+     * @param boolean $preserveToken
+     */
+    protected function setPreserveToken($preserveToken)
+    {
+        $this->preserveToken = $preserveToken;
     }
 }

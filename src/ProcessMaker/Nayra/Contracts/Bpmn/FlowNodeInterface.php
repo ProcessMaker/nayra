@@ -21,6 +21,8 @@ interface FlowNodeInterface extends FlowElementInterface
      * Create a flow to a target node.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     * @param \ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface $flowRepository
+     * @param array $properties
      *
      * @return $this
      */
@@ -93,7 +95,19 @@ interface FlowNodeInterface extends FlowElementInterface
     /**
      * Get tokens in the activity.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     *
      * @return CollectionInterface
      */
     public function getTokens(ExecutionInstanceInterface $instance);
+
+    /**
+     * Load tokens from array.
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     *
+     * @return $this
+     */
+    public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token);
 }
