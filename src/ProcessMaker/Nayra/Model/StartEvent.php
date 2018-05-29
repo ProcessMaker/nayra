@@ -1,15 +1,14 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Model;
 
 use ProcessMaker\Nayra\Bpmn\StartEventTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 
 /**
- * Start Event implementation.
- *
- * @package ProcessMaker\Models
+ * Class StartEvent
+ * @package ProcessMaker\Nayra\Model
  */
 class StartEvent implements StartEventInterface, MessageListenerInterface
 {

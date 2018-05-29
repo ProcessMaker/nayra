@@ -128,11 +128,11 @@ class NayraModelTest extends EngineTestCase
     private function createMappingConfiguration()
     {
         return [
-            ActivityInterface::class => \ProcessMaker\Models\Activity::class,
-            StartEventInterface::class => \ProcessMaker\Models\StartEvent::class,
-            EndEventInterface::class => \ProcessMaker\Models\EndEvent::class,
+            ActivityInterface::class => \ProcessMaker\Nayra\Model\Activity::class,
+            StartEventInterface::class => \ProcessMaker\Nayra\Model\StartEvent::class,
+            EndEventInterface::class => \ProcessMaker\Nayra\Model\EndEvent::class,
+            GatewayInterface::class => \ProcessMaker\Nayra\Model\ExclusiveGateway::class,
             ProcessInterface::class => \ProcessMaker\Models\Process::class,
-            GatewayInterface::class => \ProcessMaker\Models\ExclusiveGateway::class,
             DataStoreInterface::class => \ProcessMaker\Models\DataStore::class,
         ];
     }

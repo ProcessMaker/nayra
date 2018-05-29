@@ -1,6 +1,12 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: dante
+ * Date: 5/29/18
+ * Time: 5:07 PM
+ */
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Model;
 
 use ProcessMaker\Nayra\Bpmn\ExclusiveGatewayTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
@@ -28,6 +34,7 @@ class ExclusiveGateway implements GatewayInterface
         $isDefault,
         FlowRepositoryInterface $flowRepository
     ) {
+        //@todo do not use the flowrepository
         $this->createFlowTo($target, $flowRepository, [
             FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,
             FlowInterface::BPMN_PROPERTY_IS_DEFAULT => $isDefault,
@@ -45,3 +52,4 @@ class ExclusiveGateway implements GatewayInterface
         return [];
     }
 }
+

@@ -1,19 +1,14 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Model;
+
 
 use ProcessMaker\Nayra\Bpmn\EndEventTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataInputAssociationInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\InputSetInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
- * End event implementation.
- *
- * @package ProcessMaker\Models
+ * Class EndEvent
+ * @package ProcessMaker\Nayra\Model
  */
 class EndEvent implements EndEventInterface
 {
