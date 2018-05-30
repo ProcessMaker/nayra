@@ -6,6 +6,7 @@ use ProcessMaker\Nayra\Bpmn\ConditionalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\ErrorEventDefinition;
 use ProcessMaker\Nayra\Bpmn\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\TerminateEventDefinition;
@@ -68,7 +69,7 @@ class RootElementRepository implements RootElementRepositoryInterface
     /**
      * Create a collaboration instance.
      *
-     * @return \ProcessMaker\Models\Collaboration
+     * @return \ProcessMaker\Nayra\Bpmn\Models\Collaboration
      */
     public function createCollaborationInstance()
     {

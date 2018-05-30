@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Models\DataStoreCollection;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Models\Message;
 use ProcessMaker\Models\Operation;
 use ProcessMaker\Models\Participant;
