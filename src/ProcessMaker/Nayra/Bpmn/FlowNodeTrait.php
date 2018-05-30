@@ -3,11 +3,17 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Factory;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -40,6 +46,12 @@ trait FlowNodeTrait
      * @var StateInterface[]
      */
     private $states = [];
+
+    /**
+     *
+     * @var Process
+     */
+    private $process;
 
     /**
      * Initialize flow node.
@@ -167,5 +179,74 @@ trait FlowNodeTrait
             }
         }
         return $this;
+    }
+
+    /**
+     * Create a flow to a target node.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     * @param FactoryInterface $factory
+     * @param array $properties
+     * @return $this
+     * @internal param FlowRepositoryInterface $flowRepository
+     */
+    public function createFlowTo(FlowNodeInterface $target, FactoryInterface $factory, $properties=[])
+    {
+        $flow = $factory->createInstanceOf(FlowInterface::class);
+        $flow->setSource($this);
+        $flow->setTarget($target);
+        $flow->setProperties($properties);
+        $this->addProperty(FlowNodeInterface::BPMN_PROPERTY_OUTGOING, $flow);
+        $target->addProperty(FlowNodeInterface::BPMN_PROPERTY_INCOMING, $flow);
+        if (!empty($properties[FlowInterface::BPMN_PROPERTY_IS_DEFAULT])) {
+            $this->setProperty(GatewayInterface::BPMN_PROPERTY_DEFAULT, $flow);
+        }
+        return $this;
+    }
+
+    /**
+     * Get the incoming flows.
+     *
+     * @return FlowCollectionInterface
+     * @codeCoverageIgnore
+     */
+    public function getIncomingFlows()
+    {
+        return $this->getProperty(FlowNodeInterface::BPMN_PROPERTY_INCOMING);
+    }
+
+    /**
+     * Get Process of the node.
+     *
+     * @return ProcessInterface
+     * @codeCoverageIgnore
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
+
+    /**
+     * Get Process of the node.
+     *
+     * @param ProcessInterface $process
+     *
+     * @return ProcessInterface
+     * @codeCoverageIgnore
+     */
+    public function setProcess(ProcessInterface $process)
+    {
+        $this->process = $process;
+        return $this;
+    }
+
+    /**
+     * Get the outgoing flows.
+     *
+     * @return FlowCollectionInterface
+     */
+    public function getFlows()
+    {
+        return $this->getProperty(FlowNodeInterface::BPMN_PROPERTY_OUTGOING);
     }
 }

@@ -176,9 +176,9 @@ class ScriptTaskTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($activityA, $this->flowRepository);
-        $activityA->createFlowTo($scriptTask, $this->flowRepository);
-        $scriptTask->createFlowTo($end, $this->flowRepository);
+        $start->createFlowTo($activityA, $this->factory);
+        $activityA->createFlowTo($scriptTask, $this->factory);
+        $scriptTask->createFlowTo($end, $this->factory);
 
         return $process;
     }
@@ -212,9 +212,9 @@ class ScriptTaskTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($scriptTask1, $this->flowRepository);
-        $scriptTask1->createFlowTo($scriptTask2, $this->flowRepository);
-        $scriptTask2->createFlowTo($end, $this->flowRepository);
+        $start->createFlowTo($scriptTask1, $this->factory);
+        $scriptTask1->createFlowTo($scriptTask2, $this->factory);
+        $scriptTask2->createFlowTo($end, $this->factory);
 
         return $process;
     }

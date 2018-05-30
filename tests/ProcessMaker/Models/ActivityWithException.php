@@ -12,10 +12,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  */
 class ActivityWithException implements ActivityInterface
 {
-    use ActivityTrait,
-        LocalFlowNodeTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+    use ActivityTrait;
 
     /**
      * Configure the activity to go to a FAILING status when activated.

@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Models;
 
+use ProcessMaker\Nayra\Bpmn\FlowNodeTrait;
 use ProcessMaker\Nayra\Bpmn\ParticipantTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 
@@ -12,10 +13,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
  */
 class Participant implements ParticipantInterface
 {
-    use ParticipantTrait,
-        LocalFlowNodeTrait,
-        //LocalProcessTrait,
-        LocalPropertiesTrait;
+    use ParticipantTrait;
 
     /**
      * Array map of custom event classes for the bpmn element.

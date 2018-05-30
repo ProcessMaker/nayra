@@ -19,10 +19,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 class ScriptTask implements ScriptTaskInterface
 {
 
-    use ActivityTrait,
-        LocalFlowNodeTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+    use ActivityTrait;
 
     /**
      * Configure the activity to evaluate script tasks

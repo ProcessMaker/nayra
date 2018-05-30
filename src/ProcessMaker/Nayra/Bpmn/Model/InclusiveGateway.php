@@ -1,6 +1,7 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Bpmn\Model;
+
 
 use ProcessMaker\Nayra\Bpmn\InclusiveGatewayTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;

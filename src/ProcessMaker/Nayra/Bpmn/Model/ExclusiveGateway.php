@@ -1,27 +1,27 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Bpmn\Model;
 
-use ProcessMaker\Nayra\Bpmn\InclusiveGatewayTrait;
+use ProcessMaker\Nayra\Bpmn\ExclusiveGatewayTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 
-class InclusiveGateway implements InclusiveGatewayInterface
+class ExclusiveGateway implements ExclusiveGatewayInterface
 {
-
-    use InclusiveGatewayTrait;
+    use ExclusiveGatewayTrait;
 
     /**
      * For gateway connections.
      *
      * @param FlowNodeInterface $target
      * @param callable $condition
-     * @param $isDefault
-     * @param FlowRepositoryInterface $flowRepository
+     * @param bool $isDefault
+     * @param FactoryInterface $factory
+     *
      * @return $this
+     *
      */
     public function createConditionedFlowTo(
         FlowNodeInterface $target,
@@ -37,7 +37,7 @@ class InclusiveGateway implements InclusiveGatewayInterface
     }
 
     /**
-     * Array map of custom event classes for the BPMN element.
+     * Array map of custom event classes for the bpmn element.
      *
      * @return array
      */
@@ -46,3 +46,4 @@ class InclusiveGateway implements InclusiveGatewayInterface
         return [];
     }
 }
+

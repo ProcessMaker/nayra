@@ -49,17 +49,17 @@ class InclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $this->factory);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->flowRepository)
+            }, false, $this->factory)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return $data['B']=='1';
-            }, false, $this->flowRepository);
-        $activityA->createFlowTo($gatewayB, $this->flowRepository);
-        $activityB->createFlowTo($gatewayB, $this->flowRepository);
-        $gatewayB->createFlowTo($end, $this->flowRepository);
+            }, false, $this->factory);
+        $activityA->createFlowTo($gatewayB, $this->factory);
+        $activityB->createFlowTo($gatewayB, $this->factory);
+        $gatewayB->createFlowTo($end, $this->factory);
         return $process;
     }
 
@@ -93,17 +93,17 @@ class InclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $this->factory);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->flowRepository)
+            }, false, $this->factory)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return true;
-            }, true, $this->flowRepository);
-        $activityA->createFlowTo($gatewayB, $this->flowRepository);
-        $activityB->createFlowTo($gatewayB, $this->flowRepository);
-        $gatewayB->createFlowTo($end, $this->flowRepository);
+            }, true, $this->factory);
+        $activityA->createFlowTo($gatewayB, $this->factory);
+        $activityB->createFlowTo($gatewayB, $this->factory);
+        $gatewayB->createFlowTo($end, $this->factory);
         return $process;
     }
 

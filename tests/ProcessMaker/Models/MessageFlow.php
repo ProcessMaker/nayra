@@ -18,10 +18,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 class MessageFlow implements MessageFlowInterface
 {
 
-    use MessageFlowTrait,
-        LocalFlowNodeTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+    use MessageFlowTrait;
 
     private $message;
     private $source;
