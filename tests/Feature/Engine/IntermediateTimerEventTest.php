@@ -228,7 +228,7 @@ class IntermediateTimerEventTest extends EngineTestCase
      * @param $timerEvent
      * @param $type
      *
-     * @return \ProcessMaker\Nayra\Bpmn\TimerEventDefinition
+     * @return \ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition
      */
     private function addTimerEventDefinition ($timerEvent, $type)
     {
