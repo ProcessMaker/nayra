@@ -12,7 +12,7 @@ use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
-use ProcessMaker\Nayra\Bpmn\TerminateEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
 use ProcessMaker\Nayra\Bpmn\TimerEventDefinition;
 use ProcessMaker\Nayra\Contracts\Repositories\RootElementRepositoryInterface;
 
