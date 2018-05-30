@@ -4,7 +4,7 @@ namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Models\DataStoreCollection;
-use ProcessMaker\Models\Participant;
+use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;

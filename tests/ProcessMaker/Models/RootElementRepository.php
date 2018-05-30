@@ -10,6 +10,7 @@ use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
+use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
