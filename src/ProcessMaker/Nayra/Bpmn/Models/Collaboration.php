@@ -36,6 +36,21 @@ class Collaboration implements CollaborationInterface
      */
     private $correlationKeys;
 
+    /** @var Collection */
+    private $artifacts;
+    /** @var Collection */
+    private $choreographies;
+    /** @var Collection */
+    private $conversationAssociations;
+    /** @var Collection */
+    private $conversationLinks;
+    /** @var Collection */
+    private $conversationNodes;
+    /** @var Collection */
+    private $messageFlowAssociations;
+    /** @var Collection */
+    private $participantAssociations;
+
     protected function initCollaboration()
     {
         $this->artifacts = new Collection;
