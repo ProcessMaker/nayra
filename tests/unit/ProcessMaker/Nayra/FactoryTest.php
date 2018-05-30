@@ -18,7 +18,12 @@ class FactoryTest extends TestCase
 
         $object2 = $factory->getInstanceOf(DummyInterface2 ::class, "passedField1Value", "passedField2Value");
         $this->assertEquals($object2->aField, "passedField1Value");
+
+        $this->expectException(InvalidArgumentException::class);
+        $object2 = $factory->getInstanceOf("NonExistentInterface");
     }
+
+
 
     /**
      * Creates factory mappings for the test
@@ -34,16 +39,25 @@ class FactoryTest extends TestCase
     }
 }
 
+/**
+ * Interface to be used in the test
+ */
 interface DummyInterface1
 {
    public function dummyFunction();
 }
 
+/**
+ * Interface to be used in the test
+ */
 interface DummyInterface2
 {
     public function dummyFunction();
 }
 
+/**
+ * Class with constructor without parameters to be used in the test
+ */
 class DummyClassWithEmptyConstructor implements DummyInterface1
 {
     public $aField;
@@ -59,6 +73,9 @@ class DummyClassWithEmptyConstructor implements DummyInterface1
     }
 }
 
+/**
+ * Class with arguments in the constructor to be used in the test
+ */
 class DummyClassWithArgumentsConstructor implements DummyInterface2
 {
     public $aField;

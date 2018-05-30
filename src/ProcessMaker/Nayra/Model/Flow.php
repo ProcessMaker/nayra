@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dante
- * Date: 5/30/18
- * Time: 8:41 AM
- */
 
 namespace ProcessMaker\Nayra\Model;
 
@@ -14,6 +8,13 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
+/**
+ * Flow implementation.
+ *
+ * @package ProcessMaker\Nayra\Model
+ *
+ * @codeCoverageIgnore
+ */
 class Flow implements FlowInterface
 {
     use FlowTrait;

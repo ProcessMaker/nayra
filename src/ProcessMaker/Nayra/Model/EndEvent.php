@@ -8,7 +8,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 
 /**
  * Class EndEvent
+ *
  * @package ProcessMaker\Nayra\Model
+ * @codeCoverageIgnore
  */
 class EndEvent implements EndEventInterface
 {

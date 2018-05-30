@@ -208,6 +208,7 @@ trait FlowNodeTrait
      * Get the incoming flows.
      *
      * @return FlowCollectionInterface
+     * @codeCoverageIgnore
      */
     public function getIncomingFlows()
     {
@@ -218,8 +219,8 @@ trait FlowNodeTrait
      * Get Process of the activity.
      *
      * @return ProcessInterface
+     * @codeCoverageIgnore
      */
-
     public function getProcess()
     {
         return $this->process;
@@ -231,6 +232,7 @@ trait FlowNodeTrait
      * @param ProcessInterface $process
      *
      * @return ProcessInterface
+     * @codeCoverageIgnore
      */
     public function setProcess(ProcessInterface $process)
     {

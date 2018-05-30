@@ -10,6 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
  * Flow implementation.
  *
  * @package ProcessMaker\Models
+ *
  */
 class Flow implements FlowInterface
 {
