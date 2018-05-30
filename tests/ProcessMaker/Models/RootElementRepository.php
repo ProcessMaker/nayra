@@ -5,7 +5,7 @@ namespace ProcessMaker\Models;
 use ProcessMaker\Nayra\Bpmn\ConditionalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\ErrorEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
-use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
