@@ -1,20 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dante
- * Date: 5/29/18
- * Time: 5:07 PM
- */
 
 namespace ProcessMaker\Nayra\Model;
 
 use ProcessMaker\Nayra\Bpmn\ExclusiveGatewayTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
-class ExclusiveGateway implements GatewayInterface
+class ExclusiveGateway implements ExclusiveGatewayInterface
 {
     use ExclusiveGatewayTrait;
 
@@ -23,19 +17,19 @@ class ExclusiveGateway implements GatewayInterface
      *
      * @param FlowNodeInterface $target
      * @param callable $condition
-     * @param $isDefault
-     * @param FlowRepositoryInterface $flowRepository
+     * @param bool $isDefault
+     * @param FactoryInterface $factory
      *
      * @return $this
+     *
      */
     public function createConditionedFlowTo(
         FlowNodeInterface $target,
         callable $condition,
         $isDefault,
-        FlowRepositoryInterface $flowRepository
+        FactoryInterface $factory
     ) {
-        //@todo do not use the flowrepository
-        $this->createFlowTo($target, $flowRepository, [
+        $this->createFlowTo($target, $factory, [
             FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,
             FlowInterface::BPMN_PROPERTY_IS_DEFAULT => $isDefault,
         ]);

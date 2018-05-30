@@ -9,6 +9,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
+use ProcessMaker\Nayra\Contracts\Factory;
+
 /**
  * Test transitions
  *
@@ -76,6 +78,9 @@ class EngineTestCase extends TestCase
      * Initialize the engine and the factories.
      *
      */
+
+    protected $factory;
+
     protected function setUp()
     {
         parent::setUp();
@@ -89,6 +94,7 @@ class EngineTestCase extends TestCase
         $this->dataStoreRepository = $factory->getDataStoreRepository();
         $this->rootElementRepository = $factory->getRootElementRepository();
         $this->messageFlowRepository = $factory->getMessageFlowRepository();
+        $this->factory = $this->getFactory();
         //Initialize a dispatcher
         $fakeDispatcher = $this->getMockBuilder(EventBusInterface::class)
             ->getMock();
@@ -258,5 +264,21 @@ class EngineTestCase extends TestCase
         }
         $instance = $job['token'] ? $job['token']->getInstance() : null;
         return $job ? $job['element']->execute($job['eventDefinition'], $instance) : null;
+    }
+
+    protected function getFactory() {
+
+        $mappings = [
+            \ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface::class => \ProcessMaker\Models\Activity::class,
+            \ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface::class => \ProcessMaker\Models\StartEvent::class,
+            \ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface::class => \ProcessMaker\Models\EndEvent::class,
+            \ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface::class => \ProcessMaker\Models\ExclusiveGateway::class,
+            \ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface::class => \ProcessMaker\Models\InclusiveGateway::class,
+            \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface::class => \ProcessMaker\Models\Process::class,
+            \ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface::class => \ProcessMaker\Models\DataStore::class,
+            \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface::class => \ProcessMaker\Models\Flow::class,
+        ];
+
+        return new Factory($mappings);
     }
 }

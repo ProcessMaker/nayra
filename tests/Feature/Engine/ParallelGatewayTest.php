@@ -51,14 +51,14 @@ class ParallelGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $this->factory);
         $gatewayA
-            ->createFlowTo($activityA, $this->flowRepository)
-            ->createFlowTo($activityB, $this->flowRepository);
-        $activityA->createFlowTo($gatewayB, $this->flowRepository);
-        $activityB->createFlowTo($gatewayB, $this->flowRepository);
-        $gatewayB->createFlowTo($activityC, $this->flowRepository);
-        $activityC->createFlowTo($end, $this->flowRepository);
+            ->createFlowTo($activityA, $this->factory)
+            ->createFlowTo($activityB, $this->factory);
+        $activityA->createFlowTo($gatewayB, $this->factory);
+        $activityB->createFlowTo($gatewayB, $this->factory);
+        $gatewayB->createFlowTo($activityC, $this->factory);
+        $activityC->createFlowTo($end, $this->factory);
         return $process;
     }
 
@@ -98,14 +98,14 @@ class ParallelGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $this->factory);
         $gatewayA
-            ->createFlowTo($activityA, $this->flowRepository)
-            ->createFlowTo($activityB, $this->flowRepository);
-        $activityA->createFlowTo($gatewayB, $this->flowRepository);
-        $activityB->createFlowTo($gatewayB, $this->flowRepository);
-        $gatewayB->createFlowTo($activityC, $this->flowRepository);
-        $activityC->createFlowTo($end, $this->flowRepository);
+            ->createFlowTo($activityA, $this->factory)
+            ->createFlowTo($activityB, $this->factory);
+        $activityA->createFlowTo($gatewayB, $this->factory);
+        $activityB->createFlowTo($gatewayB, $this->factory);
+        $gatewayB->createFlowTo($activityC, $this->factory);
+        $activityC->createFlowTo($end, $this->factory);
         return $process;
     }
 
@@ -304,7 +304,7 @@ class ParallelGatewayTest extends EngineTestCase
 
         //Assertion: Throw exception when creating a conditioned flow from parallel.
         $this->expectException('ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException');
-        $gatewayA->createConditionedFlowTo($activityA, function() {}, false, $this->flowRepository);
+        $gatewayA->createConditionedFlowTo($activityA, function() {}, false, $this->factory);
         $process = $this->processRepository->createProcessInstance();
         $process
             ->addActivity($activityA)

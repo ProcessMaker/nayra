@@ -10,7 +10,7 @@ use InvalidArgumentException;
  *
  * @package ProcessMaker\Nayra\Contracts
  */
-class Factory
+class Factory implements FactoryInterface
 {
     private $config;
 
@@ -20,7 +20,7 @@ class Factory
     }
 
     /**
-     * Creates an instance of the interface passed as the first argument of the constructor
+     * Creates an instance of the interface passed
      *
      * @param string $interfaceName Fully qualified name of the interface
      * @param array ...$constructorArguments arguments of class' constructor
@@ -30,7 +30,7 @@ class Factory
     public function getInstanceOf($interfaceName, ...$constructorArguments)
     {
         if (!array_key_exists($interfaceName, $this->config)) {
-            throw new InvalidArgumentException("Can't determine the class to instantiate for the interface");
+            throw new InvalidArgumentException("Can't determine the class to instantiate for the interface '$interfaceName'");
         }
 
         $classToInstantiate = $this->config[$interfaceName];

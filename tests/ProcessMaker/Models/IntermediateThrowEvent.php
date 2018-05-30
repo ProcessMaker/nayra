@@ -14,10 +14,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 class IntermediateThrowEvent implements IntermediateThrowEventInterface
 {
 
-    use IntermediateThrowEventTrait,
-        LocalFlowNodeTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+    use IntermediateThrowEventTrait;
+
     /**
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\DataInputAssociationInterface[] $dataInputAssociations
      */

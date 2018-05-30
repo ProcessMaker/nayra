@@ -6,16 +6,15 @@ namespace ProcessMaker\Models;
 use ProcessMaker\Nayra\Bpmn\ParallelGatewayTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
-class ParallelGateway implements GatewayInterface
+class ParallelGateway implements ParallelGatewayInterface
 {
 
-    use ParallelGatewayTrait,
-        LocalFlowNodeTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+    use ParallelGatewayTrait;
 
     /**
      * For gateway connections.
@@ -23,14 +22,14 @@ class ParallelGateway implements GatewayInterface
      * @param FlowNodeInterface $target
      * @param callable $condition
      * @param $isDefault
-     * @param FlowRepositoryInterface $flowRepository
+     * @param FlowRepositoryInterface $factory
      * @return $this
      */
     public function createConditionedFlowTo(
         FlowNodeInterface $target,
         callable $condition,
         $isDefault,
-        FlowRepositoryInterface $flowRepository
+        FactoryInterface $factory
     ) {
         throw new InvalidSequenceFlowException('A parallel gateway can not have conditioned outgoing flows.');
     }

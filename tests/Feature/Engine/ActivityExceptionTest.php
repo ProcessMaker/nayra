@@ -35,8 +35,8 @@ class ActivityExceptionTest extends EngineTestCase
         $process->addEvent($start)
             ->addEvent($end);
         //flows
-        $start->createFlowTo($activity, $this->flowRepository);
-        $activity->createFlowTo($end, $this->flowRepository);
+        $start->createFlowTo($activity, $this->factory);
+        $activity->createFlowTo($end, $this->factory);
         return $process;
     }
 

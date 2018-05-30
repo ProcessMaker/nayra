@@ -14,10 +14,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 class IntermediateCatchEvent implements IntermediateCatchEventInterface, MessageListenerInterface
 {
 
-    use IntermediateCatchEventTrait,
-        LocalFlowNodeTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+    use IntermediateCatchEventTrait;
 
    protected function getBpmnEventClasses()
     {

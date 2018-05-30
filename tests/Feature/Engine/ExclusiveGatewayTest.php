@@ -45,18 +45,18 @@ class ExclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $this->factory);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->flowRepository)
+            }, false, $this->factory)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return $data['B']=='1';
-            }, false, $this->flowRepository)
-            ->createFlowTo($activityC, $this->flowRepository);
-        $activityA->createFlowTo($end, $this->flowRepository);
-        $activityB->createFlowTo($end, $this->flowRepository);
-        $activityC->createFlowTo($end, $this->flowRepository);
+            }, false, $this->factory)
+            ->createFlowTo($activityC, $this->factory);
+        $activityA->createFlowTo($end, $this->factory);
+        $activityB->createFlowTo($end, $this->factory);
+        $activityC->createFlowTo($end, $this->factory);
         return $process;
     }
 
@@ -90,20 +90,20 @@ class ExclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $this->factory);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->flowRepository)
+            }, false, $this->factory)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return $data['B']=='1';
-            }, false, $this->flowRepository)
+            }, false, $this->factory)
             ->createConditionedFlowTo($activityC, function ($data) {
                 return true;
-            }, true, $this->flowRepository);
-        $activityA->createFlowTo($end, $this->flowRepository);
-        $activityB->createFlowTo($end, $this->flowRepository);
-        $activityC->createFlowTo($end, $this->flowRepository);
+            }, true, $this->factory);
+        $activityA->createFlowTo($end, $this->factory);
+        $activityB->createFlowTo($end, $this->factory);
+        $activityC->createFlowTo($end, $this->factory);
         return $process;
     }
 
@@ -143,14 +143,14 @@ class ExclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $this->factory);
         $gatewayA
-            ->createFlowTo($activityA, $this->flowRepository)
-            ->createFlowTo($activityB, $this->flowRepository);
-        $activityA->createFlowTo($gatewayB, $this->flowRepository);
-        $activityB->createFlowTo($gatewayB, $this->flowRepository);
-        $gatewayB->createFlowTo($activityC, $this->flowRepository);
-        $activityC->createFlowTo($end, $this->flowRepository);
+            ->createFlowTo($activityA, $this->factory)
+            ->createFlowTo($activityB, $this->factory);
+        $activityA->createFlowTo($gatewayB, $this->factory);
+        $activityB->createFlowTo($gatewayB, $this->factory);
+        $gatewayB->createFlowTo($activityC, $this->factory);
+        $activityC->createFlowTo($end, $this->factory);
         return $process;
     }
 

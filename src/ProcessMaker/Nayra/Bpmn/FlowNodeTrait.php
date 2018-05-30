@@ -11,6 +11,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\Factory;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -183,14 +185,14 @@ trait FlowNodeTrait
      * Create a flow to a target node.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
-     * @param \ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface $flowRepository
+     * @param FactoryInterface $factory
      * @param array $properties
-     *
      * @return $this
+     * @internal param FlowRepositoryInterface $flowRepository
      */
-    public function createFlowTo(FlowNodeInterface $target, FlowRepositoryInterface $flowRepository, $properties=[])
+    public function createFlowTo(FlowNodeInterface $target, FactoryInterface $factory, $properties=[])
     {
-        $flow = $flowRepository->createFlowInstance();
+        $flow = $factory->getInstanceOf(FlowInterface::class);
         $flow->setSource($this);
         $flow->setTarget($target);
         $flow->setProperties($properties);

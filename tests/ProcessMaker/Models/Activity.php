@@ -13,10 +13,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
  */
 class Activity implements ActivityInterface
 {
-    use ActivityTrait,
-        LocalFlowNodeTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+    use ActivityTrait;
 
     /**
      * Array map of custom event classes for the bpmn element.

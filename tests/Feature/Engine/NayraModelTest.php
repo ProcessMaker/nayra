@@ -6,10 +6,14 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Factory;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
 class NayraModelTest extends EngineTestCase
 {
@@ -57,19 +61,16 @@ class NayraModelTest extends EngineTestCase
         $config = $this->createMappingConfiguration();
         $factory = new Factory($config);
 
-        $process = $this->createProcessWithExclusiveGateway($factory);
-
-        $dataStore = $process['dataStore'];
+        $processData = $this->createProcessWithInclusiveGateway($factory);
+        $process = $processData['process'];
+        $start = $processData['start'];
+        $activityA = $processData['activityA'];
+        $activityB = $processData['activityB'];
+        $dataStore = $processData['dataStore'];
         $dataStore->putData('A', '1');
         $dataStore->putData('B', '1');
 
-        //Load the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
-
-        //Get References
-        $start = $process['start'];
-        $activityA = $process['activityA'];
-        $activityB = $process['activityB'];
 
         //Start the process
         $start->start();
@@ -131,17 +132,19 @@ class NayraModelTest extends EngineTestCase
             ActivityInterface::class => \ProcessMaker\Nayra\Model\Activity::class,
             StartEventInterface::class => \ProcessMaker\Nayra\Model\StartEvent::class,
             EndEventInterface::class => \ProcessMaker\Nayra\Model\EndEvent::class,
-            GatewayInterface::class => \ProcessMaker\Nayra\Model\ExclusiveGateway::class,
+            ExclusiveGatewayInterface::class => \ProcessMaker\Nayra\Model\ExclusiveGateway::class,
+            InclusiveGatewayInterface::class => \ProcessMaker\Nayra\Model\InclusiveGateway::class,
             ProcessInterface::class => \ProcessMaker\Models\Process::class,
             DataStoreInterface::class => \ProcessMaker\Models\DataStore::class,
+            FlowInterface::class => \ProcessMaker\Models\Flow::class,
         ];
     }
 
-    private function createProcessWithExclusiveGateway(Factory $factory)
+    private function createProcessWithExclusiveGateway(FactoryInterface $factory)
     {
         $process = $factory->getInstanceOf(ProcessInterface::class);
         $start = $factory->getInstanceOf(StartEventInterface::class);
-        $gatewayA = $factory->getInstanceOf(GatewayInterface::class);
+        $gatewayA = $factory->getInstanceOf(ExclusiveGatewayInterface::class);
         $activityA = $factory->getInstanceOf(ActivityInterface::class);
         $activityB = $factory->getInstanceOf(ActivityInterface::class);
         $activityC = $factory->getInstanceOf(ActivityInterface::class);
@@ -161,19 +164,19 @@ class NayraModelTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $factory);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->flowRepository)
+            }, false, $factory)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return $data['B']=='1';
-            }, false, $this->flowRepository)
-            ->createFlowTo($activityC, $this->flowRepository);
+            }, false, $factory)
+            ->createFlowTo($activityC, $factory);
 
-        $activityA->createFlowTo($end, $this->flowRepository);
-        $activityB->createFlowTo($end, $this->flowRepository);
-        $activityC->createFlowTo($end, $this->flowRepository);
+        $activityA->createFlowTo($end, $factory);
+        $activityB->createFlowTo($end, $factory);
+        $activityC->createFlowTo($end, $factory);
 
         return [
             'process' => $process,
@@ -187,43 +190,48 @@ class NayraModelTest extends EngineTestCase
         ];
     }
 
+    private function createProcessWithInclusiveGateway($factory)
+    {
+        $process = $factory->getInstanceOf(ProcessInterface::class);
+        $start = $factory->getInstanceOf(StartEventInterface::class);
+        $gatewayA = $factory->getInstanceOf(InclusiveGatewayInterface::class);
+        $gatewayB = $factory->getInstanceOf(InclusiveGatewayInterface::class);
+        $activityA = $factory->getInstanceOf(ActivityInterface::class);
+        $activityB = $factory->getInstanceOf(ActivityInterface::class);
+        $end = $factory->getInstanceOf(EndEventInterface::class);
+        $dataStore = $factory->getInstanceOf(DataStoreInterface::class);
 
-    private function borrame() {
-        $process = $this->processRepository->createProcessInstance();
-
-        //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $gatewayA = $this->gatewayRepository->createExclusiveGatewayInstance();
-        $activityA = $this->activityRepository->createActivityInstance();
-        $activityB = $this->activityRepository->createActivityInstance();
-        $activityC = $this->activityRepository->createActivityInstance();
-
-        $end = $this->eventRepository->createEndEventInstance();
         $process
             ->addActivity($activityA)
-            ->addActivity($activityB)
-            ->addActivity($activityC);
-
+            ->addActivity($activityB);
         $process
-            ->addGateway($gatewayA);
-
+            ->addGateway($gatewayA)
+            ->addGateway($gatewayB);
         $process
             ->addEvent($start)
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->flowRepository);
+        $start->createFlowTo($gatewayA, $factory);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
-                return $data['A']=='1';
-            }, false, $this->flowRepository)
+                return $data['A'] == '1';
+            }, false, $factory)
             ->createConditionedFlowTo($activityB, function ($data) {
-                return $data['B']=='1';
-            }, false, $this->flowRepository)
-            ->createFlowTo($activityC, $this->flowRepository);
-        $activityA->createFlowTo($end, $this->flowRepository);
-        $activityB->createFlowTo($end, $this->flowRepository);
-        $activityC->createFlowTo($end, $this->flowRepository);
-        return $process;
+                return $data['B'] == '1';
+            }, false, $factory);
+        $activityA->createFlowTo($gatewayB, $factory);
+        $activityB->createFlowTo($gatewayB, $factory);
+        $gatewayB->createFlowTo($end, $factory);
+        return [
+            'process' => $process,
+            'start' => $start,
+            'gatewayA' => $gatewayA,
+            'gatewayB' => $gatewayB,
+            'activityA' => $activityA,
+            'activityB' => $activityB,
+            'end' => $end,
+            'dataStore' => $dataStore,
+        ];
     }
 }

@@ -38,10 +38,10 @@ class IntermediateTimerEventTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($activityA, $this->flowRepository);
-        $activityA->createFlowTo($timerEvent, $this->flowRepository);
-        $timerEvent->createFlowTo($activityB, $this->flowRepository);
-        $activityB->createFlowTo($end, $this->flowRepository);
+        $start->createFlowTo($activityA, $this->factory);
+        $activityA->createFlowTo($timerEvent, $this->factory);
+        $timerEvent->createFlowTo($activityB, $this->factory);
+        $activityB->createFlowTo($end, $this->factory);
 
         return $process;
     }

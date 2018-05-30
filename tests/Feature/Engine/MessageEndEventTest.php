@@ -46,10 +46,10 @@ class MessageEndEventTest extends EngineTestCase
         $activityA2 = $this->activityRepository->createActivityInstance();
         $endA = $this->eventRepository->createEndEventInstance();
 
-        $startA->createFlowTo($activityA1, $this->flowRepository);
-        $activityA1->createFlowTo($eventA, $this->flowRepository);
-        $eventA->createFlowTo($activityA2, $this->flowRepository);
-        $activityA2->createFlowTo($endA, $this->flowRepository);
+        $startA->createFlowTo($activityA1, $this->factory);
+        $activityA1->createFlowTo($eventA, $this->factory);
+        $eventA->createFlowTo($activityA2, $this->factory);
+        $activityA2->createFlowTo($endA, $this->factory);
 
         $processA->addActivity($activityA1)
             ->addActivity($activityA2)
@@ -69,8 +69,8 @@ class MessageEndEventTest extends EngineTestCase
         $messageEndEventB = $this->eventRepository->createEndEventInstance();
         $messageEndEventB->getEventDefinitions()->push($messageEventDefB);
 
-        $startB->createFlowTo($activityB1, $this->flowRepository);
-        $activityB1->createFlowTo($messageEndEventB, $this->flowRepository);
+        $startB->createFlowTo($activityB1, $this->factory);
+        $activityB1->createFlowTo($messageEndEventB, $this->factory);
 
         $processB->addActivity($activityB1)
             ->addEvent($startB)
