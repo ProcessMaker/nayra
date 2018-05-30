@@ -1,7 +1,8 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
+use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
@@ -40,7 +41,8 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
     /**
      * Get the error of the event definition.
      *
-     * @return ErrorInterface
+     * @param ErrorInterface $error
+     * @return self
      */
     public function setError(ErrorInterface $error)
     {
