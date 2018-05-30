@@ -1,7 +1,8 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
+use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
@@ -26,6 +27,7 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
         $engine = $target->getOwnerProcess()->getEngine();
         $data = $engine->getDataStore()->getData();
         $condition = $this->getCondition();
+        // TODO: code analyzer giving an error here - should be callable
         return $event instanceof ConditionalEventDefinition && $condition($data);
     }
 
