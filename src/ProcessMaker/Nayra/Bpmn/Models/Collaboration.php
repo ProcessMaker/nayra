@@ -4,7 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;

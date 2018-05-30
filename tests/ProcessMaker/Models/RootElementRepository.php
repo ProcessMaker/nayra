@@ -11,7 +11,7 @@ use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
-use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\TerminateEventDefinition;
 use ProcessMaker\Nayra\Bpmn\TimerEventDefinition;
 use ProcessMaker\Nayra\Contracts\Repositories\RootElementRepositoryInterface;
