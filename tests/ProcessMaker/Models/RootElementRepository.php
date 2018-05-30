@@ -4,6 +4,7 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\ConditionalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\ErrorEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\FormalExpression;
 use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
