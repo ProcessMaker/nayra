@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Factory;
+use ProcessMaker\Nayra\Factory;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 

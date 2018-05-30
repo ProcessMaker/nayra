@@ -2,14 +2,30 @@
 namespace Tests\Feature\Engine;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
+use ProcessMaker\Models\Activity;
+use ProcessMaker\Models\DataStore;
+use ProcessMaker\Models\EndEvent;
+use ProcessMaker\Models\ExclusiveGateway;
+use ProcessMaker\Models\Flow;
+use ProcessMaker\Models\InclusiveGateway;
+use ProcessMaker\Models\Process;
 use ProcessMaker\Models\RepositoryFactory;
+use ProcessMaker\Models\StartEvent;
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Contracts\Factory;
+use ProcessMaker\Nayra\Factory;
 
 /**
  * Test transitions
@@ -269,14 +285,14 @@ class EngineTestCase extends TestCase
     protected function getFactory() {
 
         $mappings = [
-            \ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface::class => \ProcessMaker\Models\Activity::class,
-            \ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface::class => \ProcessMaker\Models\StartEvent::class,
-            \ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface::class => \ProcessMaker\Models\EndEvent::class,
-            \ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface::class => \ProcessMaker\Models\ExclusiveGateway::class,
-            \ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface::class => \ProcessMaker\Models\InclusiveGateway::class,
-            \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface::class => \ProcessMaker\Models\Process::class,
-            \ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface::class => \ProcessMaker\Models\DataStore::class,
-            \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface::class => \ProcessMaker\Models\Flow::class,
+            ActivityInterface::class => Activity::class,
+            StartEventInterface::class => StartEvent::class,
+            EndEventInterface::class => EndEvent::class,
+            ExclusiveGatewayInterface::class => ExclusiveGateway::class,
+            InclusiveGatewayInterface::class => InclusiveGateway::class,
+            ProcessInterface::class => Process::class,
+            DataStoreInterface::class => DataStore::class,
+            FlowInterface::class => Flow::class,
         ];
 
         return new Factory($mappings);

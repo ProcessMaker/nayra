@@ -13,5 +13,5 @@ interface FactoryInterface
      *
      * @return mixed
      */
-    public function getInstanceOf($interfaceName, ...$constructorArguments);
+    public function createInstanceOf($interfaceName, ...$constructorArguments);
 }

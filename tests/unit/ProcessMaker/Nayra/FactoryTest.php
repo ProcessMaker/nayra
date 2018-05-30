@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Contracts\Factory;
+use ProcessMaker\Nayra\Factory;
 
 class FactoryTest extends TestCase
 {
@@ -10,17 +10,32 @@ class FactoryTest extends TestCase
      */
     public function testInstantiation ()
     {
+        //create a mapping for the factory
         $config = $this->createMappingConfiguration();
         $factory = new Factory($config);
 
-        $object1 = $factory->getInstanceOf(DummyInterface1::class);
+        //instantiate an object that implementes a DummyInterface1
+        $object1 = $factory->createInstanceOf(DummyInterface1::class);
+
+        //Assertion: The instantiated object is not null
         $this->assertNotNull($object1);
 
-        $object2 = $factory->getInstanceOf(DummyInterface2 ::class, "passedField1Value", "passedField2Value");
+        //Assertion: The instantiated object implementes the DummyInterface1
+        $this->assertInstanceOf(DummyInterface1::class, $object1);
+
+        //instantiate an object that implementes a DummyInterface2
+        $object2 = $factory->createInstanceOf(DummyInterface2 ::class, "passedField1Value", "passedField2Value");
+
+        //Assertion: The instantiated object has uses its constructor
         $this->assertEquals($object2->aField, "passedField1Value");
 
+        //Assertion: The instantiated object implements the DummyInterface2
+        $this->assertInstanceOf(DummyInterface2::class, $object2);
+
         $this->expectException(InvalidArgumentException::class);
-        $object2 = $factory->getInstanceOf("NonExistentInterface");
+
+        //Assertion: when trying to instantiate an interface that is not mapped an argument exception should be thrown
+        $object3 = $factory->createInstanceOf("NonExistentInterface");
     }
 
 

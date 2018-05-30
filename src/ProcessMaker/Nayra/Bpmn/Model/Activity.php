@@ -1,6 +1,6 @@
 <?php
 
-namespace ProcessMaker\Nayra\Model;
+namespace ProcessMaker\Nayra\Bpmn\Model;
 
 use ProcessMaker\Models\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Bpmn\ActivityTrait;

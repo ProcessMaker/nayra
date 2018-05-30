@@ -11,7 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\Factory;
+use ProcessMaker\Nayra\Factory;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
@@ -192,7 +192,7 @@ trait FlowNodeTrait
      */
     public function createFlowTo(FlowNodeInterface $target, FactoryInterface $factory, $properties=[])
     {
-        $flow = $factory->getInstanceOf(FlowInterface::class);
+        $flow = $factory->createInstanceOf(FlowInterface::class);
         $flow->setSource($this);
         $flow->setTarget($target);
         $flow->setProperties($properties);
@@ -216,7 +216,7 @@ trait FlowNodeTrait
     }
 
     /**
-     * Get Process of the activity.
+     * Get Process of the node.
      *
      * @return ProcessInterface
      * @codeCoverageIgnore
@@ -227,7 +227,7 @@ trait FlowNodeTrait
     }
 
     /**
-     * Get Process of the activity.
+     * Get Process of the node.
      *
      * @param ProcessInterface $process
      *

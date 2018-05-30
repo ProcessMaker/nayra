@@ -2,6 +2,14 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Models\DataStore;
+use ProcessMaker\Models\Flow;
+use ProcessMaker\Models\Process;
+use ProcessMaker\Nayra\Bpmn\Model\Activity;
+use ProcessMaker\Nayra\Bpmn\Model\EndEvent;
+use ProcessMaker\Nayra\Bpmn\Model\ExclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
@@ -12,11 +20,19 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
-use ProcessMaker\Nayra\Contracts\Factory;
+use ProcessMaker\Nayra\Factory;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
+/**
+ * Tests for the Nayra/Bpmn/Model classes
+ *
+ * @package Tests\Feature\Engine
+ */
 class NayraModelTest extends EngineTestCase
 {
+    /**
+     * Tests a process with exclusive gateways that uses the Nayra/Bpmn/Model classes
+     */
     public function testProcessWithExclusiveGateway()
     {
         $config = $this->createMappingConfiguration();
@@ -56,6 +72,9 @@ class NayraModelTest extends EngineTestCase
         $this->assertFalse($this->engine->runToNextState(1));
     }
 
+    /**
+     * Tests a process with inclusive gateways that uses the Nayra/Bpmn/Model classes
+     */
     public function testProcessWithInclusiveGateway()
     {
         $config = $this->createMappingConfiguration();
@@ -126,30 +145,42 @@ class NayraModelTest extends EngineTestCase
         ]);
     }
 
+    /**
+     * Creates the mappings between instances and concrete classes
+     *
+     * @return array
+     */
     private function createMappingConfiguration()
     {
         return [
-            ActivityInterface::class => \ProcessMaker\Nayra\Model\Activity::class,
-            StartEventInterface::class => \ProcessMaker\Nayra\Model\StartEvent::class,
-            EndEventInterface::class => \ProcessMaker\Nayra\Model\EndEvent::class,
-            ExclusiveGatewayInterface::class => \ProcessMaker\Nayra\Model\ExclusiveGateway::class,
-            InclusiveGatewayInterface::class => \ProcessMaker\Nayra\Model\InclusiveGateway::class,
-            ProcessInterface::class => \ProcessMaker\Models\Process::class,
-            DataStoreInterface::class => \ProcessMaker\Models\DataStore::class,
-            FlowInterface::class => \ProcessMaker\Models\Flow::class,
+            ActivityInterface::class => Activity::class,
+            StartEventInterface::class => StartEvent::class,
+            EndEventInterface::class => EndEvent::class,
+            ExclusiveGatewayInterface::class => ExclusiveGateway::class,
+            InclusiveGatewayInterface::class => InclusiveGateway::class,
+            ProcessInterface::class => Process::class,
+            DataStoreInterface::class => DataStore::class,
+            FlowInterface::class => Flow::class,
         ];
     }
 
+    /**
+     * Creates a process that contains an exclusive gateway, start, end events and activities
+     *
+     * @param FactoryInterface $factory
+     *
+     * @return array
+     */
     private function createProcessWithExclusiveGateway(FactoryInterface $factory)
     {
-        $process = $factory->getInstanceOf(ProcessInterface::class);
-        $start = $factory->getInstanceOf(StartEventInterface::class);
-        $gatewayA = $factory->getInstanceOf(ExclusiveGatewayInterface::class);
-        $activityA = $factory->getInstanceOf(ActivityInterface::class);
-        $activityB = $factory->getInstanceOf(ActivityInterface::class);
-        $activityC = $factory->getInstanceOf(ActivityInterface::class);
-        $end = $factory->getInstanceOf(EndEventInterface::class);
-        $dataStore = $factory->getInstanceOf(DataStoreInterface::class);
+        $process = $factory->createInstanceOf(ProcessInterface::class);
+        $start = $factory->createInstanceOf(StartEventInterface::class);
+        $gatewayA = $factory->createInstanceOf(ExclusiveGatewayInterface::class);
+        $activityA = $factory->createInstanceOf(ActivityInterface::class);
+        $activityB = $factory->createInstanceOf(ActivityInterface::class);
+        $activityC = $factory->createInstanceOf(ActivityInterface::class);
+        $end = $factory->createInstanceOf(EndEventInterface::class);
+        $dataStore = $factory->createInstanceOf(DataStoreInterface::class);
 
         $process
             ->addActivity($activityA)
@@ -190,16 +221,23 @@ class NayraModelTest extends EngineTestCase
         ];
     }
 
+    /**
+     * Creates a process that contains an inclusive gateway, start, end events and activities
+     *
+     * @param FactoryInterface $factory
+     *
+     * @return array
+     */
     private function createProcessWithInclusiveGateway($factory)
     {
-        $process = $factory->getInstanceOf(ProcessInterface::class);
-        $start = $factory->getInstanceOf(StartEventInterface::class);
-        $gatewayA = $factory->getInstanceOf(InclusiveGatewayInterface::class);
-        $gatewayB = $factory->getInstanceOf(InclusiveGatewayInterface::class);
-        $activityA = $factory->getInstanceOf(ActivityInterface::class);
-        $activityB = $factory->getInstanceOf(ActivityInterface::class);
-        $end = $factory->getInstanceOf(EndEventInterface::class);
-        $dataStore = $factory->getInstanceOf(DataStoreInterface::class);
+        $process = $factory->createInstanceOf(ProcessInterface::class);
+        $start = $factory->createInstanceOf(StartEventInterface::class);
+        $gatewayA = $factory->createInstanceOf(InclusiveGatewayInterface::class);
+        $gatewayB = $factory->createInstanceOf(InclusiveGatewayInterface::class);
+        $activityA = $factory->createInstanceOf(ActivityInterface::class);
+        $activityB = $factory->createInstanceOf(ActivityInterface::class);
+        $end = $factory->createInstanceOf(EndEventInterface::class);
+        $dataStore = $factory->createInstanceOf(DataStoreInterface::class);
 
         $process
             ->addActivity($activityA)
