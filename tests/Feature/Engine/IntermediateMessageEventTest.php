@@ -3,7 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
-use ProcessMaker\Models\Message;
+use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Models\Operation;
 use ProcessMaker\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
