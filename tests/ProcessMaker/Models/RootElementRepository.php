@@ -3,6 +3,7 @@
 namespace ProcessMaker\Models;
 
 use ProcessMaker\Nayra\Bpmn\Models\ConditionalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\Error;
 use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\FormalExpression;
 use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
