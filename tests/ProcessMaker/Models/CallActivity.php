@@ -17,10 +17,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 class CallActivity implements CallActivityInterface
 {
 
-    use ActivitySubProcessTrait,
-        LocalFlowNodeTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+    use ActivitySubProcessTrait;
 
     /**
      * Configure the activity to go to a FAILING status when activated.

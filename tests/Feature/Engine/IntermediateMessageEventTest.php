@@ -48,10 +48,10 @@ class IntermediateMessageEventTest extends EngineTestCase
         $activityB = $this->activityRepository->createActivityInstance();
         $endA = $this->eventRepository->createEndEventInstance();
 
-        $startA->createFlowTo($activityA, $this->flowRepository);
-        $activityA->createFlowTo($eventA, $this->flowRepository);
-        $eventA->createFlowTo($activityB, $this->flowRepository);
-        $activityB->createFlowTo($endA, $this->flowRepository);
+        $startA->createFlowTo($activityA, $this->factory);
+        $activityA->createFlowTo($eventA, $this->factory);
+        $eventA->createFlowTo($activityB, $this->factory);
+        $activityB->createFlowTo($endA, $this->factory);
 
         $processA->addActivity($activityA)
             ->addActivity($activityB)
@@ -70,10 +70,10 @@ class IntermediateMessageEventTest extends EngineTestCase
         $activityD = $this->activityRepository->createActivityInstance();
         $endB = $this->eventRepository->createEndEventInstance();
 
-        $startB->createFlowTo($activityC, $this->flowRepository);
-        $activityC->createFlowTo($eventB, $this->flowRepository);
-        $eventB->createFlowTo($activityD, $this->flowRepository);
-        $activityD->createFlowTo($endB, $this->flowRepository);
+        $startB->createFlowTo($activityC, $this->factory);
+        $activityC->createFlowTo($eventB, $this->factory);
+        $eventB->createFlowTo($activityD, $this->factory);
+        $activityD->createFlowTo($endB, $this->factory);
 
         $processB->addActivity($activityC)
             ->addActivity($activityD)
@@ -104,10 +104,10 @@ class IntermediateMessageEventTest extends EngineTestCase
 
 
 
-        $startA->createFlowTo($activityA, $this->flowRepository);
-        $activityA->createFlowTo($eventA, $this->flowRepository);
-        $eventA->createFlowTo($activityB, $this->flowRepository);
-        $activityB->createFlowTo($endA, $this->flowRepository);
+        $startA->createFlowTo($activityA, $this->factory);
+        $activityA->createFlowTo($eventA, $this->factory);
+        $eventA->createFlowTo($activityB, $this->factory);
+        $activityB->createFlowTo($endA, $this->factory);
 
         $processA->addActivity($activityA)
             ->addActivity($activityB)
@@ -127,10 +127,10 @@ class IntermediateMessageEventTest extends EngineTestCase
         $activityD = $this->activityRepository->createActivityInstance();
         $endB = $this->eventRepository->createEndEventInstance();
 
-        $startB->createFlowTo($activityC, $this->flowRepository);
-        $activityC->createFlowTo($eventB, $this->flowRepository);
-        $eventB->createFlowTo($activityD, $this->flowRepository);
-        $activityD->createFlowTo($endB, $this->flowRepository);
+        $startB->createFlowTo($activityC, $this->factory);
+        $activityC->createFlowTo($eventB, $this->factory);
+        $eventB->createFlowTo($activityD, $this->factory);
+        $activityD->createFlowTo($endB, $this->factory);
 
         $processB->addActivity($activityC)
             ->addActivity($activityD)

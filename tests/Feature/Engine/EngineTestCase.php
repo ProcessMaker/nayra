@@ -2,13 +2,31 @@
 namespace Tests\Feature\Engine;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
+use ProcessMaker\Models\Activity;
+use ProcessMaker\Models\DataStore;
+use ProcessMaker\Models\EndEvent;
+use ProcessMaker\Models\ExclusiveGateway;
+use ProcessMaker\Models\Flow;
+use ProcessMaker\Models\InclusiveGateway;
+use ProcessMaker\Models\Process;
 use ProcessMaker\Models\RepositoryFactory;
+use ProcessMaker\Models\StartEvent;
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
+use ProcessMaker\Nayra\Factory;
+
 /**
  * Test transitions
  *
@@ -76,6 +94,9 @@ class EngineTestCase extends TestCase
      * Initialize the engine and the factories.
      *
      */
+
+    protected $factory;
+
     protected function setUp()
     {
         parent::setUp();
@@ -89,6 +110,7 @@ class EngineTestCase extends TestCase
         $this->dataStoreRepository = $factory->getDataStoreRepository();
         $this->rootElementRepository = $factory->getRootElementRepository();
         $this->messageFlowRepository = $factory->getMessageFlowRepository();
+        $this->factory = $this->getFactory();
         //Initialize a dispatcher
         $fakeDispatcher = $this->getMockBuilder(EventBusInterface::class)
             ->getMock();
@@ -258,5 +280,21 @@ class EngineTestCase extends TestCase
         }
         $instance = $job['token'] ? $job['token']->getInstance() : null;
         return $job ? $job['element']->execute($job['eventDefinition'], $instance) : null;
+    }
+
+    protected function getFactory() {
+
+        $mappings = [
+            ActivityInterface::class => Activity::class,
+            StartEventInterface::class => StartEvent::class,
+            EndEventInterface::class => EndEvent::class,
+            ExclusiveGatewayInterface::class => ExclusiveGateway::class,
+            InclusiveGatewayInterface::class => InclusiveGateway::class,
+            ProcessInterface::class => Process::class,
+            DataStoreInterface::class => DataStore::class,
+            FlowInterface::class => Flow::class,
+        ];
+
+        return new Factory($mappings);
     }
 }

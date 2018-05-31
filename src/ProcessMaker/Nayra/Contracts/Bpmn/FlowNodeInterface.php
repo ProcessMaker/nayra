@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
@@ -21,12 +22,12 @@ interface FlowNodeInterface extends FlowElementInterface
      * Create a flow to a target node.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
-     * @param \ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface $flowRepository
+     * @param FactoryInterface $factory
      * @param array $properties
-     *
      * @return $this
+     * @internal param FlowRepositoryInterface $flowRepository
      */
-    public function createFlowTo(FlowNodeInterface $target, FlowRepositoryInterface $flowRepository, $properties=[]);
+    public function createFlowTo(FlowNodeInterface $target, FactoryInterface $factory, $properties=[]);
 
     /**
      * Get the outgoing flows.
