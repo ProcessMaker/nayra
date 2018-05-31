@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Models\Collaboration;
-use ProcessMaker\Models\Message;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Models\Operation;
-use ProcessMaker\Models\Participant;
+use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;

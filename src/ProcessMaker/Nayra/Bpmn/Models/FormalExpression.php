@@ -1,11 +1,12 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use DateInterval;
 use DatePeriod;
 use DateTime;
 use Exception;
+use ProcessMaker\Models\TestBetsy;
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 

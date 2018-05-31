@@ -2,14 +2,20 @@
 
 namespace ProcessMaker\Models;
 
-use ProcessMaker\Nayra\Bpmn\ConditionalEventDefinition;
-use ProcessMaker\Nayra\Bpmn\ErrorEventDefinition;
-use ProcessMaker\Nayra\Bpmn\ItemDefinition;
-use ProcessMaker\Nayra\Bpmn\MessageEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\ConditionalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\Error;
+use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\FormalExpression;
+use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\Message;
+use ProcessMaker\Nayra\Bpmn\Models\Participant;
+use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
-use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
-use ProcessMaker\Nayra\Bpmn\TerminateEventDefinition;
-use ProcessMaker\Nayra\Bpmn\TimerEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
 use ProcessMaker\Nayra\Contracts\Repositories\RootElementRepositoryInterface;
 
 /**
@@ -68,7 +74,7 @@ class RootElementRepository implements RootElementRepositoryInterface
     /**
      * Create a collaboration instance.
      *
-     * @return \ProcessMaker\Models\Collaboration
+     * @return \ProcessMaker\Nayra\Bpmn\Models\Collaboration
      */
     public function createCollaborationInstance()
     {

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Models\FormalExpression;
+use ProcessMaker\Nayra\Bpmn\Models\FormalExpression;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
@@ -228,7 +228,7 @@ class IntermediateTimerEventTest extends EngineTestCase
      * @param $timerEvent
      * @param $type
      *
-     * @return \ProcessMaker\Nayra\Bpmn\TimerEventDefinition
+     * @return \ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition
      */
     private function addTimerEventDefinition ($timerEvent, $type)
     {

@@ -1,13 +1,14 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Bpmn\SignalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CorrelationKeyInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
@@ -34,6 +35,21 @@ class Collaboration implements CollaborationInterface
      * @var CorrelationKeyInterface[] $correlationKeys
      */
     private $correlationKeys;
+
+    /** @var Collection */
+    private $artifacts;
+    /** @var Collection */
+    private $choreographies;
+    /** @var Collection */
+    private $conversationAssociations;
+    /** @var Collection */
+    private $conversationLinks;
+    /** @var Collection */
+    private $conversationNodes;
+    /** @var Collection */
+    private $messageFlowAssociations;
+    /** @var Collection */
+    private $participantAssociations;
 
     protected function initCollaboration()
     {

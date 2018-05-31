@@ -1,6 +1,6 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
@@ -17,6 +17,10 @@ class Signal implements SignalInterface
      * @var string $id
      */
     private $name;
+
+    /** @var MessageFlowInterface */
+    private $messageFlow;
+
     /**
      * Returns the id of the message
      *
