@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -79,19 +80,21 @@ trait EngineTrait
      *
      * @param ProcessInterface $process
      * @param DataStoreInterface $data
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface|null $event
      *
      * @return ExecutionInstanceInterface
      */
-    public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data)
+    public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data, EventInterface $event = null)
     {
         $this->loadProcess($process);
-        $this->getRepositoryFactory()->getExecutionInstanceRepository();
-        $executionInstance = new ExecutionInstance();
+        $repository = $this->getRepositoryFactory()->getExecutionInstanceRepository();
+        $executionInstance = $repository->createExecutionInstance();
         $process->addInstance($executionInstance);
         $executionInstance->setProcess($process);
         $executionInstance->setDataStore($data);
         $executionInstance->linkToEngine($this);
         $this->executionInstances[] = $executionInstance;
+        $process->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED, $executionInstance, $event);
         return $executionInstance;
     }
 

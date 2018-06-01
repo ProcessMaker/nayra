@@ -18,6 +18,8 @@ class CustomProcess implements ProcessInterface
 
     /**
      * Process constructor.
+     *
+     * @param array ...$args
      */
     public function __construct(...$args)
     {
@@ -30,10 +32,15 @@ class CustomProcess implements ProcessInterface
         $this->setDataStores(new DataStoreCollection);
     }
 
+    /**
+     * Defined BPMN event classes.
+     *
+     * @return array
+     */
     protected function getBpmnEventClasses()
     {
         return [
-            ProcessInterface::EVENT_PROCESS_COMPLETED => ProcessCompletedEvent::class
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED => ProcessCompletedEvent::class
         ];
     }
 }

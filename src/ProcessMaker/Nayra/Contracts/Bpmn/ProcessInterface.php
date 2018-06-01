@@ -31,7 +31,8 @@ interface ProcessInterface extends CallableElementInterface
     /**
      * Events defined for Activity
      */
-    const EVENT_PROCESS_COMPLETED = 'ProcessCompleted';
+    const EVENT_PROCESS_INSTANCE_CREATED = 'ProcessInstanceCreated';
+    const EVENT_PROCESS_INSTANCE_COMPLETED = 'ProcessInstanceCompleted';
 
     /**
      * Get Diagram of the process.
@@ -164,7 +165,7 @@ interface ProcessInterface extends CallableElementInterface
     /**
      * Set the dispatcher of the process.
      *
-     * @param Dispatcher $dispatcher
+     * @param EventBusInterface $dispatcher
      *
      * @return $this
      */
@@ -219,4 +220,24 @@ interface ProcessInterface extends CallableElementInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface[]
      */
     public function getLaneSets();
+
+    /**
+     * Set the lane sets of the process
+     *
+     * @param CollectionInterface $laneSets
+     *
+     * @return $this
+     */
+    public function setLaneSets(CollectionInterface $laneSets);
+
+    /**
+     * Notify an process instance event.
+     *
+     * @param string $eventName
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param mixed $event
+     *
+     * @return $this
+     */
+    public function notifyInstanceEvent($eventName, ExecutionInstanceInterface $instance, $event = null);
 }
