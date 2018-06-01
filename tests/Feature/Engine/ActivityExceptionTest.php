@@ -64,6 +64,7 @@ class ActivityExceptionTest extends EngineTestCase
         $start->start();
         $this->engine->runToNextState();
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
@@ -86,7 +87,7 @@ class ActivityExceptionTest extends EngineTestCase
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
 
         //Assertion: Finally the activity does not have tokens.

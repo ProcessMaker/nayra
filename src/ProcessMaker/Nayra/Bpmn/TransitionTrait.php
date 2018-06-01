@@ -55,11 +55,13 @@ trait TransitionTrait
      * Initialize the transition.
      *
      * @param FlowNodeInterface $owner
+     * @param bool $preserveToken
      */
-    protected function initTransition(FlowNodeInterface $owner)
+    protected function initTransition(FlowNodeInterface $owner, $preserveToken = false)
     {
         $this->owner = $owner;
         $owner->addTransition($this);
+        $this->setPreserveToken($preserveToken);
     }
 
     /**

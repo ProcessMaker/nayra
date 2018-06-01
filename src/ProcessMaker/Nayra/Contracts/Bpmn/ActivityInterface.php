@@ -26,6 +26,7 @@ interface ActivityInterface extends FlowNodeInterface
     const TOKEN_STATE_ACTIVE = 'ACTIVE';
     const TOKEN_STATE_FAILING = 'FAILING';
     const TOKEN_STATE_COMPLETED = 'COMPLETED';
+    const TOKEN_STATE_CLOSED = 'CLOSED';
 
     /**
      * Get Process of the activity.
