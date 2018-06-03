@@ -46,6 +46,7 @@ class TerminateEventTest extends EngineTestCase
 
         //Assertion: The process has started and the first activity was actived
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -61,18 +62,18 @@ class TerminateEventTest extends EngineTestCase
         //Assertion: The terminate event was activated and the process was ended
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             TerminateEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 }

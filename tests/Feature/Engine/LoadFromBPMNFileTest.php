@@ -54,16 +54,17 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
         //Assertion: Verify the triggered engine events. Two activities are activated.
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);
 
@@ -79,7 +80,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Assertion: Verify the triggered engine events. The activity is closed.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
         ]);
 
@@ -91,11 +91,12 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Assertion: Verify the triggered engine events. The activity B is closed and process is ended.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -118,7 +119,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 
@@ -165,16 +166,17 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
         //Assertion: Verify the triggered engine events. Two activities are activated.
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);
 
@@ -186,7 +188,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Assertion: Verify the triggered engine events. The activity is closed.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
         ]);
 
@@ -198,11 +199,12 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Assertion: Verify the triggered engine events. The activity is closed and process is ended.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -219,7 +221,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 }

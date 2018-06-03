@@ -2,14 +2,15 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Bpmn\Models\FormalExpression;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateTimerEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 
+/**
+ * Test intermediate timer events
+ */
 class IntermediateTimerEventTest extends EngineTestCase
 {
     /**
@@ -83,10 +84,10 @@ class IntermediateTimerEventTest extends EngineTestCase
 
         //Assertion: verify that the event schedule duration is sent to the job manager
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
             JobManagerInterface::EVENT_SCHEDULE_DURATION,
         ]);
@@ -99,9 +100,10 @@ class IntermediateTimerEventTest extends EngineTestCase
         $this->assertEvents([
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
     }
 
@@ -141,10 +143,10 @@ class IntermediateTimerEventTest extends EngineTestCase
 
         //Assertion: verify that the event schedule duration is sent to the job manager
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
             JobManagerInterface::EVENT_SCHEDULE_CYCLE,
         ]);
@@ -157,9 +159,10 @@ class IntermediateTimerEventTest extends EngineTestCase
         $this->assertEvents([
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
     }
 
@@ -199,10 +202,10 @@ class IntermediateTimerEventTest extends EngineTestCase
 
         //Assertion: verify that the event schedule duration is sent to the job manager
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
             JobManagerInterface::EVENT_SCHEDULE_DATE,
         ]);
@@ -215,9 +218,10 @@ class IntermediateTimerEventTest extends EngineTestCase
         $this->assertEvents([
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
     }
 
@@ -225,12 +229,12 @@ class IntermediateTimerEventTest extends EngineTestCase
     /**
      * Adds a test timer event definition for the timer event passed
      *
-     * @param $timerEvent
-     * @param $type
+     * @param EventInterface $timerEvent
+     * @param string $type
      *
      * @return \ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition
      */
-    private function addTimerEventDefinition ($timerEvent, $type)
+    private function addTimerEventDefinition (EventInterface $timerEvent, $type)
     {
         $formalExpression = $this->rootElementRepository->createFormalExpressionInstance();
         $formalExpression->setId('formalExpression');

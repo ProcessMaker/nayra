@@ -40,6 +40,7 @@ class ScriptTaskTest extends EngineTestCase
 
         //Assert: that the process is stared and the first activity activated
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -59,7 +60,7 @@ class ScriptTaskTest extends EngineTestCase
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
 
         $this->assertEquals($scriptTask->getProperty(self::TEST_PROPERTY), 1);
@@ -88,6 +89,7 @@ class ScriptTaskTest extends EngineTestCase
 
         //Assertion: all activities should run and the process finish immediately
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
@@ -98,7 +100,7 @@ class ScriptTaskTest extends EngineTestCase
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
 
         // Assertion: The first script task should be executed.
@@ -136,6 +138,7 @@ class ScriptTaskTest extends EngineTestCase
 
         //Assert: that the process is stared and the first activity activated
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);

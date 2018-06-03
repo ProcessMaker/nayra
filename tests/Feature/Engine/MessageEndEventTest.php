@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Models\DataStoreCollection;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
@@ -13,6 +13,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
+/**
+ * Test message end events
+ */
 class MessageEndEventTest extends EngineTestCase
 {
     /**
@@ -146,6 +149,10 @@ class MessageEndEventTest extends EngineTestCase
 
         //Assertion: The activity must be activated
         $this->assertEvents([
+            //Instance for process A
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            //Instance for process B
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -157,7 +164,6 @@ class MessageEndEventTest extends EngineTestCase
 
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES
         ]);
 
@@ -186,14 +192,15 @@ class MessageEndEventTest extends EngineTestCase
             // the Process A catching message is activated
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
 
             // the Process B end throw event must consume its tokens
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 }

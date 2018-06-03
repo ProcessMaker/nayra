@@ -2,14 +2,18 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Models\DataStoreCollection;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
+/**
+ * Test signal start events
+ */
 class SignalStartEventTest extends EngineTestCase
 {
     /**
@@ -139,6 +143,7 @@ class SignalStartEventTest extends EngineTestCase
 
         //Assertion: The activity must be activated
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -151,11 +156,12 @@ class SignalStartEventTest extends EngineTestCase
         //Assertion: The process1 activity should be finished and a new instance of the second process must be created
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //Events triggered when the catching event runs
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
 
             //Next activity should be activated in the first process

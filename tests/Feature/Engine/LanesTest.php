@@ -105,6 +105,7 @@ class LanesTest extends EngineTestCase
 
         //Assertion: All the process was executed
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             StartEventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
@@ -121,7 +122,7 @@ class LanesTest extends EngineTestCase
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 

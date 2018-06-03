@@ -23,6 +23,56 @@ class SaveExecutionInstancesTest extends EngineTestCase
     private $storage = [];
 
     /**
+     * Configure the Listener to save the tokens and instances.
+     *
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        //Prepare the listener to save tokens
+        $dispatcher = $this->engine->getDispatcher();
+        $dispatcher->listen(ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+                            function($payload) {
+            $this->storage[$payload[1]->getId()] = [
+                'processId' => $payload[0]->getId(),
+                'data'      => [],
+                'tokens'    => [],
+                'status'    => 'ACTIVE',
+            ];
+        });
+        $dispatcher->listen(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+                            function($payload) {
+            $this->storage[$payload[1]->getId()]['status'] = 'COMPLETED';
+        });
+        $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+                            function(ActivityActivatedEvent $event) {
+            $id = $event->token->getInstance()->getId();
+            $this->storage[$id]['tokens'][$event->token->getId()] = [
+                'elementId' => $event->activity->getId(),
+                'status'    => $event->token->getStatus(),
+            ];
+        });
+        $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+                            function($payload) {
+            $id = $payload[1]->getInstance()->getId();
+            $this->storage[$id]['tokens'][$payload[1]->getId()] = [
+                'elementId' => $payload[0]->getId(),
+                'status'    => $payload[1]->getStatus(),
+            ];
+        });
+        $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_CLOSED,
+                            function($payload) {
+            $id = $payload[1]->getInstance()->getId();
+            $this->storage[$id]['tokens'][$payload[1]->getId()] = [
+                'elementId' => $payload[0]->getId(),
+                'status'    => $payload[1]->getStatus(),
+            ];
+        });
+        //Prepare a clean storage.
+        $this->storage = [];
+    }
+
+    /**
      * Test to save a sequential process with one active token.
      *
      */
@@ -138,7 +188,9 @@ class SaveExecutionInstancesTest extends EngineTestCase
     /**
      * Verify id the saved data is the expected.
      *
+     * @param string $instanceId
      * @param array $expected
+     * @param string $message
      */
     private function assertSavedTokens($instanceId, array $expected, $message = '')
     {
