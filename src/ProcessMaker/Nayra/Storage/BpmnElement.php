@@ -49,37 +49,37 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                     'activities' => ['n', ActivityInterface::class],
                     'gateways' => ['n', GatewayInterface::class],
                     'events' => ['n', EventInterface::class],
-                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [BpmnFileRepository::BPMN, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
+                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [BpmnDocument::BPMN, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
                 ]
             ],
             'startEvent'   => [
                 StartEventInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
                 ]
             ],
             'endEvent'     => [
                 EndEventInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     EndEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
                 ]
             ],
             'task'   => [
                 ActivityInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             'scriptTask'   => [
                 ScriptTaskInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             FlowNodeInterface::BPMN_PROPERTY_OUTGOING     => [self::IS_PROPERTY, []],
@@ -87,40 +87,40 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             'sequenceFlow' => [
                 FlowInterface::class,
                 [
-                    FlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnFileRepository::BPMN, FlowInterface::BPMN_PROPERTY_SOURCE_REF]],
-                    FlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnFileRepository::BPMN, FlowInterface::BPMN_PROPERTY_TARGET_REF]],
-                    FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => ['1', [BpmnFileRepository::BPMN, 'conditionExpression']],
+                    FlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnDocument::BPMN, FlowInterface::BPMN_PROPERTY_SOURCE_REF]],
+                    FlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnDocument::BPMN, FlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                    FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => ['1', [BpmnDocument::BPMN, 'conditionExpression']],
                 ]
             ],
             'callActivity' => [
                 CallActivityInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT => ['1', [BpmnFileRepository::BPMN, CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT => ['1', [BpmnDocument::BPMN, CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT]],
                 ]
             ],
             'parallelGateway' => [
                 ParallelGatewayInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             'inclusiveGateway' => [
                 InclusiveGatewayInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnFileRepository::BPMN, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnDocument::BPMN, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
                 ]
             ],
             'exclusiveGateway' => [
                 ExclusiveGatewayInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnFileRepository::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnFileRepository::BPMN, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnDocument::BPMN, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
                 ]
             ],
             'conditionExpression' => [
@@ -133,19 +133,19 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             'collaboration' => [
                 CollaborationInterface::class,
                 [
-                    CollaborationInterface::BPMN_PROPERTY_PARTICIPANT => ['n', [BpmnFileRepository::BPMN, CollaborationInterface::BPMN_PROPERTY_PARTICIPANT]],
+                    CollaborationInterface::BPMN_PROPERTY_PARTICIPANT => ['n', [BpmnDocument::BPMN, CollaborationInterface::BPMN_PROPERTY_PARTICIPANT]],
                 ]
             ],
             'participant' => [
                 ParticipantInterface::class,
                 [
-                    ParticipantInterface::BPMN_PROPERTY_PROCESS => ['1', [BpmnFileRepository::BPMN, ParticipantInterface::BPMN_PROPERTY_PROCESS_REF]],
+                    ParticipantInterface::BPMN_PROPERTY_PROCESS => ['1', [BpmnDocument::BPMN, ParticipantInterface::BPMN_PROPERTY_PROCESS_REF]],
                 ]
             ],
             'conditionalEventDefinition' => [
                 ConditionalEventDefinitionInterface::class,
                 [
-                    ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION => ['1', [BpmnFileRepository::BPMN, ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION]],
+                    ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION => ['1', [BpmnDocument::BPMN, ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION]],
                 ]
             ],
             'condition' => [
@@ -165,7 +165,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             'errorEventDefinition' => [
                 ErrorEventDefinitionInterface::class,
                 [
-                    ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR => ['1', [BpmnFileRepository::BPMN, ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF]],
+                    ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR => ['1', [BpmnDocument::BPMN, ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF]],
                 ]
             ],
             'error' => [
@@ -176,16 +176,16 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             'messageFlow' => [
                 MessageFlowInterface::class,
                 [
-                    MessageFlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnFileRepository::BPMN, MessageFlowInterface::BPMN_PROPERTY_SOURCE_REF]],
-                    MessageFlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnFileRepository::BPMN, MessageFlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                    MessageFlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnDocument::BPMN, MessageFlowInterface::BPMN_PROPERTY_SOURCE_REF]],
+                    MessageFlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnDocument::BPMN, MessageFlowInterface::BPMN_PROPERTY_TARGET_REF]],
                 ]
             ],
             'timerEventDefinition' => [
                 TimerEventDefinitionInterface::class,
                 [
-                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => ['1', [BpmnFileRepository::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE]],
-                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => ['1', [BpmnFileRepository::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE]],
-                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => ['1', [BpmnFileRepository::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => ['1', [BpmnDocument::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => ['1', [BpmnDocument::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => ['1', [BpmnDocument::BPMN, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION]],
                 ]
             ],
             TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => [
@@ -209,21 +209,21 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             'laneSet' => [
                 LaneSetInterface::class,
                 [
-                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnFileRepository::BPMN, LaneSetInterface::BPMN_PROPERTY_LANE]],
+                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnDocument::BPMN, LaneSetInterface::BPMN_PROPERTY_LANE]],
                 ]
             ],
             'lane' => [
                 LaneInterface::class,
                 [
-                    LaneInterface::BPMN_PROPERTY_FLOW_NODE => ['n', [BpmnFileRepository::BPMN, LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF]],
-                    LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => ['n', [BpmnFileRepository::BPMN, LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET]],
+                    LaneInterface::BPMN_PROPERTY_FLOW_NODE => ['n', [BpmnDocument::BPMN, LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF]],
+                    LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => ['n', [BpmnDocument::BPMN, LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET]],
                 ]
             ],
             LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF => [self::IS_PROPERTY, []],
             LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => [
                 LaneSetInterface::class,
                 [
-                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnFileRepository::BPMN, LaneSetInterface::BPMN_PROPERTY_LANE]],
+                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnDocument::BPMN, LaneSetInterface::BPMN_PROPERTY_LANE]],
                 ]
             ],
         ]
