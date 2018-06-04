@@ -74,11 +74,11 @@ trait ActivityTrait
     {
         $this->setFactory($factory);
         $this->activeState = new State($this, ActivityInterface::TOKEN_STATE_ACTIVE);
-        $this->activityTransition = new ActivityTransition($this);
+        $this->activityTransition = new ActivityTransition($this, true);
         $this->failingState = new State($this, ActivityInterface::TOKEN_STATE_FAILING);
-        $this->exceptionTransition = new ExceptionTransition($this);
-        $this->closeExceptionTransition = new CloseExceptionTransition($this);
-        $this->transition = new Transition($this);
+        $this->exceptionTransition = new ExceptionTransition($this, true);
+        $this->closeExceptionTransition = new CloseExceptionTransition($this, true);
+        $this->transition = new Transition($this, true);
         $this->closedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
 
         $this->activeState->connectTo($this->exceptionTransition);
@@ -93,13 +93,6 @@ trait ActivityTrait
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token) {
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token);
-
-            }
-        );
-        $this->transition->attachEvent(
-            TransitionInterface::EVENT_BEFORE_TRANSIT,
-            function (TransitionInterface $transition) {
-                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $transition);
 
             }
         );
@@ -127,8 +120,12 @@ trait ActivityTrait
      */
     public function getInputPlace()
     {
-        $this->addInput($this->activeState);
-        return $this->activeState;
+        $ready = new State($this);
+        $transition = new Transition($this, false);
+        $ready->connectTo($transition);
+        $transition->connectTo($this->activeState);
+        $this->addInput($ready);
+        return $ready;
     }
 
     /**
@@ -140,7 +137,16 @@ trait ActivityTrait
      */
     protected function buildConnectionTo(FlowNodeInterface $target)
     {
-        $this->transition->connectTo($target->getInputPlace());
+        $place = $target->getInputPlace();
+        $this->transition->connectTo($place);
+        $place->attachEvent(
+            StateInterface::EVENT_TOKEN_CONSUMED,
+            function (TokenInterface $token) {
+                $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $token);
+
+            }
+        );
         return $this;
     }
 

@@ -90,13 +90,13 @@ class EngineTestCase extends TestCase
      * @var array $jobs
      */
     protected $jobs = [];
+
+    protected $factory;
+
     /**
      * Initialize the engine and the factories.
      *
      */
-
-    protected $factory;
-
     protected function setUp()
     {
         parent::setUp();
@@ -218,7 +218,7 @@ class EngineTestCase extends TestCase
      *
      * @param string $date
      * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      */
     protected function assertScheduledDateTimer($date, FlowElementInterface $element, TokenInterface $token = null)
     {
@@ -237,7 +237,7 @@ class EngineTestCase extends TestCase
      *
      * @param string $cycle
      * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      */
     protected function assertScheduledCyclicTimer($cycle, FlowElementInterface $element, TokenInterface $token = null)
     {
@@ -256,7 +256,7 @@ class EngineTestCase extends TestCase
      *
      * @param string $duration
      * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      */
     protected function assertScheduledDurationTimer($duration, FlowElementInterface $element, TokenInterface $token = null)
     {
@@ -282,6 +282,11 @@ class EngineTestCase extends TestCase
         return $job ? $job['element']->execute($job['eventDefinition'], $instance) : null;
     }
 
+    /**
+     * Get factory instance
+     *
+     * @return Factory
+     */
     protected function getFactory() {
 
         $mappings = [

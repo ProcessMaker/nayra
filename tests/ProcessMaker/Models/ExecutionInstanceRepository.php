@@ -2,10 +2,10 @@
 
 namespace ProcessMaker\Models;
 
+use ProcessMaker\Models\ExecutionInstance;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
-use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
 /**
  * Execution Instance Repository.

@@ -2,16 +2,15 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
-use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Models\Operation;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Test an activity with exception.
@@ -84,6 +83,9 @@ class IntermediateMessageEventTest extends EngineTestCase
         return [$processA, $processB];
     }
 
+    /**
+     * Create signal intermediate event processes
+     */
     public function createSignalIntermediateEventProcesses()
     {
         $signal = $this->rootElementRepository->createSignalInstance();
@@ -141,6 +143,9 @@ class IntermediateMessageEventTest extends EngineTestCase
         return [$processA, $processB];
     }
 
+    /**
+     * Test Process Definitions for intermediate messages
+     */
     public function testProcessDefinitionForIntermediateMessages()
     {
         list($processA, $processB) = $this->createMessageIntermediateEventProcesses();
@@ -168,6 +173,9 @@ class IntermediateMessageEventTest extends EngineTestCase
             'The Event Definition Operation must be equal to the assigned in the test.');
     }
 
+    /**
+     * Test process definitions for intermediate signals
+     */
     public function testProcessDefinitionForIntermediateSignals()
     {
         list($processA, $processB) = $this->createSignalIntermediateEventProcesses();
@@ -239,6 +247,10 @@ class IntermediateMessageEventTest extends EngineTestCase
 
         //Assertion: The activity must be activated
         $this->assertEvents([
+            //Instance of process A
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            //Instance of process B
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -251,7 +263,6 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion:
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
         ]);
 
@@ -275,16 +286,17 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion: The throwing process must advances to activity B an the catching process to activity D
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //events triggered when the catching event runs
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);
@@ -345,6 +357,10 @@ class IntermediateMessageEventTest extends EngineTestCase
 
         //Assertion: The first activity of the second flow must be activated
         $this->assertEvents([
+            //Instance for process A
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            //Instance for process B
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -357,7 +373,6 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion: the second flows is stoppen in the catching event
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
         ]);
 
@@ -381,16 +396,17 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion: The throwing process must advances to activity B an the catching process to activity D
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //events triggered when the catching event runs
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);

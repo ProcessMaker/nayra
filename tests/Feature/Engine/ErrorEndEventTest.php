@@ -52,6 +52,7 @@ class ErrorEndEventTest extends EngineTestCase
 
         //Assertion: Verify that Error End Event was triggered and the process is completed
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
@@ -64,7 +65,7 @@ class ErrorEndEventTest extends EngineTestCase
             ErrorEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 
@@ -102,8 +103,10 @@ class ErrorEndEventTest extends EngineTestCase
         //Assertion: Verify that the Activity goes to exception state
         //Assertion: Verify that the subprocess is ended
         $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
@@ -113,7 +116,7 @@ class ErrorEndEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
-            ProcessInterface::EVENT_PROCESS_COMPLETED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 }

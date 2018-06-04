@@ -24,6 +24,7 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ReflectionClass;
 
 /**
  * Process base implementation.
@@ -295,18 +296,34 @@ trait ProcessTrait
             if ($instance->getTokens()->count() !== 0) {
                 return;
             }
-            $this->notifyEvent(ProcessInterface::EVENT_PROCESS_COMPLETED, $this, $instance, $event);
-            $arguments = [$this, $instance, $event];
-            $bpmnEvents = $this->getBpmnEventClasses();
-            if (isset($bpmnEvents[ProcessInterface::EVENT_PROCESS_COMPLETED])) {
-                $payload = new $bpmnEvents[ProcessInterface::EVENT_PROCESS_COMPLETED]($this, $arguments);
-            } else {
-                $payload = ["object" => $this, "arguments" => $arguments];
-            }
-            $this->getDispatcher()->dispatch(ProcessInterface::EVENT_PROCESS_COMPLETED, $payload);
+            $this->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED, $instance, $event);
         });
         $this->transitions = new Collection($transitions);
         return $this->transitions;
+    }
+
+    /**
+     * Notify an process instance event.
+     *
+     * @param string $eventName
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param mixed $event
+     *
+     * @return $this
+     */
+    public function notifyInstanceEvent($eventName, ExecutionInstanceInterface $instance, $event = null)
+    {
+        $this->notifyEvent($eventName, $this, $instance, $event);
+        $arguments = [$this, $instance, $event];
+        $bpmnEvents = $this->getBpmnEventClasses();
+        if (isset($bpmnEvents[$eventName])) {
+            $reflector = new ReflectionClass($bpmnEvents[$eventName]);
+            $payload = $reflector->newInstanceArgs($arguments);
+        } else {
+            $payload = $arguments;
+        }
+        $this->getDispatcher()->dispatch($eventName, $payload);
+        return $this;
     }
 
     /**

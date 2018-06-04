@@ -48,7 +48,7 @@ trait StateTrait
      * @param FlowNodeInterface $owner
      * @param string $name
      */
-    protected function initState(FlowNodeInterface $owner, $name)
+    protected function initState(FlowNodeInterface $owner, $name = '')
     {
         $this->tokens = new Collection();
         $this->setFactory($owner->getFactory());
@@ -91,7 +91,7 @@ trait StateTrait
         $token->setProperties($properties);
         $token->setOwner($this);
         $token->setInstance($instance);
-        $token->setStatus($this->getName());
+        $this->getName() ? $token->setStatus($this->getName()) : '';
         !$instance ?: $instance->addToken($token);
         $this->tokens->push($token);
         $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token);
@@ -111,7 +111,7 @@ trait StateTrait
     {
         $token->setOwner($this);
         $token->setInstance($instance);
-        $token->setStatus($this->getName());
+        $this->getName() ? $token->setStatus($this->getName()) : '';
         $instance->addToken($token);
         $this->tokens->push($token);
         $skipEvents ?: $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token);

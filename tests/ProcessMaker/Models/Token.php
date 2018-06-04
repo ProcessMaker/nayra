@@ -12,7 +12,15 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  */
 class Token implements TokenInterface
 {
-    use TokenTrait,
-        LocalProcessTrait,
-        LocalPropertiesTrait;
+
+    use TokenTrait;
+
+    /**
+     * Initialize a token class with unique id.
+     *
+     */
+    protected function initToken()
+    {
+        $this->setId(uniqid());
+    }
 }

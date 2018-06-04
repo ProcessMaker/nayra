@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ReflectionClass;
 
 /**
  * Trait to implements bpmn events handling.
@@ -32,9 +33,10 @@ trait BpmnEventsTrait
     {
         $bpmnEvents = $this->getBpmnEventClasses();
         if (isset($bpmnEvents[$event])) {
-            $payload = new $bpmnEvents[$event]($this, $arguments);
+            $reflector = new ReflectionClass($bpmnEvents[$event]);
+            $payload = $reflector->newInstanceArgs($arguments);
         } else {
-            $payload = ["object" => $this, "arguments" => $arguments];
+            $payload = $arguments;
         }
         $this->getOwnerProcess()->getDispatcher()->dispatch($event, $payload);
         array_unshift($arguments, $event);

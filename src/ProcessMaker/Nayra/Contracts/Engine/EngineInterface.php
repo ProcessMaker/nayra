@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
@@ -72,10 +73,11 @@ interface EngineInterface
      *
      * @param ProcessInterface $process
      * @param DataStoreInterface $data
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface|null $event
      *
      * @return ExecutionInstanceInterface
      */
-    public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data);
+    public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data, EventInterface $event = null);
 
     /**
      * Load an execution instance from the storage.

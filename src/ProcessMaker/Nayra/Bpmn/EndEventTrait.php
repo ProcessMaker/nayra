@@ -69,7 +69,12 @@ trait EndEventTrait
      */
     public function getInputPlace()
     {
-        $this->addInput($this->endState);
+        //Create an input state
+        $input = new State($this);
+        $transition = new Transition($this, false);
+        $input->connectTo($transition);
+        $transition->connectTo($this->endState);
+        $this->addInput($input);
 
         //if the element has event definition and those event definition have a payload we notify them
         //of the triggered event
@@ -90,7 +95,7 @@ trait EndEventTrait
             $this->notifyEvent(ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
         });
 
-        return $this->endState;
+        return $input;
     }
 
     /**

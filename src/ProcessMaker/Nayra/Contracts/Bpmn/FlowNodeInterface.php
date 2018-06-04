@@ -111,4 +111,11 @@ interface FlowNodeInterface extends FlowElementInterface
      * @return $this
      */
     public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token);
+
+    /**
+     * Get an input to the element.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    public function getInputPlace();
 }
