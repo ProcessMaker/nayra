@@ -2,15 +2,15 @@
 namespace Tests\Feature\Engine;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
-use ProcessMaker\Models\Activity;
-use ProcessMaker\Models\DataStore;
-use ProcessMaker\Models\EndEvent;
-use ProcessMaker\Models\ExclusiveGateway;
-use ProcessMaker\Models\Flow;
-use ProcessMaker\Models\InclusiveGateway;
-use ProcessMaker\Models\Process;
-use ProcessMaker\Models\RepositoryFactory;
-use ProcessMaker\Models\StartEvent;
+use ProcessMaker\Nayra\Bpmn\Model\Activity;
+use ProcessMaker\Nayra\Bpmn\Model\DataStore;
+use ProcessMaker\Nayra\Bpmn\Model\EndEvent;
+use ProcessMaker\Nayra\Bpmn\Model\ExclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Model\Flow;
+use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Model\Process;
+use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
+use ProcessMaker\Nayra\Bpmn\Model\Token;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
@@ -33,40 +33,6 @@ use ProcessMaker\Nayra\Factory;
  */
 class EngineTestCase extends TestCase
 {
-    /**
-     *
-     * @var \ProcessMaker\Models\ProcessRepository
-     */
-    protected $processRepository;
-    /**
-     *
-     * @var \ProcessMaker\Models\ActivityRepository
-     */
-    protected $activityRepository;
-    /**
-     * @var \ProcessMaker\Models\EventRepository
-     */
-    protected $eventRepository;
-    /**
-     * @var \ProcessMaker\Models\DataStoreRepository
-     */
-    protected $dataStoreRepository;
-    /**
-     * @var \ProcessMaker\Models\GatewayRepository
-     */
-    protected $gatewayRepository;
-    /**
-     * @var \ProcessMaker\Models\FlowRepository
-     */
-    protected $flowRepository;
-    /**
-     * @var \ProcessMaker\Models\RootElementRepository
-     */
-    protected $rootElementRepository;
-    /**
-     * @var \ProcessMaker\Models\MessageFlowRepository
-     */
-    protected $messageFlowRepository;
     /**
      *
      * @var EngineInterface
@@ -100,16 +66,6 @@ class EngineTestCase extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        //Initialize the repository factory
-        $factory = new RepositoryFactory();
-        $this->processRepository = $factory->getProcessRepository();
-        $this->activityRepository = $factory->getActivityRepository();
-        $this->gatewayRepository = $factory->getGatewayRepository();
-        $this->eventRepository = $factory->getEventRepository();
-        $this->flowRepository = $factory->getFlowRepository();
-        $this->dataStoreRepository = $factory->getDataStoreRepository();
-        $this->rootElementRepository = $factory->getRootElementRepository();
-        $this->messageFlowRepository = $factory->getMessageFlowRepository();
         $this->factory = $this->getFactory();
         //Initialize a dispatcher
         $fakeDispatcher = $this->getMockBuilder(EventBusInterface::class)
@@ -131,9 +87,7 @@ class EngineTestCase extends TestCase
                 $this->listeners[$event][] = $listener;
             }));
         //Initialize the engine
-        $this->engine = new TestEngine($factory, $fakeDispatcher);
-        $this->engine->setRepositoryFactory($factory);
-        $this->engine->setDispatcher($fakeDispatcher);
+        $this->engine = new TestEngine($this->factory, $fakeDispatcher);
         //Mock a job manager
         $this->jobManager = $this->getMockBuilder(JobManagerInterface::class)
             ->getMock();
@@ -298,6 +252,7 @@ class EngineTestCase extends TestCase
             ProcessInterface::class => Process::class,
             DataStoreInterface::class => DataStore::class,
             FlowInterface::class => Flow::class,
+            TokenInterface::class => Token::class,
         ];
 
         return new Factory($mappings);

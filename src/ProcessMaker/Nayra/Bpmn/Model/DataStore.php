@@ -1,10 +1,17 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: dante
+ * Date: 6/4/18
+ * Time: 8:56 AM
+ */
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Bpmn\Model;
 
 use ProcessMaker\Nayra\Bpmn\DataStoreTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
 /**
  * Application
@@ -13,8 +20,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
  */
 class DataStore implements DataStoreInterface
 {
-    use DataStoreTrait,
-        LocalPropertiesTrait;
+    use DataStoreTrait;
 
     private $data = [];
 
@@ -54,10 +60,10 @@ class DataStore implements DataStoreInterface
     }
 
     /**
-     * @param \ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface $factory
+     * @param FactoryInterface $factory
      * @return $this
      */
-    public function setFactory(\ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface $factory)
+    public function setFactory(FactoryInterface $factory)
     {
         // TODO: Implement setFactory() method.
     }
@@ -125,6 +131,6 @@ class DataStore implements DataStoreInterface
 
     public function getItemSubject()
     {
-        
+
     }
 }

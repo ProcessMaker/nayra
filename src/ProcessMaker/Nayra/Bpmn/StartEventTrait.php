@@ -9,7 +9,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Factory;
 
 /**
  * Implementation of the behavior of a start event.
@@ -31,7 +33,7 @@ trait StartEventTrait
      */
     private $triggerPlace = [];
 
-    public function buildTransitions(RepositoryFactoryInterface $factory)
+    public function buildTransitions(FactoryInterface $factory)
     {
         $this->setFactory($factory);
         $this->transition = new StartTransition($this);

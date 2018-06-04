@@ -22,12 +22,12 @@ interface EngineInterface
      *
      * @return $this
      */
-    public function setRepositoryFactory(RepositoryFactoryInterface $factory);
+    public function setFactory(RepositoryFactoryInterface $factory);
 
     /**
      * @return RepositoryFactoryInterface
      */
-    public function getRepositoryFactory();
+    public function getFactory();
 
     /**
      * Dispatcher of events used by the engine.

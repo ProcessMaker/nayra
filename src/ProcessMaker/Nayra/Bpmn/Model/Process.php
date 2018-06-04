@@ -1,6 +1,6 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Nayra\Bpmn\Model;
 
 use ProcessMaker\Nayra\Bpmn\ProcessTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -13,8 +13,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 class Process implements ProcessInterface
 {
 
-    use ProcessTrait,
-        LocalPropertiesTrait;
+    use ProcessTrait;
 
     /**
      * Process constructor.

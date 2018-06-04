@@ -129,9 +129,9 @@ trait FlowNodeTrait
      * Used by EngineInterface implementatión to build the transitions
      * related to connect nodes.
      *
-     * @param RepositoryFactoryInterface $factory
+     * @param FactoryInterface$factory
      */
-    public function buildFlowTransitions(RepositoryFactoryInterface $factory)
+    public function buildFlowTransitions(FactoryInterface $factory)
     {
         $this->setFactory($factory);
         $flows = $this->getFlows();

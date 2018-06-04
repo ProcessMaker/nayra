@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -62,20 +61,18 @@ interface FlowNodeInterface extends FlowElementInterface
     /**
      * Build the transition rules of the node element.
      *
-     * @param RepositoryFactoryInterface $factory Factory that will be used to create tokens.
-     *
+     * @param FactoryInterface|RepositoryFactoryInterface $factory Factory that will be used to create tokens.
      * @return $this
      */
-    public function buildTransitions(RepositoryFactoryInterface $factory);
+    public function buildTransitions(FactoryInterface $factory);
 
     /**
      * Build the transition rules of the outgoing flows.
      *
-     * @param RepositoryFactoryInterface $factory Factory that will be used to create tokens.
-     *
+     * @param FactoryInterface|RepositoryFactoryInterface $factory Factory that will be used to create tokens.
      * @return $this
      */
-    public function buildFlowTransitions(RepositoryFactoryInterface $factory);
+    public function buildFlowTransitions(FactoryInterface $factory);
 
     /**
      * Add a state for the node element.

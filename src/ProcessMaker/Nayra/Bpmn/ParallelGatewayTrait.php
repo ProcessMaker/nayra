@@ -2,12 +2,12 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -28,9 +28,9 @@ trait ParallelGatewayTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param RepositoryFactoryInterface $factory
+     * @param FactoryInterface|RepositoryFactoryInterface $factory
      */
-    public function buildTransitions(RepositoryFactoryInterface $factory)
+    public function buildTransitions(FactoryInterface $factory)
     {
         $this->setFactory($factory);
         $this->transition=new ParallelGatewayTransition($this);

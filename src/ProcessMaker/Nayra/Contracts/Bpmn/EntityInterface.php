@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -60,10 +61,10 @@ interface EntityInterface
     public function getFactory();
 
     /**
-     * @param RepositoryFactoryInterface $factory
+     * @param FactoryInterface|RepositoryFactoryInterface $factory
      * @return $this
      */
-    public function setFactory(RepositoryFactoryInterface $factory);
+    public function setFactory(FactoryInterface $factory);
 
     /**
      * Get the name of the element.
