@@ -186,15 +186,16 @@ class SaveExecutionInstancesTest extends EngineTestCase
     }
 
     /**
-     * Verify id the saved data is the expected.
+     * Verify if the saved data is the expected.
      *
      * @param string $instanceId
      * @param array $expected
      * @param string $message
      */
-    private function assertSavedTokens($instanceId, array $expected, $message = '')
+    private function assertSavedTokens($instanceId, array $expected, $message = 'Saved data is not the expected')
     {
         $tokens = array_values($this->storage[$instanceId]['tokens']);
+        //Assertion: Verify the saved data
         $this->assertEquals($expected, $tokens, $message);
     }
 }
