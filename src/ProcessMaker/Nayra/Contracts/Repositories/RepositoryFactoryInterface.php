@@ -61,11 +61,6 @@ interface RepositoryFactoryInterface
     public function getTokenRepository();
 
     /**
-     * @return RootElementRepositoryInterface
-     */
-    public function getRootElementRepository();
-
-    /**
      * @return \ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface
      */
     public function getExecutionInstanceRepository();

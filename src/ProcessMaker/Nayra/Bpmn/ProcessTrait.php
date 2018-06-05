@@ -443,7 +443,8 @@ trait ProcessTrait
     public function call(DataStoreInterface $dataStore = null)
     {
         if (empty($dataStore)) {
-            $dataStore = $this->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+            $dataStore = $this->getFactory()->createInstanceOf(DataStoreInterface::class);
+
         }
         $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);
         $this->getEvents()->find(function(EventInterface $event){

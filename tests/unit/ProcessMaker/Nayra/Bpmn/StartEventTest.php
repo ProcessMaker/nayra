@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Models\StartEvent;
+use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
 
 class StartEventTest extends TestCase
 {

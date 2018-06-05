@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Factory;
 
 /**
  * Tests for the Nayra/Bpmn/Model classes
@@ -66,10 +65,7 @@ class NayraModelTest extends EngineTestCase
      */
     public function testProcessWithInclusiveGateway()
     {
-        $config = $this->createMappingConfiguration();
-        $factory = new Factory($config);
-
-        $processData = $this->createProcessWithInclusiveGateway($factory);
+        $processData = $this->createProcessWithInclusiveGateway($this->factory);
         $process = $processData['process'];
         $start = $processData['start'];
         $activityA = $processData['activityA'];

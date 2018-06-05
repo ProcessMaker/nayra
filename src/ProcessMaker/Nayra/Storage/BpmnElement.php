@@ -27,6 +27,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
@@ -242,7 +243,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
     {
         $id = $this->getAttribute('id');
         if ($id && $this->ownerDocument->hasBpmnInstance($id)) {
-            return $this->ownerDocument->loadBpmElementById($id);
+            return $this->ownerDocument->getElementInstanceById($id);
         }
         if (!array_key_exists($this->namespaceURI, static::map)) {
             throw new \Exception("Not found " . $this->namespaceURI);
@@ -255,11 +256,11 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
         }
         list($classInterface, $mapProperties) = static::map[$this->namespaceURI][$this->localName];
         if ($classInterface === self::IS_PROPERTY) {
-            $bpmnElement = $this->ownerDocument->loadBpmElementById($this->nodeValue);
+            $bpmnElement = $this->ownerDocument->getElementInstanceById($this->nodeValue);
             $this->bpmn = $bpmnElement;
         } else {
             $bpmnElement = $this->ownerDocument->getFactory()->createInstanceOf($classInterface);
-            $bpmnElement->setFactory($this->ownerDocument);
+            $bpmnElement->setFactory($this->ownerDocument->getFactory());
             if ($bpmnElement instanceof CallableElementInterface) {
                 $bpmnElement->setEngine($this->ownerDocument->getEngine());
             }
@@ -287,7 +288,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             if (!($node instanceof BpmnElement)) {
                 continue;
             }
-            $bpmn = $node->getBpmn($owner);
+            $bpmn = $node->getBpmnElementInstance($owner);
             if ($bpmn && is_object($bpmn)) {
                 $this->setBpmnPropertyTo($bpmn, $node, $mapProperties, $owner);
             }
@@ -331,12 +332,12 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             $isThisProperty = (is_array($type) && ($node->namespaceURI === $type[0] || $node->namespaceURI===null)
                 && $node->localName===$type[1]);
             if ($isThisProperty && $multiplicity === 'n') {
-                $ref = $this->ownerDocument->loadBpmElementById($node->value);
+                $ref = $this->ownerDocument->getElementInstanceById($node->value);
                 $bpmnElement->addProperty($name, $ref);
                 return;
             } else if ($isThisProperty && $multiplicity == '1') {
                 $id = $node->value;
-                $ref = $this->ownerDocument->loadBpmElementById($id);
+                $ref = $this->ownerDocument->getElementInstanceById($id);
                 $setter = 'set' . $name;
                 method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($ref)
                     : $bpmnElement->setProperty($name, $ref);

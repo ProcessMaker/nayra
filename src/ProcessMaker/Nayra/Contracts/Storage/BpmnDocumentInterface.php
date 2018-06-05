@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Storage;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
 /**
@@ -493,4 +494,20 @@ interface BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
     public function getTransition($id);
+
+
+    /**
+     * Returns the document engine
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Engine\EngineInterface
+     */
+    public function getEngine();
+
+    /**
+     * @param \ProcessMaker\Nayra\Contracts\Engine\EngineInterface $engine
+     *
+     * @return $this
+     */
+    public function setEngine(EngineInterface $engine = null);
+
 }

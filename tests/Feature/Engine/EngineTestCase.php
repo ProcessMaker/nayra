@@ -2,24 +2,36 @@
 namespace Tests\Feature\Engine;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
+use ProcessMaker\Models\CallActivity;
 use ProcessMaker\Nayra\Bpmn\Model\Activity;
 use ProcessMaker\Nayra\Bpmn\Model\DataStore;
 use ProcessMaker\Nayra\Bpmn\Model\EndEvent;
 use ProcessMaker\Nayra\Bpmn\Model\ExclusiveGateway;
 use ProcessMaker\Nayra\Bpmn\Model\Flow;
 use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Model\ParallelGateway;
 use ProcessMaker\Nayra\Bpmn\Model\Process;
+use ProcessMaker\Nayra\Bpmn\Model\ScriptTask;
 use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
 use ProcessMaker\Nayra\Bpmn\Model\Token;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\Participant;
+use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
@@ -57,6 +69,11 @@ class EngineTestCase extends TestCase
      */
     protected $jobs = [];
 
+    /**
+     * Scheduled jobs.
+     *
+     * @var \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
+     */
     protected $factory;
 
     /**
@@ -253,6 +270,12 @@ class EngineTestCase extends TestCase
             DataStoreInterface::class => DataStore::class,
             FlowInterface::class => Flow::class,
             TokenInterface::class => Token::class,
+            CollaborationInterface::class => Collaboration::class,
+            ParticipantInterface::class => Participant::class,
+            ScriptTaskInterface::class => ScriptTask::class,
+            CallActivityInterface::class => CallActivity::class,
+            ParallelGatewayInterface::class => ParallelGateway::class,
+            TerminateEventDefinitionInterface::class => TerminateEventDefinition::class,
         ];
 
         return new Factory($mappings);

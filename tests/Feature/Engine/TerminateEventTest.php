@@ -8,6 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -24,18 +25,19 @@ class TerminateEventTest extends EngineTestCase
     public function testTerminateEndEvent()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Terminate_Event.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('Terminate_Event');
+        $process = $bpmnRepository->getProcess('Terminate_Event');
 
         //Get 'start' activity of the process
-        $activity = $bpmnRepository->loadBpmElementById('start');
+        $activity = $bpmnRepository->getActivity('start');
 
         //Get the terminate event
-        $terminateEvent = $bpmnRepository->loadBpmElementById('EndEvent_1');
+        $terminateEvent = $bpmnRepository->getEndEvent('EndEvent_1');
 
         //Start the process
         $instance = $process->call();

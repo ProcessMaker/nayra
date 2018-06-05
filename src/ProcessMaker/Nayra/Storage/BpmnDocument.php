@@ -6,6 +6,7 @@ use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 
@@ -22,6 +23,11 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface
      */
     private $bpmnElements = [];
+
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Engine\EngineInterface
+     */
+    private $engine;
 
     /**
      * @var \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
@@ -685,5 +691,27 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     public function getTransition($id)
     {
         return $this->getElementInstanceById($id);
+    }
+
+    /**
+     * Returns the document engine
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Engine\EngineInterface
+     */
+    public function getEngine()
+    {
+        return $this->engine;
+
+    }
+
+    /**
+     * @param \ProcessMaker\Nayra\Contracts\Engine\EngineInterface $engine
+     *
+     * @return $this
+     */
+    public function setEngine(EngineInterface $engine = null)
+    {
+        $this->engine = $engine;
+        return $this;
     }
 }

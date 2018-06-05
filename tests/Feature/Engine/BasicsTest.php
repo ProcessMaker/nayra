@@ -3,6 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -28,11 +29,11 @@ class BasicsTest extends EngineTestCase
      */
     private function createSimpleProcessInstance()
     {
-        $process = $this->processRepository->createCustomProcessInstance();
+        $process = $this->factory->createInstanceOf(ProcessInterface::class);
         //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $activity = $this->activityRepository->createActivityInstance();
-        $end = $this->eventRepository->createEndEventInstance();
+        $start = $this->factory->createInstanceOf(StartEventInterface::class);
+        $activity = $this->factory->createInstanceOf(ActivityInterface::class);
+        $end = $this->factory->createInstanceOf(EndEventInterface::class);
         $process->addActivity($activity);
         $process->addEvent($start)
             ->addEvent($end);
@@ -51,7 +52,7 @@ class BasicsTest extends EngineTestCase
     public function testSimpleTransitions()
     {
         //Create a data store
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
         //Load the process
         $process = $this->createSimpleProcessInstance();
         //Create a process instance with the data store
@@ -99,7 +100,7 @@ class BasicsTest extends EngineTestCase
     public function testProcessConfiguration()
     {
         //Create a data store
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load the process
         $process = $this->createSimpleProcessInstance();
@@ -134,7 +135,7 @@ class BasicsTest extends EngineTestCase
     public function testProcessIncorrectConfiguration()
     {
         //Create a data store
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load the process
         $process = $this->createSimpleProcessInstance();

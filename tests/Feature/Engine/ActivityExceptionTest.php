@@ -3,9 +3,11 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test an activity with exception.
@@ -26,11 +28,11 @@ class ActivityExceptionTest extends EngineTestCase
      */
     private function createSimpleProcessInstance()
     {
-        $process = $this->processRepository->createProcessInstance();
+        $process = $this->factory->createInstanceOf(ProcessInterface::class);
         //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $activity = $this->activityRepository->createActivityWithExceptionInstance();
-        $end = $this->eventRepository->createEndEventInstance();
+        $start = $this->factory->createInstanceOf(StartEventInterface::class);
+        $activity = $this->factory->createInstanceOf(ActivityInterface::class);
+        $end = $this->factory->createInstanceOf(EndEventInterface::class);
         $process->addActivity($activity);
         $process->addEvent($start)
             ->addEvent($end);
@@ -47,7 +49,7 @@ class ActivityExceptionTest extends EngineTestCase
     public function testSimpleTransitions()
     {
         //Create a data store to test the process.
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load a simple process with activity exception.
         $process = $this->createSimpleProcessInstance();
