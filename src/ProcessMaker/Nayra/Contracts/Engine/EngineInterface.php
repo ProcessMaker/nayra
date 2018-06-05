@@ -6,6 +6,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -18,14 +19,14 @@ interface EngineInterface
     /**
      * Factory used to create the concrete bpmn classes for the engine.
      *
-     * @param RepositoryFactoryInterface $factory
+     * @param FactoryInterface $factory
      *
      * @return $this
      */
-    public function setFactory(RepositoryFactoryInterface $factory);
+    public function setFactory(FactoryInterface $factory);
 
     /**
-     * @return RepositoryFactoryInterface
+     * @return FactoryInterface
      */
     public function getFactory();
 

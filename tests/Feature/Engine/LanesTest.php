@@ -7,6 +7,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -24,12 +25,14 @@ class LanesTest extends EngineTestCase
     public function testLoadingLanes()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
+
         $bpmnRepository->load(__DIR__ . '/files/Lanes.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('PROCESS_1');
+        $process = $bpmnRepository->getProcess('PROCESS_1');
 
         //Assertion: The process has a collection of LaneSets
         $this->assertNotEmpty($process->getLaneSets());
@@ -73,12 +76,13 @@ class LanesTest extends EngineTestCase
     public function testExecutionWithLanes()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Lanes.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('PROCESS_1');
+        $process = $bpmnRepository->getProcess('PROCESS_1');
 
         //Execute the process
         $instance = $process->call();
@@ -88,19 +92,19 @@ class LanesTest extends EngineTestCase
         $this->assertEquals(1, $process->getInstances()->count());
 
         //Complete the Task A
-        $taksA = $bpmnRepository->loadBpmElementById('_7');
+        $taksA = $bpmnRepository->getActivity('_7');
         $this->completeTask($taksA, $instance);
 
         //Complete the Task B
-        $taksB = $bpmnRepository->loadBpmElementById('_13');
+        $taksB = $bpmnRepository->getActivity('_13');
         $this->completeTask($taksB, $instance);
 
         //Complete the Task C
-        $taksC = $bpmnRepository->loadBpmElementById('_15');
+        $taksC = $bpmnRepository->getActivity('_15');
         $this->completeTask($taksC, $instance);
 
         //Complete the Task D
-        $taksD = $bpmnRepository->loadBpmElementById('_9');
+        $taksD = $bpmnRepository->getActivity('_9');
         $this->completeTask($taksD, $instance);
 
         //Assertion: All the process was executed

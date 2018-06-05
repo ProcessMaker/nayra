@@ -670,6 +670,18 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     }
 
     /**
+     * Get ConditionalEventDefinition instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface
+     */
+    public function getConditionalEventDefinition($id)
+    {
+        return $this->getElementInstanceById($id);
+    }
+
+    /**
      * Get Token instance by id.
      *
      * @param string $id

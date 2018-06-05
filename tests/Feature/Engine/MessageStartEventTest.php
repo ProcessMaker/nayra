@@ -2,14 +2,20 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Models\DataStoreCollection;
+use ProcessMaker\Nayra\Bpmn\Model\DataStoreCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test the message start event
@@ -23,28 +29,30 @@ class MessageStartEventTest extends EngineTestCase
      */
     public function createMessageStartEventProcesses()
     {
-        $item = $this->rootElementRepository->createItemDefinitionInstance([
+        $item = $this->factory->createInstanceOf(ItemDefinitionInterface::class, [
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
             'structure' => 'String'
         ]);
-        $message = $this->rootElementRepository->createMessageInstance();
+
+        $message = $this->factory->createInstanceOf(MessageInterface::class);
         $message->setId('MessageA');
         $message->setItem($item);
 
         //Process A
-        $processA = $this->processRepository->createProcessInstance();
+        $processA = $this->factory->createInstanceOf(ProcessInterface::class);
         $processA->setEngine($this->engine);
-        $startA = $this->eventRepository->createStartEventInstance();
-        $activityA1 = $this->activityRepository->createActivityInstance();
-        $eventA = $this->eventRepository->createIntermediateThrowEventInstance();
-        $messageEventDefA = $this->rootElementRepository->createMessageEventDefinitionInstance();
+        $processA->setFactory($this->factory);
+        $startA = $this->factory->createInstanceOf(StartEventInterface::class);
+        $activityA1 = $this->factory->createInstanceOf(ActivityInterface::class);
+        $eventA = $this->factory->createInstanceOf(IntermediateThrowEventInterface::class);
+        $messageEventDefA = $this->factory->createInstanceOf(MessageEventDefinitionInterface::class);
         $messageEventDefA->setId("MessageEvent1");
         $messageEventDefA->setPayload($message);
         $eventA->getEventDefinitions()->push($messageEventDefA);
-        $activityA2 = $this->activityRepository->createActivityInstance();
-        $endA = $this->eventRepository->createEndEventInstance();
+        $activityA2 = $this->factory->createInstanceOf(ActivityInterface::class);
+        $endA = $this->factory->createInstanceOf(EndEventInterface::class);
 
         $startA->createFlowTo($activityA1, $this->factory);
         $activityA1->createFlowTo($eventA, $this->factory);
@@ -58,16 +66,18 @@ class MessageStartEventTest extends EngineTestCase
             ->addEvent($endA);
 
         //Process B
-        $processB = $this->processRepository->createProcessInstance();
+        $processB = $this->factory->createInstanceOf(ProcessInterface::class);
         $processB->setEngine($this->engine);
-        $activityB1 = $this->activityRepository->createActivityInstance();
-        $messageEventDefB = $this->rootElementRepository->createMessageEventDefinitionInstance();
+        $processB->setFactory($this->factory);
+
+        $activityB1 = $this->factory->createInstanceOf(ActivityInterface::class);
+        $messageEventDefB = $this->factory->createInstanceOf(MessageEventDefinitionInterface::class);
         $messageEventDefB->setPayload($message);
 
-        $messageStartEventB = $this->eventRepository->createStartEventInstance();
+        $messageStartEventB = $this->factory->createInstanceOf(StartEventInterface::class);
         $messageStartEventB->getEventDefinitions()->push($messageEventDefB);
 
-        $endB = $this->eventRepository->createEndEventInstance();
+        $endB = $this->factory->createInstanceOf(EndEventInterface::class);
 
         $messageStartEventB->createFlowTo($activityB1, $this->factory);
         $activityB1->createFlowTo($endB, $this->factory);
@@ -105,7 +115,7 @@ class MessageStartEventTest extends EngineTestCase
         //Create message flow from intermediate events A to B
         $eventA = $processA->getEvents()->item(1);
         $messageStartEventB = $processB->getEvents()->item(0);
-        $messageFlow = $this->messageFlowRepository->createMessageFlowInstance();
+        $messageFlow = $this->factory->createInstanceOf(MessageFlowInterface::class);
         $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($eventA);
         $messageFlow->setTarget($messageStartEventB);
@@ -117,10 +127,10 @@ class MessageStartEventTest extends EngineTestCase
         $eventA->collaboration = $collaboration;
         $eventB->collaboration = $collaboration;
 
-        $dataStoreA = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStoreA = $this->factory->createInstanceOf(DataStoreInterface::class);
         $dataStoreA->putData('A', '1');
 
-        $dataStoreB = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStoreB = $this->factory->createInstanceOf(DataStoreInterface::class);
         $dataStoreB->putData('B', '1');
 
         $dataStoreCollectionA = new DataStoreCollection();

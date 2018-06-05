@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
@@ -10,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
-use ProcessMaker\Nayra\Factory;
 
 /**
  * Implementation of the behavior of a start event.
@@ -100,7 +99,7 @@ trait StartEventTrait
         if ($start) {
             if ($instance === null) {
                 $process = $this->getOwnerProcess();
-                $dataStorage = $process->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+                $dataStorage = $process->getFactory()->createInstanceOf(DataStoreInterface::class);
                 $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
             }
             $this->start();

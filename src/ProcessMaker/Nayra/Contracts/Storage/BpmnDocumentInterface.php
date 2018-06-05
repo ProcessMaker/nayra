@@ -510,4 +510,12 @@ interface BpmnDocumentInterface
      */
     public function setEngine(EngineInterface $engine = null);
 
+    /**
+     * Get ConditionalEventDefinition instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface
+     */
+    public function getConditionalEventDefinition($id);
 }

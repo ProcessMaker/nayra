@@ -2,12 +2,13 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Models\ActivityActivatedEvent;
+use ProcessMaker\Nayra\Bpmn\Model\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
-use ProcessMaker\Repositories\BpmnFileRepository;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test to save execution instances
@@ -79,18 +80,18 @@ class SaveExecutionInstancesTest extends EngineTestCase
     public function testSaveExecutionInstanceWithOneToken()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $this->engine->setRepositoryFactory($bpmnRepository);
+        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Call the process
-        $process = $bpmnRepository->loadBpmElementById('SequentialTask');
+        $process = $bpmnRepository->getProcess('SequentialTask');
         $instance = $process->call();
         $this->engine->runToNextState();
 
         //Completes the first activity
-        $firstActivity = $bpmnRepository->loadBpmElementById('first');
+        $firstActivity = $bpmnRepository->getActivity('first');
         $token = $firstActivity->getTokens($instance)->item(0);
         $firstActivity->complete($token);
         $this->engine->runToNextState();
@@ -100,9 +101,11 @@ class SaveExecutionInstancesTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             StartEventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
         //Assertion: Saved data show the first activity was closed, the second is active
@@ -119,18 +122,18 @@ class SaveExecutionInstancesTest extends EngineTestCase
     public function testSaveExecutionInstanceWithMultipleTokens()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $this->engine->setRepositoryFactory($bpmnRepository);
+        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Call the process
-        $process = $bpmnRepository->loadBpmElementById('ParallelProcess');
+        $process = $bpmnRepository->getProcess('ParallelProcess');
         $instance = $process->call();
         $this->engine->runToNextState();
 
         //Completes the first task
-        $firstTask = $bpmnRepository->loadBpmElementById('task1');
+        $firstTask = $bpmnRepository->getActivity('task1');
         $token = $firstTask->getTokens($instance)->item(0);
         $firstTask->complete($token);
         $this->engine->runToNextState();
@@ -159,7 +162,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
         ]);
 
         //Completes the second task
-        $secondtTask = $bpmnRepository->loadBpmElementById('task2');
+        $secondtTask = $bpmnRepository->getActivity('task2');
         $token = $secondtTask->getTokens($instance)->item(0);
         $secondtTask->complete($token);
         $this->engine->runToNextState();
@@ -172,7 +175,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
         ]);
 
         //Completes the third task
-        $thirdTask = $bpmnRepository->loadBpmElementById('task3');
+        $thirdTask = $bpmnRepository->getActivity('task3');
         $token = $thirdTask->getTokens($instance)->item(0);
         $thirdTask->complete($token);
         $this->engine->runToNextState();

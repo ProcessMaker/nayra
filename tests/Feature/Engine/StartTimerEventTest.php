@@ -6,6 +6,8 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Exception;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -22,13 +24,14 @@ class StartTimerEventTest extends EngineTestCase
     public function testStartTimerEventWithTimeDate()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDate.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('Process');
-        $startEvent = $bpmnRepository->loadBpmElementById('_9');
+        $process = $bpmnRepository->getProcess('Process');
+        $startEvent = $bpmnRepository->getStartEvent('_9');
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
@@ -46,13 +49,14 @@ class StartTimerEventTest extends EngineTestCase
     public function testStartTimerEventWithTimeCycle()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycle.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('Process');
-        $startEvent = $bpmnRepository->loadBpmElementById('_9');
+        $process = $bpmnRepository->getProcess('Process');
+        $startEvent = $bpmnRepository->getStartEvent('_9');
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
@@ -74,12 +78,13 @@ class StartTimerEventTest extends EngineTestCase
     public function testStartTimerEventWithTimeDateExpression()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDateExpression.bpmn');
 
         //Create a default environment data
-        $environmentData = $bpmnRepository->getDataStoreRepository()->createDataStoreInstance();
+        $environmentData = $this->factory->createInstanceOf(DataStoreInterface::class);
         $this->engine->setDataStore($environmentData);
         $date = new DateTime;
         $date->setTime(23, 59, 59);
@@ -87,8 +92,8 @@ class StartTimerEventTest extends EngineTestCase
         $environmentData->putData('calculatedDate', $calculatedDate);
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('Process');
-        $startEvent = $bpmnRepository->loadBpmElementById('_9');
+        $process = $bpmnRepository->getProcess('Process');
+        $startEvent = $bpmnRepository->getStartEvent('_9');
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event at the date time calculated by the expression
@@ -110,12 +115,14 @@ class StartTimerEventTest extends EngineTestCase
     public function testStartTimerEventWithTimeCycleExpression()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycleExpression.bpmn');
 
         //Create a default environment data
-        $environmentData = $bpmnRepository->getDataStoreRepository()->createDataStoreInstance();
+        $environmentData = $this->factory->createInstanceOf(DataStoreInterface::class);
+
         $this->engine->setDataStore($environmentData);
 
         //Calculate a iso8601 string for a cyclic timer of 1 minute from 2018-05-01 at 00:00 UTC
@@ -125,8 +132,8 @@ class StartTimerEventTest extends EngineTestCase
         $environmentData->putData('calculatedCycle', $calculatedCycle);
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('Process');
-        $startEvent = $bpmnRepository->loadBpmElementById('_9');
+        $process = $bpmnRepository->getProcess('Process');
+        $startEvent = $bpmnRepository->getStartEvent('_9');
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
