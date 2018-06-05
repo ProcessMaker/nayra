@@ -5,7 +5,33 @@ namespace ProcessMaker\Nayra\Storage;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LaneInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ServiceInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
@@ -17,7 +43,7 @@ use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
  */
 class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
 {
-    const BPMN = 'http://www.omg.org/spec/BPMN/20100524/MODEL';
+    const BPMN_MODEL = 'http://www.omg.org/spec/BPMN/20100524/MODEL';
 
     /**
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface
@@ -33,6 +59,212 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @var \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
      */
     private $factory;
+
+    private $mapping = [
+        'http://www.omg.org/spec/BPMN/20100524/MODEL' => [
+            'process'      => [
+                ProcessInterface::class,
+                [
+                    'activities' => ['n', ActivityInterface::class],
+                    'gateways' => ['n', GatewayInterface::class],
+                    'events' => ['n', EventInterface::class],
+                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [BpmnDocument::BPMN_MODEL, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
+                ]
+            ],
+            'startEvent'   => [
+                StartEventInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                ]
+            ],
+            'endEvent'     => [
+                EndEventInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    EndEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                ]
+            ],
+            'task'   => [
+                ActivityInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ]
+            ],
+            'scriptTask'   => [
+                ScriptTaskInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ]
+            ],
+            FlowNodeInterface::BPMN_PROPERTY_OUTGOING     => [self::IS_PROPERTY, []],
+            FlowNodeInterface::BPMN_PROPERTY_INCOMING     => [self::IS_PROPERTY, []],
+            'sequenceFlow' => [
+                FlowInterface::class,
+                [
+                    FlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnDocument::BPMN_MODEL, FlowInterface::BPMN_PROPERTY_SOURCE_REF]],
+                    FlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnDocument::BPMN_MODEL, FlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                    FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => ['1', [BpmnDocument::BPMN_MODEL, 'conditionExpression']],
+                ]
+            ],
+            'callActivity' => [
+                CallActivityInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT => ['1', [BpmnDocument::BPMN_MODEL, CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT]],
+                ]
+            ],
+            'parallelGateway' => [
+                ParallelGatewayInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ]
+            ],
+            'inclusiveGateway' => [
+                InclusiveGatewayInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnDocument::BPMN_MODEL, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
+                ]
+            ],
+            'exclusiveGateway' => [
+                ExclusiveGatewayInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnDocument::BPMN_MODEL, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
+                ]
+            ],
+            'conditionExpression' => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            'script' => self::SKIP_ELEMENT,
+            'collaboration' => [
+                CollaborationInterface::class,
+                [
+                    CollaborationInterface::BPMN_PROPERTY_PARTICIPANT => ['n', [BpmnDocument::BPMN_MODEL, CollaborationInterface::BPMN_PROPERTY_PARTICIPANT]],
+                ]
+            ],
+            'participant' => [
+                ParticipantInterface::class,
+                [
+                    ParticipantInterface::BPMN_PROPERTY_PROCESS => ['1', [BpmnDocument::BPMN_MODEL, ParticipantInterface::BPMN_PROPERTY_PROCESS_REF]],
+                ]
+            ],
+            'conditionalEventDefinition' => [
+                ConditionalEventDefinitionInterface::class,
+                [
+                    ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION => ['1', [BpmnDocument::BPMN_MODEL, ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION]],
+                ]
+            ],
+            'condition' => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            'extensionElements' => self::SKIP_ELEMENT,
+            'inputSet' => self::SKIP_ELEMENT,
+            'outputSet' => self::SKIP_ELEMENT,
+            'terminateEventDefinition' => [
+                TerminateEventDefinitionInterface::class,
+                [
+                ]
+            ],
+            'errorEventDefinition' => [
+                ErrorEventDefinitionInterface::class,
+                [
+                    ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR => ['1', [BpmnDocument::BPMN_MODEL, ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF]],
+                ]
+            ],
+            'error' => [
+                ErrorInterface::class,
+                [
+                ]
+            ],
+            'messageFlow' => [
+                MessageFlowInterface::class,
+                [
+                    MessageFlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnDocument::BPMN_MODEL, MessageFlowInterface::BPMN_PROPERTY_SOURCE_REF]],
+                    MessageFlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnDocument::BPMN_MODEL, MessageFlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                ]
+            ],
+            'timerEventDefinition' => [
+                TimerEventDefinitionInterface::class,
+                [
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => ['1', [BpmnDocument::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => ['1', [BpmnDocument::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => ['1', [BpmnDocument::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION]],
+                ]
+            ],
+            TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            'laneSet' => [
+                LaneSetInterface::class,
+                [
+                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnDocument::BPMN_MODEL, LaneSetInterface::BPMN_PROPERTY_LANE]],
+                ]
+            ],
+            'lane' => [
+                LaneInterface::class,
+                [
+                    LaneInterface::BPMN_PROPERTY_FLOW_NODE => ['n', [BpmnDocument::BPMN_MODEL, LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF]],
+                    LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => ['n', [BpmnDocument::BPMN_MODEL, LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET]],
+                ]
+            ],
+            LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF => [self::IS_PROPERTY, []],
+            LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => [
+                LaneSetInterface::class,
+                [
+                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnDocument::BPMN_MODEL, LaneSetInterface::BPMN_PROPERTY_LANE]],
+                ]
+            ],
+            'interface' => [
+                ServiceInterface::class,
+                [
+                    ServiceInterface::BPMN_PROPERTY_OPERATIONS => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_TAG]],
+                ]
+            ],
+            OperationInterface::BPMN_TAG => [
+                OperationInterface::class,
+                [
+                    OperationInterface::BPMN_PROPERTY_IN_MESSAGE => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_IN_MESSAGE]],
+                    OperationInterface::BPMN_PROPERTY_OUT_MESSAGE => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_OUT_MESSAGE]],
+                    OperationInterface::BPMN_PROPERTY_ERRORS => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_ERRORS]],
+                ]
+            ],
+        ]
+    ];
+
+    const DOM_ELEMENT_BODY = [null, '#text'];
+    const SKIP_ELEMENT = null;
+    const IS_PROPERTY = 'isProperty';
 
     /**
      * BPMN file document constructor.
@@ -64,6 +296,31 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     public function getFactory()
     {
         return $this->factory;
+    }
+
+    /**
+     * Get the BPMN elements mapping.
+     *
+     * @return array
+     */
+    public function getBpmnElementsMapping()
+    {
+        return $this->mapping;
+    }
+
+    /**
+     * Set a BPMN element mapping.
+     *
+     * @param string $namespace
+     * @param string $tagName
+     * @param array $mapping
+     *
+     * @return $this
+     */
+    public function setBpmnElementMapping($namespace, $tagName, array $mapping)
+    {
+        $this->mapping[$namespace][$tagName] = $mapping;
+        return $this;
     }
 
     /**
@@ -709,7 +966,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      *
      * @return $this
      */
-    public function setEngine(EngineInterface $engine = null)
+    public function setEngine(EngineInterface $engine)
     {
         $this->engine = $engine;
         return $this;

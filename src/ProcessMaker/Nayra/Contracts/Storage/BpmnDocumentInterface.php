@@ -29,6 +29,40 @@ interface BpmnDocumentInterface
     public function getFactory();
 
     /**
+     * Get the document engine.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Engine\EngineInterface
+     */
+    public function getEngine();
+
+    /**
+     * Set the document engine.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\EngineInterface $engine
+     *
+     * @return $this
+     */
+    public function setEngine(EngineInterface $engine);
+
+    /**
+     * Get the BPMN elements mapping.
+     *
+     * @return array
+     */
+    public function getBpmnElementsMapping();
+
+    /**
+     * Set a BPMN element mapping.
+     *
+     * @param string $namespace
+     * @param string $tagName
+     * @param array $mapping
+     *
+     * @return $this
+     */
+    public function setBpmnElementMapping($namespace, $tagName, array $mapping);
+
+    /**
      * Find a element by id.
      *
      * @param string $id
@@ -494,20 +528,4 @@ interface BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
     public function getTransition($id);
-
-
-    /**
-     * Returns the document engine
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Engine\EngineInterface
-     */
-    public function getEngine();
-
-    /**
-     * @param \ProcessMaker\Nayra\Contracts\Engine\EngineInterface $engine
-     *
-     * @return $this
-     */
-    public function setEngine(EngineInterface $engine = null);
-
 }
