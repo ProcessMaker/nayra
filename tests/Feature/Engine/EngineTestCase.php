@@ -36,6 +36,7 @@ use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
+use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
@@ -65,6 +66,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -332,6 +334,7 @@ class EngineTestCase extends TestCase
             SignalEventDefinitionInterface::class       => SignalEventDefinition::class,
             SignalInterface::class                      => Signal::class,
             StartEventInterface::class                  => StartEvent::class,
+            StateInterface::class                       => State::class,
             TerminateEventDefinitionInterface::class    => TerminateEventDefinition::class,
             TimerEventDefinitionInterface::class        => TimerEventDefinition::class,
             TokenInterface::class                       => Token::class,

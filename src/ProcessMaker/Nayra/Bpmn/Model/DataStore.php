@@ -10,8 +10,8 @@ namespace ProcessMaker\Nayra\Bpmn\Model;
 
 use ProcessMaker\Nayra\Bpmn\DataStoreTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
 /**
  * Application
@@ -29,6 +29,20 @@ class DataStore implements DataStoreInterface
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface
      */
     private $process;
+
+    /**
+     *
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    private $state;
+
+    /**
+     *
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface
+     */
+    private $itemSubject;
+
+
 
     /**
      * Get owner process.
@@ -51,23 +65,6 @@ class DataStore implements DataStoreInterface
     {
         $this->process = $process;
         return $this;
-    }
-
-    /**
-     * @return \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface
-     */
-    public function getFactory()
-    {
-        // TODO: Implement getFactory() method.
-    }
-
-    /**
-     * @param FactoryInterface $factory
-     * @return $this
-     */
-    public function setFactory(FactoryInterface $factory)
-    {
-        // TODO: Implement setFactory() method.
     }
 
     /**
@@ -112,31 +109,33 @@ class DataStore implements DataStoreInterface
     /**
      * Get item state.
      *
-     * @return mixed
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
     public function getState()
     {
-        // TODO: Implement getState() method.
+        return $this->state;
     }
 
     /**
      * Set item state.
      *
-     * @param string $state
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface $state
      *
      * @return $this
      */
     public function setState($state)
     {
-        // TODO: Implement setStare() method.
+        $this->state = $state;
+        return $this;
     }
 
     /**
-     * Get item subject
+     * Get the items that are stored or conveyed by the ItemAwareElement.
      *
+     * @return ItemDefinitionInterface
      */
     public function getItemSubject()
     {
-
+        return $this->itemSubject;
     }
 }
