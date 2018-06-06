@@ -7,7 +7,6 @@ use ProcessMaker\Nayra\Bpmn\FlowTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Model\Process;
 
 /**
  * Flow implementation.

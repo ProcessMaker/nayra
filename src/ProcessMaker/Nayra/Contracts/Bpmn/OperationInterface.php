@@ -12,8 +12,11 @@ interface OperationInterface extends EntityInterface
     const BPMN_TAG = 'operation';
     const BPMN_PROPERTY_IMPLEMENTATION = 'implementation';
     const BPMN_PROPERTY_IN_MESSAGE ='inMessage';
+    const BPMN_PROPERTY_IN_MESSAGE_REF ='inMessageRef';
     const BPMN_PROPERTY_OUT_MESSAGE ='outMessage';
+    const BPMN_PROPERTY_OUT_MESSAGE_REF ='outMessageRef';
     const BPMN_PROPERTY_ERRORS ='errors';
+    const BPMN_PROPERTY_ERROR_REF ='errorRef';
 
     /**
      * This attribute allows to reference a concrete artifact in the underlying

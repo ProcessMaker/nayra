@@ -44,7 +44,7 @@ class IntermediateThrowEvent implements IntermediateThrowEventInterface
     {
         $this->dataInputAssociations= new Collection;
         $this->dataInputs= new Collection;
-        $this->eventDefinitions= new Collection;
+        $this->setProperty(static::BPMN_PROPERTY_EVENT_DEFINITIONS, new Collection);
     }
 
     /**
@@ -84,7 +84,7 @@ class IntermediateThrowEvent implements IntermediateThrowEventInterface
      */
     public function getEventDefinitions()
     {
-        return $this->eventDefinitions;
+        return $this->getProperty(static::BPMN_PROPERTY_EVENT_DEFINITIONS);
     }
 
     /**

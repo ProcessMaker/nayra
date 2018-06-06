@@ -2,15 +2,18 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
 /**
  * Behavior that must implement all event messages
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface MessageInterface
+interface MessageInterface extends EntityInterface
 {
+    const BPMN_PROPERTY_ITEM = 'item';
+    const BPMN_PROPERTY_ITEM_REF = 'itemRef';
+
     /**
      * Get the ItemDefinition is used to define the payload of the Message.
      *
@@ -38,10 +41,11 @@ interface MessageInterface
     public function getFactory();
 
     /**
-     * @param StorageInterface $factory
+     * @param FactoryInterface $factory
+     *
      * @return $this
      */
-    public function setFactory(StorageInterface $factory);
+    public function setFactory(FactoryInterface $factory);
 
     /**
      * Returns the name of the message

@@ -21,9 +21,6 @@ class MessageFlow implements MessageFlowInterface
     use MessageFlowTrait;
 
     private $message;
-    private $source;
-    private $target;
-    private $collaboration;
 
     /**
      * Get message
@@ -52,7 +49,7 @@ class MessageFlow implements MessageFlowInterface
      */
     public function getSource()
     {
-        return $this->source;
+        return $this->getProperty(static::BPMN_PROPERTY_SOURCE);
     }
 
     /**
@@ -62,7 +59,7 @@ class MessageFlow implements MessageFlowInterface
      */
     public function getTarget()
     {
-        return $this->target;
+        return $this->getProperty(static::BPMN_PROPERTY_TARGET);
     }
 
     /**
@@ -74,8 +71,7 @@ class MessageFlow implements MessageFlowInterface
      */
     public function setSource(ThrowEventInterface $source)
     {
-        $this->source = $source;
-        return $this;
+        return $this->setProperty(static::BPMN_PROPERTY_SOURCE, $source);
     }
 
     /**
@@ -91,27 +87,29 @@ class MessageFlow implements MessageFlowInterface
         $eventDef->getPayload()->setMessageFlow($this);
         $this->getCollaboration()->unsubscribe($target, $eventDef->getId());
         $this->getCollaboration()->subscribe($target, $eventDef->getId());
-        $this->target = $target;
-        return $this;
+        return $this->setProperty(static::BPMN_PROPERTY_TARGET, $target);
     }
 
 
     /**
-     * Sets the collaboration to which this element pertains
+     * Sets the collaboration of this element
+     *
      * @param CollaborationInterface $collaboration
+     *
+     * @return $this
      */
     public function setCollaboration(CollaborationInterface $collaboration)
     {
-        $this->collaboration = $collaboration;
+        return $this->setProperty(static::BPMN_PROPERTY_COLLABORATION, $collaboration);
     }
 
     /**
-     * Returns the collaboration to which this element pertains
+     * Returns the collaboration of this element
      *
      * @return CollaborationInterface
      */
     public function getCollaboration()
     {
-        return $this->collaboration;
+        return $this->getProperty(static::BPMN_PROPERTY_COLLABORATION);
     }
 }
