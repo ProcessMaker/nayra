@@ -2,12 +2,15 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
-use ProcessMaker\Nayra\Bpmn\Models\MessageFlow;
 
+/**
+ * Tests for the Collaboration class
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class CollaborationTest extends TestCase
 {
     /**

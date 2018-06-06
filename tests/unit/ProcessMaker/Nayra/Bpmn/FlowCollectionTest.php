@@ -6,6 +6,11 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Model\Flow;
 use ProcessMaker\Nayra\Bpmn\Model\FlowCollection;
 
+/**
+ * Tests for the flow collection
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class FlowCollectionTest extends TestCase
 {
     /**

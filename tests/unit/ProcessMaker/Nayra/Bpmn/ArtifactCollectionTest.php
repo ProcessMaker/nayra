@@ -6,6 +6,11 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Model\ArtifactCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Artifact;
 
+/**
+ * Tests for the artifact collection
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class ArtifactCollectionTest extends TestCase
 {
     /**

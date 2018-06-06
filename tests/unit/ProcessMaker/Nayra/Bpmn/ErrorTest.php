@@ -7,6 +7,11 @@ use ProcessMaker\Nayra\Bpmn\Models\Error;
 use ProcessMaker\Nayra\Bpmn\Models\MessageFlow;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 
+/**
+ * Tests for the Error class
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class ErrorTest extends TestCase
 {
     /**
@@ -25,10 +30,10 @@ class ErrorTest extends TestCase
         $error->setProperty(ErrorInterface::BPMN_PROPERTY_ERROR_CODE, $testString);
 
 
-        //Assertion: The set name must be equal to the created one
+        //Assertion: The get name must be equal to the set one
         $this->assertEquals($testString, $error->getName());
 
-        //Assertion: The set error code must be equal to the created one
+        //Assertion: The get error code must be equal to the set one
         $this->assertEquals($testString, $error->getErrorCode());
     }
 }

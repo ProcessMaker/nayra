@@ -6,6 +6,11 @@ namespace ProcessMaker\Nayra\Bpmn;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
 
+/**
+ * Tests for the IntermediateThrowEvent class
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class IntermediateThrowEventTest extends TestCase
 {
     /**
@@ -20,7 +25,7 @@ class IntermediateThrowEventTest extends TestCase
         $this->assertEquals(0, $event->getDataInputAssociations()->count());
         $this->assertEquals(0, $event->getDataInputs()->count());
 
-        //Assertion: input set was not initialized so it must benull
+        //Assertion: input set was not initialized so it must be null
         $this->assertNull($event->getInputSet());
     }
 }

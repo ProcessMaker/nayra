@@ -8,6 +8,11 @@ use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\Operation;
 use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 
+/**
+ * Tests for the Operation class
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class OperationTest extends TestCase
 {
     /**

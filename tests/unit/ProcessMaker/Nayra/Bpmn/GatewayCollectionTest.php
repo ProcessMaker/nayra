@@ -6,6 +6,11 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Model\GatewayCollection;
 use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
 
+/**
+ * Tests for the gateway collection
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class GatewayCollectionTest extends TestCase
 {
     /**

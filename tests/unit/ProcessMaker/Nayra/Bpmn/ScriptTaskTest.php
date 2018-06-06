@@ -7,6 +7,11 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Model\Process;
 use ProcessMaker\Nayra\Bpmn\Model\ScriptTask;
 
+/**
+ * Tests for the Operation class
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class ScriptTaskTest extends TestCase
 {
     /**
@@ -23,10 +28,10 @@ class ScriptTaskTest extends TestCase
         $script->setCalledElement($process);
         $script->setScriptFormat($testFormat);
 
-        //Assertion: The set called element must be equal to the created one
+        //Assertion: The get called element must be equal to the set one
         $this->assertEquals($process, $script->getCalledElement());
 
-        //Assertion: the set format must be equal to the created one
+        //Assertion: the get format must be equal to the set one
         $this->assertEquals($testFormat, $script->getScriptFormat());
     }
 }

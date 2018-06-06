@@ -6,6 +6,11 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Model\Activity;
 use ProcessMaker\Nayra\Bpmn\Model\ActivityCollection;
 
+/**
+ * Tests the activity collection
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class ActivityCollectionTest extends TestCase
 {
     /**

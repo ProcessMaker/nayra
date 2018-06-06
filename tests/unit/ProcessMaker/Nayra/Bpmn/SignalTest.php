@@ -5,6 +5,11 @@ namespace ProcessMaker\Nayra\Bpmn;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
 
+/**
+ * Tests for the Signal class
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class SignalTest extends TestCase
 {
     /**

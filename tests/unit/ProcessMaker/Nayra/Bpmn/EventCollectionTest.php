@@ -6,6 +6,11 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Model\EventCollection;
 use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
 
+/**
+ * Tests for the event collection
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 class EventCollectionTest extends TestCase
 {
     /**

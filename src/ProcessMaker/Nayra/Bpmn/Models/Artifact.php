@@ -7,6 +7,12 @@ use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
+/**
+ * Class that implements the ArtifactInterface
+ *
+ * @package ProcessMaker\Nayra\Bpmn\Models
+ */
+
 class Artifact implements ArtifactInterface
 {
     private $process;
@@ -14,7 +20,7 @@ class Artifact implements ArtifactInterface
     use BaseTrait;
 
     /**
-     * Get Process of the artifact.
+     * Get the Process of the artifact.
      *
      * @return ProcessInterface
      */
@@ -24,7 +30,7 @@ class Artifact implements ArtifactInterface
     }
 
     /**
-     * Get Process of the artifact.
+     * Set the Process of the artifact.
      *
      * @param ProcessInterface $process
      * @return $this
