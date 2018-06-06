@@ -174,20 +174,6 @@ class Collaboration implements CollaborationInterface
     }
 
     /**
-     * Sends a message with a delay in milliseconds
-     *
-     * @param EventDefinitionInterface $message
-     * @param $delay
-     */
-    public function delay(EventDefinitionInterface $message, $delay)
-    {
-        $initTime = time();
-        if ($delay + $initTime <= time()) {
-            $this->send($message, null);
-        }
-    }
-
-    /**
      * Subscribes an element to the collaboration so that it can listen the messages sent
      *
      * @param MessageListenerInterface $node

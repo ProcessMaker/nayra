@@ -13,9 +13,9 @@ use Tests\Feature\Engine\EngineTestCase;
 class DataStoreTest extends EngineTestCase
 {
     /**
-     * Tests that a callback function used to observe an entity is attached/detached correctly
+     * Tests that setters and getters are working properly
      */
-    public function testAttachDetach()
+    public function testDataStoreSettersAndGetters()
     {
         // Create the objects that will be set in the data store
         $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
