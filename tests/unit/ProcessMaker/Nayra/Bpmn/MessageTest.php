@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 
 use PHPUnit\Framework\TestCase;
+use ProcessMaker\Nayra\Bpmn\Models\Message;
 
 class MessageTest extends TestCase
 {
@@ -13,20 +14,16 @@ class MessageTest extends TestCase
     public function testSettersAndGetters()
     {
         // Create the objects that will be set in the data store
-        $error = new Error();
-        $message = new MessageFlow();
-        $testString = 'oneString';
+        $message = new Message();
+        $testString = 'testString';
 
         //set process and state object to the data store
-        $error->setMessageFlow($message);
-        $error->setProperty(ErrorInterface::BPMN_PROPERTY_NAME, $testString);
-        $error->setProperty(ErrorInterface::BPMN_PROPERTY_ERROR_CODE, $testString);
+        $message->setId($testString);
 
+        //Assertion: The set id must be equal to the created one
+        $this->assertEquals($testString, $message->getId());
 
-        //Assertion: The set name must be equal to the created one
-        $this->assertEquals($testString, $error->getName());
-
-        //Assertion: The set error code must be equal to the created one
-        $this->assertEquals($testString, $error->getErrorCode());
+        //Assertion: The name was not set so is null
+        $this->assertNull($message->getName());
     }
 }
