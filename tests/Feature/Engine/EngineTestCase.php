@@ -3,6 +3,8 @@ namespace Tests\Feature\Engine;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
 use ProcessMaker\Models\CallActivity;
+use ProcessMaker\Models\ExecutionInstanceRepository;
+use ProcessMaker\Models\ProcessRepository;
 use ProcessMaker\Nayra\Bpmn\Lane;
 use ProcessMaker\Nayra\Bpmn\LaneSet;
 use ProcessMaker\Nayra\Bpmn\Model\Activity;
@@ -68,6 +70,8 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 use ProcessMaker\Nayra\Factory;
 use ProcessMaker\Test\FormalExpression;
@@ -294,38 +298,40 @@ class EngineTestCase extends TestCase
     protected function getFactory() {
 
         $mappings = [
-            ActivityInterface::class => Activity::class,
-            CallActivityInterface::class => CallActivity::class,
-            CollaborationInterface::class => Collaboration::class,
-            ConditionalEventDefinitionInterface::class => ConditionalEventDefinition::class,
-            DataStoreInterface::class => DataStore::class,
-            EndEventInterface::class => EndEvent::class,
-            ErrorEventDefinitionInterface::class => ErrorEventDefinition::class,
-            ErrorInterface::class => Error::class,
-            ExclusiveGatewayInterface::class => ExclusiveGateway::class,
-            ExecutionInstanceInterface::class => ExecutionInstance::class,
-            FlowInterface::class => Flow::class,
-            FormalExpressionInterface::class => FormalExpression::class,
-            InclusiveGatewayInterface::class => InclusiveGateway::class,
-            IntermediateCatchEventInterface::class => IntermediateCatchEvent::class,
-            IntermediateThrowEventInterface::class => IntermediateThrowEvent::class,
-            ItemDefinitionInterface::class => ItemDefinition::class,
-            MessageEventDefinitionInterface::class => MessageEventDefinition::class,
-            MessageInterface::class => Message::class,
-            MessageFlowInterface::class => MessageFlow::class,
-            ParallelGatewayInterface::class => ParallelGateway::class,
-            ParticipantInterface::class => Participant::class,
-            ProcessInterface::class => Process::class,
-            ScriptTaskInterface::class => ScriptTask::class,
-            SignalEventDefinitionInterface::class => SignalEventDefinition::class,
-            SignalInterface::class => Signal::class,
-            StartEventInterface::class => StartEvent::class,
-            TerminateEventDefinitionInterface::class => TerminateEventDefinition::class,
-            TimerEventDefinitionInterface::class => TimerEventDefinition::class,
-            TokenInterface::class => Token::class,
-            OperationInterface::class => Operation::class,
-            LaneSetInterface::class => LaneSet::class,
-            LaneInterface::class => Lane::class,
+            ActivityInterface::class                    => Activity::class,
+            CallActivityInterface::class                => CallActivity::class,
+            CollaborationInterface::class               => Collaboration::class,
+            ConditionalEventDefinitionInterface::class  => ConditionalEventDefinition::class,
+            DataStoreInterface::class                   => DataStore::class,
+            EndEventInterface::class                    => EndEvent::class,
+            ErrorEventDefinitionInterface::class        => ErrorEventDefinition::class,
+            ErrorInterface::class                       => Error::class,
+            ExclusiveGatewayInterface::class            => ExclusiveGateway::class,
+            ExecutionInstanceInterface::class           => ExecutionInstance::class,
+            ExecutionInstanceRepositoryInterface::class => ExecutionInstanceRepository::class,
+            FlowInterface::class                        => Flow::class,
+            FormalExpressionInterface::class            => FormalExpression::class,
+            InclusiveGatewayInterface::class            => InclusiveGateway::class,
+            IntermediateCatchEventInterface::class      => IntermediateCatchEvent::class,
+            IntermediateThrowEventInterface::class      => IntermediateThrowEvent::class,
+            ItemDefinitionInterface::class              => ItemDefinition::class,
+            LaneInterface::class                        => Lane::class,
+            LaneSetInterface::class                     => LaneSet::class,
+            MessageEventDefinitionInterface::class      => MessageEventDefinition::class,
+            MessageFlowInterface::class                 => MessageFlow::class,
+            MessageInterface::class                     => Message::class,
+            OperationInterface::class                   => Operation::class,
+            ParallelGatewayInterface::class             => ParallelGateway::class,
+            ParticipantInterface::class                 => Participant::class,
+            ProcessInterface::class                     => Process::class,
+            ProcessRepositoryInterface::class           => ProcessRepository::class,
+            ScriptTaskInterface::class                  => ScriptTask::class,
+            SignalEventDefinitionInterface::class       => SignalEventDefinition::class,
+            SignalInterface::class                      => Signal::class,
+            StartEventInterface::class                  => StartEvent::class,
+            TerminateEventDefinitionInterface::class    => TerminateEventDefinition::class,
+            TimerEventDefinitionInterface::class        => TimerEventDefinition::class,
+            TokenInterface::class                       => Token::class,
         ];
         return new Factory($mappings);
     }

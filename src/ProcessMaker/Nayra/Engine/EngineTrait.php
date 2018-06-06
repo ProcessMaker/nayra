@@ -8,6 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
 /**
@@ -107,7 +108,7 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id)
     {
-        $repository = $this->getFactory()->getExecutionInstanceRepository();
+        $repository = $this->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $this->getFactory());
         $executionInstance = $repository->loadExecutionInstanceByUid($id);
         
         $executionInstance->linkToEngine($this);

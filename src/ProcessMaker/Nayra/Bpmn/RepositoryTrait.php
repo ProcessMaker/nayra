@@ -3,8 +3,6 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 
-use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 
 /**
@@ -24,9 +22,9 @@ trait RepositoryTrait
     /**
      * RepositoryTrait constructor.
      *
-     * @param RepositoryFactoryInterface|null $factory
+     * @param RepositoryFactoryInterface $factory
      */
-    public function __construct(RepositoryFactoryInterface $factory = null)
+    public function __construct(RepositoryFactoryInterface $factory)
     {
         $this->factory = $factory;
     }

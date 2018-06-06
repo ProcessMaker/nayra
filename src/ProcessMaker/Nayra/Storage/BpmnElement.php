@@ -37,11 +37,11 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
         if (!array_key_exists($this->localName, $map[$this->namespaceURI])) {
             throw new NotImplementedException("Not found " . $this->localName);
         }
-        if ($map[$this->namespaceURI][$this->localName]===self::SKIP_ELEMENT) {
+        if ($map[$this->namespaceURI][$this->localName]===BpmnDocument::SKIP_ELEMENT) {
             return null;
         }
         list($classInterface, $mapProperties) = $map[$this->namespaceURI][$this->localName];
-        if ($classInterface === self::IS_PROPERTY) {
+        if ($classInterface === BpmnDocument::IS_PROPERTY) {
             $bpmnElement = $this->ownerDocument->getElementInstanceById($this->nodeValue);
             $this->bpmn = $bpmnElement;
         } else {
@@ -143,7 +143,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
     {
         foreach ($mapProperties as $name => $property) {
             list($multiplicity, $type) = $property;
-            $isThisProperty = $type === self::DOM_ELEMENT_BODY;
+            $isThisProperty = $type === BpmnDocument::DOM_ELEMENT_BODY;
             if ($isThisProperty && $multiplicity === 'n') {
                 $bpmnElement->addProperty($name, $this->textContent);
             } else if ($isThisProperty && $multiplicity == '1') {

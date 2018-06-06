@@ -4,8 +4,10 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Models\ExecutionInstance;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
 
 /**
  * Execution Instance Repository.
@@ -21,7 +23,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      *
      * @var array $data
      */
-    private $data = [];
+    private static $data = [];
 
     /**
      * Create an execution instance.
@@ -42,10 +44,11 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function loadExecutionInstanceByUid($uid)
     {
-        $data = $this->data[$uid];
+        $data = self::$data[$uid];
         $instance = new ExecutionInstance();
-        $process = $this->getFactory()->getProcessRepository()->loadProcessByUid($data['processId']);
-        $dataStore = $this->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+        $processRepository = $this->getFactory()->createInstanceOf(ProcessRepositoryInterface::class, $this->getFactory());
+        $process = $processRepository->loadProcessByUid($data['processId']);
+        $dataStore = $this->getFactory()->createInstanceOf(DataStoreInterface::class);
         $dataStore->setData($data['data']);
         $instance->setProcess($process);
         $instance->setDataStore($dataStore);
@@ -81,6 +84,6 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function setRawData(array $data)
     {
-        $this->data = $data;
+        self::$data = $data;
     }
 }
