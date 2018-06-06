@@ -247,7 +247,8 @@ trait ProcessTrait
     /**
      * Get transitions of the process.
      *
-     * @param FactoryInterface|StorageInterface $factory
+     * @param FactoryInterface $factory
+     *
      * @return CollectionInterface
      */
     public function getTransitions(FactoryInterface $factory)

@@ -187,11 +187,21 @@ trait EngineTrait
         }
     }
 
+    /**
+     * Get the repository storage of the engine.
+     *
+     * @return StorageInterface
+     */
     private function getRepository()
     {
         return $this->repository;
     }
 
+    /**
+     * Set the repository storage of the engine.
+     *
+     * @param StorageInterface $repository
+     */
     public function setRepository(StorageInterface $repository)
     {
         $this->repository = $repository;

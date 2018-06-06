@@ -11,6 +11,12 @@ class TestBetsy
     public $data;
     private $code;
 
+    /**
+     * Class to test betsy processes.
+     *
+     * @param mixed $data
+     * @param string $expression
+     */
     public function __construct($data, $expression)
     {
         $this->data = $data;
@@ -29,11 +35,23 @@ class TestBetsy
         $this->code = $code;
     }
 
+    /**
+     * Check if the data contains and item by name.
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
     public function contains($name)
     {
         return isset($this->data[$name]);
     }
 
+    /**
+     * Evaluate the code.
+     *
+     * @return mixed
+     */
     public function call()
     {
         $test = $this;

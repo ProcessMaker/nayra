@@ -30,11 +30,11 @@ class DataStore implements DataStoreInterface
      */
     private $process;
 
-    public function __construct()
-    {
-
-    }
-
+    /**
+     * Get owner process.
+     *
+     * @return ProcessInterface
+     */
     public function getOwnerProcess()
     {
         return $this->process;
@@ -42,6 +42,8 @@ class DataStore implements DataStoreInterface
 
     /**
      * Get Process of the application.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
      *
      * @return ProcessInterface
      */
@@ -71,7 +73,7 @@ class DataStore implements DataStoreInterface
     /**
      * Get data from store.
      *
-     * @param $name
+     * @param mixed $name
      *
      * @return mixed
      */
@@ -83,7 +85,7 @@ class DataStore implements DataStoreInterface
     /**
      * Set data of the store.
      *
-     * @param $data
+     * @param array $data
      *
      * @return $this
      */
@@ -96,8 +98,8 @@ class DataStore implements DataStoreInterface
     /**
      * Put data to store.
      *
-     * @param $name
-     * @param $data
+     * @param string $name
+     * @param mixed $data
      *
      * @return $this
      */
@@ -120,7 +122,7 @@ class DataStore implements DataStoreInterface
     /**
      * Set item state.
      *
-     * @param $state
+     * @param string $state
      *
      * @return $this
      */
@@ -129,6 +131,10 @@ class DataStore implements DataStoreInterface
         // TODO: Implement setStare() method.
     }
 
+    /**
+     * Get item subject
+     *
+     */
     public function getItemSubject()
     {
 

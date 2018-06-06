@@ -32,6 +32,11 @@ trait StartEventTrait
      */
     private $triggerPlace = [];
 
+    /**
+     * Build the transitions of the element.
+     *
+     * @param FactoryInterface $factory
+     */
     public function buildTransitions(FactoryInterface $factory)
     {
         $this->setFactory($factory);
@@ -49,6 +54,11 @@ trait StartEventTrait
         }
     }
 
+    /**
+     * Get the input place. Start event does not have an input place.
+     *
+     * @return null
+     */
     public function getInputPlace()
     {
         return null;
@@ -82,7 +92,7 @@ trait StartEventTrait
      * Method to be called when a message event arrives
      *
      * @param EventDefinitionInterface $event
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return $this
      */

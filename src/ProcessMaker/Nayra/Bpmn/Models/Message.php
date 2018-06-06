@@ -7,6 +7,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
+/**
+ * Message implementation.
+ *
+ */
 class Message implements MessageInterface
 {
     /**
@@ -62,8 +66,10 @@ class Message implements MessageInterface
     }
 
     /**
-     * Allosws to set the item
+     * Allows to set the item
+     *
      * @param ItemDefinitionInterface $item
+     *
      * @return $this
      */
     public function setItem(ItemDefinitionInterface $item)
@@ -84,7 +90,7 @@ class Message implements MessageInterface
 
     /**
      * Sets the id of the message
-     * @param $value
+     * @param string $value
      */
     public function setId($value)
     {
@@ -104,13 +110,14 @@ class Message implements MessageInterface
     /**
      * Sets the message flow to which this signal pertains
      *
-     * @param $messageFlow
+     * @param MessageFlowInterface $messageFlow
      *
-     * @return mixed
+     * @return $this
      */
-    public function setMessageFlow($messageFlow)
+    public function setMessageFlow(MessageFlowInterface $messageFlow)
     {
         $this->messageFlow = $messageFlow;
+        return $this;
     }
 
     /**

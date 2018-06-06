@@ -59,13 +59,13 @@ trait ConditionedGatewayTrait
      * Add and output conditioned transition.
      *
      * @param ConditionedTransitionInterface $transition
-     * @param $condition
+     * @param callable $condition
      *
      * @return ConditionedTransitionInterface
      */
     protected function conditionedTransition(
         ConditionedTransitionInterface $transition,
-        $condition
+        callable $condition
     ) {
         $transition->setCondition($condition);
         $this->conditionedTransitions->push($transition);
@@ -75,9 +75,9 @@ trait ConditionedGatewayTrait
     /**
      * Add the default output transition.
      *
-     * @param DefaultTransitionInterface $transition
+     * @param TransitionInterface $transition
      *
-     * @return DefaultTransitionInterface
+     * @return TransitionInterface
      */
     protected function setDefaultTransition(TransitionInterface $transition)
     {

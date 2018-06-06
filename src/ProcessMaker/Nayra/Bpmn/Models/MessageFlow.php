@@ -25,32 +25,66 @@ class MessageFlow implements MessageFlowInterface
     private $target;
     private $collaboration;
 
+    /**
+     * Get message
+     *
+     * @return MessageInterface
+     */
     public function getMessage()
     {
         return $this->message;
     }
 
+    /**
+     * Set message.
+     *
+     * @param MessageInterface $value
+     */
     public function setMessage(MessageInterface $value)
     {
         $this->message = $value;
     }
 
+    /**
+     * Source of the message.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface
+     */
     public function getSource()
     {
         return $this->source;
     }
 
+    /**
+     * Target of the message.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface
+     */
     public function getTarget()
     {
         return $this->target;
     }
 
+    /**
+     * Set the source.
+     *
+     * @param ThrowEventInterface $source
+     *
+     * @return $this
+     */
     public function setSource(ThrowEventInterface $source)
     {
         $this->source = $source;
         return $this;
     }
 
+    /**
+     * Set the target.
+     *
+     * @param CatchEventInterface $target
+     *
+     * @return $this
+     */
     public function setTarget(CatchEventInterface $target)
     {
         $eventDef = $this->getSource()->getEventDefinitions()->item(0);

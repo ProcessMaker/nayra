@@ -17,6 +17,8 @@ class Process implements ProcessInterface
 
     /**
      * Process constructor.
+     *
+     * @param array ...$args
      */
     public function __construct(...$args)
     {
@@ -29,6 +31,11 @@ class Process implements ProcessInterface
         $this->setDataStores(new DataStoreCollection);
     }
 
+    /**
+     * Get BPMN event classes.
+     *
+     * @return array
+     */
     protected function getBpmnEventClasses()
     {
         return [];

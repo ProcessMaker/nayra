@@ -150,7 +150,8 @@ interface ProcessInterface extends CallableElementInterface
     /**
      * Get the transition rules of the process.
      *
-     * @param FactoryInterface|StorageInterface $factory
+     * @param FactoryInterface $factory
+     *
      * @return TransitionInterface[]
      */
     public function getTransitions(FactoryInterface $factory);

@@ -51,6 +51,8 @@ class FormalExpression implements FormalExpressionInterface
     /**
      * Invoke the format expression.
      *
+     * @param mixed $data
+     *
      * @return string
      */
     public function __invoke($data)

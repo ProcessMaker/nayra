@@ -61,7 +61,7 @@ interface EntityInterface
     public function getFactory();
 
     /**
-     * @param FactoryInterface|StorageInterface $factory
+     * @param FactoryInterface $factory
      * @return $this
      */
     public function setFactory(FactoryInterface $factory);

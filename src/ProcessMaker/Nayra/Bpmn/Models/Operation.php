@@ -7,6 +7,10 @@ use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 
+/**
+ * Implementation of the operation class.
+ *
+ */
 class Operation implements OperationInterface
 {
     use BaseTrait;

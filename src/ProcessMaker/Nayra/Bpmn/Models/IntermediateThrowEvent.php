@@ -36,6 +36,10 @@ class IntermediateThrowEvent implements IntermediateThrowEventInterface
      */
     private $eventDefinitions;
 
+    /**
+     * Initialize intermediate throw event.
+     *
+     */
     protected function initIntermediateThrowEvent()
     {
         $this->dataInputAssociations= new Collection;
@@ -43,26 +47,51 @@ class IntermediateThrowEvent implements IntermediateThrowEventInterface
         $this->eventDefinitions= new Collection;
     }
 
+    /**
+     * Get BPMN event classes.
+     *
+     * @return array
+     */
     protected function getBpmnEventClasses()
     {
         return [];
     }
 
+    /**
+     * Get data input associations.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     */
     public function getDataInputAssociations()
     {
         return $this->dataInputAssociations;
     }
 
+    /**
+     * Get data inputs.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     */
     public function getDataInputs()
     {
         return $this->dataInputs;
     }
 
+    /**
+     * Get event definitions.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     */
     public function getEventDefinitions()
     {
         return $this->eventDefinitions;
     }
 
+    /**
+     * Get input set.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\InputSetInterface
+     */
     public function getInputSet()
     {
         return $this->inputSet;

@@ -61,7 +61,8 @@ interface FlowNodeInterface extends FlowElementInterface
     /**
      * Build the transition rules of the node element.
      *
-     * @param FactoryInterface|StorageInterface $factory Factory that will be used to create tokens.
+     * @param FactoryInterface $factory Factory that will be used to create tokens.
+     *
      * @return $this
      */
     public function buildTransitions(FactoryInterface $factory);
@@ -69,7 +70,8 @@ interface FlowNodeInterface extends FlowElementInterface
     /**
      * Build the transition rules of the outgoing flows.
      *
-     * @param FactoryInterface|StorageInterface $factory Factory that will be used to create tokens.
+     * @param FactoryInterface $factory Factory that will be used to create tokens.
+     *
      * @return $this
      */
     public function buildFlowTransitions(FactoryInterface $factory);

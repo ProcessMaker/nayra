@@ -27,7 +27,8 @@ interface MessageInterface
 
     /**
      * Sets the id of the message
-     * @param $value
+     *
+     * @param string $value
      */
     public function setId($value);
 
@@ -52,11 +53,11 @@ interface MessageInterface
     /**
      * Sets the message flow to which this message pertains
      *
-     * @param $messageFlow
+     * @param MessageFlowInterface $messageFlow
      *
      * @return mixed
      */
-    public function setMessageFlow($messageFlow);
+    public function setMessageFlow(MessageFlowInterface $messageFlow);
 
 
     /**
@@ -65,4 +66,13 @@ interface MessageInterface
      * @return mixed
      */
     public function getMessageFlow();
+
+    /**
+     * Allows to set the item
+     *
+     * @param ItemDefinitionInterface $item
+     *
+     * @return $this
+     */
+    public function setItem(ItemDefinitionInterface $item);
 }

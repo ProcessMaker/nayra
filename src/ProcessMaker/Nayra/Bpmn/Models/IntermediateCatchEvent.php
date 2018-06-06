@@ -16,6 +16,11 @@ class IntermediateCatchEvent implements IntermediateCatchEventInterface, Message
 
     use IntermediateCatchEventTrait;
 
+    /**
+     * Get BPMN event classes.
+     *
+     * @return array
+     */
    protected function getBpmnEventClasses()
     {
         return [];

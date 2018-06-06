@@ -47,4 +47,20 @@ interface ScriptTaskInterface extends ActivityInterface
      * @return
      */
     public function runScript(TokenInterface $token);
+
+    /**
+     * Get called element.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface
+     */
+    public function getCalledElement();
+
+    /**
+     * Set called element.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface $callableElement
+     *
+     * @return $this
+     */
+    public function setCalledElement(CallableElementInterface $callableElement);
 }

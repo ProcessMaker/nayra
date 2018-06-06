@@ -7,6 +7,10 @@ use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactInterface;
 
+/**
+ * Collection of artifacts.
+ *
+ */
 class ArtifactCollection extends Collection implements ArtifactCollectionInterface
 {
 

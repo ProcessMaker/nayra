@@ -237,4 +237,20 @@ class LoadFromBPMNFileTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
+
+    /**
+     * Test to load a collaboration.
+     *
+     */
+    public function t1estLoadCollaborationWithMultipleProcesses()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->load(__DIR__ . '/files/LoadBPMNElements.bpmn');
+
+        //Load a process from a bpmn repository by Id
+        $collaboration = $bpmnRepository->getCollaboration('COLLABORATION_1');
+    }
 }

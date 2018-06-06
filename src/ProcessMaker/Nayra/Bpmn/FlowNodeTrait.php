@@ -11,10 +11,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Factory;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
+use ProcessMaker\Nayra\Factory;
 
 /**
  * Flow node define the behavior of a element that can be used as
@@ -126,10 +126,10 @@ trait FlowNodeTrait
     }
 
     /**
-     * Used by EngineInterface implementatión to build the transitions
+     * Used by EngineInterface implementation to build the transitions
      * related to connect nodes.
      *
-     * @param FactoryInterface$factory
+     * @param \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
      */
     public function buildFlowTransitions(FactoryInterface $factory)
     {

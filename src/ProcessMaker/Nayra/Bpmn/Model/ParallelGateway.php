@@ -6,9 +6,12 @@ use ProcessMaker\Nayra\Bpmn\ParallelGatewayTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
+/**
+ * Parallel gateway implementation.
+ *
+ */
 class ParallelGateway implements ParallelGatewayInterface
 {
 
@@ -19,8 +22,9 @@ class ParallelGateway implements ParallelGatewayInterface
      *
      * @param FlowNodeInterface $target
      * @param callable $condition
-     * @param $isDefault
-     * @param FlowRepositoryInterface $factory
+     * @param boolean $isDefault
+     * @param FactoryInterface $factory
+     *
      * @return $this
      */
     public function createConditionedFlowTo(

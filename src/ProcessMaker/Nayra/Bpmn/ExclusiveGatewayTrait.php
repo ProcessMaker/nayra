@@ -28,7 +28,7 @@ trait ExclusiveGatewayTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param FactoryInterface|StorageInterface $factory
+     * @param FactoryInterface $factory
      */
     public function buildTransitions(FactoryInterface $factory)
     {

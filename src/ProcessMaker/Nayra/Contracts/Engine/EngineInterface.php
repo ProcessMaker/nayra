@@ -112,4 +112,11 @@ interface EngineInterface
      * @return $this
      */
     public function setDataStore(DataStoreInterface $dataStore);
+
+    /**
+     * Set the repository storage of the engine.
+     *
+     * @param StorageInterface $repository
+     */
+    public function setRepository(StorageInterface $repository);
 }

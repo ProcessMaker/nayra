@@ -1,5 +1,6 @@
 <?php
 namespace Tests\Feature\Engine;
+
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
 use ProcessMaker\Models\CallActivity;
@@ -29,12 +30,12 @@ use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\MessageFlow;
+use ProcessMaker\Nayra\Bpmn\Models\Operation;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
-use ProcessMaker\Nayra\Bpmn\Models\Operation;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
@@ -56,6 +57,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -66,7 +68,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;

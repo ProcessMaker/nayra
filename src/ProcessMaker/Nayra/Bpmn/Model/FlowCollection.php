@@ -7,6 +7,10 @@ use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 
+/**
+ * Collection of flows.
+ *
+ */
 class FlowCollection extends Collection implements FlowCollectionInterface
 {
 

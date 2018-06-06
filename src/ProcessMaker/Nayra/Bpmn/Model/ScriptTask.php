@@ -6,7 +6,7 @@ use Exception;
 use ProcessMaker\Nayra\Bpmn\ActivityTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
@@ -45,12 +45,24 @@ class ScriptTask implements ScriptTaskInterface
         ];
     }
 
+    /**
+     * Get called element.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface
+     */
     public function getCalledElement()
     {
         return $this->getProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT);
     }
 
-    public function setCalledElement(ProcessInterface $callableElement)
+    /**
+     * Set called element.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface $callableElement
+     *
+     * @return $this
+     */
+    public function setCalledElement(CallableElementInterface $callableElement)
     {
         $this->setProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT, $callableElement);
         return $this;
