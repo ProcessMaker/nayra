@@ -3,14 +3,14 @@
 namespace ProcessMaker\Nayra\Contracts\Storage;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * BPMN DOM file interface
  *
  * @package \ProcessMaker\Nayra\Contracts\Storage
  */
-interface BpmnDocumentInterface extends RepositoryFactoryInterface
+interface BpmnDocumentInterface extends StorageInterface
 {
 
     /**

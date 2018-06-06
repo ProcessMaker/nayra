@@ -15,7 +15,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * End event behavior's implementation.
@@ -45,7 +45,7 @@ trait IntermediateCatchEventTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param FactoryInterface|RepositoryFactoryInterface $factory
+     * @param FactoryInterface|StorageInterface $factory
      */
     public function buildTransitions(FactoryInterface $factory)
     {

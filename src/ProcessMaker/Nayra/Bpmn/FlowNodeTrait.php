@@ -14,7 +14,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Factory;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Flow node define the behavior of a element that can be used as

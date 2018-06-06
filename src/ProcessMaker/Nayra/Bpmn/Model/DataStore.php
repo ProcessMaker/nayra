@@ -52,7 +52,7 @@ class DataStore implements DataStoreInterface
     }
 
     /**
-     * @return \ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface
+     * @return \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface
      */
     public function getFactory()
     {

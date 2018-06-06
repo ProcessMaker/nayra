@@ -9,7 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
 /**
@@ -192,7 +192,7 @@ trait EngineTrait
         return $this->repository;
     }
 
-    public function setRepository(RepositoryFactoryInterface $repository)
+    public function setRepository(StorageInterface $repository)
     {
         $this->repository = $repository;
     }

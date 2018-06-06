@@ -5,7 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn\Models;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 class Message implements MessageInterface
 {
@@ -20,7 +20,7 @@ class Message implements MessageInterface
     private $name;
 
     /**
-     * @var RepositoryFactoryInterface $factory
+     * @var StorageInterface $factory
      */
     private $factory;
 
@@ -35,7 +35,7 @@ class Message implements MessageInterface
     private $messageFlow;
 
     /**
-     * @return RepositoryFactoryInterface
+     * @return StorageInterface
      */
     public function getFactory()
     {
@@ -43,10 +43,10 @@ class Message implements MessageInterface
     }
 
     /**
-     * @param RepositoryFactoryInterface $factory
+     * @param StorageInterface $factory
      * @return $this
      */
-    public function setFactory(RepositoryFactoryInterface $factory)
+    public function setFactory(StorageInterface $factory)
     {
         $this->factory = $factory;
     }

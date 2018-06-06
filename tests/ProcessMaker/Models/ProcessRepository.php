@@ -26,7 +26,7 @@ class ProcessRepository implements ProcessRepositoryInterface
     public function createProcessInstance()
     {
         $process = new Process;
-        $process->setFactory($this->getFactory());
+        $process->setFactory($this->getStorage());
         return $process;
     }
 
@@ -49,7 +49,7 @@ class ProcessRepository implements ProcessRepositoryInterface
      */
     public function loadProcessByUid($uid)
     {
-        return $this->getFactory()->getProcess($uid);
+        return $this->getStorage()->getProcess($uid);
     }
 
     /**
@@ -73,7 +73,7 @@ class ProcessRepository implements ProcessRepositoryInterface
     public function createLaneSetInstance()
     {
         $laneSet = new LaneSet;
-        $laneSet->setFactory($this->getFactory());
+        $laneSet->setFactory($this->getStorage());
         return $laneSet;
     }
 
@@ -85,7 +85,7 @@ class ProcessRepository implements ProcessRepositoryInterface
     public function createLaneInstance()
     {
         $lane = new Lane;
-        $lane->setFactory($this->getFactory());
+        $lane->setFactory($this->getStorage());
         return $lane;
     }
 }

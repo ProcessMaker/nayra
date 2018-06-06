@@ -16,16 +16,7 @@ interface RepositoryInterface
     /**
      * Get factory used to build this element.
      *
-     * @return FactoryInterface
+     * @return StorageInterface
      */
-    public function getFactory();
-
-    /**
-     * Set factory used to build this element.
-     *
-     * @param FactoryInterface $factory
-     *
-     * @return $this
-     */
-    public function setFactory(FactoryInterface $factory);
+    public function getStorage();
 }

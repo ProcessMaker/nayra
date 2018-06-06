@@ -8,7 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Activity behavior's implementation.
@@ -66,7 +66,7 @@ trait ActivityTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param FactoryInterface|RepositoryFactoryInterface $factory
+     * @param FactoryInterface|StorageInterface $factory
      */
     public function buildTransitions(FactoryInterface $factory)
     {

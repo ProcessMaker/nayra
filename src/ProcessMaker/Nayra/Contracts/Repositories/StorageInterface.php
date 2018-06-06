@@ -10,7 +10,7 @@ use ProcessMaker\Nayra\Contracts\FactoryInterface;
  *
  * @package ProcessMaker\Nayra\Contracts\Repositories
  */
-interface RepositoryFactoryInterface
+interface StorageInterface
 {
     /**
      * Set the factory used to create BPMN elements.

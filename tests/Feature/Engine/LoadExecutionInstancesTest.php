@@ -8,7 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
@@ -21,9 +21,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Set data for a sequential process
      *
-     * @param RepositoryFactoryInterface $repository
+     * @param StorageInterface $repository
      */
-    private function prepareSequentialProcess(RepositoryFactoryInterface $repository)
+    private function prepareSequentialProcess(StorageInterface $repository)
     {
         $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
         $executionInstanceRepository->setRawData([
@@ -43,9 +43,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Set data for a parallel process
      *
-     * @param RepositoryFactoryInterface $repository
+     * @param StorageInterface $repository
      */
-    private function prepareParallelProcess(RepositoryFactoryInterface $repository)
+    private function prepareParallelProcess(StorageInterface $repository)
     {
         $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
         $executionInstanceRepository->setRawData([
@@ -69,9 +69,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Set data for a parallel process with an activity just completed
      *
-     * @param RepositoryFactoryInterface $repository
+     * @param StorageInterface $repository
      */
-    private function prepareParallelProcessWithActivityCompleted(RepositoryFactoryInterface $repository)
+    private function prepareParallelProcessWithActivityCompleted(StorageInterface $repository)
     {
         $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
         $executionInstanceRepository->setRawData([
@@ -95,9 +95,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Set data for a parallel process with an activity in exception state
      *
-     * @param RepositoryFactoryInterface $repository
+     * @param StorageInterface $repository
      */
-    private function prepareParallelProcessWithException(RepositoryFactoryInterface $repository)
+    private function prepareParallelProcessWithException(StorageInterface $repository)
     {
         $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
         $executionInstanceRepository->setRawData([

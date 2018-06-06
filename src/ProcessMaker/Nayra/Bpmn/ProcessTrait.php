@@ -23,7 +23,7 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ReflectionClass;
 
 /**
@@ -247,7 +247,7 @@ trait ProcessTrait
     /**
      * Get transitions of the process.
      *
-     * @param FactoryInterface|RepositoryFactoryInterface $factory
+     * @param FactoryInterface|StorageInterface $factory
      * @return CollectionInterface
      */
     public function getTransitions(FactoryInterface $factory)
