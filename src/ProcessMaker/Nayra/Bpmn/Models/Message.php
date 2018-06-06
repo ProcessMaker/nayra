@@ -2,10 +2,10 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
+use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Message implementation.
@@ -13,6 +13,8 @@ use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
  */
 class Message implements MessageInterface
 {
+    use BaseTrait;
+
     /**
      * @var string $id
      */
@@ -24,11 +26,6 @@ class Message implements MessageInterface
     private $name;
 
     /**
-     * @var StorageInterface $factory
-     */
-    private $factory;
-
-    /**
      * @var ItemDefinitionInterface $item
      */
     private $item;
@@ -37,23 +34,6 @@ class Message implements MessageInterface
      * @var MessageFlowInterface $messageFlow
      */
     private $messageFlow;
-
-    /**
-     * @return StorageInterface
-     */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
-
-    /**
-     * @param StorageInterface $factory
-     * @return $this
-     */
-    public function setFactory(StorageInterface $factory)
-    {
-        $this->factory = $factory;
-    }
 
     /**
      * Get the ItemDefinition is used to define the payload of the Message.

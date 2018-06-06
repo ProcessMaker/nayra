@@ -12,7 +12,7 @@ use ProcessMaker\Nayra\Exceptions\NotImplementedException;
 /**
  * Description of BpmnFileElement
  *
- * @property XmlLoader $ownerDocument
+ * @property BpmnDocument $ownerDocument
  *
  * @package \ProcessMaker\Nayra\Storage
  */
@@ -44,6 +44,11 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
         if ($classInterface === BpmnDocument::IS_PROPERTY) {
             $bpmnElement = $this->ownerDocument->getElementInstanceById($this->nodeValue);
             $this->bpmn = $bpmnElement;
+        } elseif ($classInterface === BpmnDocument::IS_ARRAY) {
+            $bpmnElement = [];
+            foreach($this->attributes as $attribute) {
+                $bpmnElement[$attribute->nodeName] = $attribute->nodeValue;
+            }
         } else {
             $bpmnElement = $this->ownerDocument->getFactory()->createInstanceOf($classInterface);
             $bpmnElement->setFactory($this->ownerDocument->getFactory());
@@ -51,6 +56,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 $bpmnElement->setEngine($this->ownerDocument->getEngine());
             }
             $id ? $this->ownerDocument->indexBpmnElement($id, $bpmnElement) : null;
+            $this->loadParentRef($mapProperties, $bpmnElement);
             foreach ($this->attributes as $attribute) {
                 $this->setBpmnPropertyRef($attribute, $mapProperties, $bpmnElement);
             }
@@ -148,6 +154,22 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 $bpmnElement->addProperty($name, $this->textContent);
             } else if ($isThisProperty && $multiplicity == '1') {
                 $bpmnElement->setProperty($name, $this->textContent);
+            }
+        }
+    }
+
+    /**
+     * Set value of BPMN property.
+     *
+     * @param array $mapProperties
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface $bpmnElement
+     */
+    private function loadParentRef(array $mapProperties, EntityInterface $bpmnElement)
+    {
+        foreach ($mapProperties as $name => $property) {
+            $isThisProperty = $property === BpmnDocument::PARENT_NODE;
+            if ($isThisProperty) {
+                $bpmnElement->setProperty($name, $this->parentNode->getBpmnElementInstance());
             }
         }
     }

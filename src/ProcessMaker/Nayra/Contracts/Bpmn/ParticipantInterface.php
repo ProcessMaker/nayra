@@ -23,7 +23,7 @@ interface ParticipantInterface extends EntityInterface
     /**
      * Set the Process that the Participant uses in the Collaboration.
      *
-     * @param ProcessInterface
+     * @param ProcessInterface $process
      *
      * @return $this
      */
@@ -39,10 +39,9 @@ interface ParticipantInterface extends EntityInterface
     /**
      * Set Participant multiplicity for a given interaction.
      *
-     * @param int $maximum
-     * @param int $minimum
+     * @param array $array
      *
      * @return $this
      */
-    public function setParticipantMultiplicity($maximum, $minimum);
+    public function setParticipantMultiplicity(array $array);
 }

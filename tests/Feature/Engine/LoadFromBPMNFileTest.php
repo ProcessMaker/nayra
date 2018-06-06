@@ -23,7 +23,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
      * Test parallel gateway loaded from BPMN file.
      *
      */
-    public function testParallelGateway()
+    public function t1estParallelGateway()
     {
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
@@ -135,7 +135,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
      * Test inclusive gateway loaded from BPMN file.
      *
      */
-    public function testInclusiveGatewayWithDefault()
+    public function t1estInclusiveGatewayWithDefault()
     {
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
@@ -242,7 +242,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
      * Test to load a collaboration.
      *
      */
-    public function t1estLoadCollaborationWithMultipleProcesses()
+    public function testLoadCollaborationWithMultipleProcesses()
     {
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();

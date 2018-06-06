@@ -103,13 +103,13 @@ class SignalEndEventTest extends EngineTestCase
         //Add process A as participant of the collaboration
         $participant = new Participant();
         $participant->setProcess($processA);
-        $participant->setParticipantMultiplicity(1, 0);
+        $participant->setParticipantMultiplicity(['maximum' => 1, 'minimum' => 0]);
         $collaboration->getParticipants()->push($participant);
 
         //Add process B as participant of the collaboration
         $participant = new Participant();
         $participant->setProcess($processB);
-        $participant->setParticipantMultiplicity(1, 0);
+        $participant->setParticipantMultiplicity(['maximum' => 1, 'minimum' => 0]);
         $collaboration->getParticipants()->push($participant);
 
         //Create message flow from intermediate events A to B
