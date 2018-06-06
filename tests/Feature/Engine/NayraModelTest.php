@@ -2,26 +2,16 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Models\DataStore;
-use ProcessMaker\Models\Flow;
-use ProcessMaker\Models\Process;
-use ProcessMaker\Nayra\Bpmn\Model\Activity;
-use ProcessMaker\Nayra\Bpmn\Model\EndEvent;
-use ProcessMaker\Nayra\Bpmn\Model\ExclusiveGateway;
-use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
-use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Factory;
 
 /**
  * Tests for the Nayra/Bpmn/Model classes
@@ -35,10 +25,7 @@ class NayraModelTest extends EngineTestCase
      */
     public function testProcessWithExclusiveGateway()
     {
-        $config = $this->createMappingConfiguration();
-        $factory = new Factory($config);
-
-        $processData = $this->createProcessWithExclusiveGateway($factory);
+        $processData = $this->createProcessWithExclusiveGateway($this->factory);
         $process = $processData['process'];
         $start = $processData['start'];
         $activityA = $processData['activityA'];
@@ -78,10 +65,7 @@ class NayraModelTest extends EngineTestCase
      */
     public function testProcessWithInclusiveGateway()
     {
-        $config = $this->createMappingConfiguration();
-        $factory = new Factory($config);
-
-        $processData = $this->createProcessWithInclusiveGateway($factory);
+        $processData = $this->createProcessWithInclusiveGateway($this->factory);
         $process = $processData['process'];
         $start = $processData['start'];
         $activityA = $processData['activityA'];
@@ -145,25 +129,6 @@ class NayraModelTest extends EngineTestCase
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
-    }
-
-    /**
-     * Creates the mappings between instances and concrete classes
-     *
-     * @return array
-     */
-    private function createMappingConfiguration()
-    {
-        return [
-            ActivityInterface::class => Activity::class,
-            StartEventInterface::class => StartEvent::class,
-            EndEventInterface::class => EndEvent::class,
-            ExclusiveGatewayInterface::class => ExclusiveGateway::class,
-            InclusiveGatewayInterface::class => InclusiveGateway::class,
-            ProcessInterface::class => Process::class,
-            DataStoreInterface::class => DataStore::class,
-            FlowInterface::class => Flow::class,
-        ];
     }
 
     /**

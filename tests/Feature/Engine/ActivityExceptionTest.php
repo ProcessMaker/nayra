@@ -2,10 +2,15 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Nayra\Bpmn\ActivityTrait;
+use ProcessMaker\Nayra\Bpmn\Model\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Test an activity with exception.
@@ -26,11 +31,12 @@ class ActivityExceptionTest extends EngineTestCase
      */
     private function createSimpleProcessInstance()
     {
-        $process = $this->processRepository->createProcessInstance();
+        $process = $this->factory->createInstanceOf(ProcessInterface::class);
         //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $activity = $this->activityRepository->createActivityWithExceptionInstance();
-        $end = $this->eventRepository->createEndEventInstance();
+        $start = $this->factory->createInstanceOf(StartEventInterface::class);
+//        $activity = $this->factory->createInstanceOf(ActivityInterface::class);
+        $activity = new ActivityWithException();
+        $end = $this->factory->createInstanceOf(EndEventInterface::class);
         $process->addActivity($activity);
         $process->addEvent($start)
             ->addEvent($end);
@@ -47,7 +53,7 @@ class ActivityExceptionTest extends EngineTestCase
     public function testSimpleTransitions()
     {
         //Create a data store to test the process.
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load a simple process with activity exception.
         $process = $this->createSimpleProcessInstance();
@@ -92,5 +98,33 @@ class ActivityExceptionTest extends EngineTestCase
 
         //Assertion: Finally the activity does not have tokens.
         $this->assertEquals(0, $activity->getTokens($instance)->count());
+    }
+}
+
+class ActivityWithException implements ActivityInterface
+{
+    use ActivityTrait;
+
+    /**
+     * Configure the activity to go to a FAILING status when activated.
+     *
+     */
+    protected function initActivity()
+    {
+        $this->attachEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, function ($self, TokenInterface $token) {
+            $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
+        });
+    }
+
+    /**
+     * Array map of custom event classes for the bpmn element.
+     *
+     * @return array
+     */
+    protected function getBpmnEventClasses()
+    {
+        return [
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED => ActivityActivatedEvent::class,
+        ];
     }
 }

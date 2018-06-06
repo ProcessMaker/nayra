@@ -2,17 +2,21 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Models\DataStoreCollection;
+use ProcessMaker\Nayra\Bpmn\Model\DataStoreCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test signal end events
@@ -26,29 +30,30 @@ class SignalEndEventTest extends EngineTestCase
      */
     public function createSignalStartEventProcesses()
     {
-        $item = $this->rootElementRepository->createItemDefinitionInstance([
+        $item = $this->factory->createInstanceOf(ItemDefinitionInterface::class, [
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
             'structure' => 'String'
         ]);
 
-        $signal = $this->rootElementRepository->createMessageInstance();
+        $signal = $this->factory->createInstanceOf(MessageInterface::class);
         $signal->setId('SignalA');
         $signal->setItem($item);
 
         //Process A
-        $processA = $this->processRepository->createProcessInstance();
+        $processA = $this->factory->createInstanceOf(ProcessInterface::class);
         $processA->setEngine($this->engine);
-        $startA = $this->eventRepository->createStartEventInstance();
-        $activityA1 = $this->activityRepository->createActivityInstance();
-        $eventA = $this->eventRepository->createIntermediateCatchEventInstance();
-        $signalEventDefA = $this->rootElementRepository->createSignalEventDefinitionInstance();
+        $processA->setFactory($this->factory);
+        $startA = $this->factory->createInstanceOf(StartEventInterface::class);
+        $activityA1 = $this->factory->createInstanceOf(ActivityInterface::class);
+        $eventA = $this->factory->createInstanceOf(IntermediateCatchEventInterface::class);
+        $signalEventDefA = $this->factory->createInstanceOf(SignalEventDefinitionInterface::class);
         $signalEventDefA->setId("signalEvent1");
         $signalEventDefA->setPayload($signal);
         $eventA->getEventDefinitions()->push($signalEventDefA);
-        $activityA2 = $this->activityRepository->createActivityInstance();
-        $endA = $this->eventRepository->createEndEventInstance();
+        $activityA2 = $this->factory->createInstanceOf(ActivityInterface::class);
+        $endA = $this->factory->createInstanceOf(EndEventInterface::class);
 
         $startA->createFlowTo($activityA1, $this->factory);
         $activityA1->createFlowTo($eventA, $this->factory);
@@ -62,15 +67,15 @@ class SignalEndEventTest extends EngineTestCase
             ->addEvent($endA);
 
         //Process B
-        $processB = $this->processRepository->createProcessInstance();
+        $processB = $this->factory->createInstanceOf(ProcessInterface::class);
         $processB->setEngine($this->engine);
-
-        $startB = $this->eventRepository->createStartEventInstance();
-        $activityB1 = $this->activityRepository->createActivityInstance();
-        $signalEventDefB= $this->rootElementRepository->createSignalEventDefinitionInstance();
+        $processB->setFactory($this->factory);
+        $startB = $this->factory->createInstanceOf(StartEventInterface::class);
+        $activityB1 = $this->factory->createInstanceOf(ActivityInterface::class);
+        $signalEventDefB = $this->factory->createInstanceOf(SignalEventDefinitionInterface::class);
         $signalEventDefB->setPayload($signal);
 
-        $signalEndEventB = $this->eventRepository->createEndEventInstance();
+        $signalEndEventB = $this->factory->createInstanceOf(EndEventInterface::class);
         $signalEndEventB->getEventDefinitions()->push($signalEventDefB);
 
         $startB->createFlowTo($activityB1, $this->factory);
@@ -110,7 +115,7 @@ class SignalEndEventTest extends EngineTestCase
         //Create message flow from intermediate events A to B
         $eventA = $processA->getEvents()->item(1);
         $signalEndEventB = $processB->getEvents()->item(1);
-        $messageFlow = $this->messageFlowRepository->createMessageFlowInstance();
+        $messageFlow = $this->factory->createInstanceOf(MessageFlowInterface::class);
         $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($signalEndEventB);
         $messageFlow->setTarget($eventA);
@@ -119,10 +124,10 @@ class SignalEndEventTest extends EngineTestCase
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
 
-        $dataStoreA = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStoreA =$this->factory->createInstanceOf(DataStoreInterface::class);
         $dataStoreA->putData('A', '1');
 
-        $dataStoreB = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStoreB = $this->factory->createInstanceOf(DataStoreInterface::class);
         $dataStoreB->putData('B', '1');
 
         $dataStoreCollectionA = new DataStoreCollection();

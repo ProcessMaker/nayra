@@ -11,7 +11,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
@@ -41,9 +42,9 @@ trait IntermediateThrowEventTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param RepositoryFactoryInterface $factory
+     * @param FactoryInterface $factory
      */
-    public function buildTransitions(RepositoryFactoryInterface $factory)
+    public function buildTransitions(FactoryInterface $factory)
     {
         $this->setFactory($factory);
 

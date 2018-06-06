@@ -7,7 +7,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Repositories\BpmnFileRepository;
+use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test to load execution instances
@@ -19,10 +21,11 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Set data for a sequential process
      *
+     * @param StorageInterface $repository
      */
-    private function prepareSequentialProcess()
+    private function prepareSequentialProcess(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getRepositoryFactory()->getExecutionInstanceRepository();
+        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
         $executionInstanceRepository->setRawData([
             'executionInstanceId' => [
                 'processId' => 'SequentialTask',
@@ -40,10 +43,11 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Set data for a parallel process
      *
+     * @param StorageInterface $repository
      */
-    private function prepareParallelProcess()
+    private function prepareParallelProcess(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getRepositoryFactory()->getExecutionInstanceRepository();
+        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',
@@ -65,10 +69,11 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Set data for a parallel process with an activity just completed
      *
+     * @param StorageInterface $repository
      */
-    private function prepareParallelProcessWithActivityCompleted()
+    private function prepareParallelProcessWithActivityCompleted(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getRepositoryFactory()->getExecutionInstanceRepository();
+        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',
@@ -90,10 +95,11 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Set data for a parallel process with an activity in exception state
      *
+     * @param StorageInterface $repository
      */
-    private function prepareParallelProcessWithException()
+    private function prepareParallelProcessWithException(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getRepositoryFactory()->getExecutionInstanceRepository();
+        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',
@@ -119,19 +125,21 @@ class LoadExecutionInstancesTest extends EngineTestCase
     public function testLoadExecutionInstanceWithOneToken()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $this->engine->setRepositoryFactory($bpmnRepository);
+        $bpmnRepository->setFactory($this->factory);
+        $this->engine->setFactory($this->factory);
+        $this->engine->setRepository($bpmnRepository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
-        $this->prepareSequentialProcess();
+        $this->prepareSequentialProcess($bpmnRepository);
 
         //Load the execution instance
         $instance = $this->engine->loadExecutionInstance('executionInstanceId');
 
         //Get References by id
-        $secondActivity = $bpmnRepository->loadBpmElementById('second');
+        $secondActivity = $bpmnRepository->getScriptTask('second');
 
         //Completes the second activity
         $token = $secondActivity->getTokens($instance)->item(0);
@@ -156,20 +164,22 @@ class LoadExecutionInstancesTest extends EngineTestCase
     public function testLoadExecutionInstanceWithMultipleTokens()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $this->engine->setRepositoryFactory($bpmnRepository);
+        $bpmnRepository->setFactory($this->factory);
+        $this->engine->setFactory($this->factory);
+        $this->engine->setRepository($bpmnRepository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
-        $this->prepareParallelProcess();
+        $this->prepareParallelProcess($bpmnRepository);
 
         //Load the execution instance
         $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
 
         //Get References by id
-        $secondActivity = $bpmnRepository->loadBpmElementById('task2');
-        $thirdActivity = $bpmnRepository->loadBpmElementById('task3');
+        $secondActivity = $bpmnRepository->getScriptTask('task2');
+        $thirdActivity = $bpmnRepository->getScriptTask('task3');
 
         //Completes the second activity
         $token = $secondActivity->getTokens($instance)->item(0);
@@ -208,20 +218,22 @@ class LoadExecutionInstancesTest extends EngineTestCase
     public function testLoadExecutionInstanceWithMultipleTokensStates()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $this->engine->setRepositoryFactory($bpmnRepository);
+        $bpmnRepository->setFactory($this->factory);
+        $this->engine->setFactory($this->factory);
+        $this->engine->setRepository($bpmnRepository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
-        $this->prepareParallelProcessWithActivityCompleted();
+        $this->prepareParallelProcessWithActivityCompleted($bpmnRepository);
 
         //Load the execution instance
         $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
 
         //Get References by id
-        $secondActivity = $bpmnRepository->loadBpmElementById('task2');
-        $thirdActivity = $bpmnRepository->loadBpmElementById('task3');
+        $secondActivity = $bpmnRepository->getScriptTask('task2');
+        $thirdActivity = $bpmnRepository->getScriptTask('task3');
 
         //Completes the third activity
         $token = $thirdActivity->getTokens($instance)->item(0);
@@ -254,19 +266,20 @@ class LoadExecutionInstancesTest extends EngineTestCase
     public function testLoadExecutionInstanceWithMultipleTokensFallingState()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $this->engine->setRepositoryFactory($bpmnRepository);
+        $bpmnRepository->setFactory($this->factory);
+        $this->engine->setRepository($bpmnRepository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
-        $this->prepareParallelProcessWithException();
+        $this->prepareParallelProcessWithException($bpmnRepository);
 
         //Load the execution instance
         $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
 
         //Get References by id
-        $thirdActivity = $bpmnRepository->loadBpmElementById('task3');
+        $thirdActivity = $bpmnRepository->getActivity('task3');
 
         //Assertion: The third activity is in falling state
         $token = $thirdActivity->getTokens($instance)->item(0);

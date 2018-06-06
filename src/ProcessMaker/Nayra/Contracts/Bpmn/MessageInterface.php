@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Behavior that must implement all event messages
@@ -27,20 +27,21 @@ interface MessageInterface
 
     /**
      * Sets the id of the message
-     * @param $value
+     *
+     * @param string $value
      */
     public function setId($value);
 
     /**
-     * @return RepositoryFactoryInterface
+     * @return StorageInterface
      */
     public function getFactory();
 
     /**
-     * @param RepositoryFactoryInterface $factory
+     * @param StorageInterface $factory
      * @return $this
      */
-    public function setFactory(RepositoryFactoryInterface $factory);
+    public function setFactory(StorageInterface $factory);
 
     /**
      * Returns the name of the message
@@ -52,11 +53,11 @@ interface MessageInterface
     /**
      * Sets the message flow to which this message pertains
      *
-     * @param $messageFlow
+     * @param MessageFlowInterface $messageFlow
      *
      * @return mixed
      */
-    public function setMessageFlow($messageFlow);
+    public function setMessageFlow(MessageFlowInterface $messageFlow);
 
 
     /**
@@ -65,4 +66,13 @@ interface MessageInterface
      * @return mixed
      */
     public function getMessageFlow();
+
+    /**
+     * Allows to set the item
+     *
+     * @param ItemDefinitionInterface $item
+     *
+     * @return $this
+     */
+    public function setItem(ItemDefinitionInterface $item);
 }

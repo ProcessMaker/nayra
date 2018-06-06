@@ -8,6 +8,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
 /**
@@ -38,6 +40,8 @@ trait EngineTrait
      * @var DataStoreInterface $dataStore
      */
     private $dataStore;
+
+    private $repository;
 
     /**
      * Execute all the process transitions.
@@ -87,8 +91,7 @@ trait EngineTrait
     public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data, EventInterface $event = null)
     {
         $this->loadProcess($process);
-        $repository = $this->getRepositoryFactory()->getExecutionInstanceRepository();
-        $executionInstance = $repository->createExecutionInstance();
+        $executionInstance = new ExecutionInstance();
         $process->addInstance($executionInstance);
         $executionInstance->setProcess($process);
         $executionInstance->setDataStore($data);
@@ -108,7 +111,7 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id)
     {
-        $repository = $this->getRepositoryFactory()->getExecutionInstanceRepository();
+        $repository = $this->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $this->getRepository());
         $executionInstance = $repository->loadExecutionInstanceByUid($id);
         
         $executionInstance->linkToEngine($this);
@@ -182,5 +185,25 @@ trait EngineTrait
                 $event->registerCatchEvents($this);
             }
         }
+    }
+
+    /**
+     * Get the repository storage of the engine.
+     *
+     * @return StorageInterface
+     */
+    private function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
+     * Set the repository storage of the engine.
+     *
+     * @param StorageInterface $repository
+     */
+    public function setRepository(StorageInterface $repository)
+    {
+        $this->repository = $repository;
     }
 }

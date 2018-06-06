@@ -69,7 +69,7 @@ trait ExecutionInstanceTrait
         $process->addInstance($this);
         $this->process = $process;
         $this->dataStore = $data;
-        $this->transitions = $process->getTransitions($engine->getRepositoryFactory());
+        $this->transitions = $process->getTransitions($engine->getFactory());
     }
 
     /**
@@ -138,7 +138,7 @@ trait ExecutionInstanceTrait
     public function linkToEngine(EngineInterface $engine)
     {
         $this->getProcess()->setDispatcher($engine->getDispatcher());
-        $this->transitions = $this->getProcess()->getTransitions($engine->getRepositoryFactory());
+        $this->transitions = $this->getProcess()->getTransitions($engine->getFactory());
         return $this;
     }
 

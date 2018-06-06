@@ -2,15 +2,13 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\State;
-use ProcessMaker\Nayra\Bpmn\Transition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Activity behavior's implementation.
@@ -68,9 +66,9 @@ trait ActivityTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param RepositoryFactoryInterface $factory
+     * @param FactoryInterface $factory
      */
-    public function buildTransitions(RepositoryFactoryInterface $factory)
+    public function buildTransitions(FactoryInterface $factory)
     {
         $this->setFactory($factory);
         $this->activeState = new State($this, ActivityInterface::TOKEN_STATE_ACTIVE);

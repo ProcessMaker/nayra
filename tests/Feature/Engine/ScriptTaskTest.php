@@ -2,10 +2,14 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Nayra\Bpmn\Model\Process;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Tests for the ScriptTask element
@@ -24,7 +28,7 @@ class ScriptTaskTest extends EngineTestCase
     {
         //Load a process
         $process = $this->getProcessWithOneScriptTask();
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -55,6 +59,15 @@ class ScriptTaskTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+        ]);
+
+        $token = $scriptTask->getTokens($instance)->item(0);
+        $scriptTask->runScript($token);
+        $scriptTask->complete($token);
+        $this->engine->runToNextState();
+
+        $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
@@ -73,7 +86,7 @@ class ScriptTaskTest extends EngineTestCase
     {
         //Load a process
         $process = $this->getProcessWithOnlyScriptTasks();
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -92,9 +105,27 @@ class ScriptTaskTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+        ]);
+
+        $token = $scriptTask1->getTokens($instance)->item(0);
+        $scriptTask1->runScript($token);
+        $scriptTask1->complete($token);
+        $this->engine->runToNextState();
+
+        $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+        ]);
+
+        $token = $scriptTask2->getTokens($instance)->item(0);
+        $scriptTask2->runScript($token);
+        $scriptTask2->complete($token);
+        $this->engine->runToNextState();
+
+        $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
@@ -119,7 +150,7 @@ class ScriptTaskTest extends EngineTestCase
     {
         //Load a process
         $process = $this->getProcessWithOneScriptTask();
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -149,6 +180,7 @@ class ScriptTaskTest extends EngineTestCase
         $this->engine->runToNextState();
 
         $scriptToken = $scriptTask->getTokens($instance)->item(0);
+        $scriptTask->runScript($scriptToken);
 
         //Assertion: Verify that the token was set to a failed state
         $this->assertEquals($scriptToken->getStatus(), ActivityInterface::TOKEN_STATE_FAILING);
@@ -160,17 +192,17 @@ class ScriptTaskTest extends EngineTestCase
      */
     private function getProcessWithOneScriptTask()
     {
-        $process = $this->processRepository->createProcessInstance();
+        $process = $this->factory->createInstanceOf(ProcessInterface::class);
         $process->setEngine($this->engine);
 
         //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $activityA = $this->activityRepository->createActivityInstance();
-        $scriptTask = $this->activityRepository->createScriptTaskInstance();
+        $start = $this->factory->createInstanceOf(StartEventInterface::class);
+        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
+        $scriptTask = $this->factory->createInstanceOf(ScriptTaskInterface::class);
         $scriptTask->setScriptFormat('text/php');
         $scriptTask->setScript('$this->setProperty("' . self::TEST_PROPERTY . '", 1);');
+        $end = $this->factory->createInstanceOf(EndEventInterface::class);
 
-        $end = $this->eventRepository->createEndEventInstance();
         $process
             ->addActivity($activityA)
             ->addActivity($scriptTask);
@@ -192,13 +224,13 @@ class ScriptTaskTest extends EngineTestCase
      */
     private function getProcessWithOnlyScriptTasks()
     {
-        $process = $this->processRepository->createProcessInstance();
+        $process = $this->factory->createInstanceOf(ProcessInterface::class);
         $process->setEngine($this->engine);
 
         //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $scriptTask1 = $this->activityRepository->createScriptTaskInstance();
-        $scriptTask2 = $this->activityRepository->createScriptTaskInstance();
+        $start = $this->factory->createInstanceOf(StartEventInterface::class);
+        $scriptTask1 = $this->factory->createInstanceOf(ScriptTaskInterface::class);
+        $scriptTask2 = $this->factory->createInstanceOf(ScriptTaskInterface::class);
 
         $scriptTask1->setScriptFormat('text/php');
         $scriptTask1->setScript('$this->setProperty("scriptTestTaskProp", 1);');
@@ -206,7 +238,8 @@ class ScriptTaskTest extends EngineTestCase
         $scriptTask2->setScriptFormat('text/php');
         $scriptTask2->setScript('$this->setProperty("scriptTestTaskProp", 1);');
 
-        $end = $this->eventRepository->createEndEventInstance();
+        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+
         $process
             ->addActivity($scriptTask1)
             ->addActivity($scriptTask2);

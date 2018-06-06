@@ -7,6 +7,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -23,18 +25,19 @@ class ErrorEndEventTest extends EngineTestCase
     public function testErrorEndEventTopLevel()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Error_EndEvent_TopLevel.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('Error_EndEvent_TopLevel');
+        $process = $bpmnRepository->getProcess('Error_EndEvent_TopLevel');
 
         //Get start event and event definition references
-        $startActivity = $bpmnRepository->loadBpmElementById('start');
-        $endActivity = $bpmnRepository->loadBpmElementById('end');
-        $errorEvent = $bpmnRepository->loadBpmElementById('TerminateEventDefinition_1');
-        $error = $bpmnRepository->loadBpmElementById('error');
+        $startActivity = $bpmnRepository->getScriptTask('start');
+        $endActivity = $bpmnRepository->getScriptTask('end');
+        $errorEvent = $bpmnRepository->getErrorEventDefinition('TerminateEventDefinition_1');
+        $error = $bpmnRepository->getError('error');
 
         //Start the process
         $instance = $process->call();
@@ -55,9 +58,11 @@ class ErrorEndEventTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
 
@@ -76,17 +81,18 @@ class ErrorEndEventTest extends EngineTestCase
     public function testErrorEndEventCallActivity()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Error_EndEvent_CallActivity.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('PROCESS_1');
-        $subProcess = $bpmnRepository->loadBpmElementById('PROCESS_2');
+        $process = $bpmnRepository->getProcess('PROCESS_1');
+        $subProcess = $bpmnRepository->getProcess('PROCESS_2');
 
         //Get start event and event definition references
-        $callActivity = $bpmnRepository->loadBpmElementById('_5');
-        $subActivity = $bpmnRepository->loadBpmElementById('_10');
+        $callActivity = $bpmnRepository->getCallActivity('_5');
+        $subActivity = $bpmnRepository->getActivity('_10');
 
         //Start
         $instance = $process->call();

@@ -8,6 +8,7 @@ use ProcessMaker\Models\RepositoryFactory;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
+use ProcessMaker\Nayra\Factory;
 
 /**
  * Execution Instance tests
@@ -25,7 +26,7 @@ class ExecutionInstanceTest extends TestCase
         $mockDispatcher = $this->getMockBuilder(EventBusInterface::class)
             ->getMock();
 
-        $engine = new TestEngine(new RepositoryFactory(), $mockDispatcher);
+        $engine = new TestEngine(new Factory([]), $mockDispatcher);
         $mockProcess = $this->getMockForAbstractClass(ProcessInterface::class);
         $mockStore = $this->getMockForAbstractClass(DataStoreInterface::class);
 

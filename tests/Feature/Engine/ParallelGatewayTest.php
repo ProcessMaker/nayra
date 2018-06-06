@@ -3,10 +3,14 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test transitions
@@ -28,17 +32,17 @@ class ParallelGatewayTest extends EngineTestCase
      */
     private function createProcessWithParallelGateway()
     {
-        $process = $this->processRepository->createProcessInstance();
+        $process = $this->factory->createInstanceOf(ProcessInterface::class);
 
         //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $gatewayA = $this->gatewayRepository->createParallelGatewayInstance();
-        $activityA = $this->activityRepository->createActivityInstance();
-        $activityB = $this->activityRepository->createActivityInstance();
-        $activityC = $this->activityRepository->createActivityInstance();
+        $start = $this->factory->createInstanceOf(StartEventInterface::class);
+        $gatewayA = $this->factory->createInstanceOf(ParallelGatewayInterface::class);
+        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
+        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
+        $activityC = $this->factory->createInstanceOf(ActivityInterface::class);
 
-        $gatewayB = $this->gatewayRepository->createParallelGatewayInstance();
-        $end = $this->eventRepository->createEndEventInstance();
+        $gatewayB = $this->factory->createInstanceOf(ParallelGatewayInterface::class);
+        $end =  $this->factory->createInstanceOf(EndEventInterface::class);
         $process
             ->addActivity($activityA)
             ->addActivity($activityB)
@@ -75,17 +79,18 @@ class ParallelGatewayTest extends EngineTestCase
      */
     private function createParallelDivergingInclusiveConverging()
     {
-        $process = $this->processRepository->createProcessInstance();
+        $process = $this->factory->createInstanceOf(ProcessInterface::class);
 
         //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $gatewayA = $this->gatewayRepository->createParallelGatewayInstance();
-        $activityA = $this->activityRepository->createActivityInstance();
-        $activityB = $this->activityRepository->createActivityInstance();
-        $activityC = $this->activityRepository->createActivityInstance();
+        $start = $this->factory->createInstanceOf(StartEventInterface::class);
+        $gatewayA = $this->factory->createInstanceOf(ParallelGatewayInterface::class);
+        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
+        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
+        $activityC = $this->factory->createInstanceOf(ActivityInterface::class);
 
-        $gatewayB = $this->gatewayRepository->createInclusiveGatewayInstance();
-        $end = $this->eventRepository->createEndEventInstance();
+        $gatewayB = $this->factory->createInstanceOf(InclusiveGatewayInterface::class);
+        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+
         $process
             ->addActivity($activityA)
             ->addActivity($activityB)
@@ -116,7 +121,7 @@ class ParallelGatewayTest extends EngineTestCase
     public function testParallelGateway()
     {
         //Create a data store with data.
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore =  $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load the process
         $process = $this->createProcessWithParallelGateway();
@@ -209,7 +214,7 @@ class ParallelGatewayTest extends EngineTestCase
     public function testParallelDivergingInclusiveConverging()
     {
         //Create a data store with data.
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore =  $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load the process
         $process = $this->createParallelDivergingInclusiveConverging();
@@ -301,13 +306,13 @@ class ParallelGatewayTest extends EngineTestCase
     public function testParallelCanNotHaveConditionedOutgoingFlow()
     {
         //Create a parallel gateway and an activity.
-        $gatewayA = $this->gatewayRepository->createParallelGatewayInstance();
-        $activityA = $this->activityRepository->createActivityInstance();
+        $gatewayA =  $this->factory->createInstanceOf(ParallelGatewayInterface::class);
+        $activityA =  $this->factory->createInstanceOf(ActivityInterface::class);
 
         //Assertion: Throw exception when creating a conditioned flow from parallel.
         $this->expectException('ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException');
         $gatewayA->createConditionedFlowTo($activityA, function() {}, false, $this->factory);
-        $process = $this->processRepository->createProcessInstance();
+        $process =  $this->factory->createInstanceOf(ProcessInterface::class);
         $process
             ->addActivity($activityA)
             ->addGateway($gatewayA);

@@ -2,7 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactCollectionInterface;
@@ -23,7 +22,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ReflectionClass;
 
 /**
@@ -247,11 +247,11 @@ trait ProcessTrait
     /**
      * Get transitions of the process.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface $factory
+     * @param FactoryInterface $factory
      *
      * @return CollectionInterface
      */
-    public function getTransitions(RepositoryFactoryInterface $factory)
+    public function getTransitions(FactoryInterface $factory)
     {
         if ($this->transitions) {
             return $this->transitions;
@@ -444,7 +444,8 @@ trait ProcessTrait
     public function call(DataStoreInterface $dataStore = null)
     {
         if (empty($dataStore)) {
-            $dataStore = $this->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+            $dataStore = $this->getFactory()->createInstanceOf(DataStoreInterface::class);
+
         }
         $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);
         $this->getEvents()->find(function(EventInterface $event){

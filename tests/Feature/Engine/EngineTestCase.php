@@ -1,31 +1,83 @@
 <?php
 namespace Tests\Feature\Engine;
+
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
-use ProcessMaker\Models\Activity;
-use ProcessMaker\Models\DataStore;
-use ProcessMaker\Models\EndEvent;
-use ProcessMaker\Models\ExclusiveGateway;
-use ProcessMaker\Models\Flow;
-use ProcessMaker\Models\InclusiveGateway;
-use ProcessMaker\Models\Process;
-use ProcessMaker\Models\RepositoryFactory;
-use ProcessMaker\Models\StartEvent;
+use ProcessMaker\Models\CallActivity;
+use ProcessMaker\Models\ExecutionInstanceRepository;
+use ProcessMaker\Models\ProcessRepository;
+use ProcessMaker\Models\TokenRepository;
+use ProcessMaker\Nayra\Bpmn\Lane;
+use ProcessMaker\Nayra\Bpmn\LaneSet;
+use ProcessMaker\Nayra\Bpmn\Model\Activity;
+use ProcessMaker\Nayra\Bpmn\Model\DataStore;
+use ProcessMaker\Nayra\Bpmn\Model\EndEvent;
+use ProcessMaker\Nayra\Bpmn\Model\ExclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Model\Flow;
+use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Model\ParallelGateway;
+use ProcessMaker\Nayra\Bpmn\Model\Process;
+use ProcessMaker\Nayra\Bpmn\Model\ScriptTask;
+use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
+use ProcessMaker\Nayra\Bpmn\Model\Token;
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\ConditionalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\Error;
+use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\IntermediateCatchEvent;
+use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
+use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\Message;
+use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\MessageFlow;
+use ProcessMaker\Nayra\Bpmn\Models\Operation;
+use ProcessMaker\Nayra\Bpmn\Models\Participant;
+use ProcessMaker\Nayra\Bpmn\Models\Signal;
+use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LaneInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
+use ProcessMaker\Nayra\Engine\ExecutionInstance;
 use ProcessMaker\Nayra\Factory;
+use ProcessMaker\Test\FormalExpression;
 
 /**
  * Test transitions
@@ -33,40 +85,6 @@ use ProcessMaker\Nayra\Factory;
  */
 class EngineTestCase extends TestCase
 {
-    /**
-     *
-     * @var \ProcessMaker\Models\ProcessRepository
-     */
-    protected $processRepository;
-    /**
-     *
-     * @var \ProcessMaker\Models\ActivityRepository
-     */
-    protected $activityRepository;
-    /**
-     * @var \ProcessMaker\Models\EventRepository
-     */
-    protected $eventRepository;
-    /**
-     * @var \ProcessMaker\Models\DataStoreRepository
-     */
-    protected $dataStoreRepository;
-    /**
-     * @var \ProcessMaker\Models\GatewayRepository
-     */
-    protected $gatewayRepository;
-    /**
-     * @var \ProcessMaker\Models\FlowRepository
-     */
-    protected $flowRepository;
-    /**
-     * @var \ProcessMaker\Models\RootElementRepository
-     */
-    protected $rootElementRepository;
-    /**
-     * @var \ProcessMaker\Models\MessageFlowRepository
-     */
-    protected $messageFlowRepository;
     /**
      *
      * @var EngineInterface
@@ -91,6 +109,11 @@ class EngineTestCase extends TestCase
      */
     protected $jobs = [];
 
+    /**
+     * Scheduled jobs.
+     *
+     * @var \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
+     */
     protected $factory;
 
     /**
@@ -100,16 +123,6 @@ class EngineTestCase extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        //Initialize the repository factory
-        $factory = new RepositoryFactory();
-        $this->processRepository = $factory->getProcessRepository();
-        $this->activityRepository = $factory->getActivityRepository();
-        $this->gatewayRepository = $factory->getGatewayRepository();
-        $this->eventRepository = $factory->getEventRepository();
-        $this->flowRepository = $factory->getFlowRepository();
-        $this->dataStoreRepository = $factory->getDataStoreRepository();
-        $this->rootElementRepository = $factory->getRootElementRepository();
-        $this->messageFlowRepository = $factory->getMessageFlowRepository();
         $this->factory = $this->getFactory();
         //Initialize a dispatcher
         $fakeDispatcher = $this->getMockBuilder(EventBusInterface::class)
@@ -131,9 +144,7 @@ class EngineTestCase extends TestCase
                 $this->listeners[$event][] = $listener;
             }));
         //Initialize the engine
-        $this->engine = new TestEngine($factory, $fakeDispatcher);
-        $this->engine->setRepositoryFactory($factory);
-        $this->engine->setDispatcher($fakeDispatcher);
+        $this->engine = new TestEngine($this->factory, $fakeDispatcher);
         //Mock a job manager
         $this->jobManager = $this->getMockBuilder(JobManagerInterface::class)
             ->getMock();
@@ -290,16 +301,42 @@ class EngineTestCase extends TestCase
     protected function getFactory() {
 
         $mappings = [
-            ActivityInterface::class => Activity::class,
-            StartEventInterface::class => StartEvent::class,
-            EndEventInterface::class => EndEvent::class,
-            ExclusiveGatewayInterface::class => ExclusiveGateway::class,
-            InclusiveGatewayInterface::class => InclusiveGateway::class,
-            ProcessInterface::class => Process::class,
-            DataStoreInterface::class => DataStore::class,
-            FlowInterface::class => Flow::class,
+            ActivityInterface::class                    => Activity::class,
+            CallActivityInterface::class                => CallActivity::class,
+            CollaborationInterface::class               => Collaboration::class,
+            ConditionalEventDefinitionInterface::class  => ConditionalEventDefinition::class,
+            DataStoreInterface::class                   => DataStore::class,
+            EndEventInterface::class                    => EndEvent::class,
+            ErrorEventDefinitionInterface::class        => ErrorEventDefinition::class,
+            ErrorInterface::class                       => Error::class,
+            ExclusiveGatewayInterface::class            => ExclusiveGateway::class,
+            ExecutionInstanceInterface::class           => ExecutionInstance::class,
+            ExecutionInstanceRepositoryInterface::class => ExecutionInstanceRepository::class,
+            FlowInterface::class                        => Flow::class,
+            FormalExpressionInterface::class            => FormalExpression::class,
+            InclusiveGatewayInterface::class            => InclusiveGateway::class,
+            IntermediateCatchEventInterface::class      => IntermediateCatchEvent::class,
+            IntermediateThrowEventInterface::class      => IntermediateThrowEvent::class,
+            ItemDefinitionInterface::class              => ItemDefinition::class,
+            LaneInterface::class                        => Lane::class,
+            LaneSetInterface::class                     => LaneSet::class,
+            MessageEventDefinitionInterface::class      => MessageEventDefinition::class,
+            MessageFlowInterface::class                 => MessageFlow::class,
+            MessageInterface::class                     => Message::class,
+            OperationInterface::class                   => Operation::class,
+            ParallelGatewayInterface::class             => ParallelGateway::class,
+            ParticipantInterface::class                 => Participant::class,
+            ProcessInterface::class                     => Process::class,
+            ProcessRepositoryInterface::class           => ProcessRepository::class,
+            ScriptTaskInterface::class                  => ScriptTask::class,
+            SignalEventDefinitionInterface::class       => SignalEventDefinition::class,
+            SignalInterface::class                      => Signal::class,
+            StartEventInterface::class                  => StartEvent::class,
+            TerminateEventDefinitionInterface::class    => TerminateEventDefinition::class,
+            TimerEventDefinitionInterface::class        => TimerEventDefinition::class,
+            TokenInterface::class                       => Token::class,
+            TokenRepositoryInterface::class             => TokenRepository::class,
         ];
-
         return new Factory($mappings);
     }
 }

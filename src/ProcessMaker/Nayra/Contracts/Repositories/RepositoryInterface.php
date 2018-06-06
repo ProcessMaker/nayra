@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Contracts\Repositories;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
 /**
  * Repository Interface.
@@ -15,16 +16,7 @@ interface RepositoryInterface
     /**
      * Get factory used to build this element.
      *
-     * @return RepositoryFactoryInterface
+     * @return StorageInterface
      */
-    public function getFactory();
-
-    /**
-     * Set factory used to build this element.
-     *
-     * @param RepositoryFactoryInterface $factory
-     *
-     * @return $this
-     */
-    public function setFactory(RepositoryFactoryInterface $factory);
+    public function getStorage();
 }

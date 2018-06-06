@@ -3,10 +3,13 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -23,25 +26,26 @@ class LoadFromBPMNFileTest extends EngineTestCase
     public function testParallelGateway()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/ParallelGateway.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('ParallelGateway');
+        $process = $bpmnRepository->getProcess('ParallelGateway');
 
         //Create a data store with data.
-        $dataStore = $bpmnRepository->getDataStoreRepository()->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References by id
         $start = $process->getEvents()->item(0);
-        $startActivity = $bpmnRepository->loadBpmElementById('start');
-        $activityA = $bpmnRepository->loadBpmElementById('ScriptTask_1');
-        $activityB = $bpmnRepository->loadBpmElementById('ScriptTask_2');
-        $endActivity = $bpmnRepository->loadBpmElementById('end');
+        $startActivity = $bpmnRepository->getScriptTask('start');
+        $activityA = $bpmnRepository->getScriptTask('ScriptTask_1');
+        $activityB = $bpmnRepository->getScriptTask('ScriptTask_2');
+        $endActivity = $bpmnRepository->getScriptTask('end');
 
         //Start the process
         $start->start();
@@ -57,6 +61,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
@@ -65,7 +70,9 @@ class LoadFromBPMNFileTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
         //Completes the Activity A
@@ -99,6 +106,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
         //Assertion: ActivityC has one token.
@@ -130,25 +138,26 @@ class LoadFromBPMNFileTest extends EngineTestCase
     public function testInclusiveGatewayWithDefault()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/InclusiveGateway_Default.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('InclusiveGateway_Default');
+        $process = $bpmnRepository->getProcess('InclusiveGateway_Default');
 
         //Create a data store with data.
-        $dataStore = $bpmnRepository->getDataStoreRepository()->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
         $dataStore->putData('a', 1);
         $dataStore->putData('b', 1);
 
         //Get References by id
-        $start = $bpmnRepository->loadBpmElementById('StartEvent');
-        $startActivity = $bpmnRepository->loadBpmElementById('start');
-        $activityA = $bpmnRepository->loadBpmElementById('ScriptTask_1');
-        $activityB = $bpmnRepository->loadBpmElementById('ScriptTask_2');
-        $default = $bpmnRepository->loadBpmElementById('ScriptTask_3');
-        $endActivity = $bpmnRepository->loadBpmElementById('end');
+        $start = $bpmnRepository->getStartEvent('StartEvent');
+        $startActivity = $bpmnRepository->getScriptTask('start');
+        $activityA = $bpmnRepository->getScriptTask('ScriptTask_1');
+        $activityB = $bpmnRepository->getScriptTask('ScriptTask_2');
+        $default = $bpmnRepository->getScriptTask('ScriptTask_3');
+        $endActivity = $bpmnRepository->getEndEvent('end');
 
         //Load the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -169,6 +178,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
@@ -177,7 +187,9 @@ class LoadFromBPMNFileTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
         //Completes the Activity A
@@ -207,6 +219,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
         //Completes the End Activity
@@ -223,5 +236,21 @@ class LoadFromBPMNFileTest extends EngineTestCase
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
+    }
+
+    /**
+     * Test to load a collaboration.
+     *
+     */
+    public function t1estLoadCollaborationWithMultipleProcesses()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->load(__DIR__ . '/files/LoadBPMNElements.bpmn');
+
+        //Load a process from a bpmn repository by Id
+        $collaboration = $bpmnRepository->getCollaboration('COLLABORATION_1');
     }
 }

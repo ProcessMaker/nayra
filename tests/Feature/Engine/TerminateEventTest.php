@@ -6,8 +6,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
@@ -24,18 +26,19 @@ class TerminateEventTest extends EngineTestCase
     public function testTerminateEndEvent()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/Terminate_Event.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('Terminate_Event');
+        $process = $bpmnRepository->getProcess('Terminate_Event');
 
         //Get 'start' activity of the process
-        $activity = $bpmnRepository->loadBpmElementById('start');
+        $activity = $bpmnRepository->getActivity('start');
 
         //Get the terminate event
-        $terminateEvent = $bpmnRepository->loadBpmElementById('EndEvent_1');
+        $terminateEvent = $bpmnRepository->getEndEvent('EndEvent_1');
 
         //Start the process
         $instance = $process->call();
@@ -49,6 +52,7 @@ class TerminateEventTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
         //Complete the first activity.
@@ -71,6 +75,7 @@ class TerminateEventTest extends EngineTestCase
             ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             TerminateEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,

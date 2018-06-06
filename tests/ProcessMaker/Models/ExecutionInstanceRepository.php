@@ -4,8 +4,12 @@ namespace ProcessMaker\Models;
 
 use ProcessMaker\Models\ExecutionInstance;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 
 /**
  * Execution Instance Repository.
@@ -21,7 +25,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      *
      * @var array $data
      */
-    private $data = [];
+    private static $data = [];
 
     /**
      * Create an execution instance.
@@ -42,21 +46,22 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function loadExecutionInstanceByUid($uid)
     {
-        $data = $this->data[$uid];
+        $data = self::$data[$uid];
         $instance = new ExecutionInstance();
-        $process = $this->getFactory()->getProcessRepository()->loadProcessByUid($data['processId']);
-        $dataStore = $this->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+        $processRepository = $this->getStorage()->getFactory()->createInstanceOf(ProcessRepositoryInterface::class, $this->getStorage());
+        $process = $processRepository->loadProcessByUid($data['processId']);
+        $dataStore = $this->getStorage()->getFactory()->createInstanceOf(DataStoreInterface::class);
         $dataStore->setData($data['data']);
         $instance->setProcess($process);
         $instance->setDataStore($dataStore);
-        $process->getTransitions($this->getFactory());
+        $process->getTransitions($this->getStorage()->getFactory());
 
         //Load tokens:
-        $tokenRepository = $this->getFactory()->getTokenRepository();
+        $tokenRepository = $this->getStorage()->getFactory()->createInstanceOf(TokenRepositoryInterface::class, $this->getStorage());
         foreach($data['tokens'] as $tokenInfo) {
-            $token = $tokenRepository->createTokenInstance();
+            $token = $this->getStorage()->getFactory()->createInstanceOf(TokenInterface::class);
             $token->setProperties($tokenInfo);
-            $element = $this->getFactory()->loadBpmElementById($tokenInfo['elementId']);
+            $element = $this->getStorage()->getElementInstanceById($tokenInfo['elementId']);
             $element->addToken($instance, $token);
         }
         return $instance;
@@ -81,6 +86,6 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function setRawData(array $data)
     {
-        $this->data = $data;
+        self::$data = $data;
     }
 }

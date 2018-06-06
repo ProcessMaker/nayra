@@ -3,10 +3,15 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
+use ProcessMaker\Test\FormalExpression;
 
 /**
  * Test intermediate timer events
@@ -20,16 +25,16 @@ class IntermediateTimerEventTest extends EngineTestCase
      */
     public function createStartTimerEventProcess()
     {
-        $process = $this->processRepository->createProcessInstance();
+        $process = $this->factory->createInstanceOf(ProcessInterface::class);
         $process->setEngine($this->engine);
 
         //elements
-        $start = $this->eventRepository->createStartEventInstance();
-        $timerEvent = $this->eventRepository->createIntermediateCatchEventInstance();
-        $activityA = $this->activityRepository->createActivityInstance();
-        $activityB = $this->activityRepository->createActivityInstance();
+        $start = $this->factory->createInstanceOf(StartEventInterface::class);
+        $timerEvent = $this->factory->createInstanceOf(IntermediateCatchEventInterface::class);
+        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
+        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
+        $end = $this->factory->createInstanceOf(EndEventInterface::class);
 
-        $end = $this->eventRepository->createEndEventInstance();
         $process
             ->addActivity($activityA)
             ->addActivity($activityB);
@@ -54,7 +59,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithDuration()
     {
         //Create a data store with data.
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -113,7 +118,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithCycle()
     {
         //Create a data store with data.
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -172,7 +177,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithDate()
     {
         //Create a data store with data.
-        $dataStore = $this->dataStoreRepository->createDataStoreInstance();
+        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -236,10 +241,11 @@ class IntermediateTimerEventTest extends EngineTestCase
      */
     private function addTimerEventDefinition (EventInterface $timerEvent, $type)
     {
-        $formalExpression = $this->rootElementRepository->createFormalExpressionInstance();
+        $formalExpression = new FormalExpression();
         $formalExpression->setId('formalExpression');
 
-        $timerEventDefinition = $this->rootElementRepository->createTimerEventDefinitionInstance();
+        $timerEventDefinition = $this->factory->createInstanceOf(TimerEventDefinitionInterface::class);
+
         $timerEventDefinition->setId("TimerEventDefinition");
         switch ($type) {
             case "duration":

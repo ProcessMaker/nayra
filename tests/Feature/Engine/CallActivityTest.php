@@ -6,7 +6,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Repositories\BpmnFileRepository;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test call activity element.
@@ -22,21 +23,22 @@ class CallActivityTest extends EngineTestCase
     public function testCallActivity()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
         $bpmnRepository->load(__DIR__ . '/files/CallActivity_Process.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $bpmnRepository->loadBpmElementById('collaboration');
-        $process = $bpmnRepository->loadBpmElementById('CallActivity_Process');
-        $calledProcess = $bpmnRepository->loadBpmElementById('CalledProcess');
+        $bpmnRepository->getCollaboration('collaboration');
+        $process = $bpmnRepository->getProcess('CallActivity_Process');
+        $calledProcess = $bpmnRepository->getProcess('CalledProcess');
 
-        $start = $bpmnRepository->loadBpmElementById('StartEvent_2');
-        $task = $bpmnRepository->loadBpmElementById('ScriptTask_4');
-        $subtask = $bpmnRepository->loadBpmElementById('ScriptTask_1');
-        $endTask = $bpmnRepository->loadBpmElementById('ScriptTask_5');
-        $callParticipant = $bpmnRepository->loadBpmElementById('Participant_2');
-        $calledParticipant = $bpmnRepository->loadBpmElementById('Participant_1');
+        $start = $bpmnRepository->getStartEvent('StartEvent_2');
+        $task = $bpmnRepository->getActivity('ScriptTask_4');
+        $subtask = $bpmnRepository->getScriptTask('ScriptTask_1');
+        $endTask = $bpmnRepository->getScriptTask('ScriptTask_5');
+        $callParticipant = $bpmnRepository->getParticipant('Participant_2');
+        $calledParticipant = $bpmnRepository->getParticipant('Participant_1');
 
         //Assertion: Verify $callParticipant refers to $process
         $this->assertEquals($process, $callParticipant->getProcess());
@@ -73,12 +75,14 @@ class CallActivityTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
         //Complete the subtask
@@ -97,6 +101,7 @@ class CallActivityTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
         //Complete the last task

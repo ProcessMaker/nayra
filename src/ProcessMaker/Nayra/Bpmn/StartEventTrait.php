@@ -3,13 +3,14 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
+use ProcessMaker\Nayra\Contracts\FactoryInterface;
 
 /**
  * Implementation of the behavior of a start event.
@@ -31,7 +32,12 @@ trait StartEventTrait
      */
     private $triggerPlace = [];
 
-    public function buildTransitions(RepositoryFactoryInterface $factory)
+    /**
+     * Build the transitions of the element.
+     *
+     * @param FactoryInterface $factory
+     */
+    public function buildTransitions(FactoryInterface $factory)
     {
         $this->setFactory($factory);
         $this->transition = new StartTransition($this);
@@ -48,6 +54,11 @@ trait StartEventTrait
         }
     }
 
+    /**
+     * Get the input place. Start event does not have an input place.
+     *
+     * @return null
+     */
     public function getInputPlace()
     {
         return null;
@@ -81,7 +92,7 @@ trait StartEventTrait
      * Method to be called when a message event arrives
      *
      * @param EventDefinitionInterface $event
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return $this
      */
@@ -98,7 +109,7 @@ trait StartEventTrait
         if ($start) {
             if ($instance === null) {
                 $process = $this->getOwnerProcess();
-                $dataStorage = $process->getFactory()->getDataStoreRepository()->createDataStoreInstance();
+                $dataStorage = $process->getFactory()->createInstanceOf(DataStoreInterface::class);
                 $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
             }
             $this->start();

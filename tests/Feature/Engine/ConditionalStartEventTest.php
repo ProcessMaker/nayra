@@ -1,8 +1,9 @@
 <?php
 
 namespace Tests\Feature\Engine;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 
-use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
  * Test a condition start event.
@@ -18,20 +19,22 @@ class ConditionalStartEventTest extends EngineTestCase
     public function testConditionalStartEvent()
     {
         //Load a BpmnFile Repository
-        $bpmnRepository = new BpmnFileRepository();
+        $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->factory);
+
         $bpmnRepository->load(__DIR__ . '/files/Conditional_StartEvent.bpmn');
 
         //Load a process from a bpmn repository by Id
-        $process = $bpmnRepository->loadBpmElementById('Conditional_StartEvent');
+        $process = $bpmnRepository->getProcess('Conditional_StartEvent');
 
         //Create a default environment data
-        $environmentData = $bpmnRepository->getDataStoreRepository()->createDataStoreInstance();
+        $environmentData = $this->factory->createInstanceOf(DataStoreInterface::class);
         $this->engine->setDataStore($environmentData);
 
         //Get start event and event definition references
-        $startEvent = $bpmnRepository->loadBpmElementById('StartEvent_1');
-        $conditionalEvent = $bpmnRepository->loadBpmElementById('_ConditionalEventDefinition_2');
+        $startEvent = $bpmnRepository->getStartEvent('StartEvent_1');
+        $conditionalEvent = $bpmnRepository->getConditionalEventDefinition('_ConditionalEventDefinition_2');
 
         //Trigger the start event
         $startEvent->execute($conditionalEvent);
