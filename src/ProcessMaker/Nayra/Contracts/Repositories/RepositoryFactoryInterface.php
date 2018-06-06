@@ -5,7 +5,6 @@ namespace ProcessMaker\Nayra\Contracts\Repositories;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-
 /**
  * RepositoryFactory
  *

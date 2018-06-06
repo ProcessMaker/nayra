@@ -5,9 +5,11 @@ namespace ProcessMaker\Models;
 use ProcessMaker\Models\ExecutionInstance;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 
 /**
  * Execution Instance Repository.
@@ -46,20 +48,20 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     {
         $data = self::$data[$uid];
         $instance = new ExecutionInstance();
-        $processRepository = $this->getFactory()->createInstanceOf(ProcessRepositoryInterface::class, $this->getFactory());
+        $processRepository = $this->getFactory()->getFactory()->createInstanceOf(ProcessRepositoryInterface::class, $this->getFactory());
         $process = $processRepository->loadProcessByUid($data['processId']);
-        $dataStore = $this->getFactory()->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->getFactory()->getFactory()->createInstanceOf(DataStoreInterface::class);
         $dataStore->setData($data['data']);
         $instance->setProcess($process);
         $instance->setDataStore($dataStore);
-        $process->getTransitions($this->getFactory());
+        $process->getTransitions($this->getFactory()->getFactory());
 
         //Load tokens:
-        $tokenRepository = $this->getFactory()->getTokenRepository();
+        $tokenRepository = $this->getFactory()->getFactory()->createInstanceOf(TokenRepositoryInterface::class, $this->getFactory());
         foreach($data['tokens'] as $tokenInfo) {
-            $token = $tokenRepository->createTokenInstance();
+            $token = $this->getFactory()->getFactory()->createInstanceOf(TokenInterface::class);
             $token->setProperties($tokenInfo);
-            $element = $this->getFactory()->loadBpmElementById($tokenInfo['elementId']);
+            $element = $this->getFactory()->getElementInstanceById($tokenInfo['elementId']);
             $element->addToken($instance, $token);
         }
         return $instance;

@@ -49,7 +49,7 @@ class ProcessRepository implements ProcessRepositoryInterface
      */
     public function loadProcessByUid($uid)
     {
-        return $this->getFactory()->loadBpmElementById($uid);
+        return $this->getFactory()->getProcess($uid);
     }
 
     /**

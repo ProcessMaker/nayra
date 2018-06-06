@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\RepositoryFactoryInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
 /**
@@ -39,6 +40,8 @@ trait EngineTrait
      * @var DataStoreInterface $dataStore
      */
     private $dataStore;
+
+    private $repository;
 
     /**
      * Execute all the process transitions.
@@ -108,7 +111,7 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id)
     {
-        $repository = $this->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $this->getFactory());
+        $repository = $this->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $this->getRepository());
         $executionInstance = $repository->loadExecutionInstanceByUid($id);
         
         $executionInstance->linkToEngine($this);
@@ -182,5 +185,15 @@ trait EngineTrait
                 $event->registerCatchEvents($this);
             }
         }
+    }
+
+    private function getRepository()
+    {
+        return $this->repository;
+    }
+
+    public function setRepository(RepositoryFactoryInterface $repository)
+    {
+        $this->repository = $repository;
     }
 }

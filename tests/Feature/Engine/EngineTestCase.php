@@ -5,6 +5,7 @@ use ProcessMaker\Bpmn\TestEngine;
 use ProcessMaker\Models\CallActivity;
 use ProcessMaker\Models\ExecutionInstanceRepository;
 use ProcessMaker\Models\ProcessRepository;
+use ProcessMaker\Models\TokenRepository;
 use ProcessMaker\Nayra\Bpmn\Lane;
 use ProcessMaker\Nayra\Bpmn\LaneSet;
 use ProcessMaker\Nayra\Bpmn\Model\Activity;
@@ -72,6 +73,7 @@ use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 use ProcessMaker\Nayra\Factory;
 use ProcessMaker\Test\FormalExpression;
@@ -332,6 +334,7 @@ class EngineTestCase extends TestCase
             TerminateEventDefinitionInterface::class    => TerminateEventDefinition::class,
             TimerEventDefinitionInterface::class        => TimerEventDefinition::class,
             TokenInterface::class                       => Token::class,
+            TokenRepositoryInterface::class             => TokenRepository::class,
         ];
         return new Factory($mappings);
     }

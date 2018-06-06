@@ -129,6 +129,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->factory);
         $this->engine->setFactory($this->factory);
+        $this->engine->setRepository($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
@@ -167,17 +168,18 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->factory);
         $this->engine->setFactory($this->factory);
+        $this->engine->setRepository($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
-        $this->prepareParallelProcess();
+        $this->prepareParallelProcess($bpmnRepository);
 
         //Load the execution instance
         $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
 
         //Get References by id
-        $secondActivity = $bpmnRepository->loadBpmElementById('task2');
-        $thirdActivity = $bpmnRepository->loadBpmElementById('task3');
+        $secondActivity = $bpmnRepository->getScriptTask('task2');
+        $thirdActivity = $bpmnRepository->getScriptTask('task3');
 
         //Completes the second activity
         $token = $secondActivity->getTokens($instance)->item(0);
@@ -220,17 +222,18 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->factory);
         $this->engine->setFactory($this->factory);
+        $this->engine->setRepository($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
-        $this->prepareParallelProcessWithActivityCompleted();
+        $this->prepareParallelProcessWithActivityCompleted($bpmnRepository);
 
         //Load the execution instance
         $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
 
         //Get References by id
-        $secondActivity = $bpmnRepository->loadBpmElementById('task2');
-        $thirdActivity = $bpmnRepository->loadBpmElementById('task3');
+        $secondActivity = $bpmnRepository->getScriptTask('task2');
+        $thirdActivity = $bpmnRepository->getScriptTask('task3');
 
         //Completes the third activity
         $token = $thirdActivity->getTokens($instance)->item(0);
@@ -266,10 +269,11 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->factory);
+        $this->engine->setRepository($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
-        $this->prepareParallelProcessWithException();
+        $this->prepareParallelProcessWithException($bpmnRepository);
 
         //Load the execution instance
         $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
