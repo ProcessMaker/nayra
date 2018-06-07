@@ -23,7 +23,6 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ReflectionClass;
 
 /**
@@ -316,12 +315,7 @@ trait ProcessTrait
         $this->notifyEvent($eventName, $this, $instance, $event);
         $arguments = [$this, $instance, $event];
         $bpmnEvents = $this->getBpmnEventClasses();
-        if (isset($bpmnEvents[$eventName])) {
-            $reflector = new ReflectionClass($bpmnEvents[$eventName]);
-            $payload = $reflector->newInstanceArgs($arguments);
-        } else {
-            $payload = $arguments;
-        }
+        $payload = new $bpmnEvents[$eventName](...$arguments);
         $this->getDispatcher()->dispatch($eventName, $payload);
         return $this;
     }

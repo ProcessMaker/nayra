@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Model;
 
+use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
 use ProcessMaker\Nayra\Bpmn\ProcessTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
@@ -38,6 +40,9 @@ class Process implements ProcessInterface
      */
     protected function getBpmnEventClasses()
     {
-        return [];
+        return [
+            static::EVENT_PROCESS_INSTANCE_COMPLETED => ProcessInstanceCompletedEvent::class,
+            static::EVENT_PROCESS_INSTANCE_CREATED   => ProcessInstanceCreatedEvent::class,
+        ];
     }
 }
