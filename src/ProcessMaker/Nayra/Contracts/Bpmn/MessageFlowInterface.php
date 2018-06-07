@@ -15,6 +15,7 @@ interface MessageFlowInterface extends EntityInterface
     const BPMN_PROPERTY_TARGET = 'target';
     const BPMN_PROPERTY_SOURCE_REF = 'sourceRef';
     const BPMN_PROPERTY_TARGET_REF = 'targetRef';
+    const BPMN_PROPERTY_COLLABORATION = 'collaboration';
 
     /**
      * @return InteractionNodeInterface
@@ -27,20 +28,37 @@ interface MessageFlowInterface extends EntityInterface
     public function getTarget();
 
 
+    /**
+     * Set message of the message flow.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface $message
+     *
+     * @return $this
+     */
     public function setMessage(MessageInterface $message);
 
     /**
+     * Get message of the message flow.
+     *
      * @return MessageInterface
      */
     public function getMessage();
 
     /**
-     * @return FlowNodeInterface $source
+     * Set the source of the message flow.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface $source
+     *
+     * @return $this
      */
     public function setSource(ThrowEventInterface $source);
 
     /**
-     * @param FlowNodeInterface $target
+     * Set the target of the message flow.
+     *
+     * @param CatchEventInterface $target
+     *
+     * @return $this
      */
     public function setTarget(CatchEventInterface $target);
 

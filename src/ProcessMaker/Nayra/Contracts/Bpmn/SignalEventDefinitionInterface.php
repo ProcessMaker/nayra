@@ -13,6 +13,9 @@ interface SignalEventDefinitionInterface extends EventDefinitionInterface
     const EVENT_THROW_EVENT_DEFINITION = 'ThrowSignalEvent';
     const EVENT_CATCH_EVENT_DEFINITION = 'CatchSignalEvent';
 
+    const BPMN_PROPERTY_SIGNAL = 'signal';
+    const BPMN_PROPERTY_SIGNAL_REF = 'signalRef';
+
     /**
      * Returns the event definition payload (message, signal, etc.)
      *

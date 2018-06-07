@@ -21,15 +21,22 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\LaneInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ServiceInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
@@ -160,8 +167,10 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 ParticipantInterface::class,
                 [
                     ParticipantInterface::BPMN_PROPERTY_PROCESS => ['1', [BpmnDocument::BPMN_MODEL, ParticipantInterface::BPMN_PROPERTY_PROCESS_REF]],
+                    ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY => ['1', [BpmnDocument::BPMN_MODEL, ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY]],
                 ]
             ],
+            'participantMultiplicity' => [self::IS_ARRAY, []],
             'conditionalEventDefinition' => [
                 ConditionalEventDefinitionInterface::class,
                 [
@@ -198,6 +207,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 [
                     MessageFlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnDocument::BPMN_MODEL, MessageFlowInterface::BPMN_PROPERTY_SOURCE_REF]],
                     MessageFlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnDocument::BPMN_MODEL, MessageFlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                    MessageFlowInterface::BPMN_PROPERTY_COLLABORATION => self::PARENT_NODE,
                 ]
             ],
             'timerEventDefinition' => [
@@ -255,9 +265,58 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
             OperationInterface::BPMN_TAG => [
                 OperationInterface::class,
                 [
-                    OperationInterface::BPMN_PROPERTY_IN_MESSAGE => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_IN_MESSAGE]],
-                    OperationInterface::BPMN_PROPERTY_OUT_MESSAGE => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_OUT_MESSAGE]],
-                    OperationInterface::BPMN_PROPERTY_ERRORS => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_ERRORS]],
+                    OperationInterface::BPMN_PROPERTY_IN_MESSAGE => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_IN_MESSAGE_REF]],
+                    OperationInterface::BPMN_PROPERTY_OUT_MESSAGE => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_OUT_MESSAGE_REF]],
+                    OperationInterface::BPMN_PROPERTY_ERRORS => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_ERROR_REF]],
+                ]
+            ],
+            OperationInterface::BPMN_PROPERTY_IN_MESSAGE_REF => [self::IS_PROPERTY, []],
+            OperationInterface::BPMN_PROPERTY_OUT_MESSAGE_REF => [self::IS_PROPERTY, []],
+            OperationInterface::BPMN_PROPERTY_ERROR_REF => [self::IS_PROPERTY, []],
+            'messageEventDefinition' => [
+                MessageEventDefinitionInterface::class,
+                [
+                    MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION => ['1', [BpmnDocument::BPMN_MODEL, MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION_REF]],
+                    MessageEventDefinitionInterface::BPMN_PROPERTY_MESSAGE => ['1', [BpmnDocument::BPMN_MODEL, MessageEventDefinitionInterface::BPMN_PROPERTY_MESSAGE_REF]],
+                ]
+            ],
+            MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION_REF => [self::IS_PROPERTY, []],
+            'message' => [
+                MessageInterface::class,
+                [
+                    MessageInterface::BPMN_PROPERTY_ITEM => ['1', [BpmnDocument::BPMN_MODEL, MessageInterface::BPMN_PROPERTY_ITEM_REF]],
+                ]
+            ],
+            'intermediateCatchEvent'   => [
+                IntermediateCatchEventInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    IntermediateCatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                ]
+            ],
+            'intermediateThrowEvent'   => [
+                IntermediateThrowEventInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    IntermediateThrowEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                ]
+            ],
+            'signalEventDefinition' => [
+                SignalEventDefinitionInterface::class,
+                [
+                    SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL => ['1', [BpmnDocument::BPMN_MODEL, SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF]],
+                ]
+            ],
+            'itemDefinition'=> [
+                ItemDefinitionInterface::class,
+                [
+                ]
+            ],
+            'signal'=> [
+                SignalInterface::class,
+                [
                 ]
             ],
         ]
@@ -266,6 +325,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     const DOM_ELEMENT_BODY = [null, '#text'];
     const SKIP_ELEMENT = null;
     const IS_PROPERTY = 'isProperty';
+    const IS_ARRAY = 'isArray';
+    const PARENT_NODE = [null, '#parent'];
 
     /**
      * BPMN file document constructor.

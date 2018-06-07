@@ -47,7 +47,7 @@ trait ParticipantTrait
     /**
      * Set the Process that the Participant uses in the Collaboration.
      *
-     * @param ProcessInterface
+     * @param ProcessInterface $process
      *
      * @return $this
      */
@@ -71,14 +71,12 @@ trait ParticipantTrait
     /**
      * Set Participant multiplicity for a given interaction.
      *
-     * @param int $maximum
-     * @param int $minimum
+     * @param array $array
      *
      * @return $this
      */
-    public function setParticipantMultiplicity($maximum, $minimum)
+    public function setParticipantMultiplicity(array $array)
     {
-        $value = ['maximum' => $maximum, 'minimum' => $minimum];
-        return $this->setProperty(ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY, $value);
+        return $this->setProperty(ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY, $array);
     }
 }

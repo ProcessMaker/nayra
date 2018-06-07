@@ -7,7 +7,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface SignalInterface
+interface SignalInterface extends EntityInterface
 {
     /**
      * Returns the id of the message

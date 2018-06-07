@@ -19,40 +19,25 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
     use BaseTrait;
 
     /**
-     * @var string $id
-     */
-    private $id;
-
-    /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface $message
-     */
-    private $message;
-
-    /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface $operation
-     */
-    private $operation;
-
-    /**
      * Get the message.
      *
      * @return MessageInterface
      */
     public function getPayload()
     {
-        return $this->message;
+        return $this->getProperty(static::BPMN_PROPERTY_MESSAGE);
     }
 
     /**
      * Sets the message to be used in the message event definition
      *
      * @param MessageInterface $message
+     *
      * @return $this
      */
-    public function setPayload($message)
+    public function setPayload(MessageInterface $message)
     {
-        $this->message = $message;
-        return $this;
+        return $this->setProperty(static::BPMN_PROPERTY_MESSAGE, $message);
     }
 
     /**
@@ -62,7 +47,7 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
      */
     public function getOperation()
     {
-        return $this->operation;
+        return $this->getProperty(static::BPMN_PROPERTY_OPERATION);
     }
 
     /**
@@ -73,29 +58,7 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
      */
     public function setOperation(OperationInterface $operation)
     {
-        $this->operation = $operation;
-        return $this;
-    }
-
-    /**
-     * Returns the element's id
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Sets the element id
-     *
-     * @param $value
-     * @return mixed
-     */
-    public function setId($value)
-    {
-        $this->id = $value;
+        return $this->setProperty(static::BPMN_PROPERTY_OPERATION, $operation);
     }
 
     /**
@@ -103,7 +66,7 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
      *
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return boolean
      */

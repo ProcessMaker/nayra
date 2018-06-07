@@ -7,11 +7,11 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-interface ItemDefinitionInterface
+interface ItemDefinitionInterface extends EntityInterface
 {
-    const BPMN_PROPERTY_ID = 'id';
     const BPMN_PROPERTY_ITEM_KIND = 'itemKind';
     const BPMN_PROPERTY_STRUCTURE = 'structure';
+    const BPMN_PROPERTY_STRUCTURE_REF = 'structureRef';
     const BPMN_PROPERTY_IS_COLLECTION = 'isCollection';
 
     const ITEM_KIND_PHYSICAL = 'physical';

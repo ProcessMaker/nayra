@@ -49,16 +49,6 @@ interface CollaborationInterface extends EntityInterface
     public function send(EventDefinitionInterface $message, TokenInterface $token);
 
     /**
-     * Sends a message with a delay in miliseconds
-     *
-     * @param EventDefinitionInterface $message
-     * @param int $delay
-     *
-     * @return mixed
-     */
-    public function delay(EventDefinitionInterface $message, $delay);
-
-    /**
      * Subscribes an element to the collaboration so that it can listen the messages sent
      *
      * @param MessageListenerInterface $element
