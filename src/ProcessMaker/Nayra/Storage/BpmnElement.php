@@ -102,7 +102,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 || (is_array($type) && $node->namespaceURI === $type[0] && $node->localName===$type[1]);
             if ($isThisProperty && $multiplicity === 'n') {
                 $to->addProperty($name, $value);
-            } else if ($isThisProperty && $multiplicity == '1') {
+            } else if ($isThisProperty && $multiplicity === '1') {
                 $to->setProperty($name, $value);
             }
         }
@@ -155,7 +155,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
         foreach ($mapProperties as $name => $property) {
             list($multiplicity, $type) = $property;
             $isThisProperty = $type === BpmnDocument::DOM_ELEMENT_BODY;
-            if ($isThisProperty && $multiplicity == '1') {
+            if ($isThisProperty && $multiplicity === '1') {
                 $bpmnElement->setProperty($name, $this->textContent);
             }
         }
