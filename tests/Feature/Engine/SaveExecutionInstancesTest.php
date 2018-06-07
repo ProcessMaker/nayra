@@ -3,6 +3,8 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Bpmn\Model\ActivityActivatedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -33,17 +35,17 @@ class SaveExecutionInstancesTest extends EngineTestCase
         //Prepare the listener to save tokens
         $dispatcher = $this->engine->getDispatcher();
         $dispatcher->listen(ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
-                            function($payload) {
-            $this->storage[$payload[1]->getId()] = [
-                'processId' => $payload[0]->getId(),
+                            function(ProcessInstanceCreatedEvent $payload) {
+            $this->storage[$payload->instance->getId()] = [
+                'processId' => $payload->process->getId(),
                 'data'      => [],
                 'tokens'    => [],
                 'status'    => 'ACTIVE',
             ];
         });
         $dispatcher->listen(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
-                            function($payload) {
-            $this->storage[$payload[1]->getId()]['status'] = 'COMPLETED';
+                            function(ProcessInstanceCompletedEvent $payload) {
+            $this->storage[$payload->instance->getId()]['status'] = 'COMPLETED';
         });
         $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
                             function(ActivityActivatedEvent $event) {
