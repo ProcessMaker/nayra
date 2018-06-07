@@ -9,7 +9,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface LaneSetInterface extends EntityInterface
 {
-    const BPMN_PROPERTY_NAME = 'name';
     const BPMN_PROPERTY_LANE = 'lane';
 
     /**

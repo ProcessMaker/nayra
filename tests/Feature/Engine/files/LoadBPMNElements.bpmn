@@ -5,7 +5,7 @@
   <message id="message" itemRef="item" name="message"/>
   <message id="MSG_1" name="startMessage"/>
   <interface id="IF_1" implementationRef="implementationReference" name="myInterface">
-    <operation id="IF_1_O_1" name="opMsgToProcess">
+    <operation id="IF_1_O_1" implementationRef="foo.service.url" name="opMsgToProcess">
       <inMessageRef>message</inMessageRef>
       <outMessageRef>message</outMessageRef>
       <errorRef>ERR_1</errorRef>
@@ -71,7 +71,12 @@
     <intermediateThrowEvent id="_20" name="Intermediate Throw Event">
       <incoming>_21</incoming>
       <outgoing>_49</outgoing>
-      <inputSet/>
+      <dataInput id="Din_20_1" itemSubjectRef="item" name="input1"/>
+      <dataInput id="Din_20_2" isCollection="true" name="input2"/>
+      <inputSet id="IS_1">
+        <dataInputRefs>Din_20_1</dataInputRefs>
+        <dataInputRefs>Din_20_2</dataInputRefs>
+      </inputSet>
       <messageEventDefinition id="_20_ED_1" messageRef="message">
         <operationRef>IF_1_O_1</operationRef>
       </messageEventDefinition>
@@ -151,14 +156,14 @@
       <outgoing>_74</outgoing>
       <outputSet/>
       <timerEventDefinition id="_72_ED_1">
-        <timeDuration><![CDATA[PT1M]]></timeDuration>
+        <timeDuration id="TD_EX_1"><![CDATA[PT1M]]></timeDuration>
       </timerEventDefinition>
     </intermediateCatchEvent>
     <sequenceFlow id="_73" sourceRef="_62" targetRef="_72"/>
     <sequenceFlow id="_74" sourceRef="_72" targetRef="_64"/>
   </process>
   <process id="PROCESS_2" isClosed="false" isExecutable="true" processType="None">
-    <laneSet>
+    <laneSet id="LS_59">
       <lane id="_59" name="Lane"/>
       <lane id="_70" name="Lane">
         <flowNodeRef>_34</flowNodeRef>
@@ -200,7 +205,12 @@
     <intermediateCatchEvent id="_22" name="Intermediate Catch Event" parallelMultiple="false">
       <incoming>_27</incoming>
       <outgoing>_29</outgoing>
-      <outputSet/>
+      <dataOutput id="Dout_22_1" itemSubjectRef="item" name="output1"/>
+      <dataOutput id="Dout_22_2" isCollection="true" name="output2"/>
+      <outputSet id="OS_1">
+        <dataOutputRefs>Dout_22_1</dataOutputRefs>
+        <dataOutputRefs>Dout_22_2</dataOutputRefs>
+      </outputSet>
       <messageEventDefinition id="_22_ED_1" messageRef="message">
         <operationRef>IF_1_O_1</operationRef>
       </messageEventDefinition>
@@ -241,6 +251,7 @@
       <outgoing>_41</outgoing>
     </parallelGateway>
   </process>
+  <dataStore id="DS_1" name="dataStore"/>
   <bpmndi:BPMNDiagram id="Yaoqiang_Diagram-COLLABORATION_1" name="Untitled Diagram" resolution="96.0">
     <bpmndi:BPMNPlane bpmnElement="COLLABORATION_1">
       <bpmndi:BPMNShape bpmnElement="_2" id="Yaoqiang-_2" isExpanded="true" isHorizontal="true">
@@ -268,9 +279,9 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_4" id="Yaoqiang-_4">
-        <dc:Bounds height="32.0" width="32.0" x="99.99999999999994" y="81.5"/>
+        <dc:Bounds height="32.0" width="32.0" x="99.99999999999994" y="76.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.96" width="63.0" x="84.5" y="122.02"/>
+          <dc:Bounds height="18.96" width="63.0" x="84.5" y="117.02"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_9" id="Yaoqiang-_9">
@@ -522,10 +533,10 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_6" id="Yaoqiang-_6">
-        <di:waypoint x="132.3324652542289" y="97.5"/>
+        <di:waypoint x="132.3324652542289" y="92.5"/>
         <di:waypoint x="172.33333333333326" y="97.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.96" width="6.0" x="149.33" y="88.02"/>
+          <dc:Bounds height="18.96" width="6.0" x="149.17" y="85.69"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_44" id="Yaoqiang-_44">

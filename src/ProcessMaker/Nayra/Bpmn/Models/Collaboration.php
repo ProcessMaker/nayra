@@ -14,6 +14,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
+/**
+ * Implementation of Collaboration element.
+ *
+ */
 class Collaboration implements CollaborationInterface
 {
 
@@ -25,11 +29,6 @@ class Collaboration implements CollaborationInterface
      * @var boolean $isClosed
      */
     private $isClosed;
-
-    /**
-     * @var MessageFlowInterface[] $messageFlows
-     */
-    private $messageFlows;
 
     /**
      * @var CorrelationKeyInterface[] $correlationKeys
@@ -51,6 +50,10 @@ class Collaboration implements CollaborationInterface
     /** @var Collection */
     private $participantAssociations;
 
+    /**
+     * Initialize the collaboration element.
+     *
+     */
     protected function initCollaboration()
     {
         $this->artifacts = new Collection;
@@ -60,8 +63,8 @@ class Collaboration implements CollaborationInterface
         $this->conversationNodes = new Collection;
         $this->correlationKeys = new Collection;
         $this->messageFlowAssociations = new Collection;
-        $this->messageFlows = new Collection;
         $this->participantAssociations = new Collection;
+        $this->setMessageFlows(new Collection);
         $this->setProperty(CollaborationInterface::BPMN_PROPERTY_PARTICIPANT, new Collection);
     }
 
@@ -82,7 +85,7 @@ class Collaboration implements CollaborationInterface
      */
     public function getMessageFlows()
     {
-        return $this->messageFlows;
+        return $this->getProperty(static::BPMN_PROPERTY_MESSAGE_FLOWS);
     }
 
     /**
@@ -94,8 +97,7 @@ class Collaboration implements CollaborationInterface
      */
     public function addMessageFlow(MessageFlowInterface $messageFlow)
     {
-        $this->messageFlows->push($messageFlow);
-        return $this;
+        return $this->addProperty(static::BPMN_PROPERTY_MESSAGE_FLOWS, $messageFlow);
     }
 
     /**
@@ -217,7 +219,6 @@ class Collaboration implements CollaborationInterface
      */
     public function setMessageFlows(CollectionInterface $messageFlows)
     {
-        $this->messageFlows = $messageFlows;
-        return $this;
+        return $this->setProperty(static::BPMN_PROPERTY_MESSAGE_FLOWS, $messageFlows);
     }
 }

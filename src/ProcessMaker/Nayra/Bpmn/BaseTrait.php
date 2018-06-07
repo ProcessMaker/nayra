@@ -165,4 +165,26 @@ trait BaseTrait
         $this->setProperty(static::BPMN_PROPERTY_ID, $id);
         return $this;
     }
+
+    /**
+     * Get Id of the element.
+     *
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->getProperty(static::BPMN_PROPERTY_NAME);
+    }
+
+    /**
+     * Set the name of the element
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setProperty(static::BPMN_PROPERTY_NAME, $name);
+    }
 }

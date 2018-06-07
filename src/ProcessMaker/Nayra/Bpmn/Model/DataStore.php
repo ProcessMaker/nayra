@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dante
- * Date: 6/4/18
- * Time: 8:56 AM
- */
 
 namespace ProcessMaker\Nayra\Bpmn\Model;
 

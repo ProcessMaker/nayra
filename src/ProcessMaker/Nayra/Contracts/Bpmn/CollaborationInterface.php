@@ -12,6 +12,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 interface CollaborationInterface extends EntityInterface
 {
     const BPMN_PROPERTY_PARTICIPANT = 'participant';
+    const BPMN_PROPERTY_MESSAGE_FLOW = 'messageFlow';
+    const BPMN_PROPERTY_MESSAGE_FLOWS = 'messageFlows';
 
     /**
      * Get a boolean value specifying whether Message Flows not modeled in the
@@ -20,6 +22,16 @@ interface CollaborationInterface extends EntityInterface
      * @return bool
      */
     public function isClosed();
+
+    /**
+     * Set a boolean value specifying whether Message Flows not modeled in the
+     * Collaboration can occur when the Collaboration is carried out.
+     *
+     * @param boolean $isClosed
+     *
+     * @return $this
+     */
+    public function setClosed($isClosed);
 
     /**
      * @return ParticipantInterface[]
@@ -36,8 +48,18 @@ interface CollaborationInterface extends EntityInterface
      */
     public function getMessageFlows();
 
+    /**
+     * Add a message flow to the collaboration.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface $messageFlow
+     */
     public function addMessageFlow(MessageFlowInterface $messageFlow);
 
+    /**
+     * Set the message flows collection.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $messageFlows
+     */
     public function setMessageFlows(CollectionInterface $messageFlows);
 
     /**

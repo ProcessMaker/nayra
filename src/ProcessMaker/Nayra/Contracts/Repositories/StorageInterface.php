@@ -141,33 +141,6 @@ interface StorageInterface
     public function getCollaboration($id);
 
     /**
-     * Get CorrelationProperty instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CorrelationPropertyInterface
-     */
-    public function getCorrelationProperty($id);
-
-    /**
-     * Get DataAssociation instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataAssociationInterface
-     */
-    public function getDataAssociation($id);
-
-    /**
-     * Get DataInputAssociation instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataInputAssociationInterface
-     */
-    public function getDataInputAssociation($id);
-
-    /**
      * Get DataInput instance by id.
      *
      * @param string $id
@@ -175,15 +148,6 @@ interface StorageInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface
      */
     public function getDataInput($id);
-
-    /**
-     * Get DataOutputAssociation instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataOutputAssociationInterface
-     */
-    public function getDataOutputAssociation($id);
 
     /**
      * Get DataOutput instance by id.
@@ -339,15 +303,6 @@ interface StorageInterface
     public function getIntermediateThrowEvent($id);
 
     /**
-     * Get ItemAwareElement instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ItemAwareElementInterface
-     */
-    public function getItemAwareElement($id);
-
-    /**
      * Get Lane instance by id.
      *
      * @param string $id
@@ -429,15 +384,6 @@ interface StorageInterface
     public function getProcess($id);
 
     /**
-     * Get Property instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\PropertyInterface
-     */
-    public function getProperty($id);
-
-    /**
      * Get ScriptTask instance by id.
      *
      * @param string $id
@@ -445,15 +391,6 @@ interface StorageInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface
      */
     public function getScriptTask($id);
-
-    /**
-     * Get Shape instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ShapeInterface
-     */
-    public function getShape($id);
 
     /**
      * Get SignalEventDefinition instance by id.
@@ -472,15 +409,6 @@ interface StorageInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface
      */
     public function getStartEvent($id);
-
-    /**
-     * Get State instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
-     */
-    public function getState($id);
 
     /**
      * Get TerminateEventDefinition instance by id.
@@ -508,24 +436,6 @@ interface StorageInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface
      */
     public function getTimerEventDefinition($id);
-
-    /**
-     * Get Token instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
-     */
-    public function getToken($id);
-
-    /**
-     * Get Transition instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
-     */
-    public function getTransition($id);
 
     /**
      * Get ConditionalEventDefinition instance by id.
