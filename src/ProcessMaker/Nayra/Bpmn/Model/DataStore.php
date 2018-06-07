@@ -32,12 +32,6 @@ class DataStore implements DataStoreInterface
 
     /**
      *
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
-     */
-    private $state;
-
-    /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface
      */
     private $itemSubject;
