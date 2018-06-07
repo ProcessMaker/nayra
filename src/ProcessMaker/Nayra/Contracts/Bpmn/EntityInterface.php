@@ -3,7 +3,6 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Entity could get and set properties for an bpmn element.

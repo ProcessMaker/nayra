@@ -167,7 +167,7 @@ trait BaseTrait
     }
 
     /**
-     * Get Id of the element.
+     * Get the name of the element.
      *
      * @return mixed
      */
