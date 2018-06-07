@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
  *
  * @package ProcessMaker\Nayra\Bpmn\Models
  */
-
 class Artifact implements ArtifactInterface
 {
     private $process;

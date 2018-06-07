@@ -107,29 +107,6 @@ class DataStore implements DataStoreInterface
     }
 
     /**
-     * Get item state.
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * Set item state.
-     *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface $state
-     *
-     * @return $this
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-        return $this;
-    }
-
-    /**
      * Get the items that are stored or conveyed by the ItemAwareElement.
      *
      * @return ItemDefinitionInterface

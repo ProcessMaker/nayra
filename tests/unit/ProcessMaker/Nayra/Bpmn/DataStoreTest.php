@@ -27,15 +27,11 @@ class DataStoreTest extends EngineTestCase
         $dummyActivity->setFactory($this->factory);
         $state = $this->factory->createInstanceOf(StateInterface::class, $dummyActivity,'');
 
-        //set process and state object to the data store
+        // Set process and state object to the data store
         $dataStore->setOwnerProcess($process);
-        $dataStore->setState($state);
 
         //Assertion: The get process must be equal to the set process
         $this->assertEquals($process, $dataStore->getOwnerProcess());
-
-        //Assertion: the get state must be equal to the set data store
-        $this->assertEquals($state, $dataStore->getState());
 
         //Assertion: the data store should have a non initialized item subject
         $this->assertNull($dataStore->getItemSubject());

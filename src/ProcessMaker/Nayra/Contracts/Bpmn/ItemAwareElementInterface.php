@@ -11,22 +11,6 @@ interface ItemAwareElementInterface extends FlowElementInterface
 {
 
     /**
-     * Get item state.
-     *
-     * @return mixed
-     */
-    public function getState();
-
-    /**
-     * Set item state.
-     *
-     * @param $state
-     *
-     * @return $this
-     */
-    public function setState($state);
-
-    /**
      * Get the items that are stored or conveyed by the ItemAwareElement.
      *
      * @return ItemDefinitionInterface
