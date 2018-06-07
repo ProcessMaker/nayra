@@ -9,6 +9,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataOutputInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
@@ -21,6 +24,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\InputSetInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
@@ -30,6 +34,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\OutputSetInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -161,6 +166,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 CollaborationInterface::class,
                 [
                     CollaborationInterface::BPMN_PROPERTY_PARTICIPANT => ['n', [BpmnDocument::BPMN_MODEL, CollaborationInterface::BPMN_PROPERTY_PARTICIPANT]],
+                    CollaborationInterface::BPMN_PROPERTY_MESSAGE_FLOWS => ['n', [BpmnDocument::BPMN_MODEL, CollaborationInterface::BPMN_PROPERTY_MESSAGE_FLOW]],
                 ]
             ],
             'participant' => [
@@ -184,8 +190,20 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 ]
             ],
             'extensionElements' => self::SKIP_ELEMENT,
-            'inputSet' => self::SKIP_ELEMENT,
-            'outputSet' => self::SKIP_ELEMENT,
+            'inputSet' => [
+                InputSetInterface::class,
+                [
+                    InputSetInterface::BPMN_PROPERTY_DATA_INPUTS => ['n', [BpmnDocument::BPMN_MODEL, InputSetInterface::BPMN_PROPERTY_DATA_INPUT_REFS]],
+                ]
+            ],
+            InputSetInterface::BPMN_PROPERTY_DATA_INPUT_REFS => [self::IS_PROPERTY, []],
+            'outputSet' => [
+                OutputSetInterface::class,
+                [
+                    OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUTS => ['n', [BpmnDocument::BPMN_MODEL, OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUT_REFS]],
+                ]
+            ],
+            OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUT_REFS => [self::IS_PROPERTY, []],
             'terminateEventDefinition' => [
                 TerminateEventDefinitionInterface::class,
                 [
@@ -309,15 +327,33 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL => ['1', [BpmnDocument::BPMN_MODEL, SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF]],
                 ]
             ],
-            'itemDefinition'=> [
+            'itemDefinition' => [
                 ItemDefinitionInterface::class,
                 [
                 ]
             ],
-            'signal'=> [
+            'signal' => [
                 SignalInterface::class,
                 [
                 ]
+            ],
+            'dataInput' => [
+                DataInputInterface::class,
+                [
+                    DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
+                    DataInputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
+                ]
+            ],
+            'dataOutput' => [
+                DataOutputInterface::class,
+                [
+                    DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
+                    DataOutputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
+                ]
+            ],
+            'dataStore' => [
+                DataStoreInterface::class,
+                []
             ],
         ]
     ];
@@ -326,7 +362,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     const SKIP_ELEMENT = null;
     const IS_PROPERTY = 'isProperty';
     const IS_ARRAY = 'isArray';
-    const PARENT_NODE = [null, '#parent'];
+    const PARENT_NODE = [1, '#parent'];
+    const IS_BOOLEAN = [1, '#boolean'];
 
     /**
      * BPMN file document constructor.
@@ -497,42 +534,6 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     }
 
     /**
-     * Get CorrelationProperty instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CorrelationPropertyInterface
-     */
-    public function getCorrelationProperty($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
-     * Get DataAssociation instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataAssociationInterface
-     */
-    public function getDataAssociation($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
-     * Get DataInputAssociation instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataInputAssociationInterface
-     */
-    public function getDataInputAssociation($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
      * Get DataInput instance by id.
      *
      * @param string $id
@@ -540,18 +541,6 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface
      */
     public function getDataInput($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
-     * Get DataOutputAssociation instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataOutputAssociationInterface
-     */
-    public function getDataOutputAssociation($id)
     {
         return $this->getElementInstanceById($id);
     }
@@ -761,18 +750,6 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     }
 
     /**
-     * Get ItemAwareElement instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ItemAwareElementInterface
-     */
-    public function getItemAwareElement($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
      * Get Lane instance by id.
      *
      * @param string $id
@@ -881,18 +858,6 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     }
 
     /**
-     * Get Property instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\PropertyInterface
-     */
-    public function getProperty($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
      * Get ScriptTask instance by id.
      *
      * @param string $id
@@ -900,18 +865,6 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface
      */
     public function getScriptTask($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
-     * Get Shape instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ShapeInterface
-     */
-    public function getShape($id)
     {
         return $this->getElementInstanceById($id);
     }
@@ -936,18 +889,6 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface
      */
     public function getStartEvent($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
-     * Get State instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
-     */
-    public function getState($id)
     {
         return $this->getElementInstanceById($id);
     }
@@ -996,30 +937,6 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface
      */
     public function getConditionalEventDefinition($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
-     * Get Token instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
-     */
-    public function getToken($id)
-    {
-        return $this->getElementInstanceById($id);
-    }
-
-    /**
-     * Get Transition instance by id.
-     *
-     * @param string $id
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
-     */
-    public function getTransition($id)
     {
         return $this->getElementInstanceById($id);
     }

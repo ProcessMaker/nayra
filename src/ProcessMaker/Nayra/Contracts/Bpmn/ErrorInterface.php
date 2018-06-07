@@ -9,7 +9,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface ErrorInterface extends EntityInterface
 {
-    const BPMN_PROPERTY_NAME = 'name';
     const BPMN_PROPERTY_ERROR_CODE = 'errorCode';
 
     /**

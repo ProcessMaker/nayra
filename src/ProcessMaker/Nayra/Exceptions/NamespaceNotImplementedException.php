@@ -2,13 +2,13 @@
 
 namespace ProcessMaker\Nayra\Exceptions;
 
-use BadMethodCallException;
+use DomainException;
 
 /**
  * Thrown when try to load a non implemented BPMN tag
  *
  */
-class NotImplementedException extends BadMethodCallException
+class NamespaceNotImplementedException extends DomainException
 {
 
 }

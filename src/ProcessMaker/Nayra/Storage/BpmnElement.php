@@ -7,7 +7,8 @@ use DOMElement;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
-use ProcessMaker\Nayra\Exceptions\NotImplementedException;
+use ProcessMaker\Nayra\Exceptions\ElementNotImplementedException;
+use ProcessMaker\Nayra\Exceptions\NamespaceNotImplementedException;
 
 /**
  * Description of BpmnFileElement
@@ -32,10 +33,10 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
         }
         $map = $this->ownerDocument->getBpmnElementsMapping();
         if (!array_key_exists($this->namespaceURI, $map)) {
-            throw new NotImplementedException("Not found " . $this->namespaceURI);
+            throw new NamespaceNotImplementedException($this->namespaceURI);
         }
         if (!array_key_exists($this->localName, $map[$this->namespaceURI])) {
-            throw new NotImplementedException("Not found " . $this->localName);
+            throw new ElementNotImplementedException($this->localName);
         }
         if ($map[$this->namespaceURI][$this->localName]===BpmnDocument::SKIP_ELEMENT) {
             return null;
@@ -113,6 +114,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
      * @param DOMAttr $node
      * @param array $mapProperties
      * @param EntityInterface $bpmnElement
+     *
      * @return void
      */
     private function setBpmnPropertyRef(DOMAttr $node, array $mapProperties, EntityInterface $bpmnElement)
@@ -121,16 +123,19 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             list($multiplicity, $type) = $property;
             $isThisProperty = (is_array($type) && ($node->namespaceURI === $type[0] || $node->namespaceURI===null)
                 && $node->localName===$type[1]);
-            if ($isThisProperty && $multiplicity === 'n') {
-                $ref = $this->ownerDocument->getElementInstanceById($node->value);
-                $bpmnElement->addProperty($name, $ref);
-                return;
-            } else if ($isThisProperty && $multiplicity == '1') {
+            if ($isThisProperty && $multiplicity == '1') {
                 $id = $node->value;
                 $ref = $this->ownerDocument->getElementInstanceById($id);
                 $setter = 'set' . $name;
                 method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($ref)
                     : $bpmnElement->setProperty($name, $ref);
+                return;
+            }
+            if ($node->name === $name && $property === BpmnDocument::IS_BOOLEAN) {
+                $value = strtolower($node->value) === 'true';
+                $setter = 'set' . $name;
+                method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($ref)
+                    : $bpmnElement->setProperty($name, $value);
                 return;
             }
         }
@@ -150,9 +155,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
         foreach ($mapProperties as $name => $property) {
             list($multiplicity, $type) = $property;
             $isThisProperty = $type === BpmnDocument::DOM_ELEMENT_BODY;
-            if ($isThisProperty && $multiplicity === 'n') {
-                $bpmnElement->addProperty($name, $this->textContent);
-            } else if ($isThisProperty && $multiplicity == '1') {
+            if ($isThisProperty && $multiplicity == '1') {
                 $bpmnElement->setProperty($name, $this->textContent);
             }
         }

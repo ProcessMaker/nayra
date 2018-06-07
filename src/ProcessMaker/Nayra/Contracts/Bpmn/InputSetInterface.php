@@ -9,6 +9,8 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface InputSetInterface extends EntityInterface
 {
+    const BPMN_PROPERTY_DATA_INPUTS = 'dataInputs';
+    const BPMN_PROPERTY_DATA_INPUT_REFS = 'dataInputRefs';
 
     /**
      * Get the DataInput elements that collectively make up this data requirement.
@@ -18,26 +20,11 @@ interface InputSetInterface extends EntityInterface
     public function getDataInputs();
 
     /**
-     * Get DataInput elements that are a part of the InputSet that can be in
-     * the state of "unavailable" when the Activity starts executing.
+     * Set the DataInput elements that collectively make up this data requirement.
      *
-     * @return DataInputInterface[]
-     */
-    public function getOptionalInputs();
-
-    /**
-     * Get DataInput elements that are a part of the InputSet that can be
-     * evaluated while the Activity is executing.
+     * @param CollectionInterface $dataInputs
      *
-     * @return DataInputInterface[]
+     * @return $this
      */
-    public function getWhileExecutingInputs();
-
-    /**
-     * 
-     *
-     * @return OutputSetInterface[]
-     */
-    public function getOutputSets();
-
+    public function setDataInputs(CollectionInterface $dataInputs);
 }

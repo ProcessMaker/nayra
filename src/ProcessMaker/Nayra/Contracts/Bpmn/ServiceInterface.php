@@ -9,7 +9,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface ServiceInterface extends EntityInterface
 {
-    const BPMN_PROPERTY_NAME = 'name';
     const BPMN_PROPERTY_IMPLEMENTATION_REF = 'implementationRef';
     const BPMN_PROPERTY_OPERATIONS = 'operations';
     const BPMN_PROPERTY_CALLABLE_ELEMENTS = 'callableElements';

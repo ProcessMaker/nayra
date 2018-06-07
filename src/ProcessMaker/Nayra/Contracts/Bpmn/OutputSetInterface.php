@@ -9,6 +9,8 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  */
 interface OutputSetInterface extends EntityInterface
 {
+    const BPMN_PROPERTY_DATA_OUTPUTS = 'dataOutputs';
+    const BPMN_PROPERTY_DATA_OUTPUT_REFS = 'dataOutputRefs';
 
     /**
      * Get DataOutput elements that MAY collectively be outputted.
@@ -18,27 +20,11 @@ interface OutputSetInterface extends EntityInterface
     public function getDataOutputs();
 
     /**
-     * Get DataOutput elements that are a part of the OutputSet that
-     * do not have to be produced when the Activity completes executing.
+     * Set DataOutput elements that MAY collectively be outputted.
      *
-     * @return DataOutputInterface[]
-     */
-    public function getOptionalOutputs();
-
-    /**
-     * Get DataOutput elements that are a part of the OutputSet that can
-     * be produced while the Activity is executing.
+     * @param CollectionInterface $dataOutputs
      *
-     * @return DataOutputInterface[]
+     * @return $this
      */
-    public function getWhileExecutingOutputs();
-
-    /**
-     * Get Specifies an Input/Output rule that defines which InputSet has
-     * to become valid to expect the creation of this OutputSet.
-     *
-     * @return InputSetInterface[]
-     */
-    public function getInputSets();
-
+    public function setDataOutputs(CollectionInterface $dataOutputs);
 }

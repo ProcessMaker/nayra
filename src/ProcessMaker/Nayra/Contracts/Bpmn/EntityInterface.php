@@ -3,7 +3,6 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Entity could get and set properties for an bpmn element.
@@ -14,6 +13,7 @@ interface EntityInterface
 {
 
     const BPMN_PROPERTY_ID = 'id';
+    const BPMN_PROPERTY_NAME = 'name';
 
     /**
      *
@@ -67,13 +67,6 @@ interface EntityInterface
     public function setFactory(FactoryInterface $factory);
 
     /**
-     * Get the name of the element.
-     *
-     * @return string
-     */
-    //public function getName();
-
-    /**
      * Get Entity ID
      *
      * @return mixed
@@ -85,7 +78,23 @@ interface EntityInterface
      *
      * @param string $id
      *
-     * @return mixed
+     * @return $this
      */
     public function setId($id);
+
+    /**
+     * Get the name of the element.
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * Set the name of the element
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name);
 }
