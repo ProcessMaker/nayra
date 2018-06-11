@@ -1,6 +1,6 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Test\Models;
 
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstanceTrait;

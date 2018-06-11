@@ -1,7 +1,8 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Test\Models;
 
+use ProcessMaker\Models\Token;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;

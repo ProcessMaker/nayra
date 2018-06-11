@@ -1,7 +1,15 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Test\Models;
 
+use ProcessMaker\Models\ActivityCollection;
+use ProcessMaker\Models\ArtifactCollection;
+use ProcessMaker\Models\DataStoreCollection;
+use ProcessMaker\Models\EventCollection;
+use ProcessMaker\Models\FlowCollection;
+use ProcessMaker\Models\GatewayCollection;
+use ProcessMaker\Models\LocalPropertiesTrait;
+use ProcessMaker\Models\ProcessCompletedEvent;
 use ProcessMaker\Nayra\Bpmn\ProcessTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 

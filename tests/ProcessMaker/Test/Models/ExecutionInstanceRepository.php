@@ -1,8 +1,8 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Test\Models;
 
-use ProcessMaker\Models\ExecutionInstance;
+use ProcessMaker\Test\Models\ExecutionInstance;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -34,7 +34,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function createExecutionInstance()
     {
-        return new ExecutionInstance();
+        return new \ProcessMaker\Test\Models\ExecutionInstance();
     }
 
     /**
@@ -47,7 +47,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     public function loadExecutionInstanceByUid($uid)
     {
         $data = self::$data[$uid];
-        $instance = new ExecutionInstance();
+        $instance = new \ProcessMaker\Test\Models\ExecutionInstance();
         $processRepository = $this->getStorage()->getFactory()->createInstanceOf(ProcessRepositoryInterface::class, $this->getStorage());
         $process = $processRepository->loadProcessByUid($data['processId']);
         $dataStore = $this->getStorage()->getFactory()->createInstanceOf(DataStoreInterface::class);
