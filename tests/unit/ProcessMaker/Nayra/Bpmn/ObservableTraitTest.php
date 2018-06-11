@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 
 class ObservableTraitTest extends TestCase

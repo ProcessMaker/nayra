@@ -4,7 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\Process;
+use ProcessMaker\Nayra\Bpmn\Models\Process;
 use ProcessMaker\Nayra\Bpmn\Models\Artifact;
 
 class ArtifactTest extends TestCase

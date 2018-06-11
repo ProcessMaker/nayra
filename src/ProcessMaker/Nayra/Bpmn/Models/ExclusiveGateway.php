@@ -1,31 +1,27 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn\Model;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use ProcessMaker\Nayra\Bpmn\ParallelGatewayTrait;
+use ProcessMaker\Nayra\Bpmn\ExclusiveGatewayTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
-/**
- * Parallel gateway implementation.
- *
- */
-class ParallelGateway implements ParallelGatewayInterface
+class ExclusiveGateway implements ExclusiveGatewayInterface
 {
-
-    use ParallelGatewayTrait;
+    use ExclusiveGatewayTrait;
 
     /**
      * For gateway connections.
      *
      * @param FlowNodeInterface $target
      * @param callable $condition
-     * @param boolean $isDefault
+     * @param bool $isDefault
      * @param FactoryInterface $factory
      *
      * @return $this
+     *
      */
     public function createConditionedFlowTo(
         FlowNodeInterface $target,
@@ -33,7 +29,11 @@ class ParallelGateway implements ParallelGatewayInterface
         $isDefault,
         FactoryInterface $factory
     ) {
-        throw new InvalidSequenceFlowException('A parallel gateway can not have conditioned outgoing flows.');
+        $this->createFlowTo($target, $factory, [
+            FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,
+            FlowInterface::BPMN_PROPERTY_IS_DEFAULT => $isDefault,
+        ]);
+        return $this;
     }
 
     /**
@@ -46,3 +46,4 @@ class ParallelGateway implements ParallelGatewayInterface
         return [];
     }
 }
+

@@ -1,9 +1,15 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn\Model;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
+use ProcessMaker\Nayra\Bpmn\Models\ActivityCollection;
+use ProcessMaker\Nayra\Bpmn\Models\ArtifactCollection;
+use ProcessMaker\Nayra\Bpmn\Models\DataStoreCollection;
+use ProcessMaker\Nayra\Bpmn\Models\EventCollection;
+use ProcessMaker\Nayra\Bpmn\Models\FlowCollection;
+use ProcessMaker\Nayra\Bpmn\Models\GatewayCollection;
 use ProcessMaker\Nayra\Bpmn\ProcessTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 

@@ -3,8 +3,8 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\GatewayCollection;
-use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Models\GatewayCollection;
+use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
 
 /**
  * Tests for the gateway collection

@@ -3,8 +3,8 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\Activity;
-use ProcessMaker\Nayra\Bpmn\Model\ActivityCollection;
+use ProcessMaker\Nayra\Bpmn\Models\Activity;
+use ProcessMaker\Nayra\Bpmn\Models\ActivityCollection;
 
 /**
  * Tests the activity collection

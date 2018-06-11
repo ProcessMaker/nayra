@@ -2,7 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ReflectionClass;
 
 /**
