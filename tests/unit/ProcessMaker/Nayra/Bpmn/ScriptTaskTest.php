@@ -4,8 +4,8 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\Process;
-use ProcessMaker\Nayra\Bpmn\Model\ScriptTask;
+use ProcessMaker\Nayra\Bpmn\Models\Process;
+use ProcessMaker\Nayra\Bpmn\Models\ScriptTask;
 
 /**
  * Tests for the Operation class

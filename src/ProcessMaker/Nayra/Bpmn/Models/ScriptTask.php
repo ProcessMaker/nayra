@@ -1,9 +1,10 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn\Model;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use Exception;
 use ProcessMaker\Nayra\Bpmn\ActivityTrait;
+use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;

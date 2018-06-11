@@ -1,9 +1,15 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn\Model;
+namespace ProcessMaker\Test\Models;
 
-use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
-use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
+use ProcessMaker\Models\ActivityCollection;
+use ProcessMaker\Models\ArtifactCollection;
+use ProcessMaker\Models\DataStoreCollection;
+use ProcessMaker\Models\EventCollection;
+use ProcessMaker\Models\FlowCollection;
+use ProcessMaker\Models\GatewayCollection;
+use ProcessMaker\Models\LocalPropertiesTrait;
+use ProcessMaker\Models\ProcessCompletedEvent;
 use ProcessMaker\Nayra\Bpmn\ProcessTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
@@ -12,10 +18,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
  *
  * @package ProcessMaker\Models
  */
-class Process implements ProcessInterface
+class CustomProcess implements ProcessInterface
 {
 
-    use ProcessTrait;
+    use ProcessTrait,
+        LocalPropertiesTrait;
 
     /**
      * Process constructor.
@@ -34,15 +41,14 @@ class Process implements ProcessInterface
     }
 
     /**
-     * Get BPMN event classes.
+     * Defined BPMN event classes.
      *
      * @return array
      */
     protected function getBpmnEventClasses()
     {
         return [
-            static::EVENT_PROCESS_INSTANCE_COMPLETED => ProcessInstanceCompletedEvent::class,
-            static::EVENT_PROCESS_INSTANCE_CREATED   => ProcessInstanceCreatedEvent::class,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED => ProcessCompletedEvent::class
         ];
     }
 }

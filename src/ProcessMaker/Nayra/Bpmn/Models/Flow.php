@@ -1,9 +1,10 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn\Model;
+namespace ProcessMaker\Nayra\Bpmn\Models;
 
 
 use ProcessMaker\Nayra\Bpmn\FlowTrait;
+use ProcessMaker\Nayra\Bpmn\Models\Process;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;

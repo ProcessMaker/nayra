@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\Process;
+use ProcessMaker\Nayra\Bpmn\Models\Process;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreCollectionInterface;

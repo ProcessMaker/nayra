@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\ArtifactCollection;
+use ProcessMaker\Nayra\Bpmn\Models\ArtifactCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Artifact;
 
 /**

@@ -3,23 +3,23 @@ namespace Tests\Feature\Engine;
 
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
-use ProcessMaker\Models\CallActivity;
-use ProcessMaker\Models\ExecutionInstanceRepository;
-use ProcessMaker\Models\ProcessRepository;
-use ProcessMaker\Models\TokenRepository;
+use ProcessMaker\Test\Models\CallActivity;
+use ProcessMaker\Test\Models\ExecutionInstanceRepository;
+use ProcessMaker\Test\Models\ProcessRepository;
+use ProcessMaker\Test\Models\TokenRepository;
 use ProcessMaker\Nayra\Bpmn\Lane;
 use ProcessMaker\Nayra\Bpmn\LaneSet;
-use ProcessMaker\Nayra\Bpmn\Model\Activity;
-use ProcessMaker\Nayra\Bpmn\Model\DataStore;
-use ProcessMaker\Nayra\Bpmn\Model\EndEvent;
-use ProcessMaker\Nayra\Bpmn\Model\ExclusiveGateway;
-use ProcessMaker\Nayra\Bpmn\Model\Flow;
-use ProcessMaker\Nayra\Bpmn\Model\InclusiveGateway;
-use ProcessMaker\Nayra\Bpmn\Model\ParallelGateway;
-use ProcessMaker\Nayra\Bpmn\Model\Process;
-use ProcessMaker\Nayra\Bpmn\Model\ScriptTask;
-use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
-use ProcessMaker\Nayra\Bpmn\Model\Token;
+use ProcessMaker\Nayra\Bpmn\Models\Activity;
+use ProcessMaker\Nayra\Bpmn\Models\DataStore;
+use ProcessMaker\Nayra\Bpmn\Models\EndEvent;
+use ProcessMaker\Nayra\Bpmn\Models\ExclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Models\Flow;
+use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Models\ParallelGateway;
+use ProcessMaker\Nayra\Bpmn\Models\Process;
+use ProcessMaker\Nayra\Bpmn\Models\ScriptTask;
+use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
+use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\ConditionalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\DataInput;
@@ -87,7 +87,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 use ProcessMaker\Nayra\Factory;
-use ProcessMaker\Test\FormalExpression;
+use ProcessMaker\Test\Models\FormalExpression;
 
 /**
  * Test transitions

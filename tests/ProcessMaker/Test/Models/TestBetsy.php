@@ -1,6 +1,6 @@
 <?php
 
-namespace ProcessMaker\Test;
+namespace ProcessMaker\Test\Models;
 
 /**
  * Test class for evaluate expression used in betsy BPMN files.

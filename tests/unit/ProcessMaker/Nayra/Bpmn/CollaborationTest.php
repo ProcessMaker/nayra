@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
+use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 
 /**

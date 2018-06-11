@@ -3,8 +3,8 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\EventCollection;
-use ProcessMaker\Nayra\Bpmn\Model\StartEvent;
+use ProcessMaker\Nayra\Bpmn\Models\EventCollection;
+use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 
 /**
  * Tests for the event collection

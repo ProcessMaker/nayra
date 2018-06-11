@@ -1,9 +1,9 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Test\Models;
 
 use ProcessMaker\Nayra\Bpmn\ActivitySubProcessTrait;
-use ProcessMaker\Nayra\Bpmn\Model\ActivityActivatedEvent;
+use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;

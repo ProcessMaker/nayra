@@ -11,7 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
-use ProcessMaker\Test\FormalExpression;
+use ProcessMaker\Test\Models\FormalExpression;
 
 /**
  * Test intermediate timer events

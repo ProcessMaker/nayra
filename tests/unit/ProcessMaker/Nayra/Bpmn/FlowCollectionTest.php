@@ -3,8 +3,8 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Model\Flow;
-use ProcessMaker\Nayra\Bpmn\Model\FlowCollection;
+use ProcessMaker\Nayra\Bpmn\Models\Flow;
+use ProcessMaker\Nayra\Bpmn\Models\FlowCollection;
 
 /**
  * Tests for the flow collection

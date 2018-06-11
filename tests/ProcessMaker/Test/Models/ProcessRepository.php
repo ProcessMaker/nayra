@@ -1,12 +1,14 @@
 <?php
 
-namespace ProcessMaker\Models;
+namespace ProcessMaker\Test\Models;
 
+use ProcessMaker\Models\Process;
 use ProcessMaker\Nayra\Bpmn\Lane;
 use ProcessMaker\Nayra\Bpmn\LaneSet;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
+use ProcessMaker\Test\Models\CustomProcess;
 
 /**
  * Process Repository
