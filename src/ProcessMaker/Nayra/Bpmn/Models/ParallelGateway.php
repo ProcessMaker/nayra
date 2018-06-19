@@ -23,7 +23,7 @@ class ParallelGateway implements ParallelGatewayInterface
      * @param FlowNodeInterface $target
      * @param callable $condition
      * @param boolean $isDefault
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      *
      * @return $this
      */

@@ -2,14 +2,9 @@
 
 namespace ProcessMaker\Test\Models;
 
-use ProcessMaker\Test\Models\ExecutionInstance;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 
 /**
  * Execution Instance Repository.

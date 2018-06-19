@@ -3,9 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\FactoryTrait;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 
 /**
  * Gateway used to control how the Process flows.
@@ -54,8 +52,10 @@ interface GatewayInterface extends FlowNodeInterface
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
      * @param callable $condition
      * @param bool $isDefault
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
+     *
      * @return $this
+     *
      * @internal param FlowRepositoryInterface $flowRepository
      *
      */

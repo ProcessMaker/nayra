@@ -2,21 +2,16 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Bpmn\Models\DataStoreCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\DataStoreCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test message end events

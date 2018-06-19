@@ -29,7 +29,7 @@ class TestEngine implements EngineInterface
     /**
      * Test engine constructor.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      * @param EventBusInterface $dispatcher
      */
     public function __construct(RepositoryInterface $factory, EventBusInterface $dispatcher)
@@ -66,7 +66,7 @@ class TestEngine implements EngineInterface
     }
 
     /**
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      *
      * @return $this
      */

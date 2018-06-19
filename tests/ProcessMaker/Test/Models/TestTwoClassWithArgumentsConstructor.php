@@ -17,8 +17,8 @@ class TestTwoClassWithArgumentsConstructor implements TestTwoInterface
     /**
      * Test constructor
      *
-     * @param type $field1
-     * @param type $field2
+     * @param mixed $field1
+     * @param mixed $field2
      */
     public function __construct($field1, $field2)
     {

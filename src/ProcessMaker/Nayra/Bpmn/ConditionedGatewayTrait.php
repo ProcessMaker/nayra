@@ -89,7 +89,7 @@ trait ConditionedGatewayTrait
      * Overrides the build of flow transitions, to accept gateway
      * conditioned transitions.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
     public function buildFlowTransitions(RepositoryInterface $factory)
     {

@@ -3,58 +3,40 @@
 namespace ProcessMaker\Nayra;
 
 use InvalidArgumentException;
+use ProcessMaker\Nayra\Bpmn\Lane;
+use ProcessMaker\Nayra\Bpmn\LaneSet;
 use ProcessMaker\Nayra\Bpmn\Models\Activity;
-use ProcessMaker\Nayra\Bpmn\Models\Assignment;
-use ProcessMaker\Nayra\Bpmn\Models\CallableElement;
-use ProcessMaker\Nayra\Bpmn\Models\CatchEvent;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\ConditionalEventDefinition;
-use ProcessMaker\Nayra\Bpmn\Models\ConnectionNode;
-use ProcessMaker\Nayra\Bpmn\Models\CorrelationProperty;
-use ProcessMaker\Nayra\Bpmn\Models\DataAssociation;
-use ProcessMaker\Nayra\Bpmn\Models\DataInputAssociation;
 use ProcessMaker\Nayra\Bpmn\Models\DataInput;
-use ProcessMaker\Nayra\Bpmn\Models\DataOutputAssociation;
 use ProcessMaker\Nayra\Bpmn\Models\DataOutput;
 use ProcessMaker\Nayra\Bpmn\Models\DataStore;
 use ProcessMaker\Nayra\Bpmn\Models\EndEvent;
-use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Error;
-use ProcessMaker\Nayra\Bpmn\Models\EventDefinition;
-use ProcessMaker\Nayra\Bpmn\Models\Event;
+use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\ExclusiveGateway;
-use ProcessMaker\Nayra\Bpmn\Models\FlowElement;
 use ProcessMaker\Nayra\Bpmn\Models\Flow;
-use ProcessMaker\Nayra\Bpmn\Models\FlowNode;
-use ProcessMaker\Nayra\Bpmn\Models\Gateway;
 use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
 use ProcessMaker\Nayra\Bpmn\Models\InputSet;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateCatchEvent;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
-use ProcessMaker\Nayra\Bpmn\Models\ItemAwareElement;
 use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
-use ProcessMaker\Nayra\Bpmn\Lane;
-use ProcessMaker\Nayra\Bpmn\LaneSet;
+use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\MessageFlow;
-use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\Operation;
 use ProcessMaker\Nayra\Bpmn\Models\OutputSet;
 use ProcessMaker\Nayra\Bpmn\Models\ParallelGateway;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Bpmn\Models\Process;
-use ProcessMaker\Nayra\Bpmn\Models\Property;
 use ProcessMaker\Nayra\Bpmn\Models\ScriptTask;
-use ProcessMaker\Nayra\Bpmn\Models\Service;
-use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
+use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
-use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
-use ProcessMaker\Nayra\Bpmn\Models\ThrowEvent;
 use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Token;
-use ProcessMaker\Nayra\Bpmn\Transition;
+use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 
 /**
@@ -386,6 +368,9 @@ trait FactoryTrait
 
     /**
      * Create instance of State.
+     *
+     * @param FlowNodeInterface $owner
+     * @param string $name
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */

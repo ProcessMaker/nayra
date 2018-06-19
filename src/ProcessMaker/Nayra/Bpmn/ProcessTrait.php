@@ -246,7 +246,7 @@ trait ProcessTrait
     /**
      * Get transitions of the process.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      *
      * @return CollectionInterface
      */

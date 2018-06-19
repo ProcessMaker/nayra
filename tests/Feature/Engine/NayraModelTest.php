@@ -134,7 +134,7 @@ class NayraModelTest extends EngineTestCase
     /**
      * Creates a process that contains an exclusive gateway, start, end events and activities
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      *
      * @return array
      */

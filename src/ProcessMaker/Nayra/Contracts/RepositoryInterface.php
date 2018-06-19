@@ -3,7 +3,12 @@
 namespace ProcessMaker\Nayra\Contracts;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
+/**
+ * Repository interface to create BPMN objects.
+ *
+ */
 interface RepositoryInterface
 {
 
@@ -244,6 +249,9 @@ interface RepositoryInterface
     /**
      * Create instance of State.
      *
+     * @param FlowNodeInterface $owner
+     * @param string $name
+     *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
     public function createState(FlowNodeInterface $owner, $name = '');
@@ -268,4 +276,13 @@ interface RepositoryInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
      */
     public function createToken();
+
+    /**
+     * Create a execution instance repository.
+     *
+     * @param StorageInterface $factory
+     *
+     * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
+     */
+    public function createExecutionInstanceRepository(StorageInterface $factory);
 }

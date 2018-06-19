@@ -15,7 +15,7 @@ interface StorageInterface
     /**
      * Set the factory used to create BPMN elements.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
     public function setFactory(RepositoryInterface $factory);
 

@@ -5,7 +5,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Process describes a business work using a sequence or flow of activities.
@@ -150,7 +149,7 @@ interface ProcessInterface extends CallableElementInterface
     /**
      * Get the transition rules of the process.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      *
      * @return TransitionInterface[]
      */

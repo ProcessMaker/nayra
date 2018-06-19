@@ -8,7 +8,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Base implementation for a parallel gateway.
@@ -28,7 +27,7 @@ trait ParallelGatewayTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
     public function buildTransitions(RepositoryInterface $factory)
     {

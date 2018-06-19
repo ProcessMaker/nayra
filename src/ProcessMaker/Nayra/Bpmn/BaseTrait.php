@@ -3,8 +3,8 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ReflectionClass;
 
 /**
@@ -62,7 +62,7 @@ trait BaseTrait
     /**
      * Set the factory used to build this element.
      *
-     * @param \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
+     * @param \ProcessMaker\Nayra\Contracts\RepositoryInterface $factory
      *
      * @return $this
      */

@@ -41,7 +41,7 @@ interface MessageInterface extends EntityInterface
     public function getFactory();
 
     /**
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      *
      * @return $this
      */

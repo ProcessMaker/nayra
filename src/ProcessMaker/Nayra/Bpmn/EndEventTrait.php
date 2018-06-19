@@ -40,7 +40,7 @@ trait EndEventTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
     public function buildTransitions(RepositoryInterface $factory)
     {

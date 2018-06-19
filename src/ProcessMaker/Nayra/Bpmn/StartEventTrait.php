@@ -35,7 +35,7 @@ trait StartEventTrait
     /**
      * Build the transitions of the element.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
     public function buildTransitions(RepositoryInterface $factory)
     {

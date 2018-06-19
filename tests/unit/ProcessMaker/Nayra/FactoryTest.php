@@ -1,9 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Test\Models\Repository;
 use ProcessMaker\Test\Contracts\TestOneInterface;
 use ProcessMaker\Test\Contracts\TestTwoInterface;
+use ProcessMaker\Test\Models\Repository;
 use ProcessMaker\Test\Models\TestOneClassWithEmptyConstructor;
 use ProcessMaker\Test\Models\TestTwoClassWithArgumentsConstructor;
 
