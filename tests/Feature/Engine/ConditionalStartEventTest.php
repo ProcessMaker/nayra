@@ -21,7 +21,7 @@ class ConditionalStartEventTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
 
         $bpmnRepository->load(__DIR__ . '/files/Conditional_StartEvent.bpmn');
 
@@ -29,7 +29,7 @@ class ConditionalStartEventTest extends EngineTestCase
         $process = $bpmnRepository->getProcess('Conditional_StartEvent');
 
         //Create a default environment data
-        $environmentData = $this->factory->createDataStore();
+        $environmentData = $this->repository->createDataStore();
         $this->engine->setDataStore($environmentData);
 
         //Get start event and event definition references

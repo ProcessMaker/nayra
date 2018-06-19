@@ -84,7 +84,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Call the process
@@ -126,7 +126,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Call the process

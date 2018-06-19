@@ -28,7 +28,7 @@ class ScriptTaskTest extends EngineTestCase
     {
         //Load a process
         $process = $this->getProcessWithOneScriptTask();
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -86,7 +86,7 @@ class ScriptTaskTest extends EngineTestCase
     {
         //Load a process
         $process = $this->getProcessWithOnlyScriptTasks();
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -150,7 +150,7 @@ class ScriptTaskTest extends EngineTestCase
     {
         //Load a process
         $process = $this->getProcessWithOneScriptTask();
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -192,16 +192,16 @@ class ScriptTaskTest extends EngineTestCase
      */
     private function getProcessWithOneScriptTask()
     {
-        $process = $this->factory->createProcess();
+        $process = $this->repository->createProcess();
         $process->setEngine($this->engine);
 
         //elements
-        $start = $this->factory->createStartEvent();
-        $activityA = $this->factory->createActivity();
-        $scriptTask = $this->factory->createScriptTask();
+        $start = $this->repository->createStartEvent();
+        $activityA = $this->repository->createActivity();
+        $scriptTask = $this->repository->createScriptTask();
         $scriptTask->setScriptFormat('text/php');
         $scriptTask->setScript('$this->setProperty("' . self::TEST_PROPERTY . '", 1);');
-        $end = $this->factory->createEndEvent();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -211,9 +211,9 @@ class ScriptTaskTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($activityA, $this->factory);
-        $activityA->createFlowTo($scriptTask, $this->factory);
-        $scriptTask->createFlowTo($end, $this->factory);
+        $start->createFlowTo($activityA, $this->repository);
+        $activityA->createFlowTo($scriptTask, $this->repository);
+        $scriptTask->createFlowTo($end, $this->repository);
 
         return $process;
     }
@@ -224,13 +224,13 @@ class ScriptTaskTest extends EngineTestCase
      */
     private function getProcessWithOnlyScriptTasks()
     {
-        $process = $this->factory->createProcess();
+        $process = $this->repository->createProcess();
         $process->setEngine($this->engine);
 
         //elements
-        $start = $this->factory->createStartEvent();
-        $scriptTask1 = $this->factory->createScriptTask();
-        $scriptTask2 = $this->factory->createScriptTask();
+        $start = $this->repository->createStartEvent();
+        $scriptTask1 = $this->repository->createScriptTask();
+        $scriptTask2 = $this->repository->createScriptTask();
 
         $scriptTask1->setScriptFormat('text/php');
         $scriptTask1->setScript('$this->setProperty("scriptTestTaskProp", 1);');
@@ -238,7 +238,7 @@ class ScriptTaskTest extends EngineTestCase
         $scriptTask2->setScriptFormat('text/php');
         $scriptTask2->setScript('$this->setProperty("scriptTestTaskProp", 1);');
 
-        $end = $this->factory->createEndEvent();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($scriptTask1)
@@ -248,9 +248,9 @@ class ScriptTaskTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($scriptTask1, $this->factory);
-        $scriptTask1->createFlowTo($scriptTask2, $this->factory);
-        $scriptTask2->createFlowTo($end, $this->factory);
+        $start->createFlowTo($scriptTask1, $this->repository);
+        $scriptTask1->createFlowTo($scriptTask2, $this->repository);
+        $scriptTask2->createFlowTo($end, $this->repository);
 
         return $process;
     }

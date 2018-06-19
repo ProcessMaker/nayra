@@ -25,15 +25,15 @@ class IntermediateTimerEventTest extends EngineTestCase
      */
     public function createStartTimerEventProcess()
     {
-        $process = $this->factory->createProcess();
+        $process = $this->repository->createProcess();
         $process->setEngine($this->engine);
 
         //elements
-        $start = $this->factory->createStartEvent();
-        $timerEvent = $this->factory->createIntermediateCatchEvent();
-        $activityA = $this->factory->createActivity();
-        $activityB = $this->factory->createActivity();
-        $end = $this->factory->createEndEvent();
+        $start = $this->repository->createStartEvent();
+        $timerEvent = $this->repository->createIntermediateCatchEvent();
+        $activityA = $this->repository->createActivity();
+        $activityB = $this->repository->createActivity();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -44,10 +44,10 @@ class IntermediateTimerEventTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($activityA, $this->factory);
-        $activityA->createFlowTo($timerEvent, $this->factory);
-        $timerEvent->createFlowTo($activityB, $this->factory);
-        $activityB->createFlowTo($end, $this->factory);
+        $start->createFlowTo($activityA, $this->repository);
+        $activityA->createFlowTo($timerEvent, $this->repository);
+        $timerEvent->createFlowTo($activityB, $this->repository);
+        $activityB->createFlowTo($end, $this->repository);
 
         return $process;
     }
@@ -59,7 +59,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithDuration()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -118,7 +118,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithCycle()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -177,7 +177,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithDate()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -244,7 +244,7 @@ class IntermediateTimerEventTest extends EngineTestCase
         $formalExpression = new FormalExpression();
         $formalExpression->setId('formalExpression');
 
-        $timerEventDefinition = $this->factory->createTimerEventDefinition();
+        $timerEventDefinition = $this->repository->createTimerEventDefinition();
 
         $timerEventDefinition->setId("TimerEventDefinition");
         switch ($type) {

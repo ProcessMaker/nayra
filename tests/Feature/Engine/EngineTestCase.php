@@ -47,7 +47,7 @@ class EngineTestCase extends TestCase
      *
      * @var \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
      */
-    protected $factory;
+    protected $repository;
 
     /**
      * Initialize the engine and the factories.
@@ -56,7 +56,7 @@ class EngineTestCase extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->factory = $this->getFactory();
+        $this->repository = $this->createRepository();
         //Initialize a dispatcher
         $fakeDispatcher = $this->getMockBuilder(EventBusInterface::class)
             ->getMock();
@@ -77,7 +77,7 @@ class EngineTestCase extends TestCase
                 $this->listeners[$event][] = $listener;
             }));
         //Initialize the engine
-        $this->engine = new TestEngine($this->factory, $fakeDispatcher);
+        $this->engine = new TestEngine($this->repository, $fakeDispatcher);
         //Mock a job manager
         $this->jobManager = $this->getMockBuilder(JobManagerInterface::class)
             ->getMock();
@@ -231,7 +231,7 @@ class EngineTestCase extends TestCase
      *
      * @return \ProcessMaker\Nayra\Contracts\RepositoryInterface
      */
-    protected function getFactory()
+    private function createRepository()
     {
         return new Repository();
     }

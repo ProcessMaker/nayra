@@ -20,12 +20,12 @@ class DataStoreTest extends EngineTestCase
     public function testDataStoreSettersAndGetters()
     {
         // Create the objects that will be set in the data store
-        $dataStore = $this->factory->createDataStore();
-        $process = $this->factory->createProcess();
-        $process->setRepository($this->factory);
-        $dummyActivity = $this->factory->createActivity();
-        $dummyActivity->setRepository($this->factory);
-        $state = $this->factory->createState($dummyActivity,'');
+        $dataStore = $this->repository->createDataStore();
+        $process = $this->repository->createProcess();
+        $process->setRepository($this->repository);
+        $dummyActivity = $this->repository->createActivity();
+        $dummyActivity->setRepository($this->repository);
+        $state = $this->repository->createState($dummyActivity,'');
 
         // Set process and state object to the data store
         $dataStore->setOwnerProcess($process);

@@ -32,15 +32,15 @@ class InclusiveGatewayTest extends EngineTestCase
      */
     private function createProcessWithInclusiveGateway()
     {
-        $process = $this->factory->createProcess();
+        $process = $this->repository->createProcess();
 
         //elements
-        $start = $this->factory->createStartEvent();
-        $gatewayA = $this->factory->createInclusiveGateway();
-        $activityA = $this->factory->createActivity();
-        $activityB = $this->factory->createActivity();
-        $gatewayB = $this->factory->createInclusiveGateway();
-        $end = $this->factory->createEndEvent();
+        $start = $this->repository->createStartEvent();
+        $gatewayA = $this->repository->createInclusiveGateway();
+        $activityA = $this->repository->createActivity();
+        $activityB = $this->repository->createActivity();
+        $gatewayB = $this->repository->createInclusiveGateway();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -53,17 +53,17 @@ class InclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->factory);
+        $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->factory)
+            }, false, $this->repository)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return $data['B']=='1';
-            }, false, $this->factory);
-        $activityA->createFlowTo($gatewayB, $this->factory);
-        $activityB->createFlowTo($gatewayB, $this->factory);
-        $gatewayB->createFlowTo($end, $this->factory);
+            }, false, $this->repository);
+        $activityA->createFlowTo($gatewayB, $this->repository);
+        $activityB->createFlowTo($gatewayB, $this->repository);
+        $gatewayB->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -74,17 +74,17 @@ class InclusiveGatewayTest extends EngineTestCase
      */
     private function createProcessWithDefaultTransition()
     {
-        $process = $this->factory->createProcess();
+        $process = $this->repository->createProcess();
 
         //elements
-        $start = $this->factory->createStartEvent();
-        $gatewayA = $this->factory->createInclusiveGateway();
-        $gatewayB = $this->factory->createInclusiveGateway();
+        $start = $this->repository->createStartEvent();
+        $gatewayA = $this->repository->createInclusiveGateway();
+        $gatewayB = $this->repository->createInclusiveGateway();
         $gatewayA->name= "A";
         $gatewayB->name= "B";
-        $activityA = $this->factory->createActivity();
-        $activityB = $this->factory->createActivity();
-        $end = $this->factory->createEndEvent();
+        $activityA = $this->repository->createActivity();
+        $activityB = $this->repository->createActivity();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -97,17 +97,17 @@ class InclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->factory);
+        $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->factory)
+            }, false, $this->repository)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return true;
-            }, true, $this->factory);
-        $activityA->createFlowTo($gatewayB, $this->factory);
-        $activityB->createFlowTo($gatewayB, $this->factory);
-        $gatewayB->createFlowTo($end, $this->factory);
+            }, true, $this->repository);
+        $activityA->createFlowTo($gatewayB, $this->repository);
+        $activityB->createFlowTo($gatewayB, $this->repository);
+        $gatewayB->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -120,7 +120,7 @@ class InclusiveGatewayTest extends EngineTestCase
     public function testInclusiveGatewayAllPaths()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
         $dataStore->putData('A', '1');
         $dataStore->putData('B', '1');
 
@@ -197,7 +197,7 @@ class InclusiveGatewayTest extends EngineTestCase
     public function testInclusiveGatewayOnlyB()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
         $dataStore->putData('A', '0');
         $dataStore->putData('B', '1');
         $process = $this->createProcessWithInclusiveGateway();
@@ -249,7 +249,7 @@ class InclusiveGatewayTest extends EngineTestCase
     public function testDefaultTransition()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
         $dataStore->putData('A', '2');
         $process = $this->createProcessWithDefaultTransition();
         $this->engine->createExecutionInstance($process, $dataStore);

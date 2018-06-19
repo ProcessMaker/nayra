@@ -126,8 +126,8 @@ class LoadExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
-        $this->engine->setRepository($this->factory);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setRepository($this->repository);
         $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
@@ -165,8 +165,8 @@ class LoadExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
-        $this->engine->setRepository($this->factory);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setRepository($this->repository);
         $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
@@ -219,8 +219,8 @@ class LoadExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
-        $this->engine->setRepository($this->factory);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setRepository($this->repository);
         $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
@@ -267,7 +267,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 

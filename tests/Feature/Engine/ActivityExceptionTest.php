@@ -31,17 +31,17 @@ class ActivityExceptionTest extends EngineTestCase
      */
     private function createSimpleProcessInstance()
     {
-        $process = $this->factory->createProcess();
+        $process = $this->repository->createProcess();
         //elements
-        $start = $this->factory->createStartEvent();
+        $start = $this->repository->createStartEvent();
         $activity = new ActivityWithException();
-        $end = $this->factory->createEndEvent();
+        $end = $this->repository->createEndEvent();
         $process->addActivity($activity);
         $process->addEvent($start)
             ->addEvent($end);
         //flows
-        $start->createFlowTo($activity, $this->factory);
-        $activity->createFlowTo($end, $this->factory);
+        $start->createFlowTo($activity, $this->repository);
+        $activity->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -52,7 +52,7 @@ class ActivityExceptionTest extends EngineTestCase
     public function testSimpleTransitions()
     {
         //Create a data store to test the process.
-        $dataStore = $this->factory->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //Load a simple process with activity exception.
         $process = $this->createSimpleProcessInstance();

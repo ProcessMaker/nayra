@@ -25,34 +25,34 @@ class MessageEndEventTest extends EngineTestCase
      */
     public function createMessageStartEventProcesses()
     {
-        $item = $this->factory->createItemDefinition([
+        $item = $this->repository->createItemDefinition([
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
             'structure' => 'String'
         ]);
 
-        $message = $this->factory->createMessage();
+        $message = $this->repository->createMessage();
         $message->setId('MessageA');
         $message->setItem($item);
 
-        $processA = $this->factory->createProcess();
+        $processA = $this->repository->createProcess();
         $processA->setEngine($this->engine);
-        $processA->setRepository($this->factory);
-        $startA = $this->factory->createStartEvent();
-        $activityA1 = $this->factory->createActivity();
-        $eventA = $this->factory->createIntermediateCatchEvent();
-        $messageEventDefA = $this->factory->createMessageEventDefinition();
+        $processA->setRepository($this->repository);
+        $startA = $this->repository->createStartEvent();
+        $activityA1 = $this->repository->createActivity();
+        $eventA = $this->repository->createIntermediateCatchEvent();
+        $messageEventDefA = $this->repository->createMessageEventDefinition();
         $messageEventDefA->setId("MessageEvent1");
         $messageEventDefA->setPayload($message);
         $eventA->getEventDefinitions()->push($messageEventDefA);
-        $activityA2 = $this->factory->createActivity();
-        $endA = $this->factory->createEndEvent();
+        $activityA2 = $this->repository->createActivity();
+        $endA = $this->repository->createEndEvent();
 
-        $startA->createFlowTo($activityA1, $this->factory);
-        $activityA1->createFlowTo($eventA, $this->factory);
-        $eventA->createFlowTo($activityA2, $this->factory);
-        $activityA2->createFlowTo($endA, $this->factory);
+        $startA->createFlowTo($activityA1, $this->repository);
+        $activityA1->createFlowTo($eventA, $this->repository);
+        $eventA->createFlowTo($activityA2, $this->repository);
+        $activityA2->createFlowTo($endA, $this->repository);
 
         $processA->addActivity($activityA1)
             ->addActivity($activityA2)
@@ -61,19 +61,19 @@ class MessageEndEventTest extends EngineTestCase
             ->addEvent($endA);
 
         //Process B
-        $processB = $this->factory->createProcess();
+        $processB = $this->repository->createProcess();
         $processB->setEngine($this->engine);
 
-        $startB = $this->factory->createStartEvent();
-        $activityB1 = $this->factory->createActivity();
-        $messageEventDefB= $this->factory->createMessageEventDefinition();
+        $startB = $this->repository->createStartEvent();
+        $activityB1 = $this->repository->createActivity();
+        $messageEventDefB= $this->repository->createMessageEventDefinition();
         $messageEventDefB->setPayload($message);
 
-        $messageEndEventB = $this->factory->createEndEvent();
+        $messageEndEventB = $this->repository->createEndEvent();
         $messageEndEventB->getEventDefinitions()->push($messageEventDefB);
 
-        $startB->createFlowTo($activityB1, $this->factory);
-        $activityB1->createFlowTo($messageEndEventB, $this->factory);
+        $startB->createFlowTo($activityB1, $this->repository);
+        $activityB1->createFlowTo($messageEndEventB, $this->repository);
 
         $processB->addActivity($activityB1)
             ->addEvent($startB)
@@ -109,7 +109,7 @@ class MessageEndEventTest extends EngineTestCase
         //Create message flow from intermediate events A to B
         $eventA = $processA->getEvents()->item(1);
         $messageEndEventB = $processB->getEvents()->item(1);
-        $messageFlow = $this->factory->createMessageFlow();
+        $messageFlow = $this->repository->createMessageFlow();
         $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($messageEndEventB);
         $messageFlow->setTarget($eventA);
@@ -118,10 +118,10 @@ class MessageEndEventTest extends EngineTestCase
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
 
-        $dataStoreA = $this->factory->createDataStore();
+        $dataStoreA = $this->repository->createDataStore();
         $dataStoreA->putData('A', '1');
 
-        $dataStoreB = $this->factory->createDataStore();
+        $dataStoreB = $this->repository->createDataStore();
         $dataStoreB->putData('B', '1');
 
         $dataStoreCollectionA = new DataStoreCollection();

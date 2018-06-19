@@ -32,17 +32,17 @@ class ParallelGatewayTest extends EngineTestCase
      */
     private function createProcessWithParallelGateway()
     {
-        $process = $this->factory->createProcess();
+        $process = $this->repository->createProcess();
 
         //elements
-        $start = $this->factory->createStartEvent();
-        $gatewayA = $this->factory->createParallelGateway();
-        $activityA = $this->factory->createActivity();
-        $activityB = $this->factory->createActivity();
-        $activityC = $this->factory->createActivity();
+        $start = $this->repository->createStartEvent();
+        $gatewayA = $this->repository->createParallelGateway();
+        $activityA = $this->repository->createActivity();
+        $activityB = $this->repository->createActivity();
+        $activityC = $this->repository->createActivity();
 
-        $gatewayB = $this->factory->createParallelGateway();
-        $end =  $this->factory->createEndEvent();
+        $gatewayB = $this->repository->createParallelGateway();
+        $end =  $this->repository->createEndEvent();
         $process
             ->addActivity($activityA)
             ->addActivity($activityB)
@@ -55,14 +55,14 @@ class ParallelGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->factory);
+        $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
-            ->createFlowTo($activityA, $this->factory)
-            ->createFlowTo($activityB, $this->factory);
-        $activityA->createFlowTo($gatewayB, $this->factory);
-        $activityB->createFlowTo($gatewayB, $this->factory);
-        $gatewayB->createFlowTo($activityC, $this->factory);
-        $activityC->createFlowTo($end, $this->factory);
+            ->createFlowTo($activityA, $this->repository)
+            ->createFlowTo($activityB, $this->repository);
+        $activityA->createFlowTo($gatewayB, $this->repository);
+        $activityB->createFlowTo($gatewayB, $this->repository);
+        $gatewayB->createFlowTo($activityC, $this->repository);
+        $activityC->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -79,17 +79,17 @@ class ParallelGatewayTest extends EngineTestCase
      */
     private function createParallelDivergingInclusiveConverging()
     {
-        $process = $this->factory->createProcess();
+        $process = $this->repository->createProcess();
 
         //elements
-        $start = $this->factory->createStartEvent();
-        $gatewayA = $this->factory->createParallelGateway();
-        $activityA = $this->factory->createActivity();
-        $activityB = $this->factory->createActivity();
-        $activityC = $this->factory->createActivity();
+        $start = $this->repository->createStartEvent();
+        $gatewayA = $this->repository->createParallelGateway();
+        $activityA = $this->repository->createActivity();
+        $activityB = $this->repository->createActivity();
+        $activityC = $this->repository->createActivity();
 
-        $gatewayB = $this->factory->createInclusiveGateway();
-        $end = $this->factory->createEndEvent();
+        $gatewayB = $this->repository->createInclusiveGateway();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -103,14 +103,14 @@ class ParallelGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->factory);
+        $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
-            ->createFlowTo($activityA, $this->factory)
-            ->createFlowTo($activityB, $this->factory);
-        $activityA->createFlowTo($gatewayB, $this->factory);
-        $activityB->createFlowTo($gatewayB, $this->factory);
-        $gatewayB->createFlowTo($activityC, $this->factory);
-        $activityC->createFlowTo($end, $this->factory);
+            ->createFlowTo($activityA, $this->repository)
+            ->createFlowTo($activityB, $this->repository);
+        $activityA->createFlowTo($gatewayB, $this->repository);
+        $activityB->createFlowTo($gatewayB, $this->repository);
+        $gatewayB->createFlowTo($activityC, $this->repository);
+        $activityC->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -121,7 +121,7 @@ class ParallelGatewayTest extends EngineTestCase
     public function testParallelGateway()
     {
         //Create a data store with data.
-        $dataStore =  $this->factory->createDataStore();
+        $dataStore =  $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createProcessWithParallelGateway();
@@ -214,7 +214,7 @@ class ParallelGatewayTest extends EngineTestCase
     public function testParallelDivergingInclusiveConverging()
     {
         //Create a data store with data.
-        $dataStore =  $this->factory->createDataStore();
+        $dataStore =  $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createParallelDivergingInclusiveConverging();
@@ -306,13 +306,13 @@ class ParallelGatewayTest extends EngineTestCase
     public function testParallelCanNotHaveConditionedOutgoingFlow()
     {
         //Create a parallel gateway and an activity.
-        $gatewayA =  $this->factory->createParallelGateway();
-        $activityA =  $this->factory->createActivity();
+        $gatewayA =  $this->repository->createParallelGateway();
+        $activityA =  $this->repository->createActivity();
 
         //Assertion: Throw exception when creating a conditioned flow from parallel.
         $this->expectException('ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException');
-        $gatewayA->createConditionedFlowTo($activityA, function() {}, false, $this->factory);
-        $process =  $this->factory->createProcess();
+        $gatewayA->createConditionedFlowTo($activityA, function() {}, false, $this->repository);
+        $process =  $this->repository->createProcess();
         $process
             ->addActivity($activityA)
             ->addGateway($gatewayA);

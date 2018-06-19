@@ -25,7 +25,7 @@ class NayraModelTest extends EngineTestCase
      */
     public function testProcessWithExclusiveGateway()
     {
-        $processData = $this->createProcessWithExclusiveGateway($this->factory);
+        $processData = $this->createProcessWithExclusiveGateway($this->repository);
         $process = $processData['process'];
         $start = $processData['start'];
         $activityA = $processData['activityA'];
@@ -65,7 +65,7 @@ class NayraModelTest extends EngineTestCase
      */
     public function testProcessWithInclusiveGateway()
     {
-        $processData = $this->createProcessWithInclusiveGateway($this->factory);
+        $processData = $this->createProcessWithInclusiveGateway($this->repository);
         $process = $processData['process'];
         $start = $processData['start'];
         $activityA = $processData['activityA'];

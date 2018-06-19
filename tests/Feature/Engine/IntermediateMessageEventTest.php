@@ -40,31 +40,31 @@ class IntermediateMessageEventTest extends EngineTestCase
             'structure' => 'String'
         ];
 
-        $item = $this->factory->createItemDefinition($properties);
+        $item = $this->repository->createItemDefinition($properties);
         $item->setProperties($properties);
 
-        $message = $this->factory->createMessage();
+        $message = $this->repository->createMessage();
         $message->setId('MessageA');
         $message->setItem($item);
 
         //Process A
-        $processA = $this->factory->createProcess();
+        $processA = $this->repository->createProcess();
         $processA->setEngine($this->engine);
-        $processA->setRepository($this->factory);
-        $startA = $this->factory->createStartEvent();
-        $activityA = $this->factory->createActivity();
-        $eventA = $this->factory->createIntermediateThrowEvent();
-        $messageEventDefA = $this->factory->createMessageEventDefinition();
+        $processA->setRepository($this->repository);
+        $startA = $this->repository->createStartEvent();
+        $activityA = $this->repository->createActivity();
+        $eventA = $this->repository->createIntermediateThrowEvent();
+        $messageEventDefA = $this->repository->createMessageEventDefinition();
         $messageEventDefA->setId("MessageEvent1");
         $messageEventDefA->setPayload($message);
         $eventA->getEventDefinitions()->push($messageEventDefA);
-        $activityB = $this->factory->createActivity();
-        $endA = $this->factory->createEndEvent();
+        $activityB = $this->repository->createActivity();
+        $endA = $this->repository->createEndEvent();
 
-        $startA->createFlowTo($activityA, $this->factory);
-        $activityA->createFlowTo($eventA, $this->factory);
-        $eventA->createFlowTo($activityB, $this->factory);
-        $activityB->createFlowTo($endA, $this->factory);
+        $startA->createFlowTo($activityA, $this->repository);
+        $activityA->createFlowTo($eventA, $this->repository);
+        $eventA->createFlowTo($activityB, $this->repository);
+        $activityB->createFlowTo($endA, $this->repository);
 
         $processA->addActivity($activityA)
             ->addActivity($activityB)
@@ -73,20 +73,20 @@ class IntermediateMessageEventTest extends EngineTestCase
             ->addEvent($endA);
 
         //Process B
-        $processB = $this->factory->createProcess();
-        $startB = $this->factory->createStartEvent();
-        $activityC = $this->factory->createActivity();
-        $eventB = $this->factory->createIntermediateCatchEvent();
-        $messageEventDefB = $this->factory->createMessageEventDefinition();
+        $processB = $this->repository->createProcess();
+        $startB = $this->repository->createStartEvent();
+        $activityC = $this->repository->createActivity();
+        $eventB = $this->repository->createIntermediateCatchEvent();
+        $messageEventDefB = $this->repository->createMessageEventDefinition();
         $messageEventDefB->setPayload($message);
         $eventB->getEventDefinitions()->push($messageEventDefB);
-        $activityD = $this->factory->createActivity();
-        $endB = $this->factory->createEndEvent();
+        $activityD = $this->repository->createActivity();
+        $endB = $this->repository->createEndEvent();
 
-        $startB->createFlowTo($activityC, $this->factory);
-        $activityC->createFlowTo($eventB, $this->factory);
-        $eventB->createFlowTo($activityD, $this->factory);
-        $activityD->createFlowTo($endB, $this->factory);
+        $startB->createFlowTo($activityC, $this->repository);
+        $activityC->createFlowTo($eventB, $this->repository);
+        $eventB->createFlowTo($activityD, $this->repository);
+        $activityD->createFlowTo($endB, $this->repository);
 
         $processB->addActivity($activityC)
             ->addActivity($activityD)
@@ -102,28 +102,28 @@ class IntermediateMessageEventTest extends EngineTestCase
      */
     public function createSignalIntermediateEventProcesses()
     {
-        $signal = $this->factory->createSignal();
+        $signal = $this->repository->createSignal();
         $signal->setId('Signal1');
         $signal->setName('SignalName');
 
         //Process A
-        $processA = $this->factory->createProcess();
-        $startA = $this->factory->createStartEvent();
-        $activityA = $this->factory->createActivity();
-        $eventA = $this->factory->createIntermediateThrowEvent();
-        $signalEventDefA = $this->factory->createSignalEventDefinition();
+        $processA = $this->repository->createProcess();
+        $startA = $this->repository->createStartEvent();
+        $activityA = $this->repository->createActivity();
+        $eventA = $this->repository->createIntermediateThrowEvent();
+        $signalEventDefA = $this->repository->createSignalEventDefinition();
         $signalEventDefA->setId('signalEventDefA');
         $signalEventDefA->setPayload($signal);
         $eventA->getEventDefinitions()->push($signalEventDefA);
-        $activityB = $this->factory->createActivity();
-        $endA = $this->factory->createEndEvent();
+        $activityB = $this->repository->createActivity();
+        $endA = $this->repository->createEndEvent();
 
 
 
-        $startA->createFlowTo($activityA, $this->factory);
-        $activityA->createFlowTo($eventA, $this->factory);
-        $eventA->createFlowTo($activityB, $this->factory);
-        $activityB->createFlowTo($endA, $this->factory);
+        $startA->createFlowTo($activityA, $this->repository);
+        $activityA->createFlowTo($eventA, $this->repository);
+        $eventA->createFlowTo($activityB, $this->repository);
+        $activityB->createFlowTo($endA, $this->repository);
 
         $processA->addActivity($activityA)
             ->addActivity($activityB)
@@ -132,21 +132,21 @@ class IntermediateMessageEventTest extends EngineTestCase
             ->addEvent($endA);
 
         //Process B
-        $processB = $this->factory->createProcess();
-        $startB = $this->factory->createStartEvent();
-        $activityC = $this->factory->createActivity();
-        $eventB = $this->factory->createIntermediateCatchEvent();
-        $signalEventDefB = $this->factory->createSignalEventDefinition();
+        $processB = $this->repository->createProcess();
+        $startB = $this->repository->createStartEvent();
+        $activityC = $this->repository->createActivity();
+        $eventB = $this->repository->createIntermediateCatchEvent();
+        $signalEventDefB = $this->repository->createSignalEventDefinition();
         $signalEventDefB->setId('signalEventDefB');
         $signalEventDefB->setPayload($signal);
         $eventB->getEventDefinitions()->push($signalEventDefB);
-        $activityD = $this->factory->createActivity();
-        $endB = $this->factory->createEndEvent();
+        $activityD = $this->repository->createActivity();
+        $endB = $this->repository->createEndEvent();
 
-        $startB->createFlowTo($activityC, $this->factory);
-        $activityC->createFlowTo($eventB, $this->factory);
-        $eventB->createFlowTo($activityD, $this->factory);
-        $activityD->createFlowTo($endB, $this->factory);
+        $startB->createFlowTo($activityC, $this->repository);
+        $activityC->createFlowTo($eventB, $this->repository);
+        $eventB->createFlowTo($activityD, $this->repository);
+        $activityD->createFlowTo($endB, $this->repository);
 
         $processB->addActivity($activityC)
             ->addActivity($activityD)
@@ -180,7 +180,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $this->assertEquals('String', $message->getItem()->getStructure());
         $this->assertNotNull($signal, 'Event Definition B should have a signal');
 
-        $operation = $this->factory->createOperation();
+        $operation = $this->repository->createOperation();
 
         $eventDefA->setOperation($operation);
 
@@ -233,7 +233,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Create mmessage flow from intemediate events A to B
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
-        $messageFlow = $this->factory->createMessageFlow();
+        $messageFlow = $this->repository->createMessageFlow();
         $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($eventA);
         $messageFlow->setTarget($eventB);
@@ -245,10 +245,10 @@ class IntermediateMessageEventTest extends EngineTestCase
         $eventA->collaboration = $collaboration;
         $eventB->collaboration = $collaboration;
 
-        $dataStoreA = $this->factory->createDataStore();
+        $dataStoreA = $this->repository->createDataStore();
         $dataStoreA->putData('A', '1');
 
-        $dataStoreB = $this->factory->createDataStore();
+        $dataStoreB = $this->repository->createDataStore();
         $dataStoreB->putData('B', '1');
 
         $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
@@ -343,7 +343,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Create mmessage flow from intemediate events A to B
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
-        $messageFlow = $this->factory->createMessageFlow();
+        $messageFlow = $this->repository->createMessageFlow();
         $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($eventA);
         $messageFlow->setTarget($eventB);
@@ -355,10 +355,10 @@ class IntermediateMessageEventTest extends EngineTestCase
         $eventA->collaboration = $collaboration;
         $eventB->collaboration = $collaboration;
 
-        $dataStoreA = $this->factory->createDataStore();
+        $dataStoreA = $this->repository->createDataStore();
         $dataStoreA->putData('A', '1');
 
-        $dataStoreB = $this->factory->createDataStore();
+        $dataStoreB = $this->repository->createDataStore();
         $dataStoreB->putData('B', '1');
 
         $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
