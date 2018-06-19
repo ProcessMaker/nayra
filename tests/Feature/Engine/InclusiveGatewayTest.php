@@ -32,15 +32,15 @@ class InclusiveGatewayTest extends EngineTestCase
      */
     private function createProcessWithInclusiveGateway()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->factory->createProcess();
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $this->factory->createInstanceOf(InclusiveGatewayInterface::class);
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $gatewayB = $this->factory->createInstanceOf(InclusiveGatewayInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->factory->createStartEvent();
+        $gatewayA = $this->factory->createInclusiveGateway();
+        $activityA = $this->factory->createActivity();
+        $activityB = $this->factory->createActivity();
+        $gatewayB = $this->factory->createInclusiveGateway();
+        $end = $this->factory->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -74,17 +74,17 @@ class InclusiveGatewayTest extends EngineTestCase
      */
     private function createProcessWithDefaultTransition()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->factory->createProcess();
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $this->factory->createInstanceOf(InclusiveGatewayInterface::class);
-        $gatewayB = $this->factory->createInstanceOf(InclusiveGatewayInterface::class);
+        $start = $this->factory->createStartEvent();
+        $gatewayA = $this->factory->createInclusiveGateway();
+        $gatewayB = $this->factory->createInclusiveGateway();
         $gatewayA->name= "A";
         $gatewayB->name= "B";
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $activityA = $this->factory->createActivity();
+        $activityB = $this->factory->createActivity();
+        $end = $this->factory->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -120,7 +120,7 @@ class InclusiveGatewayTest extends EngineTestCase
     public function testInclusiveGatewayAllPaths()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
         $dataStore->putData('A', '1');
         $dataStore->putData('B', '1');
 
@@ -197,7 +197,7 @@ class InclusiveGatewayTest extends EngineTestCase
     public function testInclusiveGatewayOnlyB()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
         $dataStore->putData('A', '0');
         $dataStore->putData('B', '1');
         $process = $this->createProcessWithInclusiveGateway();
@@ -249,7 +249,7 @@ class InclusiveGatewayTest extends EngineTestCase
     public function testDefaultTransition()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
         $dataStore->putData('A', '2');
         $process = $this->createProcessWithDefaultTransition();
         $this->engine->createExecutionInstance($process, $dataStore);

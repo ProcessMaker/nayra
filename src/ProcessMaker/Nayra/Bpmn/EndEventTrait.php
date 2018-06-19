@@ -11,7 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
@@ -42,7 +42,7 @@ trait EndEventTrait
      *
      * @param FactoryInterface $factory
      */
-    public function buildTransitions(FactoryInterface $factory)
+    public function buildTransitions(RepositoryInterface $factory)
     {
         $this->setFactory($factory);
         $this->endState = new State($this, EventInterface::TOKEN_STATE_ACTIVE);

@@ -25,15 +25,15 @@ class IntermediateTimerEventTest extends EngineTestCase
      */
     public function createStartTimerEventProcess()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->factory->createProcess();
         $process->setEngine($this->engine);
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $timerEvent = $this->factory->createInstanceOf(IntermediateCatchEventInterface::class);
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->factory->createStartEvent();
+        $timerEvent = $this->factory->createIntermediateCatchEvent();
+        $activityA = $this->factory->createActivity();
+        $activityB = $this->factory->createActivity();
+        $end = $this->factory->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -59,7 +59,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithDuration()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -118,7 +118,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithCycle()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -177,7 +177,7 @@ class IntermediateTimerEventTest extends EngineTestCase
     public function testIntermediateTimerEventWithDate()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
 
         //Load the process
         $process = $this->createStartTimerEventProcess();
@@ -244,7 +244,7 @@ class IntermediateTimerEventTest extends EngineTestCase
         $formalExpression = new FormalExpression();
         $formalExpression->setId('formalExpression');
 
-        $timerEventDefinition = $this->factory->createInstanceOf(TimerEventDefinitionInterface::class);
+        $timerEventDefinition = $this->factory->createTimerEventDefinition();
 
         $timerEventDefinition->setId("TimerEventDefinition");
         switch ($type) {

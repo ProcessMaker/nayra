@@ -25,7 +25,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
      */
     private function prepareSequentialProcess(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
+        $executionInstanceRepository = $this->engine->getFactory()->createExecutionInstanceRepository($repository);
         $executionInstanceRepository->setRawData([
             'executionInstanceId' => [
                 'processId' => 'SequentialTask',
@@ -47,7 +47,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
      */
     private function prepareParallelProcess(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
+        $executionInstanceRepository = $this->engine->getFactory()->createExecutionInstanceRepository($repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',
@@ -73,7 +73,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
      */
     private function prepareParallelProcessWithActivityCompleted(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
+        $executionInstanceRepository = $this->engine->getFactory()->createExecutionInstanceRepository($repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',
@@ -99,7 +99,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
      */
     private function prepareParallelProcessWithException(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
+        $executionInstanceRepository = $this->engine->getFactory()->createExecutionInstanceRepository($repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',

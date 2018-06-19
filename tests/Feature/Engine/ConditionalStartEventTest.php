@@ -29,7 +29,7 @@ class ConditionalStartEventTest extends EngineTestCase
         $process = $bpmnRepository->getProcess('Conditional_StartEvent');
 
         //Create a default environment data
-        $environmentData = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $environmentData = $this->factory->createDataStore();
         $this->engine->setDataStore($environmentData);
 
         //Get start event and event definition references

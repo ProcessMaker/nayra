@@ -3,8 +3,8 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Factory;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\FactoryTrait;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 
 /**
@@ -59,6 +59,6 @@ interface GatewayInterface extends FlowNodeInterface
      * @internal param FlowRepositoryInterface $flowRepository
      *
      */
-    public function createConditionedFlowTo(FlowNodeInterface $target, callable $condition, $isDefault, FactoryInterface $factory);
+    public function createConditionedFlowTo(FlowNodeInterface $target, callable $condition, $isDefault, RepositoryInterface $factory);
 
 }

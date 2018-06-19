@@ -64,7 +64,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $process = $bpmnRepository->getProcess('ParallelGateway');
 
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
 
         //Load the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -176,7 +176,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $process = $bpmnRepository->getProcess('InclusiveGateway_Default');
 
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
         $dataStore->putData('a', 1);
         $dataStore->putData('b', 1);
 

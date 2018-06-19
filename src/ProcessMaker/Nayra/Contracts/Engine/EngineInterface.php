@@ -6,7 +6,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
@@ -23,7 +23,7 @@ interface EngineInterface
      *
      * @return $this
      */
-    public function setFactory(FactoryInterface $factory);
+    public function setFactory(RepositoryInterface $factory);
 
     /**
      * @return FactoryInterface

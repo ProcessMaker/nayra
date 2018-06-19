@@ -22,7 +22,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ReflectionClass;
 
 /**
@@ -250,7 +250,7 @@ trait ProcessTrait
      *
      * @return CollectionInterface
      */
-    public function getTransitions(FactoryInterface $factory)
+    public function getTransitions(RepositoryInterface $factory)
     {
         if ($this->transitions) {
             return $this->transitions;
@@ -438,7 +438,7 @@ trait ProcessTrait
     public function call(DataStoreInterface $dataStore = null)
     {
         if (empty($dataStore)) {
-            $dataStore = $this->getFactory()->createInstanceOf(DataStoreInterface::class);
+            $dataStore = $this->getFactory()->createDataStore();
 
         }
         $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);

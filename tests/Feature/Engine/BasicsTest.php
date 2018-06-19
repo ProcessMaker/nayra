@@ -29,11 +29,11 @@ class BasicsTest extends EngineTestCase
      */
     private function createSimpleProcessInstance()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->factory->createProcess();
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $activity = $this->factory->createInstanceOf(ActivityInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->factory->createStartEvent();
+        $activity = $this->factory->createActivity();
+        $end = $this->factory->createEndEvent();
         $process->addActivity($activity);
         $process->addEvent($start)
             ->addEvent($end);
@@ -52,7 +52,7 @@ class BasicsTest extends EngineTestCase
     public function testSimpleTransitions()
     {
         //Create a data store
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
         //Load the process
         $process = $this->createSimpleProcessInstance();
         //Create a process instance with the data store
@@ -100,7 +100,7 @@ class BasicsTest extends EngineTestCase
     public function testProcessConfiguration()
     {
         //Create a data store
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
 
         //Load the process
         $process = $this->createSimpleProcessInstance();
@@ -135,7 +135,7 @@ class BasicsTest extends EngineTestCase
     public function testProcessIncorrectConfiguration()
     {
         //Create a data store
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
 
         //Load the process
         $process = $this->createSimpleProcessInstance();

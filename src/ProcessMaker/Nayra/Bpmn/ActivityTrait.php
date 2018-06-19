@@ -7,7 +7,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
@@ -68,7 +68,7 @@ trait ActivityTrait
      *
      * @param FactoryInterface $factory
      */
-    public function buildTransitions(FactoryInterface $factory)
+    public function buildTransitions(RepositoryInterface $factory)
     {
         $this->setFactory($factory);
         $this->activeState = new State($this, ActivityInterface::TOKEN_STATE_ACTIVE);

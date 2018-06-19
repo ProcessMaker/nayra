@@ -48,18 +48,16 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     {
         $data = self::$data[$uid];
         $instance = new \ProcessMaker\Test\Models\ExecutionInstance();
-        $processRepository = $this->getStorage()->getFactory()->createInstanceOf(ProcessRepositoryInterface::class, $this->getStorage());
-        $process = $processRepository->loadProcessByUid($data['processId']);
-        $dataStore = $this->getStorage()->getFactory()->createInstanceOf(DataStoreInterface::class);
+        $process = $this->getStorage()->getProcess($data['processId']);
+        $dataStore = $this->getStorage()->getFactory()->createDataStore();
         $dataStore->setData($data['data']);
         $instance->setProcess($process);
         $instance->setDataStore($dataStore);
         $process->getTransitions($this->getStorage()->getFactory());
 
         //Load tokens:
-        $tokenRepository = $this->getStorage()->getFactory()->createInstanceOf(TokenRepositoryInterface::class, $this->getStorage());
         foreach($data['tokens'] as $tokenInfo) {
-            $token = $this->getStorage()->getFactory()->createInstanceOf(TokenInterface::class);
+            $token = $this->getStorage()->getFactory()->createToken();
             $token->setProperties($tokenInfo);
             $element = $this->getStorage()->getElementInstanceById($tokenInfo['elementId']);
             $element->addToken($instance, $token);

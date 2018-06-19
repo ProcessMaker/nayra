@@ -84,7 +84,7 @@ class StartTimerEventTest extends EngineTestCase
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDateExpression.bpmn');
 
         //Create a default environment data
-        $environmentData = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $environmentData = $this->factory->createDataStore();
         $this->engine->setDataStore($environmentData);
         $date = new DateTime;
         $date->setTime(23, 59, 59);
@@ -121,7 +121,7 @@ class StartTimerEventTest extends EngineTestCase
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycleExpression.bpmn');
 
         //Create a default environment data
-        $environmentData = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $environmentData = $this->factory->createDataStore();
 
         $this->engine->setDataStore($environmentData);
 

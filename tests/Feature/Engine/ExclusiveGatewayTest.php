@@ -26,15 +26,15 @@ class ExclusiveGatewayTest extends EngineTestCase
      */
     private function createProcessWithExclusiveGateway()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->factory->createProcess();
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $this->factory->createInstanceOf(ExclusiveGatewayInterface::class);
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityC = $this->factory->createInstanceOf(ActivityInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->factory->createStartEvent();
+        $gatewayA = $this->factory->createExclusiveGateway();
+        $activityA = $this->factory->createActivity();
+        $activityB = $this->factory->createActivity();
+        $activityC = $this->factory->createActivity();
+        $end = $this->factory->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -71,15 +71,15 @@ class ExclusiveGatewayTest extends EngineTestCase
      */
     private function createProcessWithExclusiveGatewayAndDefaultTransition()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->factory->createProcess();
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $this->factory->createInstanceOf(ExclusiveGatewayInterface::class);
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityC = $this->factory->createInstanceOf(ActivityInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->factory->createStartEvent();
+        $gatewayA = $this->factory->createExclusiveGateway();
+        $activityA = $this->factory->createActivity();
+        $activityB = $this->factory->createActivity();
+        $activityC = $this->factory->createActivity();
+        $end = $this->factory->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -124,16 +124,16 @@ class ExclusiveGatewayTest extends EngineTestCase
      */
     private function createParallelDivergingExclusiveConverging()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->factory->createProcess();
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $this->factory->createInstanceOf(ParallelGatewayInterface::class);
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityC = $this->factory->createInstanceOf(ActivityInterface::class);
-        $gatewayB = $this->factory->createInstanceOf(ExclusiveGatewayInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->factory->createStartEvent();
+        $gatewayA = $this->factory->createParallelGateway();
+        $activityA = $this->factory->createActivity();
+        $activityB = $this->factory->createActivity();
+        $activityC = $this->factory->createActivity();
+        $gatewayB = $this->factory->createExclusiveGateway();
+        $end = $this->factory->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -164,7 +164,7 @@ class ExclusiveGatewayTest extends EngineTestCase
     public function testExclusiveGateway()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
         $dataStore->putData('A', '2');
         $dataStore->putData('B', '1');
 
@@ -205,7 +205,7 @@ class ExclusiveGatewayTest extends EngineTestCase
     public function testExclusiveGatewayFirstConditionTrue()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
         $dataStore->putData('A', '1');
         $dataStore->putData('B', '1');
 
@@ -239,7 +239,7 @@ class ExclusiveGatewayTest extends EngineTestCase
     public function testExclusiveGatewayWithDefaultTransition()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
         $dataStore->putData('A', '2');
         $dataStore->putData('B', '2');
 
@@ -301,7 +301,7 @@ class ExclusiveGatewayTest extends EngineTestCase
     public function testParallelDivergingExclusiveConverging()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->factory->createDataStore();
 
         //Load the process
         $process = $this->createParallelDivergingExclusiveConverging();

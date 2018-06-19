@@ -11,10 +11,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
-use ProcessMaker\Nayra\Factory;
+use ProcessMaker\Nayra\FactoryTrait;
 
 /**
  * Flow node define the behavior of a element that can be used as
@@ -131,7 +131,7 @@ trait FlowNodeTrait
      *
      * @param \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
      */
-    public function buildFlowTransitions(FactoryInterface $factory)
+    public function buildFlowTransitions(RepositoryInterface $factory)
     {
         $this->setFactory($factory);
         $flows = $this->getFlows();
@@ -190,9 +190,9 @@ trait FlowNodeTrait
      * @return $this
      * @internal param FlowRepositoryInterface $flowRepository
      */
-    public function createFlowTo(FlowNodeInterface $target, FactoryInterface $factory, $properties=[])
+    public function createFlowTo(FlowNodeInterface $target, RepositoryInterface $factory, $properties=[])
     {
-        $flow = $factory->createInstanceOf(FlowInterface::class);
+        $flow = $factory->createFlow();
         $flow->setSource($this);
         $flow->setTarget($target);
         $flow->setProperties($properties);

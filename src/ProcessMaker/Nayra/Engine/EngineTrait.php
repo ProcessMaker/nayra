@@ -111,7 +111,7 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id)
     {
-        $repository = $this->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $this->getRepository());
+        $repository = $this->getFactory()->createExecutionInstanceRepository($this->getRepository());
         $executionInstance = $repository->loadExecutionInstanceByUid($id);
         
         $executionInstance->linkToEngine($this);

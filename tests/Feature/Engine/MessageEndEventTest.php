@@ -30,29 +30,29 @@ class MessageEndEventTest extends EngineTestCase
      */
     public function createMessageStartEventProcesses()
     {
-        $item = $this->factory->createInstanceOf(ItemDefinitionInterface::class, [
+        $item = $this->factory->createItemDefinition([
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
             'structure' => 'String'
         ]);
 
-        $message = $this->factory->createInstanceOf(MessageInterface::class);
+        $message = $this->factory->createMessage();
         $message->setId('MessageA');
         $message->setItem($item);
 
-        $processA = $this->factory->createInstanceOf(ProcessInterface::class);
+        $processA = $this->factory->createProcess();
         $processA->setEngine($this->engine);
         $processA->setFactory($this->factory);
-        $startA = $this->factory->createInstanceOf(StartEventInterface::class);
-        $activityA1 = $this->factory->createInstanceOf(ActivityInterface::class);
-        $eventA = $this->factory->createInstanceOf(IntermediateCatchEventInterface::class);
-        $messageEventDefA = $this->factory->createInstanceOf(MessageEventDefinitionInterface::class);
+        $startA = $this->factory->createStartEvent();
+        $activityA1 = $this->factory->createActivity();
+        $eventA = $this->factory->createIntermediateCatchEvent();
+        $messageEventDefA = $this->factory->createMessageEventDefinition();
         $messageEventDefA->setId("MessageEvent1");
         $messageEventDefA->setPayload($message);
         $eventA->getEventDefinitions()->push($messageEventDefA);
-        $activityA2 = $this->factory->createInstanceOf(ActivityInterface::class);
-        $endA = $this->factory->createInstanceOf(EndEventInterface::class);
+        $activityA2 = $this->factory->createActivity();
+        $endA = $this->factory->createEndEvent();
 
         $startA->createFlowTo($activityA1, $this->factory);
         $activityA1->createFlowTo($eventA, $this->factory);
@@ -66,15 +66,15 @@ class MessageEndEventTest extends EngineTestCase
             ->addEvent($endA);
 
         //Process B
-        $processB = $this->factory->createInstanceOf(ProcessInterface::class);
+        $processB = $this->factory->createProcess();
         $processB->setEngine($this->engine);
 
-        $startB = $this->factory->createInstanceOf(StartEventInterface::class);
-        $activityB1 = $this->factory->createInstanceOf(ActivityInterface::class);
-        $messageEventDefB= $this->factory->createInstanceOf(MessageEventDefinitionInterface::class);
+        $startB = $this->factory->createStartEvent();
+        $activityB1 = $this->factory->createActivity();
+        $messageEventDefB= $this->factory->createMessageEventDefinition();
         $messageEventDefB->setPayload($message);
 
-        $messageEndEventB = $this->factory->createInstanceOf(EndEventInterface::class);
+        $messageEndEventB = $this->factory->createEndEvent();
         $messageEndEventB->getEventDefinitions()->push($messageEventDefB);
 
         $startB->createFlowTo($activityB1, $this->factory);
@@ -114,7 +114,7 @@ class MessageEndEventTest extends EngineTestCase
         //Create message flow from intermediate events A to B
         $eventA = $processA->getEvents()->item(1);
         $messageEndEventB = $processB->getEvents()->item(1);
-        $messageFlow = $this->factory->createInstanceOf(MessageFlowInterface::class);
+        $messageFlow = $this->factory->createMessageFlow();
         $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($messageEndEventB);
         $messageFlow->setTarget($eventA);
@@ -123,10 +123,10 @@ class MessageEndEventTest extends EngineTestCase
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
 
-        $dataStoreA = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStoreA = $this->factory->createDataStore();
         $dataStoreA->putData('A', '1');
 
-        $dataStoreB = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStoreB = $this->factory->createDataStore();
         $dataStoreB->putData('B', '1');
 
         $dataStoreCollectionA = new DataStoreCollection();

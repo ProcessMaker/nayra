@@ -7,7 +7,7 @@ use ProcessMaker\Nayra\Bpmn\InclusiveGatewayTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
 
 class InclusiveGateway implements InclusiveGatewayInterface
@@ -28,7 +28,7 @@ class InclusiveGateway implements InclusiveGatewayInterface
         FlowNodeInterface $target,
         callable $condition,
         $isDefault,
-        FactoryInterface $factory
+        RepositoryInterface $factory
     ) {
         $this->createFlowTo($target, $factory, [
             FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,

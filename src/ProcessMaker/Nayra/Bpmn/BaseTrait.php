@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ReflectionClass;
 
@@ -66,7 +66,7 @@ trait BaseTrait
      *
      * @return $this
      */
-    public function setFactory(FactoryInterface $factory)
+    public function setFactory(RepositoryInterface $factory)
     {
         $this->factory = $factory;
         return $this;

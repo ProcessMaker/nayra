@@ -87,7 +87,7 @@ trait StateTrait
     public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = [])
     {
         //$token = $this->getFactory()->getTokenRepository()->createTokenInstance();
-        $token = $this->getFactory()->createInstanceOf(TokenInterface::class);
+        $token = $this->getFactory()->createToken();
         $token->setOwner($this);
         $token->setProperties($properties);
         $token->setOwner($this);

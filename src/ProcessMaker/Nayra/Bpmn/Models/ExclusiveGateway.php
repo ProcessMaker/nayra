@@ -6,7 +6,7 @@ use ProcessMaker\Nayra\Bpmn\ExclusiveGatewayTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 class ExclusiveGateway implements ExclusiveGatewayInterface
 {
@@ -27,7 +27,7 @@ class ExclusiveGateway implements ExclusiveGatewayInterface
         FlowNodeInterface $target,
         callable $condition,
         $isDefault,
-        FactoryInterface $factory
+        RepositoryInterface $factory
     ) {
         $this->createFlowTo($target, $factory, [
             FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,

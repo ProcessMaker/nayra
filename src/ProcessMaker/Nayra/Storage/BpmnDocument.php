@@ -46,7 +46,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 
 /**
@@ -382,7 +382,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      *
      * @param FactoryInterface $factory
      */
-    public function setFactory(FactoryInterface $factory)
+    public function setFactory(RepositoryInterface $factory)
     {
         $this->factory = $factory;
     }

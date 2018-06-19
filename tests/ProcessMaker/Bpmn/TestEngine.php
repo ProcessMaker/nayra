@@ -4,7 +4,7 @@ namespace ProcessMaker\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Engine\EngineTrait;
 
 /**
@@ -32,7 +32,7 @@ class TestEngine implements EngineInterface
      * @param FactoryInterface $factory
      * @param EventBusInterface $dispatcher
      */
-    public function __construct(FactoryInterface $factory, EventBusInterface $dispatcher)
+    public function __construct(RepositoryInterface $factory, EventBusInterface $dispatcher)
     {
         $this->factory = $factory;
         $this->dispatcher = $dispatcher;
@@ -70,7 +70,7 @@ class TestEngine implements EngineInterface
      *
      * @return $this
      */
-    public function setFactory(FactoryInterface $factory)
+    public function setFactory(RepositoryInterface $factory)
     {
         $this->factory = $factory;
         return $this;

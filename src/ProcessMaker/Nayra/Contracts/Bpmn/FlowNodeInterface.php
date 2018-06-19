@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
@@ -26,7 +26,7 @@ interface FlowNodeInterface extends FlowElementInterface
      * @return $this
      * @internal param FlowRepositoryInterface $flowRepository
      */
-    public function createFlowTo(FlowNodeInterface $target, FactoryInterface $factory, $properties=[]);
+    public function createFlowTo(FlowNodeInterface $target, RepositoryInterface $factory, $properties=[]);
 
     /**
      * Get the outgoing flows.
@@ -65,7 +65,7 @@ interface FlowNodeInterface extends FlowElementInterface
      *
      * @return $this
      */
-    public function buildTransitions(FactoryInterface $factory);
+    public function buildTransitions(RepositoryInterface $factory);
 
     /**
      * Build the transition rules of the outgoing flows.
@@ -74,7 +74,7 @@ interface FlowNodeInterface extends FlowElementInterface
      *
      * @return $this
      */
-    public function buildFlowTransitions(FactoryInterface $factory);
+    public function buildFlowTransitions(RepositoryInterface $factory);
 
     /**
      * Add a state for the node element.

@@ -4,7 +4,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
@@ -154,7 +154,7 @@ interface ProcessInterface extends CallableElementInterface
      *
      * @return TransitionInterface[]
      */
-    public function getTransitions(FactoryInterface $factory);
+    public function getTransitions(RepositoryInterface $factory);
 
     /**
      * Get the dispatcher of the process.

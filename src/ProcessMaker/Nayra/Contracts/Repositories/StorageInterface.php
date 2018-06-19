@@ -4,7 +4,7 @@ namespace ProcessMaker\Nayra\Contracts\Repositories;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 /**
  * RepositoryFactory
  *
@@ -17,7 +17,7 @@ interface StorageInterface
      *
      * @param FactoryInterface $factory
      */
-    public function setFactory(FactoryInterface $factory);
+    public function setFactory(RepositoryInterface $factory);
 
     /**
      * Get the factory used to create BPMN elements.

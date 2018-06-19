@@ -11,7 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Tests for the Nayra/Bpmn/Model classes
@@ -138,16 +138,16 @@ class NayraModelTest extends EngineTestCase
      *
      * @return array
      */
-    private function createProcessWithExclusiveGateway(FactoryInterface $factory)
+    private function createProcessWithExclusiveGateway(RepositoryInterface $factory)
     {
-        $process = $factory->createInstanceOf(ProcessInterface::class);
-        $start = $factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $factory->createInstanceOf(ExclusiveGatewayInterface::class);
-        $activityA = $factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $factory->createInstanceOf(ActivityInterface::class);
-        $activityC = $factory->createInstanceOf(ActivityInterface::class);
-        $end = $factory->createInstanceOf(EndEventInterface::class);
-        $dataStore = $factory->createInstanceOf(DataStoreInterface::class);
+        $process = $factory->createProcess();
+        $start = $factory->createStartEvent();
+        $gatewayA = $factory->createExclusiveGateway();
+        $activityA = $factory->createActivity();
+        $activityB = $factory->createActivity();
+        $activityC = $factory->createActivity();
+        $end = $factory->createEndEvent();
+        $dataStore = $factory->createDataStore();
 
         $process
             ->addActivity($activityA)
@@ -197,14 +197,14 @@ class NayraModelTest extends EngineTestCase
      */
     private function createProcessWithInclusiveGateway($factory)
     {
-        $process = $factory->createInstanceOf(ProcessInterface::class);
-        $start = $factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $factory->createInstanceOf(InclusiveGatewayInterface::class);
-        $gatewayB = $factory->createInstanceOf(InclusiveGatewayInterface::class);
-        $activityA = $factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $factory->createInstanceOf(ActivityInterface::class);
-        $end = $factory->createInstanceOf(EndEventInterface::class);
-        $dataStore = $factory->createInstanceOf(DataStoreInterface::class);
+        $process = $factory->createProcess();
+        $start = $factory->createStartEvent();
+        $gatewayA = $factory->createInclusiveGateway();
+        $gatewayB = $factory->createInclusiveGateway();
+        $activityA = $factory->createActivity();
+        $activityB = $factory->createActivity();
+        $end = $factory->createEndEvent();
+        $dataStore = $factory->createDataStore();
 
         $process
             ->addActivity($activityA)
