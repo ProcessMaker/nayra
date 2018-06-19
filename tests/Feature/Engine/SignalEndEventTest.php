@@ -40,7 +40,7 @@ class SignalEndEventTest extends EngineTestCase
         //Process A
         $processA = $this->factory->createProcess();
         $processA->setEngine($this->engine);
-        $processA->setFactory($this->factory);
+        $processA->setRepository($this->factory);
         $startA = $this->factory->createStartEvent();
         $activityA1 = $this->factory->createActivity();
         $eventA = $this->factory->createIntermediateCatchEvent();
@@ -65,7 +65,7 @@ class SignalEndEventTest extends EngineTestCase
         //Process B
         $processB = $this->factory->createProcess();
         $processB->setEngine($this->engine);
-        $processB->setFactory($this->factory);
+        $processB->setRepository($this->factory);
         $startB = $this->factory->createStartEvent();
         $activityB1 = $this->factory->createActivity();
         $signalEventDefB = $this->factory->createSignalEventDefinition();

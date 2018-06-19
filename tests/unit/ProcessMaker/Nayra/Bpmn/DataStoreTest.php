@@ -22,9 +22,9 @@ class DataStoreTest extends EngineTestCase
         // Create the objects that will be set in the data store
         $dataStore = $this->factory->createDataStore();
         $process = $this->factory->createProcess();
-        $process->setFactory($this->factory);
+        $process->setRepository($this->factory);
         $dummyActivity = $this->factory->createActivity();
-        $dummyActivity->setFactory($this->factory);
+        $dummyActivity->setRepository($this->factory);
         $state = $this->factory->createState($dummyActivity,'');
 
         // Set process and state object to the data store

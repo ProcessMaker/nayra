@@ -58,14 +58,14 @@ interface EntityInterface
     /**
      * @return \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface
      */
-    public function getFactory();
+    public function getRepository();
 
     /**
      * @param RepositoryInterface $factory
      *
      * @return $this
      */
-    public function setFactory(RepositoryInterface $factory);
+    public function setRepository(RepositoryInterface $factory);
 
     /**
      * Get Entity ID

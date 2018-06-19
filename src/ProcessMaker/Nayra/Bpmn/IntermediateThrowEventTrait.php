@@ -43,7 +43,7 @@ trait IntermediateThrowEventTrait
      */
     public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
 
         $this->transition=new IntermediateThrowEventTransition($this);
 

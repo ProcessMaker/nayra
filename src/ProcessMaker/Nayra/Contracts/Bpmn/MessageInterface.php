@@ -36,18 +36,6 @@ interface MessageInterface extends EntityInterface
     public function setId($value);
 
     /**
-     * @return StorageInterface
-     */
-    public function getFactory();
-
-    /**
-     * @param RepositoryInterface $factory
-     *
-     * @return $this
-     */
-    public function setFactory(RepositoryInterface $factory);
-
-    /**
      * Returns the name of the message
      *
      * @return string

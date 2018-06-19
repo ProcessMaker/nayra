@@ -130,7 +130,7 @@ trait FlowNodeTrait
      */
     public function buildFlowTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $flows = $this->getFlows();
         foreach($flows as $flow) {
             $this->buildConnectionTo($flow->getTarget());

@@ -31,7 +31,7 @@ trait ExclusiveGatewayTrait
      */
     public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $this->transition=new ExclusiveGatewayTransition($this);
         $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function()  {
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);

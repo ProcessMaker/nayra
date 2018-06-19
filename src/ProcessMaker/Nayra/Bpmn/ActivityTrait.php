@@ -68,7 +68,7 @@ trait ActivityTrait
      */
     public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $this->activeState = new State($this, ActivityInterface::TOKEN_STATE_ACTIVE);
         $this->activityTransition = new ActivityTransition($this, true);
         $this->failingState = new State($this, ActivityInterface::TOKEN_STATE_FAILING);

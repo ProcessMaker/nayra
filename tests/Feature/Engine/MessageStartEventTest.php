@@ -37,7 +37,7 @@ class MessageStartEventTest extends EngineTestCase
         //Process A
         $processA = $this->factory->createProcess();
         $processA->setEngine($this->engine);
-        $processA->setFactory($this->factory);
+        $processA->setRepository($this->factory);
         $startA = $this->factory->createStartEvent();
         $activityA1 = $this->factory->createActivity();
         $eventA = $this->factory->createIntermediateThrowEvent();
@@ -62,7 +62,7 @@ class MessageStartEventTest extends EngineTestCase
         //Process B
         $processB = $this->factory->createProcess();
         $processB->setEngine($this->engine);
-        $processB->setFactory($this->factory);
+        $processB->setRepository($this->factory);
 
         $activityB1 = $this->factory->createActivity();
         $messageEventDefB = $this->factory->createMessageEventDefinition();

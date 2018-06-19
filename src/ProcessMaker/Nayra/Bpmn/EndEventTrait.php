@@ -44,7 +44,7 @@ trait EndEventTrait
      */
     public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $this->endState = new State($this, EventInterface::TOKEN_STATE_ACTIVE);
         $terminate = $this->findTerminateEventDefinition();
         if ($terminate) {

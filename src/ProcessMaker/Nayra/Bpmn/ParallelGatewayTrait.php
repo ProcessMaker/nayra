@@ -31,7 +31,7 @@ trait ParallelGatewayTrait
      */
     public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $this->transition=new ParallelGatewayTransition($this);
         $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function()  {
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);

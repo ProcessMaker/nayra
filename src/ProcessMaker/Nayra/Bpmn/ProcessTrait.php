@@ -23,7 +23,6 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ReflectionClass;
 
 /**
  * Process base implementation.
@@ -438,8 +437,7 @@ trait ProcessTrait
     public function call(DataStoreInterface $dataStore = null)
     {
         if (empty($dataStore)) {
-            $dataStore = $this->getFactory()->createDataStore();
-
+            $dataStore = $this->getRepository()->createDataStore();
         }
         $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);
         $this->getEvents()->find(function(EventInterface $event){

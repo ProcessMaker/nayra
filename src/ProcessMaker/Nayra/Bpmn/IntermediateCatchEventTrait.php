@@ -48,7 +48,7 @@ trait IntermediateCatchEventTrait
      */
     public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         //$this->transition=new ExclusiveGatewayTransition($this);
         $this->transition=new IntermediateCatchEventTransition($this);
 

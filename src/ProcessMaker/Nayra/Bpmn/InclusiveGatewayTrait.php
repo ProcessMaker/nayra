@@ -32,7 +32,7 @@ trait InclusiveGatewayTrait
      */
     public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $this->transition=new InclusiveGatewayTransition($this);
         $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function()  {
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);

@@ -93,7 +93,7 @@ trait ConditionedGatewayTrait
      */
     public function buildFlowTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $flows = $this->getFlows();
         $defaultFlow = $this->getProperty(GatewayInterface::BPMN_PROPERTY_DEFAULT);
         foreach ($flows as $flow) {

@@ -50,7 +50,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Process A
         $processA = $this->factory->createProcess();
         $processA->setEngine($this->engine);
-        $processA->setFactory($this->factory);
+        $processA->setRepository($this->factory);
         $startA = $this->factory->createStartEvent();
         $activityA = $this->factory->createActivity();
         $eventA = $this->factory->createIntermediateThrowEvent();

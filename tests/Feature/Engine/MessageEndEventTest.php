@@ -38,7 +38,7 @@ class MessageEndEventTest extends EngineTestCase
 
         $processA = $this->factory->createProcess();
         $processA->setEngine($this->engine);
-        $processA->setFactory($this->factory);
+        $processA->setRepository($this->factory);
         $startA = $this->factory->createStartEvent();
         $activityA1 = $this->factory->createActivity();
         $eventA = $this->factory->createIntermediateCatchEvent();

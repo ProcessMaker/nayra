@@ -39,7 +39,7 @@ trait StartEventTrait
      */
     public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $this->transition = new StartTransition($this);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_BEFORE_TRANSIT,
@@ -109,7 +109,7 @@ trait StartEventTrait
         if ($start) {
             if ($instance === null) {
                 $process = $this->getOwnerProcess();
-                $dataStorage = $process->getFactory()->createDataStore();
+                $dataStorage = $process->getRepository()->createDataStore();
                 $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
             }
             $this->start();
