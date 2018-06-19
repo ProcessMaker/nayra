@@ -111,7 +111,7 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id)
     {
-        $repository = $this->getFactory()->createExecutionInstanceRepository($this->getRepository());
+        $repository = $this->getFactory()->createExecutionInstanceRepository($this->getStorage());
         $executionInstance = $repository->loadExecutionInstanceByUid($id);
         
         $executionInstance->linkToEngine($this);
@@ -192,7 +192,7 @@ trait EngineTrait
      *
      * @return StorageInterface
      */
-    private function getRepository()
+    private function getStorage()
     {
         return $this->repository;
     }
@@ -202,7 +202,7 @@ trait EngineTrait
      *
      * @param StorageInterface $repository
      */
-    public function setRepository(StorageInterface $repository)
+    public function setStorage(StorageInterface $repository)
     {
         $this->repository = $repository;
     }

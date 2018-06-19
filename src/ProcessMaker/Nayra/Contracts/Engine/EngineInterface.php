@@ -118,5 +118,5 @@ interface EngineInterface
      *
      * @param StorageInterface $repository
      */
-    public function setRepository(StorageInterface $repository);
+    public function setStorage(StorageInterface $repository);
 }

@@ -129,7 +129,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->factory);
         $this->engine->setFactory($this->factory);
-        $this->engine->setRepository($bpmnRepository);
+        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
@@ -168,7 +168,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->factory);
         $this->engine->setFactory($this->factory);
-        $this->engine->setRepository($bpmnRepository);
+        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
@@ -222,7 +222,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->factory);
         $this->engine->setFactory($this->factory);
-        $this->engine->setRepository($bpmnRepository);
+        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
@@ -269,7 +269,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->factory);
-        $this->engine->setRepository($bpmnRepository);
+        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
