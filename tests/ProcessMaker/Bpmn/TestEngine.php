@@ -60,7 +60,7 @@ class TestEngine implements EngineInterface
     /**
      * @return FactoryInterface
      */
-    public function getFactory()
+    public function getRepository()
     {
         return $this->factory;
     }
@@ -70,7 +70,7 @@ class TestEngine implements EngineInterface
      *
      * @return $this
      */
-    public function setFactory(RepositoryInterface $factory)
+    public function setRepository(RepositoryInterface $factory)
     {
         $this->factory = $factory;
         return $this;

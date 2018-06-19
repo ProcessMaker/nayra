@@ -8,7 +8,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
@@ -111,7 +110,7 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id)
     {
-        $repository = $this->getFactory()->createExecutionInstanceRepository($this->getStorage());
+        $repository = $this->getRepository()->createExecutionInstanceRepository($this->getStorage());
         $executionInstance = $repository->loadExecutionInstanceByUid($id);
         
         $executionInstance->linkToEngine($this);

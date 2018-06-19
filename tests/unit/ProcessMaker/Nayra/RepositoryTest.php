@@ -1,5 +1,8 @@
 <?php
 
+namespace ProcessMaker\Nayra;
+
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Test\Contracts\TestOneInterface;
 use ProcessMaker\Test\Contracts\TestTwoInterface;
@@ -7,7 +10,11 @@ use ProcessMaker\Test\Models\Repository;
 use ProcessMaker\Test\Models\TestOneClassWithEmptyConstructor;
 use ProcessMaker\Test\Models\TestTwoClassWithArgumentsConstructor;
 
-class FactoryTest extends TestCase
+/**
+ * Test Repository implementation
+ *
+ */
+class RepositoryTest extends TestCase
 {
     /**
      * Tests that the Factory instantiates classes whose constructors have and don't have arguments

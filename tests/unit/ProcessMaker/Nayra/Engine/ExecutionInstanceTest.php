@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Engine;
 
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
-use ProcessMaker\Models\RepositoryFactory;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
