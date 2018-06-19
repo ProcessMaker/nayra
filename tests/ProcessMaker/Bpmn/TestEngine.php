@@ -19,7 +19,7 @@ class TestEngine implements EngineInterface
     /**
      * @var RepositoryFactoryInterface
      */
-    private $factory;
+    private $repository;
 
     /**
      * @var EventBusInterface $dispatcher
@@ -29,12 +29,12 @@ class TestEngine implements EngineInterface
     /**
      * Test engine constructor.
      *
-     * @param RepositoryInterface $factory
+     * @param RepositoryInterface $repository
      * @param EventBusInterface $dispatcher
      */
-    public function __construct(RepositoryInterface $factory, EventBusInterface $dispatcher)
+    public function __construct(RepositoryInterface $repository, EventBusInterface $dispatcher)
     {
-        $this->factory = $factory;
+        $this->repository = $repository;
         $this->dispatcher = $dispatcher;
     }
 
@@ -62,17 +62,17 @@ class TestEngine implements EngineInterface
      */
     public function getRepository()
     {
-        return $this->factory;
+        return $this->repository;
     }
 
     /**
-     * @param RepositoryInterface $factory
+     * @param RepositoryInterface $repository
      *
      * @return $this
      */
-    public function setRepository(RepositoryInterface $factory)
+    public function setRepository(RepositoryInterface $repository)
     {
-        $this->factory = $factory;
+        $this->repository = $repository;
         return $this;
     }
 }

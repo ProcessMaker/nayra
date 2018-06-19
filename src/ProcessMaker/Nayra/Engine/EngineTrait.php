@@ -40,7 +40,7 @@ trait EngineTrait
      */
     private $dataStore;
 
-    private $repository;
+    private $storage;
 
     /**
      * Execute all the process transitions.
@@ -193,16 +193,16 @@ trait EngineTrait
      */
     private function getStorage()
     {
-        return $this->repository;
+        return $this->storage;
     }
 
     /**
      * Set the repository storage of the engine.
      *
-     * @param StorageInterface $repository
+     * @param StorageInterface $storage
      */
-    public function setStorage(StorageInterface $repository)
+    public function setStorage(StorageInterface $storage)
     {
-        $this->repository = $repository;
+        $this->storage = $storage;
     }
 }
