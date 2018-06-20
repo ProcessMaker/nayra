@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
+use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;

@@ -8,7 +8,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  * Repository for ExecutionInstanceInterface
  *
  */
-interface ExecutionInstanceRepositoryInterface extends RepositoryInterface
+interface ExecutionInstanceRepositoryInterface
 {
 
     /**
@@ -35,4 +35,11 @@ interface ExecutionInstanceRepositoryInterface extends RepositoryInterface
      * @return $this
      */
     public function storeExecutionInstance(ExecutionInstanceInterface $instance);
+
+    /**
+     * Get factory used to build this element.
+     *
+     * @return StorageInterface
+     */
+    public function getStorage();
 }

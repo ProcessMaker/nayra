@@ -17,7 +17,7 @@ use ProcessMaker\Test\Models\TestTwoClassWithArgumentsConstructor;
 class RepositoryTest extends TestCase
 {
     /**
-     * Tests that the Factory instantiates classes whose constructors have and don't have arguments
+     * Tests that the repository creates classes whose constructors have and don't have arguments
      */
     public function testInstantiation ()
     {
@@ -46,8 +46,6 @@ class RepositoryTest extends TestCase
         //Assertion: when trying to instantiate an interface that is not mapped an argument exception should be thrown
         $object3 = $factory->create("NonExistentInterface");
     }
-
-
 
     /**
      * Creates factory mappings for the test
