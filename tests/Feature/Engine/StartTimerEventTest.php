@@ -26,7 +26,7 @@ class StartTimerEventTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDate.bpmn');
 
         //Load a process from a bpmn repository by Id
@@ -51,7 +51,7 @@ class StartTimerEventTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycle.bpmn');
 
         //Load a process from a bpmn repository by Id
@@ -80,11 +80,11 @@ class StartTimerEventTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDateExpression.bpmn');
 
         //Create a default environment data
-        $environmentData = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $environmentData = $this->repository->createDataStore();
         $this->engine->setDataStore($environmentData);
         $date = new DateTime;
         $date->setTime(23, 59, 59);
@@ -117,11 +117,11 @@ class StartTimerEventTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycleExpression.bpmn');
 
         //Create a default environment data
-        $environmentData = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $environmentData = $this->repository->createDataStore();
 
         $this->engine->setDataStore($environmentData);
 

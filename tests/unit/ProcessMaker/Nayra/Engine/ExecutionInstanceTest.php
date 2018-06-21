@@ -4,11 +4,10 @@ namespace ProcessMaker\Nayra\Engine;
 
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
-use ProcessMaker\Models\RepositoryFactory;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Factory;
+use ProcessMaker\Test\Models\Repository;
 
 /**
  * Execution Instance tests
@@ -26,7 +25,7 @@ class ExecutionInstanceTest extends TestCase
         $mockDispatcher = $this->getMockBuilder(EventBusInterface::class)
             ->getMock();
 
-        $engine = new TestEngine(new Factory([]), $mockDispatcher);
+        $engine = new TestEngine(new Repository(), $mockDispatcher);
         $mockProcess = $this->getMockForAbstractClass(ProcessInterface::class);
         $mockStore = $this->getMockForAbstractClass(DataStoreInterface::class);
 

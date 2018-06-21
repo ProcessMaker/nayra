@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Entity could get and set properties for an bpmn element.
@@ -58,13 +58,14 @@ interface EntityInterface
     /**
      * @return \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface
      */
-    public function getFactory();
+    public function getRepository();
 
     /**
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
+     *
      * @return $this
      */
-    public function setFactory(FactoryInterface $factory);
+    public function setRepository(RepositoryInterface $factory);
 
     /**
      * Get Entity ID

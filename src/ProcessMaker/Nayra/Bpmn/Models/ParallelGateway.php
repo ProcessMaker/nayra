@@ -5,7 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn\Models;
 use ProcessMaker\Nayra\Bpmn\ParallelGatewayTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
@@ -23,7 +23,7 @@ class ParallelGateway implements ParallelGatewayInterface
      * @param FlowNodeInterface $target
      * @param callable $condition
      * @param boolean $isDefault
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      *
      * @return $this
      */
@@ -31,7 +31,7 @@ class ParallelGateway implements ParallelGatewayInterface
         FlowNodeInterface $target,
         callable $condition,
         $isDefault,
-        FactoryInterface $factory
+        RepositoryInterface $factory
     ) {
         throw new InvalidSequenceFlowException('A parallel gateway can not have conditioned outgoing flows.');
     }

@@ -57,14 +57,14 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/ParallelGateway.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('ParallelGateway');
 
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -169,14 +169,14 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/InclusiveGateway_Default.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('InclusiveGateway_Default');
 
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
         $dataStore->putData('a', 1);
         $dataStore->putData('b', 1);
 
@@ -276,7 +276,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/LoadBPMNElements.bpmn');
 
         //Get a Collaboration
@@ -484,7 +484,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->setBpmnElementMapping('http://www.processmaker.org/spec/PM/20100607/MODEL', 'webEntry', [
                 StartEventInterface::class,
                 [
@@ -507,7 +507,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
         $this->expectException(NamespaceNotImplementedException::class);
         $bpmnRepository->getActivity('_2');
@@ -522,7 +522,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
+        $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->setBpmnElementMapping('http://www.processmaker.org/spec/PM/20100607/MODEL', 'task', [
                 ActivityInterface::class,
                 [

@@ -5,7 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionedTransitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Base behavior for gateway elements.
@@ -89,11 +89,11 @@ trait ConditionedGatewayTrait
      * Overrides the build of flow transitions, to accept gateway
      * conditioned transitions.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
-    public function buildFlowTransitions(FactoryInterface $factory)
+    public function buildFlowTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $flows = $this->getFlows();
         $defaultFlow = $this->getProperty(GatewayInterface::BPMN_PROPERTY_DEFAULT);
         foreach ($flows as $flow) {

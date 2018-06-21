@@ -29,17 +29,17 @@ class BasicsTest extends EngineTestCase
      */
     private function createSimpleProcessInstance()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->repository->createProcess();
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $activity = $this->factory->createInstanceOf(ActivityInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->repository->createStartEvent();
+        $activity = $this->repository->createActivity();
+        $end = $this->repository->createEndEvent();
         $process->addActivity($activity);
         $process->addEvent($start)
             ->addEvent($end);
         //flows
-        $start->createFlowTo($activity, $this->factory);
-        $activity->createFlowTo($end, $this->factory);
+        $start->createFlowTo($activity, $this->repository);
+        $activity->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -52,7 +52,7 @@ class BasicsTest extends EngineTestCase
     public function testSimpleTransitions()
     {
         //Create a data store
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
         //Load the process
         $process = $this->createSimpleProcessInstance();
         //Create a process instance with the data store
@@ -100,7 +100,7 @@ class BasicsTest extends EngineTestCase
     public function testProcessConfiguration()
     {
         //Create a data store
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createSimpleProcessInstance();
@@ -135,7 +135,7 @@ class BasicsTest extends EngineTestCase
     public function testProcessIncorrectConfiguration()
     {
         //Create a data store
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createSimpleProcessInstance();
@@ -146,7 +146,7 @@ class BasicsTest extends EngineTestCase
 
         //Try to add and invalid flow to the end event
         try {
-            $end->createFlowTo($activity, $this->factory);
+            $end->createFlowTo($activity, $this->repository);
             $this->engine->createExecutionInstance($process, $dataStore);
         }
         catch (InvalidSequenceFlowException $e) {

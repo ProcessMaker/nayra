@@ -7,8 +7,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Base implementation for a exclusive gateway.
@@ -28,11 +27,11 @@ trait ExclusiveGatewayTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
-    public function buildTransitions(FactoryInterface $factory)
+    public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $this->transition=new ExclusiveGatewayTransition($this);
         $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function()  {
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);

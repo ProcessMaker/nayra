@@ -8,7 +8,6 @@ use ProcessMaker\Models\DataStoreCollection;
 use ProcessMaker\Models\EventCollection;
 use ProcessMaker\Models\FlowCollection;
 use ProcessMaker\Models\GatewayCollection;
-use ProcessMaker\Models\LocalPropertiesTrait;
 use ProcessMaker\Models\ProcessCompletedEvent;
 use ProcessMaker\Nayra\Bpmn\ProcessTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -21,8 +20,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 class CustomProcess implements ProcessInterface
 {
 
-    use ProcessTrait,
-        LocalPropertiesTrait;
+    use ProcessTrait;
 
     /**
      * Process constructor.

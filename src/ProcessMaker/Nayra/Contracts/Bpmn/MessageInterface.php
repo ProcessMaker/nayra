@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Behavior that must implement all event messages
@@ -34,18 +34,6 @@ interface MessageInterface extends EntityInterface
      * @param string $value
      */
     public function setId($value);
-
-    /**
-     * @return StorageInterface
-     */
-    public function getFactory();
-
-    /**
-     * @param FactoryInterface $factory
-     *
-     * @return $this
-     */
-    public function setFactory(FactoryInterface $factory);
 
     /**
      * Returns the name of the message

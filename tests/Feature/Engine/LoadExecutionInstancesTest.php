@@ -7,7 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
@@ -25,7 +24,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
      */
     private function prepareSequentialProcess(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
+        $executionInstanceRepository = $this->engine->getRepository()->createExecutionInstanceRepository($repository);
         $executionInstanceRepository->setRawData([
             'executionInstanceId' => [
                 'processId' => 'SequentialTask',
@@ -47,7 +46,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
      */
     private function prepareParallelProcess(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
+        $executionInstanceRepository = $this->engine->getRepository()->createExecutionInstanceRepository($repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',
@@ -73,7 +72,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
      */
     private function prepareParallelProcessWithActivityCompleted(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
+        $executionInstanceRepository = $this->engine->getRepository()->createExecutionInstanceRepository($repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',
@@ -99,7 +98,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
      */
     private function prepareParallelProcessWithException(StorageInterface $repository)
     {
-        $executionInstanceRepository = $this->engine->getFactory()->createInstanceOf(ExecutionInstanceRepositoryInterface::class, $repository);
+        $executionInstanceRepository = $this->engine->getRepository()->createExecutionInstanceRepository($repository);
         $executionInstanceRepository->setRawData([
             'otherExecutionInstanceId' => [
                 'processId' => 'ParallelProcess',
@@ -127,9 +126,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
-        $this->engine->setFactory($this->factory);
-        $this->engine->setRepository($bpmnRepository);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setRepository($this->repository);
+        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
@@ -166,9 +165,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
-        $this->engine->setFactory($this->factory);
-        $this->engine->setRepository($bpmnRepository);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setRepository($this->repository);
+        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
@@ -220,9 +219,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
-        $this->engine->setFactory($this->factory);
-        $this->engine->setRepository($bpmnRepository);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setRepository($this->repository);
+        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
@@ -268,8 +267,8 @@ class LoadExecutionInstancesTest extends EngineTestCase
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
-        $bpmnRepository->setFactory($this->factory);
-        $this->engine->setRepository($bpmnRepository);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process

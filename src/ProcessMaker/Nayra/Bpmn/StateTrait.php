@@ -51,7 +51,7 @@ trait StateTrait
     protected function initState(FlowNodeInterface $owner, $name = '')
     {
         $this->tokens = new Collection();
-        $this->setFactory($owner->getFactory());
+        $this->setRepository($owner->getRepository());
         $this->setName($name);
         $owner->addState($this);
         $this->setOwner($owner);
@@ -87,7 +87,7 @@ trait StateTrait
     public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = [])
     {
         //$token = $this->getFactory()->getTokenRepository()->createTokenInstance();
-        $token = $this->getFactory()->createInstanceOf(TokenInterface::class);
+        $token = $this->getRepository()->createToken();
         $token->setOwner($this);
         $token->setProperties($properties);
         $token->setOwner($this);

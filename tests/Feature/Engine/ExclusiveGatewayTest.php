@@ -26,15 +26,15 @@ class ExclusiveGatewayTest extends EngineTestCase
      */
     private function createProcessWithExclusiveGateway()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->repository->createProcess();
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $this->factory->createInstanceOf(ExclusiveGatewayInterface::class);
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityC = $this->factory->createInstanceOf(ActivityInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->repository->createStartEvent();
+        $gatewayA = $this->repository->createExclusiveGateway();
+        $activityA = $this->repository->createActivity();
+        $activityB = $this->repository->createActivity();
+        $activityC = $this->repository->createActivity();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -49,18 +49,18 @@ class ExclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->factory);
+        $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->factory)
+            }, false, $this->repository)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return $data['B']=='1';
-            }, false, $this->factory)
-            ->createFlowTo($activityC, $this->factory);
-        $activityA->createFlowTo($end, $this->factory);
-        $activityB->createFlowTo($end, $this->factory);
-        $activityC->createFlowTo($end, $this->factory);
+            }, false, $this->repository)
+            ->createFlowTo($activityC, $this->repository);
+        $activityA->createFlowTo($end, $this->repository);
+        $activityB->createFlowTo($end, $this->repository);
+        $activityC->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -71,15 +71,15 @@ class ExclusiveGatewayTest extends EngineTestCase
      */
     private function createProcessWithExclusiveGatewayAndDefaultTransition()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->repository->createProcess();
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $this->factory->createInstanceOf(ExclusiveGatewayInterface::class);
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityC = $this->factory->createInstanceOf(ActivityInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->repository->createStartEvent();
+        $gatewayA = $this->repository->createExclusiveGateway();
+        $activityA = $this->repository->createActivity();
+        $activityB = $this->repository->createActivity();
+        $activityC = $this->repository->createActivity();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -94,20 +94,20 @@ class ExclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->factory);
+        $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
                 return $data['A']=='1';
-            }, false, $this->factory)
+            }, false, $this->repository)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return $data['B']=='1';
-            }, false, $this->factory)
+            }, false, $this->repository)
             ->createConditionedFlowTo($activityC, function ($data) {
                 return true;
-            }, true, $this->factory);
-        $activityA->createFlowTo($end, $this->factory);
-        $activityB->createFlowTo($end, $this->factory);
-        $activityC->createFlowTo($end, $this->factory);
+            }, true, $this->repository);
+        $activityA->createFlowTo($end, $this->repository);
+        $activityB->createFlowTo($end, $this->repository);
+        $activityC->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -124,16 +124,16 @@ class ExclusiveGatewayTest extends EngineTestCase
      */
     private function createParallelDivergingExclusiveConverging()
     {
-        $process = $this->factory->createInstanceOf(ProcessInterface::class);
+        $process = $this->repository->createProcess();
 
         //elements
-        $start = $this->factory->createInstanceOf(StartEventInterface::class);
-        $gatewayA = $this->factory->createInstanceOf(ParallelGatewayInterface::class);
-        $activityA = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityB = $this->factory->createInstanceOf(ActivityInterface::class);
-        $activityC = $this->factory->createInstanceOf(ActivityInterface::class);
-        $gatewayB = $this->factory->createInstanceOf(ExclusiveGatewayInterface::class);
-        $end = $this->factory->createInstanceOf(EndEventInterface::class);
+        $start = $this->repository->createStartEvent();
+        $gatewayA = $this->repository->createParallelGateway();
+        $activityA = $this->repository->createActivity();
+        $activityB = $this->repository->createActivity();
+        $activityC = $this->repository->createActivity();
+        $gatewayB = $this->repository->createExclusiveGateway();
+        $end = $this->repository->createEndEvent();
 
         $process
             ->addActivity($activityA)
@@ -147,14 +147,14 @@ class ExclusiveGatewayTest extends EngineTestCase
             ->addEvent($end);
 
         //flows
-        $start->createFlowTo($gatewayA, $this->factory);
+        $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
-            ->createFlowTo($activityA, $this->factory)
-            ->createFlowTo($activityB, $this->factory);
-        $activityA->createFlowTo($gatewayB, $this->factory);
-        $activityB->createFlowTo($gatewayB, $this->factory);
-        $gatewayB->createFlowTo($activityC, $this->factory);
-        $activityC->createFlowTo($end, $this->factory);
+            ->createFlowTo($activityA, $this->repository)
+            ->createFlowTo($activityB, $this->repository);
+        $activityA->createFlowTo($gatewayB, $this->repository);
+        $activityB->createFlowTo($gatewayB, $this->repository);
+        $gatewayB->createFlowTo($activityC, $this->repository);
+        $activityC->createFlowTo($end, $this->repository);
         return $process;
     }
 
@@ -164,7 +164,7 @@ class ExclusiveGatewayTest extends EngineTestCase
     public function testExclusiveGateway()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
         $dataStore->putData('A', '2');
         $dataStore->putData('B', '1');
 
@@ -205,7 +205,7 @@ class ExclusiveGatewayTest extends EngineTestCase
     public function testExclusiveGatewayFirstConditionTrue()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
         $dataStore->putData('A', '1');
         $dataStore->putData('B', '1');
 
@@ -239,7 +239,7 @@ class ExclusiveGatewayTest extends EngineTestCase
     public function testExclusiveGatewayWithDefaultTransition()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
         $dataStore->putData('A', '2');
         $dataStore->putData('B', '2');
 
@@ -301,7 +301,7 @@ class ExclusiveGatewayTest extends EngineTestCase
     public function testParallelDivergingExclusiveConverging()
     {
         //Create a data store with data.
-        $dataStore = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createParallelDivergingExclusiveConverging();

@@ -3,8 +3,8 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ReflectionClass;
 
 /**
@@ -21,7 +21,7 @@ trait BaseTrait
      *
      * @var StorageInterface $factory
      */
-    private $factory;
+    private $repository;
 
     /**
      * BaseTrait constructor.
@@ -52,23 +52,23 @@ trait BaseTrait
     /**
      * Get the factory used to build this element.
      *
-     * @return \ProcessMaker\Nayra\Contracts\FactoryInterface
+     * @return \ProcessMaker\Nayra\Contracts\RepositoryInterface
      */
-    public function getFactory()
+    public function getRepository()
     {
-        return $this->factory;
+        return $this->repository;
     }
 
     /**
      * Set the factory used to build this element.
      *
-     * @param \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
+     * @param \ProcessMaker\Nayra\Contracts\RepositoryInterface $repository
      *
      * @return $this
      */
-    public function setFactory(FactoryInterface $factory)
+    public function setRepository(RepositoryInterface $repository)
     {
-        $this->factory = $factory;
+        $this->repository = $repository;
         return $this;
     }
 

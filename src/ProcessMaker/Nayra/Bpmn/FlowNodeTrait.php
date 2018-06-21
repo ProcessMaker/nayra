@@ -11,10 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
-use ProcessMaker\Nayra\Factory;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Flow node define the behavior of a element that can be used as
@@ -129,11 +126,11 @@ trait FlowNodeTrait
      * Used by EngineInterface implementation to build the transitions
      * related to connect nodes.
      *
-     * @param \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
+     * @param \ProcessMaker\Nayra\Contracts\RepositoryInterface $factory
      */
-    public function buildFlowTransitions(FactoryInterface $factory)
+    public function buildFlowTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $flows = $this->getFlows();
         foreach($flows as $flow) {
             $this->buildConnectionTo($flow->getTarget());
@@ -185,14 +182,14 @@ trait FlowNodeTrait
      * Create a flow to a target node.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      * @param array $properties
      * @return $this
      * @internal param FlowRepositoryInterface $flowRepository
      */
-    public function createFlowTo(FlowNodeInterface $target, FactoryInterface $factory, $properties=[])
+    public function createFlowTo(FlowNodeInterface $target, RepositoryInterface $factory, $properties=[])
     {
-        $flow = $factory->createInstanceOf(FlowInterface::class);
+        $flow = $factory->createFlow();
         $flow->setSource($this);
         $flow->setTarget($target);
         $flow->setProperties($properties);

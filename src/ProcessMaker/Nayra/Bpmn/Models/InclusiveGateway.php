@@ -2,14 +2,21 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-
 use ProcessMaker\Nayra\Bpmn\InclusiveGatewayTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\FlowRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
+/**
+ * Inclusive Gateway
+ *
+ * Synchronizes a certain subset of branches out of the set
+ * of concurrent incoming branches (merging behavior). Further on, each firing
+ * leads to the creation of threads on a certain subset out of the set of
+ * outgoing branches (branching behavior).
+ *
+ */
 class InclusiveGateway implements InclusiveGatewayInterface
 {
 
@@ -20,15 +27,16 @@ class InclusiveGateway implements InclusiveGatewayInterface
      *
      * @param FlowNodeInterface $target
      * @param callable $condition
-     * @param $isDefault
-     * @param FlowRepositoryInterface $flowRepository
+     * @param boolean $isDefault
+     * @param RepositoryInterface $factory
+     *
      * @return $this
      */
     public function createConditionedFlowTo(
         FlowNodeInterface $target,
         callable $condition,
         $isDefault,
-        FactoryInterface $factory
+        RepositoryInterface $factory
     ) {
         $this->createFlowTo($target, $factory, [
             FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,

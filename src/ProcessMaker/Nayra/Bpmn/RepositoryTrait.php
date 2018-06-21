@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**

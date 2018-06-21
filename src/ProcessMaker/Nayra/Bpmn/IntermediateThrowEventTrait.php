@@ -4,16 +4,13 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Bpmn\EndTransition;
 use ProcessMaker\Nayra\Bpmn\State;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
-use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * End event behavior's implementation.
@@ -42,11 +39,11 @@ trait IntermediateThrowEventTrait
     /**
      * Build the transitions that define the element.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
-    public function buildTransitions(FactoryInterface $factory)
+    public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
 
         $this->transition=new IntermediateThrowEventTransition($this);
 

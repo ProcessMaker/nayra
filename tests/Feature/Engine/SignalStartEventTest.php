@@ -2,20 +2,14 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Bpmn\Models\DataStoreCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\DataStoreCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test signal start events
@@ -29,35 +23,35 @@ class SignalStartEventTest extends EngineTestCase
      */
     public function createSignalStartEventProcesses()
     {
-        $item = $this->factory->createInstanceOf(ItemDefinitionInterface::class, [
+        $item = $this->repository->createItemDefinition([
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
             'structure' => 'String'
         ]);
 
-        $signal = $this->factory->createInstanceOf(MessageInterface::class);
+        $signal = $this->repository->createMessage();
         $signal->setId('SignalA');
         $signal->setItem($item);
 
         //Process A
-        $processA = $this->factory->createInstanceOf(ProcessInterface::class);
+        $processA = $this->repository->createProcess();
         $processA->setEngine($this->engine);
-        $processA->setFactory($this->factory);
-        $startA = $this->factory->createInstanceOf(StartEventInterface::class);
-        $activityA1 = $this->factory->createInstanceOf(ActivityInterface::class);
-        $eventA = $this->factory->createInstanceOf(IntermediateThrowEventInterface::class);
-        $signalEventDefA = $this->factory->createInstanceOf(SignalEventDefinitionInterface::class);
+        $processA->setRepository($this->repository);
+        $startA = $this->repository->createStartEvent();
+        $activityA1 = $this->repository->createActivity();
+        $eventA = $this->repository->createIntermediateThrowEvent();
+        $signalEventDefA = $this->repository->createSignalEventDefinition();
         $signalEventDefA->setId("signalEvent1");
         $signalEventDefA->setPayload($signal);
         $eventA->getEventDefinitions()->push($signalEventDefA);
-        $activityA2 = $this->factory->createInstanceOf(ActivityInterface::class);
-        $endA = $this->factory->createInstanceOf(EndEventInterface::class);
+        $activityA2 = $this->repository->createActivity();
+        $endA = $this->repository->createEndEvent();
 
-        $startA->createFlowTo($activityA1, $this->factory);
-        $activityA1->createFlowTo($eventA, $this->factory);
-        $eventA->createFlowTo($activityA2, $this->factory);
-        $activityA2->createFlowTo($endA, $this->factory);
+        $startA->createFlowTo($activityA1, $this->repository);
+        $activityA1->createFlowTo($eventA, $this->repository);
+        $eventA->createFlowTo($activityA2, $this->repository);
+        $activityA2->createFlowTo($endA, $this->repository);
 
         $processA->addActivity($activityA1)
             ->addActivity($activityA2)
@@ -66,20 +60,20 @@ class SignalStartEventTest extends EngineTestCase
             ->addEvent($endA);
 
         //Process B
-        $processB = $this->factory->createInstanceOf(ProcessInterface::class);
+        $processB = $this->repository->createProcess();
         $processB->setEngine($this->engine);
-        $processB->setFactory($this->factory);
-        $activityB1 = $this->factory->createInstanceOf(ActivityInterface::class);
-        $signalEventDefB = $this->factory->createInstanceOf(SignalEventDefinitionInterface::class);
+        $processB->setRepository($this->repository);
+        $activityB1 = $this->repository->createActivity();
+        $signalEventDefB = $this->repository->createSignalEventDefinition();
         $signalEventDefB->setPayload($signal);
 
-        $signalStartEventB = $this->factory->createInstanceOf(StartEventInterface::class);
+        $signalStartEventB = $this->repository->createStartEvent();
         $signalStartEventB->getEventDefinitions()->push($signalEventDefB);
 
-        $endB = $this->factory->createInstanceOf(EndEventInterface::class);
+        $endB = $this->repository->createEndEvent();
 
-        $signalStartEventB->createFlowTo($activityB1, $this->factory);
-        $activityB1->createFlowTo($endB, $this->factory);
+        $signalStartEventB->createFlowTo($activityB1, $this->repository);
+        $activityB1->createFlowTo($endB, $this->repository);
 
         $processB->addActivity($activityB1)
             ->addEvent($signalStartEventB)
@@ -115,7 +109,7 @@ class SignalStartEventTest extends EngineTestCase
         //Create message flow from intermediate events A to B
         $eventA = $processA->getEvents()->item(1);
         $signalStartEventB = $processB->getEvents()->item(0);
-        $messageFlow = $this->factory->createInstanceOf(MessageFlowInterface::class);
+        $messageFlow = $this->repository->createMessageFlow();
         $messageFlow->setCollaboration($collaboration);
         $messageFlow->setSource($eventA);
         $messageFlow->setTarget($signalStartEventB);
@@ -124,10 +118,10 @@ class SignalStartEventTest extends EngineTestCase
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
 
-        $dataStoreA =$this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStoreA =$this->repository->createDataStore();
         $dataStoreA->putData('A', '1');
 
-        $dataStoreB = $this->factory->createInstanceOf(DataStoreInterface::class);
+        $dataStoreB = $this->repository->createDataStore();
         $dataStoreB->putData('B', '1');
 
         $dataStoreCollectionA = new DataStoreCollection();

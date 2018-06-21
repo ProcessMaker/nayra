@@ -51,8 +51,8 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 $bpmnElement[$attribute->nodeName] = $attribute->nodeValue;
             }
         } else {
-            $bpmnElement = $this->ownerDocument->getFactory()->createInstanceOf($classInterface);
-            $bpmnElement->setFactory($this->ownerDocument->getFactory());
+            $bpmnElement = $this->ownerDocument->getFactory()->create($classInterface);
+            $bpmnElement->setRepository($this->ownerDocument->getFactory());
             if ($bpmnElement instanceof CallableElementInterface) {
                 $bpmnElement->setEngine($this->ownerDocument->getEngine());
             }

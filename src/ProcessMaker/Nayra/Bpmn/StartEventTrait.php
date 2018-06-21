@@ -10,7 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\FactoryInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Implementation of the behavior of a start event.
@@ -35,11 +35,11 @@ trait StartEventTrait
     /**
      * Build the transitions of the element.
      *
-     * @param FactoryInterface $factory
+     * @param RepositoryInterface $factory
      */
-    public function buildTransitions(FactoryInterface $factory)
+    public function buildTransitions(RepositoryInterface $factory)
     {
-        $this->setFactory($factory);
+        $this->setRepository($factory);
         $this->transition = new StartTransition($this);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_BEFORE_TRANSIT,
@@ -109,7 +109,7 @@ trait StartEventTrait
         if ($start) {
             if ($instance === null) {
                 $process = $this->getOwnerProcess();
-                $dataStorage = $process->getFactory()->createInstanceOf(DataStoreInterface::class);
+                $dataStorage = $process->getRepository()->createDataStore();
                 $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
             }
             $this->start();
