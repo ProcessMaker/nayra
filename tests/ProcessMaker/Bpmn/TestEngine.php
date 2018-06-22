@@ -17,7 +17,7 @@ class TestEngine implements EngineInterface
     use EngineTrait;
 
     /**
-     * @var RepositoryFactoryInterface
+     * @var RepositoryInterface
      */
     private $repository;
 
