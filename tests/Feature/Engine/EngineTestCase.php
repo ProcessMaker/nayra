@@ -9,7 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\FactoryTrait;
+use ProcessMaker\Nayra\RepositoryTrait;
 use ProcessMaker\Test\Models\Repository;
 
 /**

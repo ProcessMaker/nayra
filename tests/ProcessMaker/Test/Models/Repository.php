@@ -4,9 +4,10 @@ namespace ProcessMaker\Test\Models;
 
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ProcessMaker\Nayra\FactoryTrait;
+use ProcessMaker\Nayra\RepositoryTrait;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Test\Models\CallActivity;
+use ProcessMaker\Test\Models\ExecutionInstance;
 use ProcessMaker\Test\Models\FormalExpression;
 use ProcessMaker\Test\Models\TestOneClassWithEmptyConstructor;
 use ProcessMaker\Test\Models\TestTwoClassWithArgumentsConstructor;
@@ -19,7 +20,7 @@ use ProcessMaker\Test\Models\TestTwoClassWithArgumentsConstructor;
 class Repository implements RepositoryInterface
 {
 
-    use FactoryTrait;
+    use RepositoryTrait;
 
     /**
      * Create instance of FormalExpression.
@@ -62,6 +63,18 @@ class Repository implements RepositoryInterface
     {
         return new BpmnDocument();
     }
+    /**
+     * Create a execution instance repository.
+     *
+     * @param StorageInterface $factory
+     *
+     * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
+     */
+    public function createExecutionInstance()
+    {
+        return new ExecutionInstance();
+    }
+
     /**
      * Create a test class
      *

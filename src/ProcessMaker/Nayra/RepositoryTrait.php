@@ -44,7 +44,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
  *
  * @package ProcessMaker\Nayra\Contracts
  */
-trait FactoryTrait
+trait RepositoryTrait
 {
 
     /**

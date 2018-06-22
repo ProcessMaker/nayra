@@ -5,6 +5,7 @@ namespace ProcessMaker\Test\Models;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Test\Models\ExecutionInstance;
 
 /**
  * Execution Instance Repository.
@@ -29,7 +30,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function createExecutionInstance()
     {
-        return new \ProcessMaker\Test\Models\ExecutionInstance();
+        return new ExecutionInstance();
     }
 
     /**

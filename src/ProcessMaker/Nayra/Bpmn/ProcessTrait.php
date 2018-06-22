@@ -371,11 +371,11 @@ trait ProcessTrait
     }
 
     /**
-     * @param \ProcessMaker\Nayra\Contracts\EventBusInterface $dispatcher
+     * @param mixed $dispatcher
      *
      * @return $this
      */
-    public function setDispatcher(EventBusInterface $dispatcher)
+    public function setDispatcher($dispatcher)
     {
         $this->dispatcher = $dispatcher;
         return $this;
