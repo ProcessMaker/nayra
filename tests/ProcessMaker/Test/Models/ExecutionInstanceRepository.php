@@ -38,12 +38,15 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      *
      * @param string $uid
      *
-     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface
+     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null
      */
     public function loadExecutionInstanceByUid($uid)
     {
         $data = self::$data[$uid];
-        $instance = new \ProcessMaker\Test\Models\ExecutionInstance();
+        if (empty($data)) {
+            return;
+        }
+        $instance = new ExecutionInstance();
         $process = $this->getStorage()->getProcess($data['processId']);
         $dataStore = $this->getStorage()->getFactory()->createDataStore();
         $dataStore->setData($data['data']);

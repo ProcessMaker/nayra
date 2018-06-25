@@ -106,12 +106,15 @@ trait EngineTrait
      * @param string $id
      * @param DataStoreInterface $data
      *
-     * @return ExecutionInstanceInterface
+     * @return ExecutionInstanceInterface|null
      */
     public function loadExecutionInstance($id)
     {
         $repository = $this->getRepository()->createExecutionInstanceRepository($this->getStorage());
         $executionInstance = $repository->loadExecutionInstanceByUid($id);
+        if (!$executionInstance) {
+            return;
+        }
         
         $executionInstance->linkToEngine($this);
         $this->executionInstances[] = $executionInstance;
