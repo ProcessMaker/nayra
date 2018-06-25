@@ -63,6 +63,7 @@ class Repository implements RepositoryInterface
     {
         return new BpmnDocument();
     }
+
     /**
      * Create a execution instance repository.
      *
