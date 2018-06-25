@@ -285,11 +285,4 @@ interface RepositoryInterface
      * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
      */
     public function createExecutionInstanceRepository(StorageInterface $factory);
-
-    /*
-     * Creates a storage interface
-     *
-     * @return ProcessMaker\Nayra\Contracts\Repositories\StorageInterface
-     */
-    public function createStorage();
 }
