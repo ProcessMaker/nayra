@@ -5,7 +5,6 @@ namespace ProcessMaker\Test\Models;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\RepositoryTrait;
-use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Test\Models\CallActivity;
 use ProcessMaker\Test\Models\ExecutionInstance;
 use ProcessMaker\Test\Models\FormalExpression;
@@ -52,16 +51,6 @@ class Repository implements RepositoryInterface
     public function createExecutionInstanceRepository(StorageInterface $factory)
     {
         return new ExecutionInstanceRepository($factory);
-    }
-
-    /*
-    * Creates a storage interface
-    *
-    * @return ProcessMaker\Nayra\Contracts\Repositories\StorageInterface
-    */
-    public function createStorage()
-    {
-        return new BpmnDocument();
     }
 
     /**
