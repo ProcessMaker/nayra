@@ -284,4 +284,24 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $token = $thirdActivity->getTokens($instance)->item(0);
         $this->assertEquals(ActivityInterface::TOKEN_STATE_FAILING, $token->getStatus());
     }
+    
+    /**
+     * Test load a non existing execution instance from repository
+     *
+     */
+    public function testLoadNonExistingInstance()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setStorage($bpmnRepository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+
+        //Load the execution instance
+        $instance = $this->engine->loadExecutionInstance('nonExistingInstance');
+
+        //Assertion: The returned value must be null
+        $this->assertNull($instance);
+    }
 }

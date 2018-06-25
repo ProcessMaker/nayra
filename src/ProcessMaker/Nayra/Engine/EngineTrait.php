@@ -90,8 +90,7 @@ trait EngineTrait
     public function createExecutionInstance(ProcessInterface $process, DataStoreInterface $data, EventInterface $event = null)
     {
         $this->loadProcess($process);
-        $executionInstance = $this->repository->createExecutionInstanceRepository($this->repository->createStorage())
-                                ->createExecutionInstance();
+        $executionInstance = $this->getRepository()->createExecutionInstance();
         $process->addInstance($executionInstance);
         $executionInstance->setProcess($process);
         $executionInstance->setDataStore($data);
@@ -107,12 +106,15 @@ trait EngineTrait
      * @param string $id
      * @param DataStoreInterface $data
      *
-     * @return ExecutionInstanceInterface
+     * @return ExecutionInstanceInterface|null
      */
     public function loadExecutionInstance($id)
     {
         $repository = $this->getRepository()->createExecutionInstanceRepository($this->getStorage());
         $executionInstance = $repository->loadExecutionInstanceByUid($id);
+        if (!$executionInstance) {
+            return;
+        }
         
         $executionInstance->linkToEngine($this);
         $this->executionInstances[] = $executionInstance;

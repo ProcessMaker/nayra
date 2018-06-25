@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Nayra\Bpmn\Events\ActivityActivatedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ActivityClosedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
-use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -56,19 +58,19 @@ class SaveExecutionInstancesTest extends EngineTestCase
             ];
         });
         $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-                            function($payload) {
-            $id = $payload[1]->getInstance()->getId();
-            $this->storage[$id]['tokens'][$payload[1]->getId()] = [
-                'elementId' => $payload[0]->getId(),
-                'status'    => $payload[1]->getStatus(),
+                            function(ActivityCompletedEvent $event) {
+            $id = $event->token->getInstance()->getId();
+            $this->storage[$id]['tokens'][$event->token->getId()] = [
+                'elementId' => $event->activity->getId(),
+                'status'    => $event->token->getStatus(),
             ];
         });
         $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_CLOSED,
-                            function($payload) {
-            $id = $payload[1]->getInstance()->getId();
-            $this->storage[$id]['tokens'][$payload[1]->getId()] = [
-                'elementId' => $payload[0]->getId(),
-                'status'    => $payload[1]->getStatus(),
+                            function(ActivityClosedEvent $event) {
+            $id = $event->token->getInstance()->getId();
+            $this->storage[$id]['tokens'][$event->token->getId()] = [
+                'elementId' => $event->activity->getId(),
+                'status'    => $event->token->getStatus(),
             ];
         });
         //Prepare a clean storage.

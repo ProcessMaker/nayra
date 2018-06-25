@@ -3,7 +3,6 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
@@ -165,11 +164,11 @@ interface ProcessInterface extends CallableElementInterface
     /**
      * Set the dispatcher of the process.
      *
-     * @param EventBusInterface $dispatcher
+     * @param mixed $dispatcher
      *
      * @return $this
      */
-    public function setDispatcher(EventBusInterface $dispatcher);
+    public function setDispatcher($dispatcher);
 
     /**
      * Add an activity to the process.

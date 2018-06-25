@@ -1,16 +1,16 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn\Models;
+namespace ProcessMaker\Nayra\Bpmn\Events;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
- * Event raised when and activity is activated.
+ * Event raised when and activity is closed.
  *
  * @package ProcessMaker\Models
  */
-class ActivityActivatedEvent
+class ActivityClosedEvent
 {
     /**
      * @var ActivityInterface
@@ -23,7 +23,7 @@ class ActivityActivatedEvent
     public $token;
 
     /**
-     * ActivityActivatedEvent constructor.
+     * ActivityClosedEvent constructor.
      *
      * @param ActivityInterface $activity
      * @param TokenInterface $token

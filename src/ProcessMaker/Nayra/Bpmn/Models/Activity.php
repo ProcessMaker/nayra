@@ -3,7 +3,9 @@
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\ActivityTrait;
-use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ActivityActivatedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ActivityClosedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 
 /**
@@ -24,6 +26,8 @@ class Activity implements ActivityInterface
     {
         return [
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED => ActivityActivatedEvent::class,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED => ActivityCompletedEvent::class,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED => ActivityClosedEvent::class,
         ];
     }
 }
