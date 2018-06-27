@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Bpmn\Events\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityClosedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
@@ -48,29 +46,6 @@ class ScriptTask implements ScriptTaskInterface
             ActivityInterface::EVENT_ACTIVITY_COMPLETED => ActivityCompletedEvent::class,
             ActivityInterface::EVENT_ACTIVITY_CLOSED => ActivityClosedEvent::class,
         ];
-    }
-
-    /**
-     * Get called element.
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface
-     */
-    public function getCalledElement()
-    {
-        return $this->getProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT);
-    }
-
-    /**
-     * Set called element.
-     *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface $callableElement
-     *
-     * @return $this
-     */
-    public function setCalledElement(CallableElementInterface $callableElement)
-    {
-        $this->setProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT, $callableElement);
-        return $this;
     }
 
     /**
