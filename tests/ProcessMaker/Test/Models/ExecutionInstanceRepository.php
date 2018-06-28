@@ -5,6 +5,7 @@ namespace ProcessMaker\Test\Models;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Test\Models\ExecutionInstance;
 
 /**
@@ -14,8 +15,6 @@ use ProcessMaker\Test\Models\ExecutionInstance;
  */
 class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterface
 {
-    use RepositoryTrait;
-
     /**
      * Array to simulate a storage of execution instances.
      *
@@ -23,42 +22,34 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     private static $data = [];
 
-    /**
-     * Create an execution instance.
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface
-     */
-    public function createExecutionInstance()
-    {
-        return new ExecutionInstance();
-    }
 
     /**
      * Load an execution instance from a persistent storage.
      *
      * @param string $uid
+     * @param StorageInterface $storage
      *
-     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null
+     * @return null|ExecutionInstanceInterface
      */
-    public function loadExecutionInstanceByUid($uid)
+    public function loadExecutionInstanceByUid($uid, StorageInterface $storage)
     {
         $data = self::$data[$uid];
         if (empty($data)) {
             return;
         }
         $instance = new ExecutionInstance();
-        $process = $this->getStorage()->getProcess($data['processId']);
-        $dataStore = $this->getStorage()->getFactory()->createDataStore();
+        $process = $storage->getProcess($data['processId']);
+        $dataStore = $storage->getFactory()->createDataStore();
         $dataStore->setData($data['data']);
         $instance->setProcess($process);
         $instance->setDataStore($dataStore);
-        $process->getTransitions($this->getStorage()->getFactory());
+        $process->getTransitions($storage->getFactory());
 
         //Load tokens:
         foreach($data['tokens'] as $tokenInfo) {
-            $token = $this->getStorage()->getFactory()->createToken();
+            $token = $storage->getFactory()->createToken();
             $token->setProperties($tokenInfo);
-            $element = $this->getStorage()->getElementInstanceById($tokenInfo['elementId']);
+            $element = $storage->getElementInstanceById($tokenInfo['elementId']);
             $element->addToken($instance, $token);
         }
         return $instance;

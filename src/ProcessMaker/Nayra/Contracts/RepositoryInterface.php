@@ -280,9 +280,7 @@ interface RepositoryInterface
     /**
      * Create a execution instance repository.
      *
-     * @param StorageInterface $factory
-     *
      * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
      */
-    public function createExecutionInstanceRepository(StorageInterface $factory);
+    public function createExecutionInstanceRepository();
 }

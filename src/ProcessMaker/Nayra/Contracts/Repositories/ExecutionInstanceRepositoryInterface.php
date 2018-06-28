@@ -12,20 +12,14 @@ interface ExecutionInstanceRepositoryInterface
 {
 
     /**
-     * Create an execution instance.
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface
-     */
-    public function createExecutionInstance();
-
-    /**
      * Load an execution instance from a persistent storage.
      *
      * @param string $uid
+     * @param StorageInterface $storage
      *
-     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface
+     * @return ExecutionInstanceInterface
      */
-    public function loadExecutionInstanceByUid($uid);
+    public function loadExecutionInstanceByUid($uid, StorageInterface $storage);
 
     /**
      * Create or update an execution instance to a persistent storage.
@@ -36,10 +30,4 @@ interface ExecutionInstanceRepositoryInterface
      */
     public function storeExecutionInstance(ExecutionInstanceInterface $instance);
 
-    /**
-     * Get factory used to build this element.
-     *
-     * @return StorageInterface
-     */
-    public function getStorage();
 }

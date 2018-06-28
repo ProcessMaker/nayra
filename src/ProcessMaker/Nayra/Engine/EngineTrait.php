@@ -110,8 +110,8 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id)
     {
-        $repository = $this->getRepository()->createExecutionInstanceRepository($this->getStorage());
-        $executionInstance = $repository->loadExecutionInstanceByUid($id);
+        $repository = $this->getRepository()->createExecutionInstanceRepository();
+        $executionInstance = $repository->loadExecutionInstanceByUid($id, $this->getStorage());
         if (!$executionInstance) {
             return;
         }
