@@ -36,4 +36,12 @@ interface ExecutionInstanceRepositoryInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
      */
     public function createToken();
+
+
+    /**
+     * Create an execution instance .
+     *
+     * @return \ProcessMaker\Test\Models\ExecutionInstance
+     */
+    public function createExecutionInstance();
 }

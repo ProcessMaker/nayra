@@ -398,6 +398,4 @@ trait RepositoryTrait
     {
         return new TimerEventDefinition();
     }
-
-
 }

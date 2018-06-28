@@ -87,4 +87,14 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     {
         return new Token();
     }
+
+    /**
+     * Create an execution instance .
+     *
+     * @return \ProcessMaker\Test\Models\ExecutionInstance
+     */
+    public function createExecutionInstance()
+    {
+        return new ExecutionInstance();
+    }
 }
