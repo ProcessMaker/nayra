@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
 use ProcessMaker\Nayra\Exceptions\ElementNotImplementedException;
 use ProcessMaker\Nayra\Exceptions\NamespaceNotImplementedException;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 
 /**
  * Description of BpmnFileElement
@@ -55,6 +56,11 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             $bpmnElement->setRepository($this->ownerDocument->getFactory());
             if ($bpmnElement instanceof CallableElementInterface) {
                 $bpmnElement->setEngine($this->ownerDocument->getEngine());
+            }
+            if ($bpmnElement instanceof FlowNodeInterface) {
+                $process = $this->ownerDocument->getElementInstanceById($this->parentNode->getAttribute('id'));
+                $bpmnElement->setOwnerProcess($process);
+                $bpmnElement->setProcess($process);
             }
             $id ? $this->ownerDocument->indexBpmnElement($id, $bpmnElement) : null;
             $this->loadParentRef($mapProperties, $bpmnElement);

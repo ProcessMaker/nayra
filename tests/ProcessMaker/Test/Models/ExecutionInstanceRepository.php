@@ -42,10 +42,10 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function loadExecutionInstanceByUid($uid)
     {
-        $data = self::$data[$uid];
-        if (empty($data)) {
+        if (empty(self::$data) || empty(self::$data[$uid])) {
             return;
         }
+        $data = self::$data[$uid];
         $instance = new ExecutionInstance();
         $process = $this->getStorage()->getProcess($data['processId']);
         $dataStore = $this->getStorage()->getFactory()->createDataStore();
