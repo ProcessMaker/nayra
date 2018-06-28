@@ -79,7 +79,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     }
 
     /**
-     * Create instance of Token.
+     * Creates an instance of Token.
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
      */
@@ -89,7 +89,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     }
 
     /**
-     * Create an execution instance .
+     * Creates an execution instance.
      *
      * @return \ProcessMaker\Test\Models\ExecutionInstance
      */

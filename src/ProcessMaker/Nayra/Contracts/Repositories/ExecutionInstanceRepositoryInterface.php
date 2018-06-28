@@ -17,7 +17,7 @@ interface ExecutionInstanceRepositoryInterface
      * @param string $uid
      * @param StorageInterface $storage
      *
-     * @return ExecutionInstanceInterface
+     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface
      */
     public function loadExecutionInstanceByUid($uid, StorageInterface $storage);
 
@@ -31,15 +31,14 @@ interface ExecutionInstanceRepositoryInterface
     public function storeExecutionInstance(ExecutionInstanceInterface $instance);
 
     /**
-     * Create instance of Token.
+     * Creates an instance of Token.
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
      */
     public function createToken();
 
-
     /**
-     * Create an execution instance .
+     * Creates an execution instance.
      *
      * @return \ProcessMaker\Test\Models\ExecutionInstance
      */

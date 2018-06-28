@@ -271,7 +271,7 @@ interface RepositoryInterface
     public function createTimerEventDefinition();
 
     /**
-     * Create a execution instance repository.
+     * Create an execution instance repository.
      *
      * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
      */
