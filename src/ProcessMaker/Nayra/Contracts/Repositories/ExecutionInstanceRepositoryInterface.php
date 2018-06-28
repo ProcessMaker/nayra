@@ -30,4 +30,10 @@ interface ExecutionInstanceRepositoryInterface
      */
     public function storeExecutionInstance(ExecutionInstanceInterface $instance);
 
+    /**
+     * Create instance of Token.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
+     */
+    public function createToken();
 }

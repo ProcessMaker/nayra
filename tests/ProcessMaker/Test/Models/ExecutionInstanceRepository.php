@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Test\Models;
 
+use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
@@ -47,7 +48,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
 
         //Load tokens:
         foreach($data['tokens'] as $tokenInfo) {
-            $token = $storage->getFactory()->createToken();
+            $token = $this->createToken();
             $token->setProperties($tokenInfo);
             $element = $storage->getElementInstanceById($tokenInfo['elementId']);
             $element->addToken($instance, $token);
@@ -75,5 +76,15 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     public function setRawData(array $data)
     {
         self::$data = $data;
+    }
+
+    /**
+     * Create instance of Token.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
+     */
+    public function createToken()
+    {
+        return new Token();
     }
 }
