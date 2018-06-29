@@ -38,6 +38,7 @@ use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Test\Models\InstanceRepository;
 
 /**
  * Class that create instances of classes based on the mappings interface-concrete class passed to it.

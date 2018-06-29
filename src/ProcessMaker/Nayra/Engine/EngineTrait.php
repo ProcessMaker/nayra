@@ -91,15 +91,16 @@ trait EngineTrait
     {
         $this->loadProcess($process);
 
-        $executionInstance = $this->repository
-            ->createExecutionInstanceRepository()
-            ->createExecutionInstance($process, $data);
+        $instanceRepo = $this->repository->createExecutionInstanceRepository();
+        $executionInstance = $instanceRepo->createExecutionInstance($process, $data);
 
         $process->addInstance($executionInstance);
         $executionInstance->setProcess($process);
         $executionInstance->setDataStore($data);
         $executionInstance->linkToEngine($this);
         $this->executionInstances[] = $executionInstance;
+
+        $instanceRepo->persistInstanceCreated($executionInstance);
         $process->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED, $executionInstance, $event);
         return $executionInstance;
     }

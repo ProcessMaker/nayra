@@ -88,6 +88,8 @@ trait ActivityTrait
         $this->activeState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token) {
+                $instanceRepo = $this->getRepository()->createExecutionInstanceRepository();
+                $instanceRepo->persistActivityActivated($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token);
 
             }
@@ -95,6 +97,8 @@ trait ActivityTrait
         $this->failingState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token) {
+                $instanceRepo = $this->getRepository()->createExecutionInstanceRepository();
+                $instanceRepo->persistActivityException($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, $this, $token);
 
             }
@@ -102,6 +106,8 @@ trait ActivityTrait
         $this->closedState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token) {
+                $instanceRepo = $this->getRepository()->createExecutionInstanceRepository();
+                $instanceRepo->persistActivityCompleted($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_COMPLETED, $this, $token);
 
             }
@@ -139,6 +145,8 @@ trait ActivityTrait
             StateInterface::EVENT_TOKEN_CONSUMED,
             function (TokenInterface $token) {
                 $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                $instanceRepo = $this->getRepository()->createExecutionInstanceRepository();
+                $instanceRepo->persistActivityClosed($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $token);
 
             }

@@ -3,11 +3,10 @@
 namespace ProcessMaker\Test\Models;
 
 use ProcessMaker\Nayra\Bpmn\Models\Token;
-use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
-use ProcessMaker\Test\Models\ExecutionInstance;
 
 /**
  * Execution Instance Repository.
@@ -57,18 +56,6 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     }
 
     /**
-     * Create or update an execution instance to a persistent storage.
-     *
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
-     *
-     * @return $this
-     */
-    public function storeExecutionInstance(ExecutionInstanceInterface $instance)
-    {
-        // TODO: Implement store() method.
-    }
-
-    /**
      * Set the test data to be loaded.
      *
      * @param array $data
@@ -96,5 +83,69 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     public function createExecutionInstance()
     {
         return new ExecutionInstance();
+    }
+
+    /**
+     * Persists instance's data related to the event Activity Activated
+     *
+     * @param $source
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistActivityActivated($source, TokenInterface $token)
+    {
+
+    }
+
+    /**
+     * Persists instance's data related to the event Activity Exception
+     *
+     * @param $source
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistActivityException($source, TokenInterface $token)
+    {
+
+    }
+
+    /**
+     * Persists instance's data related to the event Activity Completed
+     *
+     * @param $source
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistActivityCompleted($source, TokenInterface $token)
+    {
+
+    }
+
+    /**
+     * Persists instance's data related to the event Activity Closed
+     *
+     * @param $source
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistActivityClosed($source, TokenInterface $token)
+    {
+
+    }
+
+    /**
+     * Persists instance's data related to the event Process Instance Created
+     *
+     * @param $instance
+     *
+     * @return mixed
+     */
+    public function persistInstanceCreated($instance)
+    {
+
     }
 }
