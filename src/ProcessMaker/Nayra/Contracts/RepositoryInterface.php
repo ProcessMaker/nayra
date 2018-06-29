@@ -271,18 +271,9 @@ interface RepositoryInterface
     public function createTimerEventDefinition();
 
     /**
-     * Create instance of Token.
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
-     */
-    public function createToken();
-
-    /**
-     * Create a execution instance repository.
-     *
-     * @param StorageInterface $factory
+     * Create an execution instance repository.
      *
      * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
      */
-    public function createExecutionInstanceRepository(StorageInterface $factory);
+    public function createExecutionInstanceRepository();
 }

@@ -398,14 +398,4 @@ trait RepositoryTrait
     {
         return new TimerEventDefinition();
     }
-
-    /**
-     * Create instance of Token.
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
-     */
-    public function createToken()
-    {
-        return new Token();
-    }
 }

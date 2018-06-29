@@ -44,25 +44,11 @@ class Repository implements RepositoryInterface
     /**
      * Create a execution instance repository.
      *
-     * @param StorageInterface $factory
-     *
      * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
      */
-    public function createExecutionInstanceRepository(StorageInterface $factory)
+    public function createExecutionInstanceRepository()
     {
-        return new ExecutionInstanceRepository($factory);
-    }
-
-    /**
-     * Create a execution instance repository.
-     *
-     * @param StorageInterface $factory
-     *
-     * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
-     */
-    public function createExecutionInstance()
-    {
-        return new ExecutionInstance();
+        return new ExecutionInstanceRepository();
     }
 
     /**
