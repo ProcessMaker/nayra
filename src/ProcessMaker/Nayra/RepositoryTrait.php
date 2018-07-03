@@ -39,6 +39,7 @@ use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Test\Models\InstanceRepository;
+use ProcessMaker\Test\Models\TokenRepository;
 
 /**
  * Class that create instances of classes based on the mappings interface-concrete class passed to it.
@@ -398,5 +399,15 @@ trait RepositoryTrait
     public function createTimerEventDefinition()
     {
         return new TimerEventDefinition();
+    }
+
+    /**
+     * Creates a TokenRepository
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface
+     */
+    public function getTokenRepository()
+    {
+        return new TokenRepository();
     }
 }

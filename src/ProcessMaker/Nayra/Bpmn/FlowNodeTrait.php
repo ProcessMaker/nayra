@@ -65,7 +65,7 @@ trait FlowNodeTrait
      *
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface[]
+     * @return \ProcessMaker\Nayra\Bpmn\Collection
      */
     public function getTokens(ExecutionInstanceInterface $instance)
     {

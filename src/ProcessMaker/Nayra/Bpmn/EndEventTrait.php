@@ -56,7 +56,7 @@ trait EndEventTrait
         $this->endState->connectTo($this->transition);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_AFTER_TRANSIT,
-            function (TransitionInterface $transition, CollectionInterface $consumeTokens) {
+            function (TransitionInterface $transition, CollectionInterface $consumeTokens) use ($factory) {
                 $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
             }
         );

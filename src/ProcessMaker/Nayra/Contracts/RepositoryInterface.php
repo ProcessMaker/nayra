@@ -277,4 +277,11 @@ interface RepositoryInterface
      * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
      */
     public function createExecutionInstanceRepository();
+
+    /**
+     * Creates a TokenRepository
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface
+     */
+    public function getTokenRepository();
 }
