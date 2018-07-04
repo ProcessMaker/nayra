@@ -32,27 +32,6 @@ trait BpmnEventsTrait
      */
     protected function notifyEvent($event, ...$arguments)
     {
-        switch ($event) {
-            case ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES:
-                if ($arguments[0] instanceof EndEventInterface) {
-                    foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
-                        $this->getRepository()
-                            ->getTokenRepository()
-                            ->persistThrowEventTokenArrives($arguments[0], $arguments[1]);
-                    }
-                }
-
-                if ($arguments[0] instanceof ThrowEventInterface) {
-                    foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
-                        $this->getRepository()
-                            ->getTokenRepository()
-                            ->persistThrowEventTokenArrives($arguments[0], $arguments[1]);
-                    }
-                }
-            break;
-        }
-
-
         $bpmnEvents = $this->getBpmnEventClasses();
         if (isset($bpmnEvents[$event])) {
             $reflector = new ReflectionClass($bpmnEvents[$event]);

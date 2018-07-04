@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\EndTransition;
-use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
@@ -48,6 +46,13 @@ trait IntermediateThrowEventTrait
         $this->transition=new IntermediateThrowEventTransition($this);
 
         $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function()  {
+
+            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistThrowEventTokenPassed($this, $this->getTokens($instance));
+            }
+
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED, $this);
         });
     }
@@ -64,10 +69,24 @@ trait IntermediateThrowEventTrait
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $collaboration = $this->getEventDefinitions()->item(0)->getPayload()->getMessageFlow()->getCollaboration();
             $collaboration->send($this->getEventDefinitions()->item(0), $token);
+
+            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistThrowEventTokenArrives($this, $this->getTokens($instance));
+            }
+
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
         });
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+
+            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistThrowEventTokenConsumed($this, $this->getTokens($instance));
+            }
+
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
         });
 

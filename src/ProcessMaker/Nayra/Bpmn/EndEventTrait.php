@@ -79,6 +79,13 @@ trait EndEventTrait
         //if the element has event definition and those event definition have a payload we notify them
         //of the triggered event
         $this->endState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
+
+            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistThrowEventTokenArrives($this, $this->getTokens($instance));
+            }
+
             $this->notifyEvent(ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
             foreach($this->getEventDefinitions() as $eventDefinition) {
                 $eventDefinitionClass = get_class($eventDefinition);
@@ -91,7 +98,15 @@ trait EndEventTrait
                 }
             }
         });
+
         $this->endState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+
+            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistThrowEventTokenConsumed($this, $this->getTokens($instance));
+            }
+
             $this->notifyEvent(ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
         });
 

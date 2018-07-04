@@ -53,6 +53,13 @@ trait IntermediateCatchEventTrait
         $this->transition=new IntermediateCatchEventTransition($this);
 
         $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function()  {
+
+            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistCatchEventTokenPassed($this, $this->getTokens($instance));
+            }
+
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED, $this);
         });
 
@@ -83,11 +90,25 @@ trait IntermediateCatchEventTrait
         $incomingPlace->connectTo($this->transition);
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
+
+            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistCatchEventTokenArrives($this, $this->getTokens($instance));
+            }
+
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
             $this->notifyTimerEvents($this->getEventDefinitions(), $token);
         });
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+
+            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistCatchEventTokenConsumed($this, $this->getTokens($instance));
+            }
+
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED, $this, $token);
         });
         return $incomingPlace;
