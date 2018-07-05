@@ -185,6 +185,11 @@ class EngineTestCase extends TestCase
         $this->firedEvents = [];
     }
 
+    /**
+     * Asserts that for every persisted call a repository persist method was called
+     *
+     * @param $expectedCalls
+     */
     protected function assertRepositoryCalls ($expectedCalls) {
         $count = 0;
         foreach($this->firedEvents as $event) {

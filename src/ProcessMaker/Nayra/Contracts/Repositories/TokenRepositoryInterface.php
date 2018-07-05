@@ -42,63 +42,92 @@ interface TokenRepositoryInterface
     public function store(TokenInterface $token, $saveChildElements = false);
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param ThrowEventInterface $event
-     * @param TokenInterface $token
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistThrowEventTokenArrives(ThrowEventInterface $event, Collection $tokens);
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param ThrowEventInterface $endEvent
-     * @param TokenInterface $token
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistThrowEventTokenConsumed(ThrowEventInterface $endEvent, Collection $tokens);
 
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param ThrowEventInterface $endEvent
-     * @param TokenInterface $token
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistThrowEventTokenPassed(ThrowEventInterface $endEvent, Collection $tokens);
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param GatewayInterface $exclusiveGateway
-     * @param TokenInterface $token
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistGatewayTokenArrives(GatewayInterface $exclusiveGateway, Collection $tokens);
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param GatewayInterface $exclusiveGateway
-     * @param TokenInterface $token
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistGatewayTokenConsumed(GatewayInterface $exclusiveGateway, Collection $tokens);
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param GatewayInterface $exclusiveGateway
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistGatewayTokenPassed(GatewayInterface $exclusiveGateway, Collection $tokens);
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param CatchEventInterface $intermediateCatchEvent
-     * @param TokenInterface $token
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistCatchEventTokenArrives(CatchEventInterface $intermediateCatchEvent, Collection $tokens);
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param CatchEventInterface $intermediateCatchEvent
-     * @param TokenInterface $token
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistCatchEventTokenConsumed(CatchEventInterface $intermediateCatchEvent, Collection $tokens);
 
     /**
+     * Persists instance and token data when a token arrives
+     *
      * @param CatchEventInterface $intermediateCatchEvent
+     * @param Collection $tokens
+     *
      * @return mixed
      */
     public function persistCatchEventTokenPassed(CatchEventInterface $intermediateCatchEvent, Collection $tokens);

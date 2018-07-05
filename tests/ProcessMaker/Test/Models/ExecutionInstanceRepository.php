@@ -39,6 +39,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
         $data = self::$data[$uid];
         $instance = new ExecutionInstance();
         $process = $storage->getProcess($data['processId']);
+        $process->addInstance($instance);
         $dataStore = $storage->getFactory()->createDataStore();
         $dataStore->setData($data['data']);
         $instance->setProcess($process);
@@ -86,58 +87,6 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     }
 
     /**
-     * Persists instance's data related to the event Activity Activated
-     *
-     * @param $source
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
-     *
-     * @return mixed
-     */
-    public function persistActivityActivated($source, TokenInterface $token)
-    {
-
-    }
-
-    /**
-     * Persists instance's data related to the event Activity Exception
-     *
-     * @param $source
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
-     *
-     * @return mixed
-     */
-    public function persistActivityException($source, TokenInterface $token)
-    {
-
-    }
-
-    /**
-     * Persists instance's data related to the event Activity Completed
-     *
-     * @param $source
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
-     *
-     * @return mixed
-     */
-    public function persistActivityCompleted($source, TokenInterface $token)
-    {
-
-    }
-
-    /**
-     * Persists instance's data related to the event Activity Closed
-     *
-     * @param $source
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
-     *
-     * @return mixed
-     */
-    public function persistActivityClosed($source, TokenInterface $token)
-    {
-
-    }
-
-    /**
      * Persists instance's data related to the event Process Instance Created
      *
      * @param $instance
@@ -147,5 +96,16 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     public function persistInstanceCreated($instance)
     {
 
+    }
+
+    /**
+     * Persists instance's data related to the event Process Instance Completed
+     *
+     * @param $instance
+     *
+     * @return mixed
+     */
+    public function persistInstanceCompleted($instance)
+    {
     }
 }

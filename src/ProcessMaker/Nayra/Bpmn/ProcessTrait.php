@@ -294,6 +294,7 @@ trait ProcessTrait
             if ($instance->getTokens()->count() !== 0) {
                 return;
             }
+
             $this->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED, $instance, $event);
         });
         $this->transitions = new Collection($transitions);
