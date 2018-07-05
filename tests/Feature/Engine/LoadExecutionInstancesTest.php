@@ -190,7 +190,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $thirdActivity->complete($token);
         $this->engine->runToNextState();
 
-        //Assertion: Second and third activity are completed and closed, the gateway is activiate, and the process ends.
+        //Assertion: Second and third activity are completed and closed, the gateway is activate, and the process ends.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,

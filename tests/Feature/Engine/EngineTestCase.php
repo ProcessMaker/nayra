@@ -3,7 +3,12 @@ namespace Tests\Feature\Engine;
 
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
+use ProcessMaker\Nayra\Bpmn\Models\IntermediateCatchEvent;
+use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
@@ -47,6 +52,25 @@ class EngineTestCase extends TestCase
      * @var \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
      */
     protected $repository;
+
+    /**
+     * List of of events that should be persisted by the engine
+     *
+     * @var array
+     */
+    protected $eventsToPersist = [
+        ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+        ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+        ThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
+        GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
+        GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+        GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
+        IntermediateCatchEvent::EVENT_CATCH_TOKEN_ARRIVES,
+        IntermediateCatchEvent::EVENT_CATCH_TOKEN_CONSUMED,
+        IntermediateCatchEvent::EVENT_CATCH_TOKEN_PASSED,
+        EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+        EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+    ];
 
     /**
      * Initialize the engine and the factories.
@@ -149,6 +173,10 @@ class EngineTestCase extends TestCase
      */
     protected function assertEvents(array $events)
     {
+        $tokenRepository = $this->engine->getRepository()->getTokenRepository();
+        $this->assertRepositoryCalls($tokenRepository->getPersistCalls());
+        $tokenRepository->resetPersistCalls();
+
         $this->assertEquals(
             $events,
             $this->firedEvents,
@@ -156,6 +184,16 @@ class EngineTestCase extends TestCase
         );
         $this->firedEvents = [];
     }
+
+    protected function assertRepositoryCalls ($expectedCalls) {
+        $count = 0;
+        foreach($this->firedEvents as $event) {
+            $count += (in_array($event, $this->eventsToPersist)) ? 1 : 0;
+        }
+
+        $this->assertEquals($expectedCalls, $count);
+    }
+
     /**
      * Assert that a date timer was scheduled.
      *

@@ -49,6 +49,7 @@ use ProcessMaker\Test\Models\TokenRepository;
 trait RepositoryTrait
 {
 
+    private $tokenRepo = null;
     /**
      * Creates an instance of the interface passed
      *
@@ -408,6 +409,9 @@ trait RepositoryTrait
      */
     public function getTokenRepository()
     {
-        return new TokenRepository();
+        if ($this->tokenRepo === null) {
+            $this->tokenRepo = new TokenRepository();
+        }
+        return $this->tokenRepo;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ReflectionClass;
 
 /**

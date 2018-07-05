@@ -16,6 +16,8 @@ use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
  */
 class TokenRepository implements TokenRepositoryInterface
 {
+    public $persistCalls = 0;
+
     /**
      * Create a token instance.
      *
@@ -59,7 +61,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistThrowEventTokenArrives(ThrowEventInterface $event, Collection $tokens)
     {
-        // TODO: Implement persistThrowEventTokenArrives() method.
+        $this->persistCalls++;
     }
 
     /**
@@ -69,7 +71,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistThrowEventTokenConsumed(ThrowEventInterface $endEvent, Collection $tokens)
     {
-        // TODO: Implement persistThrowEventTokenConsumed() method.
+        $this->persistCalls++;
     }
 
     /**
@@ -79,7 +81,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistThrowEventTokenPassed(ThrowEventInterface $endEvent, Collection $tokens)
     {
-        // TODO: Implement persistThrowEventTokenPassed() method.
+        $this->persistCalls++;
     }
 
     /**
@@ -89,7 +91,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistGatewayTokenArrives(GatewayInterface $exclusiveGateway, Collection $tokens)
     {
-        // TODO: Implement persistGatewayTokenArrives() method.
+        $this->persistCalls++;
     }
 
     /**
@@ -99,7 +101,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistGatewayTokenConsumed(GatewayInterface $exclusiveGateway, Collection $tokens)
     {
-        // TODO: Implement persistGatewayTokenConsumed() method.
+        $this->persistCalls++;
     }
 
     /**
@@ -108,7 +110,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistGatewayTokenPassed(GatewayInterface $exclusiveGateway, Collection $tokens)
     {
-        // TODO: Implement persistGatewayTokenPassed() method.
+        $this->persistCalls++;
     }
 
     /**
@@ -118,7 +120,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistCatchEventTokenArrives(CatchEventInterface $intermediateCatchEvent, Collection $tokens)
     {
-        // TODO: Implement persistCatchEventTokenArrives() method.
+        $this->persistCalls++;
     }
 
     /**
@@ -128,7 +130,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistCatchEventTokenConsumed(CatchEventInterface $intermediateCatchEvent, Collection $tokens)
     {
-        // TODO: Implement persistCatchEventTokenConsumed() method.
+        $this->persistCalls++;
     }
 
     /**
@@ -137,6 +139,16 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistCatchEventTokenPassed(CatchEventInterface $intermediateCatchEvent, Collection $tokens)
     {
-        // TODO: Implement persistCatchEventTokenPassed() method.
+        $this->persistCalls++;
+    }
+
+    public function getPersistCalls()
+    {
+        return $this->persistCalls;
+    }
+
+    public function resetPersistCalls()
+    {
+        $this->persistCalls = 0;
     }
 }
