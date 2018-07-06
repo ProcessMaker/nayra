@@ -64,7 +64,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token arrives in a throw event
      *
      * @param ThrowEventInterface $event
      * @param TokenInterface $token
@@ -77,7 +77,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token is consumed in a throw event
      *
      * @param ThrowEventInterface $endEvent
      * @param TokenInterface $token
@@ -90,7 +90,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token is passed in a throw event
      *
      * @param ThrowEventInterface $endEvent
      * @param TokenInterface $token
@@ -103,7 +103,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token arrives in a gateway
      *
      * @param GatewayInterface $exclusiveGateway
      * @param TokenInterface $token
@@ -116,7 +116,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token is consumed in a gateway
      *
      * @param GatewayInterface $exclusiveGateway
      * @param TokenInterface $token
@@ -129,7 +129,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token is passed in a gateway
      *
      * @param GatewayInterface $exclusiveGateway
      * @param TokenInterface $token
@@ -142,7 +142,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token arrives in a catch event
      *
      * @param CatchEventInterface $intermediateCatchEvent
      * @param TokenInterface $token
@@ -155,7 +155,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token is consumed in a catch event
      *
      * @param CatchEventInterface $intermediateCatchEvent
      * @param TokenInterface $token
@@ -168,7 +168,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Persists instance and token data when a token arrives
+     * Persists instance and token data when a token is passed in a catch event
      *
      * @param CatchEventInterface $intermediateCatchEvent
      * @param TokenInterface $token
