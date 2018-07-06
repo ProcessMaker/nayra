@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\EndTransition;
-use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
@@ -47,7 +45,14 @@ trait IntermediateThrowEventTrait
 
         $this->transition=new IntermediateThrowEventTransition($this);
 
-        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function()  {
+        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function(TransitionInterface $interface, Collection $consumedTokens)  {
+
+            foreach ($consumedTokens as $token) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistThrowEventTokenPassed($this, $token);
+            }
+
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED, $this);
         });
     }
@@ -64,10 +69,20 @@ trait IntermediateThrowEventTrait
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $collaboration = $this->getEventDefinitions()->item(0)->getPayload()->getMessageFlow()->getCollaboration();
             $collaboration->send($this->getEventDefinitions()->item(0), $token);
+
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistThrowEventTokenArrives($this, $token);
+
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
         });
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistThrowEventTokenConsumed($this, $token);
+
             $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
         });
 

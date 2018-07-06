@@ -200,7 +200,7 @@ interface ProcessInterface extends CallableElementInterface
     /**
      * Get the loaded process instances.
      *
-     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface[]
+     * @return \ProcessMaker\Nayra\Bpmn\Collection
      */
     public function getInstances();
 

@@ -2,8 +2,9 @@
 
 namespace ProcessMaker\Test\Models;
 
-use ProcessMaker\Models\Token;
-use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 
@@ -14,7 +15,7 @@ use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
  */
 class TokenRepository implements TokenRepositoryInterface
 {
-    use RepositoryTrait;
+    public $persistCalls = 0;
 
     /**
      * Create a token instance.
@@ -36,7 +37,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function loadTokenByUid($uid)
     {
-        // TODO: Implement loadTokenByUid() method.
+
     }
 
     /**
@@ -49,6 +50,133 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function store(TokenInterface $token, $saveChildElements = false)
     {
-        // TODO: Implement store() method.
+
+    }
+
+    public function getPersistCalls()
+    {
+        return $this->persistCalls;
+    }
+
+    public function resetPersistCalls()
+    {
+        $this->persistCalls = 0;
+    }
+
+    /**
+     * Persists instance and token data when a token arrives in a throw event
+     *
+     * @param ThrowEventInterface $event
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistThrowEventTokenArrives(ThrowEventInterface $event, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a token is consumed in a throw event
+     *
+     * @param ThrowEventInterface $endEvent
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistThrowEventTokenConsumed(ThrowEventInterface $endEvent, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a token is passed in a throw event
+     *
+     * @param ThrowEventInterface $endEvent
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistThrowEventTokenPassed(ThrowEventInterface $endEvent, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a token arrives in a gateway
+     *
+     * @param GatewayInterface $exclusiveGateway
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistGatewayTokenArrives(GatewayInterface $exclusiveGateway, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a token is consumed in a gateway
+     *
+     * @param GatewayInterface $exclusiveGateway
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistGatewayTokenConsumed(GatewayInterface $exclusiveGateway, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a token is passed in a gateway
+     *
+     * @param GatewayInterface $exclusiveGateway
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistGatewayTokenPassed(GatewayInterface $exclusiveGateway, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a token arrives in a catch event
+     *
+     * @param CatchEventInterface $intermediateCatchEvent
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistCatchEventTokenArrives(CatchEventInterface $intermediateCatchEvent, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a token is consumed in a catch event
+     *
+     * @param CatchEventInterface $intermediateCatchEvent
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistCatchEventTokenConsumed(CatchEventInterface $intermediateCatchEvent, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a token is passed in a catch event
+     *
+     * @param CatchEventInterface $intermediateCatchEvent
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistCatchEventTokenPassed(CatchEventInterface $intermediateCatchEvent, TokenInterface $token)
+    {
+        $this->persistCalls++;
     }
 }

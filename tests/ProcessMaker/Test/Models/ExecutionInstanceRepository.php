@@ -3,11 +3,10 @@
 namespace ProcessMaker\Test\Models;
 
 use ProcessMaker\Nayra\Bpmn\Models\Token;
-use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
-use ProcessMaker\Test\Models\ExecutionInstance;
 
 /**
  * Execution Instance Repository.
@@ -40,6 +39,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
         $data = self::$data[$uid];
         $instance = new ExecutionInstance();
         $process = $storage->getProcess($data['processId']);
+        $process->addInstance($instance);
         $dataStore = $storage->getFactory()->createDataStore();
         $dataStore->setData($data['data']);
         $instance->setProcess($process);
@@ -54,18 +54,6 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
             $element->addToken($instance, $token);
         }
         return $instance;
-    }
-
-    /**
-     * Create or update an execution instance to a persistent storage.
-     *
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
-     *
-     * @return $this
-     */
-    public function storeExecutionInstance(ExecutionInstanceInterface $instance)
-    {
-        // TODO: Implement store() method.
     }
 
     /**
@@ -96,5 +84,28 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     public function createExecutionInstance()
     {
         return new ExecutionInstance();
+    }
+
+    /**
+     * Persists instance's data related to the event Process Instance Created
+     *
+     * @param $instance
+     *
+     * @return mixed
+     */
+    public function persistInstanceCreated($instance)
+    {
+
+    }
+
+    /**
+     * Persists instance's data related to the event Process Instance Completed
+     *
+     * @param $instance
+     *
+     * @return mixed
+     */
+    public function persistInstanceCompleted($instance)
+    {
     }
 }

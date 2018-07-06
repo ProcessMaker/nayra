@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Repositories\InstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
@@ -276,4 +277,11 @@ interface RepositoryInterface
      * @return \ProcessMaker\Test\Models\ExecutionInstanceRepository
      */
     public function createExecutionInstanceRepository();
+
+    /**
+     * Creates a TokenRepository
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface
+     */
+    public function getTokenRepository();
 }
