@@ -49,21 +49,17 @@ trait InclusiveGatewayTrait
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
 
-            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistGatewayTokenArrives($this, $this->getTokens($instance));
-            }
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistGatewayTokenArrives($this, $token);
 
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES, $this, $token);
         });
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
 
-            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistGatewayTokenConsumed($this, $this->getTokens($instance));
-            }
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistGatewayTokenConsumed($this, $token);
 
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED, $this, $token);
         });
@@ -103,12 +99,12 @@ trait InclusiveGatewayTrait
                 $condition
             );
         }
-        $outgoingTransition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function(TransitionInterface $transition)  {
+        $outgoingTransition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function(TransitionInterface $transition, Collection $consumedTokens)  {
 
-            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+            foreach ($consumedTokens as $token) {
                 $this->getRepository()
                     ->getTokenRepository()
-                    ->persistGatewayTokenPassed($this, $this->getTokens($instance));
+                    ->persistGatewayTokenPassed($this, $token);
             }
 
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this);

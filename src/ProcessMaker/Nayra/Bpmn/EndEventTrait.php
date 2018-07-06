@@ -56,7 +56,7 @@ trait EndEventTrait
         $this->endState->connectTo($this->transition);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_AFTER_TRANSIT,
-            function (TransitionInterface $transition, CollectionInterface $consumeTokens) use ($factory) {
+            function (TransitionInterface $transition, CollectionInterface $consumeTokens) {
                 $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
             }
         );
@@ -80,11 +80,9 @@ trait EndEventTrait
         //of the triggered event
         $this->endState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
 
-            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistThrowEventTokenArrives($this, $this->getTokens($instance));
-            }
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistThrowEventTokenArrives($this, $token);
 
             $this->notifyEvent(ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
             foreach($this->getEventDefinitions() as $eventDefinition) {
@@ -101,11 +99,9 @@ trait EndEventTrait
 
         $this->endState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
 
-            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistThrowEventTokenConsumed($this, $this->getTokens($instance));
-            }
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistThrowEventTokenConsumed($this, $token);
 
             $this->notifyEvent(ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
         });

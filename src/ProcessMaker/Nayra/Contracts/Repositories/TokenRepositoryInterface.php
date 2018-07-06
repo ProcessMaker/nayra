@@ -2,7 +2,6 @@
 
 namespace ProcessMaker\Nayra\Contracts\Repositories;
 
-use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
@@ -45,90 +44,90 @@ interface TokenRepositoryInterface
      * Persists instance and token data when a token arrives
      *
      * @param ThrowEventInterface $event
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistThrowEventTokenArrives(ThrowEventInterface $event, Collection $tokens);
+    public function persistThrowEventTokenArrives(ThrowEventInterface $event, TokenInterface $token);
 
     /**
      * Persists instance and token data when a token arrives
      *
      * @param ThrowEventInterface $endEvent
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistThrowEventTokenConsumed(ThrowEventInterface $endEvent, Collection $tokens);
+    public function persistThrowEventTokenConsumed(ThrowEventInterface $endEvent, TokenInterface $token);
 
 
     /**
      * Persists instance and token data when a token arrives
      *
      * @param ThrowEventInterface $endEvent
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistThrowEventTokenPassed(ThrowEventInterface $endEvent, Collection $tokens);
+    public function persistThrowEventTokenPassed(ThrowEventInterface $endEvent, TokenInterface $token);
 
     /**
      * Persists instance and token data when a token arrives
      *
      * @param GatewayInterface $exclusiveGateway
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistGatewayTokenArrives(GatewayInterface $exclusiveGateway, Collection $tokens);
+    public function persistGatewayTokenArrives(GatewayInterface $exclusiveGateway, TokenInterface $token);
 
     /**
      * Persists instance and token data when a token arrives
      *
      * @param GatewayInterface $exclusiveGateway
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistGatewayTokenConsumed(GatewayInterface $exclusiveGateway, Collection $tokens);
+    public function persistGatewayTokenConsumed(GatewayInterface $exclusiveGateway, TokenInterface $token);
 
     /**
      * Persists instance and token data when a token arrives
      *
      * @param GatewayInterface $exclusiveGateway
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistGatewayTokenPassed(GatewayInterface $exclusiveGateway, Collection $tokens);
+    public function persistGatewayTokenPassed(GatewayInterface $exclusiveGateway, TokenInterface $token);
 
     /**
      * Persists instance and token data when a token arrives
      *
      * @param CatchEventInterface $intermediateCatchEvent
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistCatchEventTokenArrives(CatchEventInterface $intermediateCatchEvent, Collection $tokens);
+    public function persistCatchEventTokenArrives(CatchEventInterface $intermediateCatchEvent, TokenInterface $token);
 
     /**
      * Persists instance and token data when a token arrives
      *
      * @param CatchEventInterface $intermediateCatchEvent
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistCatchEventTokenConsumed(CatchEventInterface $intermediateCatchEvent, Collection $tokens);
+    public function persistCatchEventTokenConsumed(CatchEventInterface $intermediateCatchEvent, TokenInterface $token);
 
     /**
      * Persists instance and token data when a token arrives
      *
      * @param CatchEventInterface $intermediateCatchEvent
-     * @param Collection $tokens
+     * @param TokenInterface $token
      *
      * @return mixed
      */
-    public function persistCatchEventTokenPassed(CatchEventInterface $intermediateCatchEvent, Collection $tokens);
+    public function persistCatchEventTokenPassed(CatchEventInterface $intermediateCatchEvent, TokenInterface $token);
 }

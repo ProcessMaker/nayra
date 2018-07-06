@@ -8,6 +8,8 @@ use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -59,17 +61,23 @@ class EngineTestCase extends TestCase
      * @var array
      */
     protected $eventsToPersist = [
-        ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
-        ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
-        ThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
+        EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+        EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
         GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
         GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
         GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
         IntermediateCatchEvent::EVENT_CATCH_TOKEN_ARRIVES,
         IntermediateCatchEvent::EVENT_CATCH_TOKEN_CONSUMED,
         IntermediateCatchEvent::EVENT_CATCH_TOKEN_PASSED,
-        EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
-        EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+        IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+        IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
+        IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
+        IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+        IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+        IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
+        ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+        ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+        ThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
     ];
 
     /**

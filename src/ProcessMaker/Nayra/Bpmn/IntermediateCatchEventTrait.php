@@ -52,12 +52,12 @@ trait IntermediateCatchEventTrait
         //$this->transition=new ExclusiveGatewayTransition($this);
         $this->transition=new IntermediateCatchEventTransition($this);
 
-        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function()  {
+        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function(TransitionInterface $transition, Collection $consumedTokens)  {
 
-            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
+            foreach ($consumedTokens as $token) {
                 $this->getRepository()
                     ->getTokenRepository()
-                    ->persistCatchEventTokenPassed($this, $this->getTokens($instance));
+                    ->persistCatchEventTokenPassed($this, $token);
             }
 
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED, $this);
@@ -91,11 +91,9 @@ trait IntermediateCatchEventTrait
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
 
-            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistCatchEventTokenArrives($this, $this->getTokens($instance));
-            }
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistCatchEventTokenArrives($this, $token);
 
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
             $this->notifyTimerEvents($this->getEventDefinitions(), $token);
@@ -103,11 +101,9 @@ trait IntermediateCatchEventTrait
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
 
-            foreach ($this->getOwnerProcess()->getInstances()->toArray() as $instance) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistCatchEventTokenConsumed($this, $this->getTokens($instance));
-            }
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistCatchEventTokenConsumed($this, $token);
 
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED, $this, $token);
         });
