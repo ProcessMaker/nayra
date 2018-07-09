@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Test\Models;
 
+use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
@@ -106,11 +107,20 @@ class TokenRepository implements TokenRepositoryInterface
         
     }
 
+    /**
+     * Get persist calls
+     *
+     * @return int
+     */
     public function getPersistCalls()
     {
         return $this->persistCalls;
     }
 
+    /**
+     * Reset persist calls
+     *
+     */
     public function resetPersistCalls()
     {
         $this->persistCalls = 0;

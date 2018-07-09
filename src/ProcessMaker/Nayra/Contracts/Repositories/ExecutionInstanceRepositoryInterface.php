@@ -24,13 +24,6 @@ interface ExecutionInstanceRepositoryInterface
     public function loadExecutionInstanceByUid($uid, StorageInterface $storage);
 
     /**
-     * Creates an instance of Token.
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
-     */
-    public function createToken();
-
-    /**
      * Creates an execution instance.
      *
      * @return \ProcessMaker\Test\Models\ExecutionInstance
@@ -40,18 +33,18 @@ interface ExecutionInstanceRepositoryInterface
     /**
      * Persists instance's data related to the event Process Instance Created
      *
-     * @param $instance
+     * @param ExecutionInstanceInterface $instance
      *
      * @return mixed
      */
-    public function persistInstanceCreated($instance);
+    public function persistInstanceCreated(ExecutionInstanceInterface $instance);
 
     /**
      * Persists instance's data related to the event Process Instance Completed
      *
-     * @param $instance
+     * @param ExecutionInstanceInterface $instance
      *
      * @return mixed
      */
-    public function persistInstanceCompleted($instance);
+    public function persistInstanceCompleted(ExecutionInstanceInterface $instance);
 }
