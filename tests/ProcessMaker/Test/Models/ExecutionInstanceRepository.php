@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Test\Models;
 
-use ProcessMaker\Nayra\Bpmn\Models\Token;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
@@ -37,7 +35,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
             return;
         }
         $data = self::$data[$uid];
-        $instance = new ExecutionInstance();
+        $instance = $this->createExecutionInstance();
         $process = $storage->getProcess($data['processId']);
         $process->addInstance($instance);
         $dataStore = $storage->getFactory()->createDataStore();
@@ -48,7 +46,7 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
 
         //Load tokens:
         foreach($data['tokens'] as $tokenInfo) {
-            $token = $this->createToken();
+            $token = $storage->getFactory()->getTokenRepository()->createTokenInstance();
             $token->setProperties($tokenInfo);
             $element = $storage->getElementInstanceById($tokenInfo['elementId']);
             $element->addToken($instance, $token);
@@ -67,16 +65,6 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     }
 
     /**
-     * Creates an instance of Token.
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface
-     */
-    public function createToken()
-    {
-        return new Token();
-    }
-
-    /**
      * Creates an execution instance.
      *
      * @return \ProcessMaker\Test\Models\ExecutionInstance
@@ -89,11 +77,11 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     /**
      * Persists instance's data related to the event Process Instance Created
      *
-     * @param $instance
+     * @param ExecutionInstanceInterface $instance
      *
      * @return mixed
      */
-    public function persistInstanceCreated($instance)
+    public function persistInstanceCreated(ExecutionInstanceInterface $instance)
     {
 
     }
@@ -101,11 +89,11 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     /**
      * Persists instance's data related to the event Process Instance Completed
      *
-     * @param $instance
+     * @param ExecutionInstanceInterface $instance
      *
      * @return mixed
      */
-    public function persistInstanceCompleted($instance)
+    public function persistInstanceCompleted(ExecutionInstanceInterface $instance)
     {
     }
 }
