@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Test\Models;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
@@ -51,6 +52,58 @@ class TokenRepository implements TokenRepositoryInterface
     public function store(TokenInterface $token, $saveChildElements = false)
     {
 
+    }
+
+    /**
+     * Persists instance and token data when a token arrives to an activity
+     *
+     * @param ActivityInterface $activity
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistActivityActivated(ActivityInterface $activity, TokenInterface $token)
+    {
+        
+    }
+
+    /**
+     * Persists instance and token data when a token within an activity change to error state
+     *
+     * @param ActivityInterface $activity
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistActivityException(ActivityInterface $activity, TokenInterface $token)
+    {
+        
+    }
+
+    /**
+     * Persists instance and token data when a token is completed within an activity
+     *
+     * @param ActivityInterface $activity
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistActivityCompleted(ActivityInterface $activity, TokenInterface $token)
+    {
+        
+    }
+
+    /**
+     * Persists instance and token data when a token is closed by an activity
+     *
+     * @param ActivityInterface $activity
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistActivityClosed(ActivityInterface $activity, TokenInterface $token)
+    {
+        
     }
 
     public function getPersistCalls()
