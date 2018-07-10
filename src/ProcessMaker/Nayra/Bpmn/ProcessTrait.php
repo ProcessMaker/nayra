@@ -295,6 +295,8 @@ trait ProcessTrait
                 return;
             }
 
+            $instanceRepo = $this->getRepository()->createExecutionInstanceRepository();
+            $instanceRepo->persistInstanceCompleted($instance);
             $this->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED, $instance, $event);
         });
         $this->transitions = new Collection($transitions);
