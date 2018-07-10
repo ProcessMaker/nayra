@@ -326,7 +326,9 @@ trait RepositoryTrait
      */
     public function createProcess()
     {
-        return new Process();
+        $process = new Process();
+        $process->setRepository($this);
+        return $process;
     }
 
     /**
