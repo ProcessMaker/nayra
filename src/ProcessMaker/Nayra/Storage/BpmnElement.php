@@ -24,9 +24,11 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
     /**
      * Get instance of the BPMN element.
      *
+     * @param object $owner
+     *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface
      */
-    public function getBpmnElementInstance()
+    public function getBpmnElementInstance($owner = null)
     {
         $id = $this->getAttribute('id');
         if ($id && $this->ownerDocument->hasBpmnInstance($id)) {
@@ -43,9 +45,12 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             return null;
         }
         list($classInterface, $mapProperties) = $map[$this->namespaceURI][$this->localName];
-        if ($classInterface === BpmnDocument::IS_PROPERTY) {
+        if ($classInterface === BpmnDocument::IS_REFERENCE) {
             $bpmnElement = $this->ownerDocument->getElementInstanceById($this->nodeValue);
             $this->bpmn = $bpmnElement;
+        } elseif ($classInterface === BpmnDocument::TEXT_PROPERTY) {
+            $bpmnElement = $this->nodeValue;
+            $owner->setProperty($this->nodeName, $this->nodeValue);
         } elseif ($classInterface === BpmnDocument::IS_ARRAY) {
             $bpmnElement = [];
             foreach($this->attributes as $attribute) {
@@ -86,7 +91,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 continue;
             }
             $bpmn = $node->getBpmnElementInstance($owner);
-            if ($bpmn && is_object($bpmn)) {
+            if ($bpmn) {
                 $this->setBpmnPropertyTo($bpmn, $node, $mapProperties, $owner);
             }
         }

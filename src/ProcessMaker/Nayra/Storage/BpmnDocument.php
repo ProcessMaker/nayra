@@ -112,10 +112,11 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    ScriptTaskInterface::BPMN_PROPERTY_SCRIPT => ['1', [BpmnDocument::BPMN_MODEL, ScriptTaskInterface::BPMN_PROPERTY_SCRIPT]],
                 ]
             ],
-            FlowNodeInterface::BPMN_PROPERTY_OUTGOING     => [self::IS_PROPERTY, []],
-            FlowNodeInterface::BPMN_PROPERTY_INCOMING     => [self::IS_PROPERTY, []],
+            FlowNodeInterface::BPMN_PROPERTY_OUTGOING     => [self::IS_REFERENCE, []],
+            FlowNodeInterface::BPMN_PROPERTY_INCOMING     => [self::IS_REFERENCE, []],
             'sequenceFlow' => [
                 FlowInterface::class,
                 [
@@ -161,7 +162,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
                 ]
             ],
-            'script' => self::SKIP_ELEMENT,
+            'script' => [self::TEXT_PROPERTY, []],
             'collaboration' => [
                 CollaborationInterface::class,
                 [
@@ -196,14 +197,14 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     InputSetInterface::BPMN_PROPERTY_DATA_INPUTS => ['n', [BpmnDocument::BPMN_MODEL, InputSetInterface::BPMN_PROPERTY_DATA_INPUT_REFS]],
                 ]
             ],
-            InputSetInterface::BPMN_PROPERTY_DATA_INPUT_REFS => [self::IS_PROPERTY, []],
+            InputSetInterface::BPMN_PROPERTY_DATA_INPUT_REFS => [self::IS_REFERENCE, []],
             'outputSet' => [
                 OutputSetInterface::class,
                 [
                     OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUTS => ['n', [BpmnDocument::BPMN_MODEL, OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUT_REFS]],
                 ]
             ],
-            OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUT_REFS => [self::IS_PROPERTY, []],
+            OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUT_REFS => [self::IS_REFERENCE, []],
             'terminateEventDefinition' => [
                 TerminateEventDefinitionInterface::class,
                 [
@@ -267,7 +268,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => ['n', [BpmnDocument::BPMN_MODEL, LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET]],
                 ]
             ],
-            LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF => [self::IS_PROPERTY, []],
+            LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF => [self::IS_REFERENCE, []],
             LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => [
                 LaneSetInterface::class,
                 [
@@ -288,9 +289,9 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     OperationInterface::BPMN_PROPERTY_ERRORS => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_ERROR_REF]],
                 ]
             ],
-            OperationInterface::BPMN_PROPERTY_IN_MESSAGE_REF => [self::IS_PROPERTY, []],
-            OperationInterface::BPMN_PROPERTY_OUT_MESSAGE_REF => [self::IS_PROPERTY, []],
-            OperationInterface::BPMN_PROPERTY_ERROR_REF => [self::IS_PROPERTY, []],
+            OperationInterface::BPMN_PROPERTY_IN_MESSAGE_REF => [self::IS_REFERENCE, []],
+            OperationInterface::BPMN_PROPERTY_OUT_MESSAGE_REF => [self::IS_REFERENCE, []],
+            OperationInterface::BPMN_PROPERTY_ERROR_REF => [self::IS_REFERENCE, []],
             'messageEventDefinition' => [
                 MessageEventDefinitionInterface::class,
                 [
@@ -298,7 +299,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     MessageEventDefinitionInterface::BPMN_PROPERTY_MESSAGE => ['1', [BpmnDocument::BPMN_MODEL, MessageEventDefinitionInterface::BPMN_PROPERTY_MESSAGE_REF]],
                 ]
             ],
-            MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION_REF => [self::IS_PROPERTY, []],
+            MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION_REF => [self::IS_REFERENCE, []],
             'message' => [
                 MessageInterface::class,
                 [
@@ -360,7 +361,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
 
     const DOM_ELEMENT_BODY = [null, '#text'];
     const SKIP_ELEMENT = null;
-    const IS_PROPERTY = 'isProperty';
+    const IS_REFERENCE = 'isReference';
+    const TEXT_PROPERTY = 'textProperty';
     const IS_ARRAY = 'isArray';
     const PARENT_NODE = [1, '#parent'];
     const IS_BOOLEAN = [1, '#boolean'];
