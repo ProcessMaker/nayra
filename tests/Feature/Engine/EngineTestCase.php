@@ -3,13 +3,11 @@ namespace Tests\Feature\Engine;
 
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
-use ProcessMaker\Nayra\Bpmn\Models\IntermediateCatchEvent;
-use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -69,7 +67,7 @@ class EngineTestCase extends TestCase
         IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
         //IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
         //IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
-        IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+        IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
         IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
         IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
         IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
@@ -197,7 +195,7 @@ class EngineTestCase extends TestCase
     /**
      * Asserts that for every persisted call a repository persist method was called
      *
-     * @param $expectedCalls
+     * @param int $expectedCalls
      */
     protected function assertRepositoryCalls ($expectedCalls) {
         $count = 0;

@@ -2,8 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Repositories;
 
-use ProcessMaker\Nayra\Bpmn\Models\Token;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -47,4 +46,14 @@ interface ExecutionInstanceRepositoryInterface
      * @return mixed
      */
     public function persistInstanceCompleted(ExecutionInstanceInterface $instance);
+
+    /**
+     * Persists collaboration between two instances.
+     *
+     * @param ExecutionInstanceInterface $target Target instance
+     * @param ParticipantInterface $targetParticipant Participant related to the target instance
+     * @param ExecutionInstanceInterface $source Source instance
+     * @param ParticipantInterface $sourceParticipant
+     */
+    public function persistInstanceCollaboration(ExecutionInstanceInterface $target, ParticipantInterface $targetParticipant, ExecutionInstanceInterface $source, ParticipantInterface $sourceParticipant);
 }

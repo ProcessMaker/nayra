@@ -162,12 +162,9 @@ class Collaboration implements CollaborationInterface
         foreach ($subscriber['node']->getEventDefinitions() as $subscriberPayload) {
             $match = !$isBroadcast && $subscriber['key'] === $message->getId()
                 || ($isBroadcast && $subscriberPayload instanceof SignalEventDefinition);
-            if (!$match) {
-                continue;
-            }
-            if ($subscriber['node'] instanceof StartEventInterface) {
+            if ($match && $subscriber['node'] instanceof StartEventInterface) {
                 $this->startEventReceiveMessage($subscriber['node'], $message, $token);
-            } else {
+            } elseif ($match) {
                 $this->catchEventReceiveMessage($subscriber['node'], $message, $token);
             }
         }
@@ -187,7 +184,9 @@ class Collaboration implements CollaborationInterface
         $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
         $instanceRepository = $process->getRepository()->createExecutionInstanceRepository();
         $participant = $this->getParticipantFor($process);
-        $instanceRepository->persistInstanceCollaboration($instance, $participant, $token->getInstance());
+        $sourceInstance = $token->getInstance();
+        $sourceParticipant = $this->getParticipantFor($sourceInstance->getProcess());
+        $instanceRepository->persistInstanceCollaboration($instance, $participant, $sourceInstance, $sourceParticipant);
         $startEvent->execute($message, $instance, $token);
     }
 
@@ -209,15 +208,19 @@ class Collaboration implements CollaborationInterface
      * Get the participant of a specific $process.
      *
      * @param ProcessInterface $process
+     *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface
      */
     private function getParticipantFor(ProcessInterface $process)
     {
+        $participantFor = null;
         foreach ($this->getParticipants() as $participant) {
             if ($participant->getProcess()->getId() === $process->getId()) {
-                return $participant;
+                $participantFor = $participant;
+                break;
             }
         }
+        return $participantFor;
     }
 
     /**

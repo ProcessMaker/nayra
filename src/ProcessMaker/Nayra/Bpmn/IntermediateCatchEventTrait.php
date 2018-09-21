@@ -94,7 +94,7 @@ trait IntermediateCatchEventTrait
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistCatchEventMessageArrives($this, $token);
-            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH, $this, $token);
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH, $this, $token);
         });
         $this->triggerPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
             $this->getRepository()
@@ -143,12 +143,10 @@ trait IntermediateCatchEventTrait
      */
     public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
     {
-        if ($instance === null) {
-            return $this;
+        if ($instance !== null) {
+            // with a new token in the trigger place, the event catch element will be fired
+            $this->triggerPlace->addNewToken($instance);
         }
-
-        // with a new token in the trigger place, the event catch element will be fired
-        $this->triggerPlace->addNewToken($instance);
         return $this;
     }
 
