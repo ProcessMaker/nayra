@@ -278,6 +278,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion:
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
         ]);
 
@@ -301,12 +302,12 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion: The throwing process must advances to activity B an the catching process to activity D
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //events triggered when the catching event runs
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
@@ -388,6 +389,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion: the second flows is stoppen in the catching event
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
         ]);
 
@@ -411,12 +413,12 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion: The throwing process must advances to activity B an the catching process to activity D
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //events triggered when the catching event runs
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,

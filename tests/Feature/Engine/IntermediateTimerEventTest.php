@@ -93,6 +93,7 @@ class IntermediateTimerEventTest extends EngineTestCase
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
             JobManagerInterface::EVENT_SCHEDULE_DURATION,
         ]);
@@ -103,9 +104,9 @@ class IntermediateTimerEventTest extends EngineTestCase
 
         //Assertion: the process should continue to the next task
         $this->assertEvents([
-            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
@@ -152,6 +153,7 @@ class IntermediateTimerEventTest extends EngineTestCase
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
             JobManagerInterface::EVENT_SCHEDULE_CYCLE,
         ]);
@@ -162,9 +164,9 @@ class IntermediateTimerEventTest extends EngineTestCase
 
         //Assertion: the process should continue to the next task
         $this->assertEvents([
-            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
@@ -211,6 +213,7 @@ class IntermediateTimerEventTest extends EngineTestCase
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
             JobManagerInterface::EVENT_SCHEDULE_DATE,
         ]);
@@ -221,9 +224,9 @@ class IntermediateTimerEventTest extends EngineTestCase
 
         //Assertion: the process should continue to the next task
         $this->assertEvents([
-            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,

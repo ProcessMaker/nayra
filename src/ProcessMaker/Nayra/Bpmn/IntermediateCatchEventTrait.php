@@ -6,7 +6,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
@@ -39,6 +38,7 @@ trait IntermediateCatchEventTrait
      */
     private $transition;
 
+    private $activeState;
     private $triggerPlace;
 
     /**
@@ -49,16 +49,36 @@ trait IntermediateCatchEventTrait
     public function buildTransitions(RepositoryInterface $factory)
     {
         $this->setRepository($factory);
-        //$this->transition=new ExclusiveGatewayTransition($this);
+        $this->activeState = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_ACTIVE);
+        $this->triggerPlace = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_EVENT_CATCH);
         $this->transition=new IntermediateCatchEventTransition($this);
+        $this->activeState->connectTo($this->transition);
+        $this->triggerPlace->connectTo($this->transition);
+
+        $this->activeState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
+
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistCatchEventTokenArrives($this, $token);
+
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
+            $this->notifyTimerEvents($this->getEventDefinitions(), $token);
+        });
+
+        $this->activeState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistCatchEventTokenConsumed($this, $token);
+
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED, $this, $token);
+        });
 
         $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function(TransitionInterface $transition, Collection $consumedTokens)  {
 
-            foreach ($consumedTokens as $token) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistCatchEventTokenPassed($this, $token);
-            }
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistCatchEventTokenPassed($this, $consumedTokens);
 
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED, $this);
         });
@@ -70,11 +90,17 @@ trait IntermediateCatchEventTrait
             }
         );
 
-        $this->triggerPlace = new  State($this, GatewayInterface::TOKEN_STATE_INCOMING);
-        $this->triggerPlace->connectTo($this->transition);
-
         $this->triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH, $this, $token);
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistCatchEventMessageArrives($this, $token);
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH, $this, $token);
+        });
+        $this->triggerPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistCatchEventMessageConsumed($this, $token);
+            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED, $this, $token);
         });
     }
 
@@ -85,28 +111,12 @@ trait IntermediateCatchEventTrait
      */
     public function getInputPlace()
     {
-        $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
+        $incomingPlace = new State($this);
 
-        $incomingPlace->connectTo($this->transition);
+        $transition = new Transition($this, false);
+        $incomingPlace->connectTo($transition);
+        $transition->connectTo($this->activeState);
 
-        $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-
-            $this->getRepository()
-                ->getTokenRepository()
-                ->persistCatchEventTokenArrives($this, $token);
-
-            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
-            $this->notifyTimerEvents($this->getEventDefinitions(), $token);
-        });
-
-        $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-
-            $this->getRepository()
-                ->getTokenRepository()
-                ->persistCatchEventTokenConsumed($this, $token);
-
-            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED, $this, $token);
-        });
         return $incomingPlace;
     }
 
@@ -133,12 +143,10 @@ trait IntermediateCatchEventTrait
      */
     public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
     {
-        if ($instance === null) {
-            return $this;
+        if ($instance !== null) {
+            // with a new token in the trigger place, the event catch element will be fired
+            $this->triggerPlace->addNewToken($instance);
         }
-
-        // with a new token in the trigger place, the event catch element will be fired
-        $this->triggerPlace->addNewToken($instance);
         return $this;
     }
 
@@ -171,4 +179,3 @@ trait IntermediateCatchEventTrait
         return $this;
     }
 }
-

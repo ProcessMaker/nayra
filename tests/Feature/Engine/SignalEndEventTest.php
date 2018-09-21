@@ -166,6 +166,7 @@ class SignalEndEventTest extends EngineTestCase
 
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES
             ]);
 
@@ -194,9 +195,9 @@ class SignalEndEventTest extends EngineTestCase
             SignalEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
 
             // the Process A catching message is activated
-            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
