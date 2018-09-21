@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Test\Models;
 
+use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
@@ -234,11 +235,33 @@ class TokenRepository implements TokenRepositoryInterface
      * Persists instance and token data when a token is passed in a catch event
      *
      * @param CatchEventInterface $intermediateCatchEvent
-     * @param TokenInterface $token
+     * @param Collection $consumedTokens
      *
      * @return mixed
      */
-    public function persistCatchEventTokenPassed(CatchEventInterface $intermediateCatchEvent, TokenInterface $token)
+    public function persistCatchEventTokenPassed(CatchEventInterface $intermediateCatchEvent, Collection $consumedTokens)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a message arrives to a catch event
+     * 
+     * @param CatchEventInterface $intermediateCatchEvent
+     * @param TokenInterface $token
+     */
+    public function persistCatchEventMessageArrives(CatchEventInterface $intermediateCatchEvent, TokenInterface $token)
+    {
+        $this->persistCalls++;
+    }
+
+    /**
+     * Persists instance and token data when a message is consumed in a catch event
+     * 
+     * @param CatchEventInterface $intermediateCatchEvent
+     * @param TokenInterface $token
+     */
+    public function persistCatchEventMessageConsumed(CatchEventInterface $intermediateCatchEvent, TokenInterface $token)
     {
         $this->persistCalls++;
     }

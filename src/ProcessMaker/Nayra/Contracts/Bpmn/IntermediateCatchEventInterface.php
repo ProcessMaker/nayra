@@ -17,5 +17,6 @@ interface IntermediateCatchEventInterface extends CatchEventInterface
     const EVENT_CATCH_TOKEN_PASSED = 'CatchEventTokenPassed';
     const EVENT_CATCH_TOKEN_CONSUMED = 'CatchEventTokenConsumed';
     const EVENT_CATCH_TOKEN_CATCH = 'CatchEventTokenCatch';
+    const EVENT_CATCH_MESSAGE_CONSUMED = 'CatchEventMessageConsumed';
 
 }

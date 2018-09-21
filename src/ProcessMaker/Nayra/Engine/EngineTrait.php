@@ -122,6 +122,7 @@ trait EngineTrait
         }
         
         $executionInstance->linkToEngine($this);
+        $executionInstance->getProcess()->addInstance($executionInstance);
         $this->executionInstances[] = $executionInstance;
 
         return $executionInstance;

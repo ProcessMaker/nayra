@@ -12,6 +12,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CorrelationKeyInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
@@ -142,21 +144,78 @@ class Collaboration implements CollaborationInterface
      */
     public function send(EventDefinitionInterface $message, TokenInterface $token)
     {
-        $isBroadcast = is_a($message, SignalEventDefinition::class);
         foreach ($this->subscribers as $subscriber) {
-            $subscriberPayload = $subscriber['node']->getEventDefinitions()->item(0);
-            foreach ($this->getInstancesFor($subscriber['node'], $message, $token) as $instance) {
-                if (!$isBroadcast && $subscriber['key'] === $message->getId()
-                     || ($isBroadcast && is_a($subscriberPayload, SignalEventDefinition::class))
-                ) {
-                    $subscriber['node']->execute($message, $instance);
-                }
+            $this->subscriberReceiveEvent($message, $token, $subscriber);
+        }
+    }
+
+    /**
+     * A subscriber receive a message within a collaboration.
+     *
+     * @param EventDefinitionInterface $message
+     * @param TokenInterface $token
+     * @param array $subscriber
+     */
+    private function subscriberReceiveEvent(EventDefinitionInterface $message, TokenInterface $token, array $subscriber)
+    {
+        $isBroadcast = $message instanceof SignalEventDefinition;
+        foreach ($subscriber['node']->getEventDefinitions() as $subscriberPayload) {
+            $match = !$isBroadcast && $subscriber['key'] === $message->getId()
+                || ($isBroadcast && $subscriberPayload instanceof SignalEventDefinition);
+            if (!$match) {
+                continue;
             }
-            //for start events that doesn't have instances
-            if (!$isBroadcast && $subscriber['key'] === $message->getId()
-                || ($isBroadcast && is_a($subscriberPayload, SignalEventDefinition::class))
-            ) {
-                $subscriber['node']->execute($message, null);
+            if ($subscriber['node'] instanceof StartEventInterface) {
+                $this->startEventReceiveMessage($subscriber['node'], $message, $token);
+            } else {
+                $this->catchEventReceiveMessage($subscriber['node'], $message, $token);
+            }
+        }
+    }
+
+    /**
+     * A Start Event receive a message within a collaboration.
+     *
+     * @param StartEventInterface $startEvent
+     * @param EventDefinitionInterface $message
+     * @param TokenInterface $token
+     */
+    private function startEventReceiveMessage(StartEventInterface $startEvent, EventDefinitionInterface $message, TokenInterface $token)
+    {
+        $process = $startEvent->getOwnerProcess();
+        $dataStorage = $process->getRepository()->createDataStore();
+        $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
+        $instanceRepository = $process->getRepository()->createExecutionInstanceRepository();
+        $participant = $this->getParticipantFor($process);
+        $instanceRepository->persistInstanceCollaboration($instance, $participant, $token->getInstance());
+        $startEvent->execute($message, $instance, $token);
+    }
+
+    /**
+     * A catch event receive a message within a collaboration.
+     *
+     * @param CatchEventInterface $catchEvent
+     * @param EventDefinitionInterface $message
+     * @param TokenInterface $token
+     */
+    private function catchEventReceiveMessage(CatchEventInterface $catchEvent, EventDefinitionInterface $message, TokenInterface $token)
+    {
+        foreach ($this->getInstancesFor($catchEvent, $message, $token) as $instance) {
+            $catchEvent->execute($message, $instance, $token);
+        }
+    }
+
+    /**
+     * Get the participant of a specific $process.
+     *
+     * @param ProcessInterface $process
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface
+     */
+    private function getParticipantFor(ProcessInterface $process)
+    {
+        foreach ($this->getParticipants() as $participant) {
+            if ($participant->getProcess()->getId() === $process->getId()) {
+                return $participant;
             }
         }
     }
