@@ -65,4 +65,18 @@ interface BpmnDocumentInterface extends StorageInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface
      */
     public function getElementInstanceById($id);
+
+    /**
+     * Validate document with BPMN schemas.
+     *
+     * @param string $schema
+     */
+    public function validateBPMNSchema($schema);
+
+    /**
+     * Get BPMN validation errors.
+     *
+     * @return array
+     */
+    public function getValidationErrors();
 }

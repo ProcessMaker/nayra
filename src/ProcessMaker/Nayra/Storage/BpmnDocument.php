@@ -73,6 +73,13 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      */
     private $factory;
 
+    /**
+     * BPMNValidator errors.
+     *
+     * @var array $validationErrors
+     */
+    private $validationErrors=[];
+
     private $mapping = [
         'http://www.omg.org/spec/BPMN/20100524/MODEL' => [
             'process'      => [
@@ -963,5 +970,28 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     {
         $this->engine = $engine;
         return $this;
+    }
+
+    /**
+     * Validate document with BPMN schemas.
+     *
+     * @param string $schema
+     */
+    public function validateBPMNSchema($schema)
+    {
+        $validator = new BPMNValidator($this);
+        $validation = $validator->validate($schema);
+        $this->validationErrors = $validator->getErrors();
+        return $validation;
+    }
+
+    /**
+     * Get BPMN validation errors.
+     *
+     * @return array
+     */
+    public function getValidationErrors()
+    {
+        return $this->validationErrors;
     }
 }
