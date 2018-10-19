@@ -6,7 +6,7 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Exception;
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Bpmn\FormalExpressionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Test\Models\TestBetsy;
 
@@ -17,7 +17,7 @@ use ProcessMaker\Test\Models\TestBetsy;
 class FormalExpression implements FormalExpressionInterface
 {
 
-    use BaseTrait;
+    use FormalExpressionTrait;
 
     /**
      * Get the body of the Expression.
@@ -59,11 +59,11 @@ class FormalExpression implements FormalExpressionInterface
     public function __invoke($data)
     {
         $expression = $this->getProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY);
-        if ($this->isDateExpression() || $this->isCycleExpression() || $this->isDurationExpression()) {
-            return $expression;
-        }
         $test = new TestBetsy($data, $expression);
-        return $test->call();
+        return $this->getDateExpression()
+            ?: $this->getCycleExpression()
+            ?: $this->getDurationExpression()
+            ?: $test->call();
     }
 
     /**
@@ -91,11 +91,11 @@ class FormalExpression implements FormalExpressionInterface
     {
         $expression = $this->getProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY);
         try {
-            $interval = new DatePeriod($expression);
+            $cycle = new DatePeriod($expression);
         } catch (Exception $e) {
             return false;
         }
-        return $interval !== false;
+        return $cycle !== false;
     }
 
     /**

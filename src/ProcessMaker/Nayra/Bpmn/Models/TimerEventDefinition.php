@@ -11,6 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
+
 /**
  * MessageEventDefinition class
  *
@@ -52,7 +53,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      *
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return boolean
      */
@@ -66,7 +67,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      *
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      */
     public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
@@ -74,11 +75,12 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
         $this->scheduleTimeDate($engine, $element, $token);
         $this->scheduleTimeCycle($engine, $element, $token);
     }
+
     /**
      * Get the data store.
      *
      * @param EngineInterface $engine
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface
      */
@@ -87,18 +89,39 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
         $dataStore = $token ? $token->getInstance()->getDataStore() : $engine->getDataStore();
         return $dataStore ? $dataStore->getData() : [];
     }
+
+    /**
+     * Evaluates a timer expression.
+     *
+     * @param callable $expression
+     * @param array $data
+     *
+     * @return \DateTime|\DatePeriod|\DateInterval
+     */
+    private function evaluateTimer(callable $expression, array $data)
+    {
+        $value = $expression($data);
+        if (is_string($value)) {
+            $formal = $this->getRepository()->createFormalExpression();
+            $formal->setProperty('body', $value);
+            return $formal($data);
+        }
+        return $value;
+    }
+
     /**
      * Schedule as timeDate.
      *
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      */
     private function scheduleTimeDate(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
         $expression = $this->getTimeDate();
         if ($expression) {
-            $date = $expression($this->getDataFrom($engine, $token));
+            $date = $this->evaluateTimer($expression, $this->getDataFrom($engine, $token));
+            $engine->getJobManager()->scheduleDate($date, $this, $element, $token);
             $engine->getDispatcher()->dispatch(
                 JobManagerInterface::EVENT_SCHEDULE_DATE,
                 $date,
@@ -108,18 +131,20 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
             );
         }
     }
+
     /**
      * Schedule as timeDate.
      *
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      */
     private function scheduleTimeCycle(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
         $expression = $this->getTimeCycle();
         if ($expression) {
-            $cycle = $expression($this->getDataFrom($engine, $token));
+            $cycle = $this->evaluateTimer($expression, $this->getDataFrom($engine, $token));
+            $engine->getJobManager()->scheduleCycle($cycle, $this, $element, $token);
             $engine->getDispatcher()->dispatch(
                 JobManagerInterface::EVENT_SCHEDULE_CYCLE,
                 $cycle,
@@ -129,18 +154,20 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
             );
         }
     }
+
     /**
      * Schedule as timeDuration.
      *
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      */
     private function scheduleTimeDuration(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
         $expression = $this->getTimeDuration();
         if ($expression) {
-            $duration = $expression($this->getDataFrom($engine, $token));
+            $duration = $this->evaluateTimer($expression, $this->getDataFrom($engine, $token));
+            $engine->getJobManager()->scheduleDuration($duration, $this, $element, $token);
             $engine->getDispatcher()->dispatch(
                 JobManagerInterface::EVENT_SCHEDULE_DURATION,
                 $duration,
