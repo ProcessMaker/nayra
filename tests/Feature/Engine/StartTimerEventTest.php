@@ -5,10 +5,7 @@ namespace Tests\Feature\Engine;
 use DateInterval;
 use DatePeriod;
 use DateTime;
-use Exception;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
-use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
  * Start Timer Event tests
@@ -35,7 +32,7 @@ class StartTimerEventTest extends EngineTestCase
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
-        $this->assertScheduledDateTimer('2018-05-01T14:30:00', $startEvent);
+        $this->assertScheduledDateTimer(new DateTime('2018-05-01T14:30:00'), $startEvent);
 
         //Force to dispatch the requersted job
         $this->dispatchJob();
@@ -60,7 +57,7 @@ class StartTimerEventTest extends EngineTestCase
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
-        $this->assertScheduledCyclicTimer('R4/2018-05-01T00:00:00Z/PT1M', $startEvent);
+        $this->assertScheduledCyclicTimer(new DatePeriod('R4/2018-05-01T00:00:00Z/PT1M'), $startEvent);
 
         //Force to dispatch the requersted job
         $this->dispatchJob();
@@ -97,7 +94,7 @@ class StartTimerEventTest extends EngineTestCase
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event at the date time calculated by the expression
-        $this->assertScheduledDateTimer($calculatedDate, $startEvent);
+        $this->assertScheduledDateTimer(new DateTime($calculatedDate), $startEvent);
 
         //Assertion: The calculated value should conform to the ISO-8601 format for date and time representations.
         $value = $this->jobs[0]['timer'];
@@ -137,7 +134,7 @@ class StartTimerEventTest extends EngineTestCase
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
-        $this->assertScheduledCyclicTimer($calculatedCycle, $startEvent);
+        $this->assertScheduledCyclicTimer(new \DatePeriod($calculatedCycle), $startEvent);
 
         //Assertion: The calculated value should conform to the ISO-8601 format for date and time representations.
         $value = $this->jobs[0]['timer'];
@@ -155,46 +152,31 @@ class StartTimerEventTest extends EngineTestCase
     /**
      * Validate if the string has a valid ISO8601 date time representation
      *
-     * @param string $expression
+     * @param mixed $date
      */
-    private function assertValidDate($expression)
+    private function assertValidDate($date)
     {
-        try {
-            $date = new DateTime($expression);
-        } catch (Exception $e) {
-            $date = false;
-        }
-        $this->assertTrue($date !== false, "Failed asserting that $expression is a valid date timer");
+        $this->assertTrue($date instanceof DateTime, "Failed asserting that ".json_encode($date)." is a valid date timer");
 
     }
 
     /**
      * Validate if the string has a valid ISO8601 cycle representation
      *
-     * @param string $expression
+     * @param mixed $cycle
      */
-    private function assertValidCycle($expression)
+    private function assertValidCycle($cycle)
     {
-        try {
-            $cycle = new DatePeriod($expression);
-        } catch (Exception $e) {
-            $cycle = false;
-        }
-        $this->assertTrue($cycle !== false, "Failed asserting that $expression is a valid cyclic timer");
+        $this->assertTrue($cycle instanceof DatePeriod, "Failed asserting that ".json_encode($cycle)." is a valid cyclic timer");
     }
 
     /**
      * Validate if the string has a valid ISO8601 duration representation
      *
-     * @param string $expression
+     * @param mixed $duration
      */
-    private function assertValidDuration($expression)
+    private function assertValidDuration($duration)
     {
-        try {
-            $duration = new DateInterval($expression);
-        } catch (Exception $e) {
-            $duration = false;
-        }
-        $this->assertTrue($duration !== false, "Failed asserting that $expression is a valid duration timer");
+        $this->assertTrue($duration instanceof DateInterval, "Failed asserting that ".json_encode($duration)." is a valid duration timer");
     }
 }

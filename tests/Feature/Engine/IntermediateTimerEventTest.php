@@ -248,11 +248,12 @@ class IntermediateTimerEventTest extends EngineTestCase
         $formalExpression->setId('formalExpression');
 
         $timerEventDefinition = $this->repository->createTimerEventDefinition();
+        $timerEventDefinition->setRepository($this->repository);
 
         $timerEventDefinition->setId("TimerEventDefinition");
         switch ($type) {
             case "duration":
-                $timerEventDefinition->setTimeDuration(function ($data) {return '1H';});
+                $timerEventDefinition->setTimeDuration(function ($data) {return 'PT1H';});
                 break;
             case "cycle":
                 $timerEventDefinition->setTimeCycle(function ($data) { return 'R4/2018-05-01T00:00:00Z/PT1M';});

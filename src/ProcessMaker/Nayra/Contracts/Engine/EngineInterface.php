@@ -5,8 +5,8 @@ namespace ProcessMaker\Nayra\Contracts\Engine;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
@@ -120,4 +120,20 @@ interface EngineInterface
      * @param StorageInterface $repository
      */
     public function setStorage(StorageInterface $repository);
+
+    /**
+     * Get the engine job manager for timer tasks and events.
+     *
+     * @return JobManagerInterface
+     */
+    public function getJobManager();
+
+    /**
+     * Set the engine job manager for timer tasks and events.
+     *
+     * @param JobManagerInterface|null $jobManager
+     *
+     * @return $this
+     */
+    public function setJobManager(JobManagerInterface $jobManager = null);
 }

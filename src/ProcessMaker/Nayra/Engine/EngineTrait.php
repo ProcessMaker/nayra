@@ -8,6 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
@@ -41,6 +42,8 @@ trait EngineTrait
     private $dataStore;
 
     private $storage;
+
+    protected $jobManager;
 
     /**
      * Execute all the process transitions.
@@ -213,5 +216,28 @@ trait EngineTrait
     public function setStorage(StorageInterface $storage)
     {
         $this->storage = $storage;
+    }
+
+    /**
+     * Get the engine job manager for timer tasks and events.
+     *
+     * @return JobManagerInterface
+     */
+    public function getJobManager()
+    {
+        return $this->jobManager;
+    }
+
+    /**
+     * Set the engine job manager for timer tasks and events.
+     *
+     * @param JobManagerInterface|null $jobManager
+     *
+     * @return $this
+     */
+    public function setJobManager(JobManagerInterface $jobManager = null)
+    {
+        $this->jobManager = $jobManager;
+        return $this;
     }
 }
