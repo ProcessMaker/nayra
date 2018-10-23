@@ -48,6 +48,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
+use ProcessMaker\Nayra\Exceptions\ElementNotFoundException;
 
 /**
  * BPMN file
@@ -478,8 +479,29 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     public function getElementInstanceById($id)
     {
         $this->bpmnElements[$id] = isset($this->bpmnElements[$id])
-            ? $this->bpmnElements[$id] : $this->findElementById($id)->getBpmnElementInstance();
+            ? $this->bpmnElements[$id]
+            : (
+                ($element = $this->findElementById($id))
+                ? $element->getBpmnElementInstance()
+                : null
+            );
+        if ($this->bpmnElements[$id] === null) {
+            throw new ElementNotFoundException($id);
+        }
         return $this->bpmnElements[$id];
+    }
+
+    /**
+     * Return true if the element instance exists in the Process.
+     *
+     * @param string $id
+     *
+     * @return bool
+     */
+    public function hasElementInstance($id)
+    {
+        $element = $this->findElementById($id);
+        return !empty($element) && !empty($element->getBpmnElementInstance());
     }
 
     /**

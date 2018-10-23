@@ -37,6 +37,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
+use ProcessMaker\Nayra\Exceptions\ElementNotFoundException;
 use ProcessMaker\Nayra\Exceptions\ElementNotImplementedException;
 use ProcessMaker\Nayra\Exceptions\NamespaceNotImplementedException;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
@@ -164,7 +165,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
      * Test inclusive gateway loaded from BPMN file.
      *
      */
-    public function t1estInclusiveGatewayWithDefault()
+    public function testInclusiveGatewayWithDefault()
     {
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
@@ -531,7 +532,53 @@ class LoadFromBPMNFileTest extends EngineTestCase
                 ]
             ]);
         $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
+        
+        //Try to get custom element
+        //Assertion: An ElementNotImplementedException expected
         $this->expectException(ElementNotImplementedException::class);
         $bpmnRepository->getActivity('_2');
+    }
+
+    /**
+     * Test to get a missing BPMN element.
+     *
+     */
+    public function testGetMissingElement()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadBPMNElements.bpmn');
+
+        //Try to get an non existing element
+        //Assertion: An ElementNotImplementedException expected
+        $this->expectException(ElementNotFoundException::class);
+        $bpmnRepository->getCollaboration('NON_EXIXTING_ELEMENT');
+    }
+
+    /**
+     * Test if an BPMN element exists.
+     *
+     */
+    public function testBPMNElementExists()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadBPMNElements.bpmn');
+
+        //Test an existing element
+        $exists = $bpmnRepository->hasElementInstance('PROCESS_1');
+
+        //Assertion: hasElementInstance('PROCESS_1') must return true
+        $this->assertTrue($exists);
+
+        //Test an existing element
+        $doesNotExists = $bpmnRepository->hasElementInstance('DOES_NOT_EXISTS');
+
+        //Assertion: hasElementInstance('DOES_NOT_EXISTS') must return false
+        $this->assertFalse($doesNotExists);
     }
 }

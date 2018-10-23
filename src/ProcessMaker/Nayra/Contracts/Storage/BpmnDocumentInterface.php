@@ -67,6 +67,14 @@ interface BpmnDocumentInterface extends StorageInterface
     public function getElementInstanceById($id);
 
     /**
+     * Return true if the element instance exists in the Process.
+     *
+     * @param string $id
+     *
+     * @return bool
+     */
+    public function hasElementInstance($id);
+    /**
      * Validate document with BPMN schemas.
      *
      * @param string $schema
