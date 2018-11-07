@@ -30,15 +30,14 @@ use ProcessMaker\Nayra\Bpmn\Models\ParallelGateway;
 use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Bpmn\Models\Process;
 use ProcessMaker\Nayra\Bpmn\Models\ScriptTask;
+use ProcessMaker\Nayra\Bpmn\Models\ServiceTask;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
-use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Test\Models\InstanceRepository;
 use ProcessMaker\Test\Models\TokenRepository;
 
 /**
@@ -339,6 +338,16 @@ trait RepositoryTrait
     public function createScriptTask()
     {
         return new ScriptTask();
+    }
+
+    /**
+     * Create instance of ServiceTask.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ServiceTaskInterface
+     */
+    public function createServiceTask()
+    {
+        return new ServiceTask();
     }
 
     /**
