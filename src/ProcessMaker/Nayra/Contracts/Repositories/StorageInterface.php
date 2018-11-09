@@ -393,6 +393,15 @@ interface StorageInterface
     public function getScriptTask($id);
 
     /**
+     * Get ServiceTask instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ServiceTaskInterface
+     */
+    public function getServiceTask($id);
+
+    /**
      * Get SignalEventDefinition instance by id.
      *
      * @param string $id

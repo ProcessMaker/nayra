@@ -40,6 +40,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ServiceInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ServiceTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
@@ -121,6 +122,13 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     ScriptTaskInterface::BPMN_PROPERTY_SCRIPT => ['1', [BpmnDocument::BPMN_MODEL, ScriptTaskInterface::BPMN_PROPERTY_SCRIPT]],
+                ]
+            ],
+            'serviceTask'   => [
+                ServiceTaskInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             FlowNodeInterface::BPMN_PROPERTY_OUTGOING     => [self::IS_REFERENCE, []],
@@ -896,6 +904,18 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface
      */
     public function getScriptTask($id)
+    {
+        return $this->getElementInstanceById($id);
+    }
+
+    /**
+     * Get ServiceTask instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ServiceTaskInterface
+     */
+    public function getServiceTask($id)
     {
         return $this->getElementInstanceById($id);
     }
