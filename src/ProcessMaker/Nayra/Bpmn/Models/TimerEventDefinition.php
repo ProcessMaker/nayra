@@ -207,5 +207,19 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         $this->setProperty(self::BPMN_PROPERTY_TIME_DURATION, $timeExpression);
     }
-}
 
+    /**
+     * Implement the event definition behavior when an event is triggered.
+     *
+     * @param EventDefinitionInterface $event
+     * @param FlowNodeInterface $target
+     * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
+     *
+     * @return $this
+     */
+    public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
+    {
+        return $this;
+    }
+}

@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
+
 /**
  * ErrorEventDefinition interface.
  *
@@ -28,4 +30,13 @@ interface ErrorEventDefinitionInterface extends EventDefinitionInterface
      * @return ErrorInterface
      */
     public function getPayload();
+
+    /**
+     * Set the error of the event definition.
+     *
+     * @param ErrorInterface $error
+     *
+     * @return $this
+     */
+    public function setError(ErrorInterface $error);
 }

@@ -23,7 +23,7 @@ interface EventDefinitionInterface extends EntityInterface
     /**
      * Sets the element id
      *
-     * @param $value
+     * @param mixed $value
      */
     public function setId($value);
 
@@ -32,9 +32,21 @@ interface EventDefinitionInterface extends EntityInterface
      *
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return boolean
      */
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null);
+
+    /**
+     * Implement the event definition behavior when an event is triggered.
+     *
+     * @param EventDefinitionInterface $event
+     * @param FlowNodeInterface $target
+     * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
+     *
+     * @return $this
+     */
+    public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null);
 }

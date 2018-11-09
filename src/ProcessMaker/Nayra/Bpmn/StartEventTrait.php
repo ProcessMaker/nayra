@@ -3,10 +3,10 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -93,10 +93,11 @@ trait StartEventTrait
      *
      * @param EventDefinitionInterface $event
      * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
      *
      * @return $this
      */
-    public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null)
+    public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         $start = $this->getEventDefinitions()->count() === 0;
         $index = -1;
@@ -111,6 +112,10 @@ trait StartEventTrait
                 $process = $this->getOwnerProcess();
                 $dataStorage = $process->getRepository()->createDataStore();
                 $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
+            }
+            //Execute the behavior of the EventDefinition
+            foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
+                $eventDefinition->execute($event, $this, $instance, $token);
             }
             $this->start();
             // with a new token in the trigger place, the event catch element will be fired
