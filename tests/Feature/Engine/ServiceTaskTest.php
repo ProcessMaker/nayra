@@ -11,7 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ServiceTaskInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
- * Tests for the ScriptTask element
+ * Tests for the ServiceTask element
  *
  */
 class ServiceTaskTest extends EngineTestCase
@@ -21,7 +21,7 @@ class ServiceTaskTest extends EngineTestCase
     private static $serviceCalls = 0;
 
     /**
-     * Tests the a process with the sequence start->Task1->scriptTask1->End executes correctly
+     * Tests the a process with the sequence start->serviceTask->End executes correctly
      */
     public function testProcessWithServiceTask()
     {
@@ -76,7 +76,9 @@ class ServiceTaskTest extends EngineTestCase
     }
 
     /**
-     * Tests the a process with the sequence start->Task1->scriptTask1->End executes correctly
+     * Tests a process with the sequence start->serviceTask->End when fails
+     * the task goes to a failure state.
+     *
      */
     public function testProcessWithServiceTaskFailure()
     {

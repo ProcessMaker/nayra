@@ -21,7 +21,7 @@ class ServiceTask implements ServiceTaskInterface
     use ActivityTrait;
 
     /**
-     * Configure the activity to evaluate script tasks
+     * Initialize the service task
      *
      */
     protected function initServiceTask()
