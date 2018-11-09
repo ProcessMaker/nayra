@@ -8,6 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -73,5 +74,20 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null)
     {
         return true;
+    }
+
+    /**
+     * Implement the event definition behavior when an event is triggered.
+     *
+     * @param EventDefinitionInterface $event
+     * @param FlowNodeInterface $target
+     * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
+     *
+     * @return $this
+     */
+    public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
+    {
+        return $this;
     }
 }

@@ -7,8 +7,13 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
+/**
+ * ErrorEventDefinition class
+ *
+ */
 class ErrorEventDefinition implements ErrorEventDefinitionInterface
 {
 
@@ -19,7 +24,7 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
      *
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
-     * @param ExecutionInstanceInterface $instance
+     * @param ExecutionInstanceInterface|null $instance
      *
      * @return boolean
      */
@@ -39,10 +44,11 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
     }
 
     /**
-     * Get the error of the event definition.
+     * Set the error of the event definition.
      *
      * @param ErrorInterface $error
-     * @return self
+     *
+     * @return $this
      */
     public function setError(ErrorInterface $error)
     {
@@ -58,5 +64,20 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
     public function getPayload()
     {
         return $this->getError();
+    }
+
+    /**
+     * Implement the event definition behavior when an event is triggered.
+     *
+     * @param EventDefinitionInterface $event
+     * @param FlowNodeInterface $target
+     * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
+     *
+     * @return $this
+     */
+    public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
+    {
+        return $this;
     }
 }

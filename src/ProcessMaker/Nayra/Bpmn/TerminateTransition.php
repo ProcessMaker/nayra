@@ -27,11 +27,12 @@ class TerminateTransition implements TransitionInterface
     /**
      * Condition required to terminate the token.
      *
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
+     * @param ExecutionInstanceInterface|null $executionInstance
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         return $this->eventDefinition->assertsRule($this->eventDefinition, $this->owner, $executionInstance);
     }
@@ -48,6 +49,7 @@ class TerminateTransition implements TransitionInterface
         $tokens = [];
         foreach($executionInstance->getTokens() as $token) {
             if ($this->assertCondition($token, $executionInstance)) {
+                $this->eventDefinition->execute($this->eventDefinition, $this->owner, $executionInstance, $token);
                 $tokens[]=$token;
             }
         }

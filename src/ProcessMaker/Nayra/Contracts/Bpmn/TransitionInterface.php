@@ -18,6 +18,8 @@ interface TransitionInterface extends ConnectionNodeInterface
     /**
      * Execute a transition.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
+     *
      * @return bool
      */
     public function execute(ExecutionInstanceInterface $executionInstance);
@@ -25,7 +27,7 @@ interface TransitionInterface extends ConnectionNodeInterface
     /**
      * Evaluates if the transition condition evaluates to true using the data of the execution instance
      *
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      * @param ExecutionInstanceInterface $executionInstance
      * @return mixed
      */
