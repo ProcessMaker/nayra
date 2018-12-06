@@ -430,11 +430,11 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      *
      * @param string $namespace
      * @param string $tagName
-     * @param array $mapping
+     * @param mixed $mapping
      *
      * @return $this
      */
-    public function setBpmnElementMapping($namespace, $tagName, array $mapping)
+    public function setBpmnElementMapping($namespace, $tagName, $mapping)
     {
         $this->mapping[$namespace][$tagName] = $mapping;
         return $this;
