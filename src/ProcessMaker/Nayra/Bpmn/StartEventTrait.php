@@ -44,6 +44,9 @@ trait StartEventTrait
         $this->transition->attachEvent(
             TransitionInterface::EVENT_BEFORE_TRANSIT,
             function(TransitionInterface $transition, CollectionInterface $consumeTokens) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistStartEventTriggered($this, $consumeTokens);
                 $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
             }
         );
