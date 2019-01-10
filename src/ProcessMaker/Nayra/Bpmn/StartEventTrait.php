@@ -88,6 +88,8 @@ trait StartEventTrait
     /**
      * Start event.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     *
      * @return $this;
      */
     public function start(ExecutionInstanceInterface $instance)

@@ -5,11 +5,11 @@ namespace ProcessMaker\Nayra\Contracts\Repositories;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 
 /**
  * Repository for TokenInterface
@@ -194,8 +194,8 @@ interface TokenRepositoryInterface
     /**
      * Persists tokens that triggered a Start Event
      *
-     * @param StartEventInterface $startEvent
-     * @param CollectionInterface $tokens
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface $startEvent
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $tokens
      *
      * @return mixed
      */
