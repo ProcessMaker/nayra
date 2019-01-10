@@ -66,7 +66,7 @@ class BasicsTest extends EngineTestCase
         $this->assertEquals(0, $activity->getTokens($instance)->count());
 
         //Trigger start event
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,

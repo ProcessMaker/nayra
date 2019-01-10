@@ -146,7 +146,7 @@ class SignalEndEventTest extends EngineTestCase
         $startA = $processA->getEvents()->item(0);
         $activityA1 = $processA->getActivities()->item(0);
 
-        $startA->start();
+        $startA->start($instanceA);
         $this->engine->runToNextState();
 
         //Assertion: The activity must be activated
@@ -171,7 +171,7 @@ class SignalEndEventTest extends EngineTestCase
             ]);
 
         //Start the process B
-        $startB->start();
+        $startB->start($instanceB);
         $this->engine->runToNextState();
 
         //Assertion: Process B - The activity must be activated

@@ -134,7 +134,7 @@ class ParallelGatewayTest extends EngineTestCase
         $activityC = $process->getActivities()->item(2);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 
@@ -227,7 +227,7 @@ class ParallelGatewayTest extends EngineTestCase
         $activityC = $process->getActivities()->item(2);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 

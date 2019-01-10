@@ -39,7 +39,7 @@ class ScriptTaskTest extends EngineTestCase
         $scriptTask = $process->getActivities()->item(1);
 
         //start the process an instance of the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Assert: that the process is stared and the first activity activated
@@ -97,7 +97,7 @@ class ScriptTaskTest extends EngineTestCase
         $scriptTask2 = $process->getActivities()->item(1);
 
         //start the process an instance of the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Assertion: all activities should run and the process finish immediately
@@ -164,7 +164,7 @@ class ScriptTaskTest extends EngineTestCase
         $scriptTask->setScript('throw new Exception ("test exception");');
 
         //start the process an instance of the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Assert: that the process is stared and the first activity activated

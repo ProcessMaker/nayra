@@ -45,7 +45,7 @@ class ServiceTaskTest extends EngineTestCase
         $serviceCalls = static::$serviceCalls;
 
         //start the process an instance of the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Assert: that the process is stared and the service task is activated
@@ -104,7 +104,7 @@ class ServiceTaskTest extends EngineTestCase
         $serviceCalls = static::$serviceCalls;
 
         //start the process an instance of the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Assert: that the process is stared and the service task is activated

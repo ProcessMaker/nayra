@@ -78,7 +78,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $endActivity = $bpmnRepository->getScriptTask('end');
 
         //Start the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Completes the Activity 0
@@ -193,7 +193,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Completes the Activity 0
