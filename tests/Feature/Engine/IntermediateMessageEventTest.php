@@ -257,7 +257,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $startC = $processB->getEvents()->item(0);
         $activityC = $processB->getActivities()->item(0);
 
-        $startC->start();
+        $startC->start($instanceB);
         $this->engine->runToNextState();
 
         //Assertion: The activity must be activated
@@ -285,7 +285,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $startA = $processA->getEvents()->item(0);
         $activityA = $processA->getActivities()->item(0);
 
-        $startA->start();
+        $startA->start($instanceA);
         $this->engine->runToNextState();
 
         //Assertion: The activity must be activated
@@ -368,7 +368,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $startC = $processB->getEvents()->item(0);
         $activityC = $processB->getActivities()->item(0);
 
-        $startC->start();
+        $startC->start($instanceB);
         $this->engine->runToNextState();
 
         //Assertion: The first activity of the second flow must be activated
@@ -396,7 +396,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $startA = $processA->getEvents()->item(0);
         $activityA = $processA->getActivities()->item(0);
 
-        $startA->start();
+        $startA->start($instanceA);
         $this->engine->runToNextState();
 
         //Assertion: The activity must be activated

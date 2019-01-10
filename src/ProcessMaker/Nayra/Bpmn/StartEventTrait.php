@@ -40,17 +40,25 @@ trait StartEventTrait
     public function buildTransitions(RepositoryInterface $factory)
     {
         $this->setRepository($factory);
-        $this->transition = new StartTransition($this);
+        $this->transition = new Transition($this);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_BEFORE_TRANSIT,
             function(TransitionInterface $transition, CollectionInterface $consumeTokens) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistStartEventTriggered($this, $consumeTokens);
                 $this->notifyEvent(EventInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $consumeTokens);
             }
         );
 
-        foreach($this->getEventDefinitions() as $index => $eventDefinition) {
+        $eventDefinitions = $this->getEventDefinitions();
+        foreach($eventDefinitions as $index => $eventDefinition) {
             $this->triggerPlace[$index] = new State($this, $eventDefinition->getId());
             $this->triggerPlace[$index]->connectTo($this->transition);
+        }
+        if ($eventDefinitions->count() === 0) {
+            $this->triggerPlace[0] = new State($this);
+            $this->triggerPlace[0]->connectTo($this->transition);
         }
     }
 
@@ -80,11 +88,13 @@ trait StartEventTrait
     /**
      * Start event.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     *
      * @return $this;
      */
-    public function start()
+    public function start(ExecutionInstanceInterface $instance)
     {
-        $this->transition->start();
+        $this->triggerPlace[0]->addNewToken($instance);
         return $this;
     }
 
@@ -99,27 +109,16 @@ trait StartEventTrait
      */
     public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
-        $start = $this->getEventDefinitions()->count() === 0;
-        $index = -1;
         foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
             if ($eventDefinition->assertsRule($event, $this, $instance)) {
-                $start = true;
-                break;
-            }
-        }
-        if ($start) {
-            if ($instance === null) {
-                $process = $this->getOwnerProcess();
-                $dataStorage = $process->getRepository()->createDataStore();
-                $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
-            }
-            //Execute the behavior of the EventDefinition
-            foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
+                if ($instance === null) {
+                    $process = $this->getOwnerProcess();
+                    $dataStorage = $process->getRepository()->createDataStore();
+                    $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
+                }
+                $this->triggerPlace[$index]->addNewToken($instance);
                 $eventDefinition->execute($event, $this, $instance, $token);
             }
-            $this->start();
-            // with a new token in the trigger place, the event catch element will be fired
-            $index < 0 ?: $this->triggerPlace[$index]->addNewToken($instance);
         }
         return $this;
     }

@@ -177,7 +177,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         $activityB = $process->getActivities()->item(1);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 
@@ -211,13 +211,13 @@ class ExclusiveGatewayTest extends EngineTestCase
 
         //Load the process
         $process = $this->createProcessWithExclusiveGatewayAndDefaultTransition();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 
@@ -252,7 +252,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         $activityC = $process->getActivities()->item(2);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 
@@ -314,7 +314,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         $activityC = $process->getActivities()->item(2);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 

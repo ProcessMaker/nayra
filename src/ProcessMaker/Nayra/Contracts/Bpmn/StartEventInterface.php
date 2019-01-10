@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+
 /**
  * End event interface.
  *
@@ -12,7 +14,9 @@ interface StartEventInterface extends CatchEventInterface
     /**
      * Start event.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     *
      * @return $this;
      */
-    public function start();
+    public function start(ExecutionInstanceInterface $instance);
 }

@@ -134,7 +134,7 @@ class InclusiveGatewayTest extends EngineTestCase
         $activityB = $process->getActivities()->item(1);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 
@@ -209,7 +209,7 @@ class InclusiveGatewayTest extends EngineTestCase
         $activityB = $process->getActivities()->item(1);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Assertion: Verify the triggered engine events. One activity is activated.
@@ -252,13 +252,13 @@ class InclusiveGatewayTest extends EngineTestCase
         $dataStore = $this->repository->createDataStore();
         $dataStore->putData('A', '2');
         $process = $this->createProcessWithDefaultTransition();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Assertion: The correct events of the default transition should be triggered
@@ -274,13 +274,13 @@ class InclusiveGatewayTest extends EngineTestCase
 
         $dataStore->putData('A', '1');
         $process = $this->createProcessWithDefaultTransition();
-        $this->engine->createExecutionInstance($process, $dataStore);
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References
         $start = $process->getEvents()->item(0);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
         //Assertion: The correct events of the default transition should be triggered
         $this->assertEvents([

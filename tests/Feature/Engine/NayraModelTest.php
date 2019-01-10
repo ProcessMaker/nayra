@@ -38,7 +38,7 @@ class NayraModelTest extends EngineTestCase
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 
@@ -77,7 +77,7 @@ class NayraModelTest extends EngineTestCase
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Start the process
-        $start->start();
+        $start->start($instance);
 
         $this->engine->runToNextState();
 

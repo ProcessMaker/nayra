@@ -144,7 +144,7 @@ class MessageEndEventTest extends EngineTestCase
         $startA = $processA->getEvents()->item(0);
         $activityA1 = $processA->getActivities()->item(0);
 
-        $startA->start();
+        $startA->start($instanceA);
         $this->engine->runToNextState();
 
         //Assertion: The activity must be activated
@@ -168,7 +168,7 @@ class MessageEndEventTest extends EngineTestCase
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
         ]);
 
-        $startB->start();
+        $startB->start($instanceB);
         $this->engine->runToNextState();
 
         //Assertion: Process B - The activity must be activated

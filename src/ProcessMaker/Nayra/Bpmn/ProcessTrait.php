@@ -443,9 +443,9 @@ trait ProcessTrait
             $dataStore = $this->getRepository()->createDataStore();
         }
         $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);
-        $this->getEvents()->find(function(EventInterface $event){
+        $this->getEvents()->find(function(EventInterface $event) use($instance) {
             if ($event instanceof StartEventInterface && $event->getEventDefinitions()->count() === 0) {
-                $event->start();
+                $event->start($instance);
             }
         });
         return $instance;

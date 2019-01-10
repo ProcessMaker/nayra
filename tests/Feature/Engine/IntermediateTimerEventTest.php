@@ -76,7 +76,7 @@ class IntermediateTimerEventTest extends EngineTestCase
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //run the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Complete the first task
@@ -136,7 +136,7 @@ class IntermediateTimerEventTest extends EngineTestCase
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //run the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Complete the first task
@@ -196,7 +196,7 @@ class IntermediateTimerEventTest extends EngineTestCase
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //run the process
-        $start->start();
+        $start->start($instance);
         $this->engine->runToNextState();
 
         //Complete the first task

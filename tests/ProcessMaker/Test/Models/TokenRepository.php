@@ -6,7 +6,9 @@ use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
@@ -66,7 +68,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityActivated(ActivityInterface $activity, TokenInterface $token)
     {
-        
+
     }
 
     /**
@@ -79,7 +81,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityException(ActivityInterface $activity, TokenInterface $token)
     {
-        
+
     }
 
     /**
@@ -92,7 +94,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityCompleted(ActivityInterface $activity, TokenInterface $token)
     {
-        
+
     }
 
     /**
@@ -105,7 +107,7 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityClosed(ActivityInterface $activity, TokenInterface $token)
     {
-        
+
     }
 
     /**
@@ -246,7 +248,7 @@ class TokenRepository implements TokenRepositoryInterface
 
     /**
      * Persists instance and token data when a message arrives to a catch event
-     * 
+     *
      * @param CatchEventInterface $intermediateCatchEvent
      * @param TokenInterface $token
      */
@@ -257,12 +259,24 @@ class TokenRepository implements TokenRepositoryInterface
 
     /**
      * Persists instance and token data when a message is consumed in a catch event
-     * 
+     *
      * @param CatchEventInterface $intermediateCatchEvent
      * @param TokenInterface $token
      */
     public function persistCatchEventMessageConsumed(CatchEventInterface $intermediateCatchEvent, TokenInterface $token)
     {
         $this->persistCalls++;
+    }
+
+    /**
+     * Persists tokens that triggered a Start Event
+     *
+     * @param StartEventInterface $startEvent
+     * @param CollectionInterface $tokens
+     *
+     */
+    public function persistStartEventTriggered(StartEventInterface $startEvent, CollectionInterface $tokens)
+    {
+
     }
 }

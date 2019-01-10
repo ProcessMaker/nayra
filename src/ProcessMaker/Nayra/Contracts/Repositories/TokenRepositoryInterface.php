@@ -5,7 +5,9 @@ namespace ProcessMaker\Nayra\Contracts\Repositories;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
@@ -175,7 +177,7 @@ interface TokenRepositoryInterface
 
     /**
      * Persists instance and token data when a message arrives to a catch event
-     * 
+     *
      * @param CatchEventInterface $intermediateCatchEvent
      * @param TokenInterface $token
      */
@@ -183,9 +185,19 @@ interface TokenRepositoryInterface
 
     /**
      * Persists instance and token data when a message is consumed in a catch event
-     * 
+     *
      * @param CatchEventInterface $intermediateCatchEvent
      * @param TokenInterface $token
      */
     public function persistCatchEventMessageConsumed(CatchEventInterface $intermediateCatchEvent, TokenInterface $token);
+
+    /**
+     * Persists tokens that triggered a Start Event
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface $startEvent
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $tokens
+     *
+     * @return mixed
+     */
+    public function persistStartEventTriggered(StartEventInterface $startEvent, CollectionInterface $tokens);
 }
