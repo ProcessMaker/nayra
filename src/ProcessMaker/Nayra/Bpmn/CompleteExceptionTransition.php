@@ -12,7 +12,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class CloseExceptionTransition implements TransitionInterface
+class CompleteExceptionTransition implements TransitionInterface
 {
     use TransitionTrait;
 
@@ -35,6 +35,6 @@ class CloseExceptionTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
     {
-        return $token->getStatus() === ActivityInterface::TOKEN_STATE_CLOSED;
+        return $token->getStatus() === ActivityInterface::TOKEN_STATE_COMPLETED;
     }
 }

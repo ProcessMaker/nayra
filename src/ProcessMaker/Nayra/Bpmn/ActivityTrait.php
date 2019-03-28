@@ -6,6 +6,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
@@ -15,7 +16,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  */
 trait ActivityTrait
 {
-
     use FlowNodeTrait;
 
     /**
@@ -60,7 +60,6 @@ trait ActivityTrait
      */
     private $closedState;
 
-
     /**
      * Build the transitions that define the element.
      *
@@ -74,16 +73,18 @@ trait ActivityTrait
         $this->failingState = new State($this, ActivityInterface::TOKEN_STATE_FAILING);
         $this->exceptionTransition = new ExceptionTransition($this, true);
         $this->closeExceptionTransition = new CloseExceptionTransition($this, true);
+        $this->completeExceptionTransition = new CompleteExceptionTransition($this, true);
         $this->transition = new Transition($this, true);
         $this->closedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
 
         $this->activeState->connectTo($this->exceptionTransition);
         $this->activeState->connectTo($this->activityTransition);
+        $this->failingState->connectTo($this->completeExceptionTransition);
         $this->failingState->connectTo($this->closeExceptionTransition);
         $this->exceptionTransition->connectTo($this->failingState);
         $this->activityTransition->connectTo($this->closedState);
         $this->closedState->connectTo($this->transition);
-        $this->closeExceptionTransition->connectTo($this->closedState);
+        $this->completeExceptionTransition->connectTo($this->closedState);
 
         $this->activeState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
@@ -92,7 +93,6 @@ trait ActivityTrait
                     ->getTokenRepository()
                     ->persistActivityActivated($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token);
-
             }
         );
         $this->failingState->attachEvent(
@@ -102,7 +102,6 @@ trait ActivityTrait
                     ->getTokenRepository()
                     ->persistActivityException($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, $this, $token);
-
             }
         );
         $this->closedState->attachEvent(
@@ -112,10 +111,19 @@ trait ActivityTrait
                     ->getTokenRepository()
                     ->persistActivityCompleted($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_COMPLETED, $this, $token);
-
             }
         );
-
+        $this->closeExceptionTransition->attachEvent(
+            TransitionInterface::EVENT_AFTER_CONSUME,
+            function ($transition, $tokens) {
+                foreach ($tokens as $token) {
+                    $this->getRepository()
+                        ->getTokenRepository()
+                        ->persistActivityCompleted($this, $token);
+                }
+                $this->notifyEvent(ActivityInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $tokens);
+            }
+        );
     }
 
     /**
@@ -152,7 +160,6 @@ trait ActivityTrait
                     ->getTokenRepository()
                     ->persistActivityClosed($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $token);
-
             }
         );
         return $this;
