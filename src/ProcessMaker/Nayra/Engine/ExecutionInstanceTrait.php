@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Engine;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -149,6 +150,10 @@ trait ExecutionInstanceTrait
      */
     public function close()
     {
+        $tokens = $this->getTokens()->toArray();
+        foreach ($tokens as $token) {
+            $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+        }
         return true;
     }
 

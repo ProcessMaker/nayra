@@ -4,12 +4,10 @@ namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Bpmn\Models\Process;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Tests for the ScriptTask element
@@ -254,6 +252,64 @@ class ScriptTaskTest extends EngineTestCase
 
         return $process;
     }
+
+    /**
+     * Tests that when a script fails, then it is closed
+     */
+    public function testScriptTaskThatFailsAndIsClosed()
+    {
+        //Load a process
+        $process = $this->getProcessWithOneScriptTask();
+        $dataStore = $this->repository->createDataStore();
+
+        //create an instance of the process
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        //Get References
+        $start = $process->getEvents()->item(0);
+        $activity1 = $process->getActivities()->item(0);
+        $scriptTask = $process->getActivities()->item(1);
+
+        //set an script that evaluates with an error
+        $scriptTask->setScript('throw new Exception ("test exception");');
+
+        //start the process an instance of the process
+        $start->start($instance);
+        $this->engine->runToNextState();
+
+        //Assert: that the process is stared and the first activity activated
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        //complete the first activity (that is a manual one)
+        $token = $activity1->getTokens($instance)->item(0);
+        $activity1->complete($token);
+        $this->engine->runToNextState();
+
+        $scriptToken = $scriptTask->getTokens($instance)->item(0);
+        $scriptTask->runScript($scriptToken);
+        $this->engine->runToNextState();
+
+        //Assertion: Verify that the token was set to a failed state
+        $this->assertEquals($scriptToken->getStatus(), ActivityInterface::TOKEN_STATE_FAILING);
+
+        // Close the script task
+        $scriptToken = $scriptTask->getTokens($instance)->item(0);
+        $scriptToken->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+        $this->engine->runToNextState();
+
+        //Assertion: Verify that the script was
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
+            ActivityInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+        ]);
+    }
 }
-
-

@@ -9,11 +9,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -21,7 +21,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
@@ -236,7 +235,7 @@ trait ProcessTrait
     public function addProperty($name, $value)
     {
         $this->baseAddProperty($name, $value);
-        if($value instanceof FlowElementInterface) {
+        if ($value instanceof FlowElementInterface) {
             $value->setOwnerProcess($this);
         }
         return $this;
@@ -255,41 +254,38 @@ trait ProcessTrait
             return $this->transitions;
         }
         //Build the runtime elements
-        foreach($this->getProperty('events') as $event) {
+        foreach ($this->getProperty('events') as $event) {
             $event->buildTransitions($factory);
         }
-        foreach($this->getProperty('activities') as $activity) {
+        foreach ($this->getProperty('activities') as $activity) {
             $activity->buildTransitions($factory);
         }
-        foreach($this->getProperty('gateways') as $gateway) {
+        foreach ($this->getProperty('gateways') as $gateway) {
             $gateway->buildTransitions($factory);
         }
         //Build the runtime flows
-        foreach($this->getProperty('events') as $event) {
+        foreach ($this->getProperty('events') as $event) {
             $event->buildFlowTransitions($factory);
         }
-        foreach($this->getProperty('activities') as $activity) {
+        foreach ($this->getProperty('activities') as $activity) {
             $activity->buildFlowTransitions($factory);
         }
-        foreach($this->getProperty('gateways') as $gateway) {
+        foreach ($this->getProperty('gateways') as $gateway) {
             $gateway->buildFlowTransitions($factory);
         }
         //Get the transitions
         $transitions = [];
-        foreach($this->getProperty('events') as $event) {
+        foreach ($this->getProperty('events') as $event) {
             $transitions = array_merge($transitions, $event->getTransitions());
         }
-        foreach($this->getProperty('activities') as $activity) {
+        foreach ($this->getProperty('activities') as $activity) {
             $transitions = array_merge($transitions, $activity->getTransitions());
         }
-        foreach($this->getProperty('gateways') as $gateway) {
+        foreach ($this->getProperty('gateways') as $gateway) {
             $transitions = array_merge($transitions, $gateway->getTransitions());
         }
         //Catch the conclusion of a process
-        $this->attachEvent(EventInterface::EVENT_EVENT_TRIGGERED, function (EventInterface $event, TransitionInterface $transition, CollectionInterface $tokens) {
-            if ($tokens->count() === 0 || !$event instanceof EndEventInterface) {
-                return;
-            }
+        $this->attachEvent(EventInterface::EVENT_EVENT_TRIGGERED, function (FlowNodeInterface $node, TransitionInterface $transition, CollectionInterface $tokens) {
             $instance = $tokens->item(0)->getInstance();
             if ($instance->getTokens()->count() !== 0) {
                 return;
@@ -297,7 +293,7 @@ trait ProcessTrait
 
             $instanceRepo = $this->getRepository()->createExecutionInstanceRepository();
             $instanceRepo->persistInstanceCompleted($instance);
-            $this->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED, $instance, $event);
+            $this->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED, $instance, $node);
         });
         $this->transitions = new Collection($transitions);
         return $this->transitions;
@@ -443,7 +439,7 @@ trait ProcessTrait
             $dataStore = $this->getRepository()->createDataStore();
         }
         $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);
-        $this->getEvents()->find(function(EventInterface $event) use($instance) {
+        $this->getEvents()->find(function (EventInterface $event) use ($instance) {
             if ($event instanceof StartEventInterface && $event->getEventDefinitions()->count() === 0) {
                 $event->start($instance);
             }

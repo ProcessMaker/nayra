@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-
 /**
  * Activity interface.
  *
@@ -11,7 +9,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
  */
 interface ActivityInterface extends FlowNodeInterface
 {
-
     /**
      * Events defined for Activity
      */
@@ -19,6 +16,7 @@ interface ActivityInterface extends FlowNodeInterface
     const EVENT_ACTIVITY_COMPLETED = 'ActivityCompleted';
     const EVENT_ACTIVITY_EXCEPTION = 'ActivityException';
     const EVENT_ACTIVITY_CLOSED = 'ActivityClosed';
+    const EVENT_EVENT_TRIGGERED = 'EventTriggered';
 
     /**
      * Token states defined for Activity
