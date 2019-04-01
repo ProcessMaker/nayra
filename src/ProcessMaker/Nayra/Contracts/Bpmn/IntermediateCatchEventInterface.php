@@ -19,4 +19,19 @@ interface IntermediateCatchEventInterface extends CatchEventInterface
     const EVENT_CATCH_MESSAGE_CATCH = 'CatchEventMessageCatch';
     const EVENT_CATCH_MESSAGE_CONSUMED = 'CatchEventMessageConsumed';
 
+    const TOKEN_STATE_CLOSED = 'CLOSED';
+
+    /**
+     * Get the activation transition of the element
+     *
+     * @return TransitionInterface
+     */
+    public function getActivationTransition();
+
+    /**
+     * Get the active state of the element
+     *
+     * @return StateInterface
+     */
+    public function getActiveState();
 }

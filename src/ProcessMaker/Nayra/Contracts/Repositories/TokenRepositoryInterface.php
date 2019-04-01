@@ -10,6 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
 
 /**
  * Repository for TokenInterface
@@ -17,7 +18,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  */
 interface TokenRepositoryInterface
 {
-
     /**
      * Create a token instance.
      *
@@ -103,7 +103,6 @@ interface TokenRepositoryInterface
      * @return mixed
      */
     public function persistThrowEventTokenConsumed(ThrowEventInterface $endEvent, TokenInterface $token);
-
 
     /**
      * Persists instance and token data when a token is passed in a throw event
@@ -200,4 +199,14 @@ interface TokenRepositoryInterface
      * @return mixed
      */
     public function persistStartEventTriggered(StartEventInterface $startEvent, CollectionInterface $tokens);
+
+    /**
+     * Persists instance and token data when a token is consumed in a event based gateway
+     *
+     * @param EventBasedGatewayInterface $eventBasedGateway
+     * @param TokenInterface $token
+     *
+     * @return mixed
+     */
+    public function persistEventBasedGatewayTokenConsumed(EventBasedGatewayInterface $eventBasedGateway, TokenInterface $token);
 }
