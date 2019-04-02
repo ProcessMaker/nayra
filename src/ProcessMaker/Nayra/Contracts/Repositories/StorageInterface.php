@@ -5,6 +5,7 @@ namespace ProcessMaker\Nayra\Contracts\Repositories;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
+
 /**
  * RepositoryFactory
  *
@@ -202,6 +203,15 @@ interface StorageInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface
      */
     public function getEventDefinition($id);
+
+    /**
+     * Get EventBasedGateway instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface
+     */
+    public function getEventBasedGateway($id);
 
     /**
      * Get Event instance by id.

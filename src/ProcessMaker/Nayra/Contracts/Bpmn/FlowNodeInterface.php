@@ -27,7 +27,7 @@ interface FlowNodeInterface extends FlowElementInterface
      *
      * @internal param FlowRepositoryInterface $flowRepository
      */
-    public function createFlowTo(FlowNodeInterface $target, RepositoryInterface $factory, $properties=[]);
+    public function createFlowTo(FlowNodeInterface $target, RepositoryInterface $factory, $properties = []);
 
     /**
      * Get the outgoing flows.
@@ -42,6 +42,13 @@ interface FlowNodeInterface extends FlowElementInterface
      * @return FlowCollectionInterface
      */
     public function getIncomingFlows();
+
+    /**
+     * Get the outgoing flows.
+     *
+     * @return FlowCollectionInterface
+     */
+    public function getOutgoingFlows();
 
     /**
      * Add a transition rule for the node element.
