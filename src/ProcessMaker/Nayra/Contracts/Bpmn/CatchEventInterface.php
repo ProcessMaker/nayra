@@ -25,7 +25,7 @@ interface CatchEventInterface extends EventInterface
     public function getEventDefinitions();
 
     /**
-     * Undocumented function
+     * Get target instances of the element
      *
      * @param EventDefinitionInterface $message
      * @param TokenInterface $token
