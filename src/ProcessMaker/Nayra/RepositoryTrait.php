@@ -14,6 +14,7 @@ use ProcessMaker\Nayra\Bpmn\Models\DataStore;
 use ProcessMaker\Nayra\Bpmn\Models\EndEvent;
 use ProcessMaker\Nayra\Bpmn\Models\Error;
 use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\EventBasedGateway;
 use ProcessMaker\Nayra\Bpmn\Models\ExclusiveGateway;
 use ProcessMaker\Nayra\Bpmn\Models\Flow;
 use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
@@ -47,8 +48,8 @@ use ProcessMaker\Test\Models\TokenRepository;
  */
 trait RepositoryTrait
 {
-
     private $tokenRepo = null;
+
     /**
      * Creates an instance of the interface passed
      *
@@ -156,6 +157,16 @@ trait RepositoryTrait
     public function createError()
     {
         return new Error();
+    }
+
+    /**
+     * Create instance of EventBasedGateway.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface
+     */
+    public function createEventBasedGateway()
+    {
+        return new EventBasedGateway();
     }
 
     /**

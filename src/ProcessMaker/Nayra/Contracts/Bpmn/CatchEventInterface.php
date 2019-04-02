@@ -14,6 +14,9 @@ interface CatchEventInterface extends EventInterface
     const BPMN_PROPERTY_PARALLEL_MULTIPLE = 'parallelMultiple';
 
     const TOKEN_STATE_EVENT_CATCH = 'EVENT_CATCH';
+
+    const EVENT_CATCH_TOKEN_ARRIVES = 'CatchEventTokenArrives';
+
     /**
      * Get EventDefinitions that are triggers expected for a catch Event.
      *
@@ -22,7 +25,12 @@ interface CatchEventInterface extends EventInterface
     public function getEventDefinitions();
 
     /**
-     * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
+     * Get target instances of the element
+     *
+     * @param EventDefinitionInterface $message
+     * @param TokenInterface $token
+     *
+     * @return CollectionInterface
      */
     public function getTargetInstances(EventDefinitionInterface $message, TokenInterface $token);
 

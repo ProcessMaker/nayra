@@ -16,6 +16,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
@@ -80,11 +81,11 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      *
      * @var array $validationErrors
      */
-    private $validationErrors=[];
+    private $validationErrors = [];
 
     private $mapping = [
         'http://www.omg.org/spec/BPMN/20100524/MODEL' => [
-            'process'      => [
+            'process' => [
                 ProcessInterface::class,
                 [
                     'activities' => ['n', ActivityInterface::class],
@@ -93,30 +94,30 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [BpmnDocument::BPMN_MODEL, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
                 ]
             ],
-            'startEvent'   => [
+            'startEvent' => [
                 StartEventInterface::class,
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
                 ]
             ],
-            'endEvent'     => [
+            'endEvent' => [
                 EndEventInterface::class,
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    EndEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                    EndEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
                 ]
             ],
-            'task'   => [
+            'task' => [
                 ActivityInterface::class,
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
-            'scriptTask'   => [
+            'scriptTask' => [
                 ScriptTaskInterface::class,
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
@@ -124,15 +125,15 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     ScriptTaskInterface::BPMN_PROPERTY_SCRIPT => ['1', [BpmnDocument::BPMN_MODEL, ScriptTaskInterface::BPMN_PROPERTY_SCRIPT]],
                 ]
             ],
-            'serviceTask'   => [
+            'serviceTask' => [
                 ServiceTaskInterface::class,
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
-            FlowNodeInterface::BPMN_PROPERTY_OUTGOING     => [self::IS_REFERENCE, []],
-            FlowNodeInterface::BPMN_PROPERTY_INCOMING     => [self::IS_REFERENCE, []],
+            FlowNodeInterface::BPMN_PROPERTY_OUTGOING => [self::IS_REFERENCE, []],
+            FlowNodeInterface::BPMN_PROPERTY_INCOMING => [self::IS_REFERENCE, []],
             'sequenceFlow' => [
                 FlowInterface::class,
                 [
@@ -170,6 +171,13 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnDocument::BPMN_MODEL, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
+                ]
+            ],
+            'eventBasedGateway' => [
+                EventBasedGatewayInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
             'conditionExpression' => [
@@ -322,20 +330,20 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     MessageInterface::BPMN_PROPERTY_ITEM => ['1', [BpmnDocument::BPMN_MODEL, MessageInterface::BPMN_PROPERTY_ITEM_REF]],
                 ]
             ],
-            'intermediateCatchEvent'   => [
+            'intermediateCatchEvent' => [
                 IntermediateCatchEventInterface::class,
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    IntermediateCatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    IntermediateCatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
                 ]
             ],
-            'intermediateThrowEvent'   => [
+            'intermediateThrowEvent' => [
                 IntermediateThrowEventInterface::class,
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    IntermediateThrowEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    IntermediateThrowEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
                 ]
             ],
             'signalEventDefinition' => [
@@ -664,6 +672,18 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventInterface
      */
     public function getEvent($id)
+    {
+        return $this->getElementInstanceById($id);
+    }
+
+    /**
+     * Get EventBasedGateway instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface
+     */
+    public function getEventBasedGateway($id)
     {
         return $this->getElementInstanceById($id);
     }
@@ -1000,7 +1020,6 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     public function getEngine()
     {
         return $this->engine;
-
     }
 
     /**

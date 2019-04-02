@@ -32,4 +32,11 @@ interface TransitionInterface extends ConnectionNodeInterface
      * @return mixed
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance);
+
+    /**
+     * Get transition owner element
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface
+     */
+    public function getOwner();
 }

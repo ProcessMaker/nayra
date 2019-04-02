@@ -16,17 +16,11 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class SignalEventDefinition implements SignalEventDefinitionInterface
 {
-
     use BaseTrait;
     /**
      * @var string $id
      */
     private $id;
-
-    /**
-     * @var string $signal
-     */
-    private $signal;
 
     /**
      * Returns the element's id
@@ -58,7 +52,7 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
      */
     public function setPayload($value)
     {
-        $this->signal = $value;
+        $this->setProperty(SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL, $value);
     }
 
     /**
@@ -67,7 +61,7 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
      */
     public function getPayload()
     {
-        return $this->signal;
+        return $this->getProperty(SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL);
     }
 
     /**

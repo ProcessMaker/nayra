@@ -2,11 +2,9 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\FlowElementTrait;
-use ProcessMaker\Nayra\Bpmn\ObservableTrait;
-use ProcessMaker\Nayra\Bpmn\TraversableTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -18,7 +16,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 trait TransitionTrait
 {
-
     use FlowElementTrait,
         TraversableTrait,
         ObservableTrait;
@@ -74,8 +71,8 @@ trait TransitionTrait
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $instance)
     {
         return $this->incoming()->count() > 0 && $this->incoming()->find(function ($flow) use ($instance) {
-                return $flow->origin()->getTokens($instance)->count() === 0;
-            })->count() === 0;
+            return $flow->origin()->getTokens($instance)->count() === 0;
+        })->count() === 0;
     }
 
     /**
@@ -109,7 +106,7 @@ trait TransitionTrait
         $this->notifyEvent(TransitionInterface::EVENT_AFTER_CONSUME, $this, $consumeTokens);
 
         $this->outgoing()->find(function (ConnectionInterface $flow) use ($consumeTokens, $executionInstance, $consumedTokensCount) {
-            if ($this->preserveToken && $consumedTokensCount==1) {
+            if ($this->preserveToken && $consumedTokensCount == 1) {
                 $consumeTokens->find(function (TokenInterface $token) use ($flow, $executionInstance) {
                     $flow->targetState()->addToken($executionInstance, $token);
                 });
@@ -230,5 +227,15 @@ trait TransitionTrait
     protected function setPreserveToken($preserveToken)
     {
         $this->preserveToken = $preserveToken;
+    }
+
+    /**
+     * Get transition owner element
+     *
+     * @return FlowElementInterface
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 }

@@ -7,6 +7,7 @@ use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
@@ -42,7 +43,6 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function loadTokenByUid($uid)
     {
-
     }
 
     /**
@@ -55,7 +55,6 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function store(TokenInterface $token, $saveChildElements = false)
     {
-
     }
 
     /**
@@ -68,7 +67,6 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityActivated(ActivityInterface $activity, TokenInterface $token)
     {
-
     }
 
     /**
@@ -81,7 +79,6 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityException(ActivityInterface $activity, TokenInterface $token)
     {
-
     }
 
     /**
@@ -94,7 +91,6 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityCompleted(ActivityInterface $activity, TokenInterface $token)
     {
-
     }
 
     /**
@@ -107,7 +103,6 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityClosed(ActivityInterface $activity, TokenInterface $token)
     {
-
     }
 
     /**
@@ -277,6 +272,18 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistStartEventTriggered(StartEventInterface $startEvent, CollectionInterface $tokens)
     {
+    }
 
+    /**
+     * Persists instance and token data when a token is consumed in a event based gateway
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface $eventBasedGateway
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $passedToken
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $consumedTokens
+     *
+     * @return mixed
+     */
+    public function persistEventBasedGatewayActivated(EventBasedGatewayInterface $eventBasedGateway, TokenInterface $passedToken, CollectionInterface $consumedTokens)
+    {
     }
 }

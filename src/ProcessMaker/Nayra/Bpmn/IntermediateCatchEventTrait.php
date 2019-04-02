@@ -22,7 +22,7 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  */
 trait IntermediateCatchEventTrait
 {
-     use CatchEventTrait;
+    use CatchEventTrait;
 
     /**
      * Receive tokens.
@@ -51,12 +51,11 @@ trait IntermediateCatchEventTrait
         $this->setRepository($factory);
         $this->activeState = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_ACTIVE);
         $this->triggerPlace = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_EVENT_CATCH);
-        $this->transition=new IntermediateCatchEventTransition($this);
+        $this->transition = new IntermediateCatchEventTransition($this);
         $this->activeState->connectTo($this->transition);
         $this->triggerPlace->connectTo($this->transition);
 
         $this->activeState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistCatchEventTokenArrives($this, $token);
@@ -66,7 +65,6 @@ trait IntermediateCatchEventTrait
         });
 
         $this->activeState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistCatchEventTokenConsumed($this, $token);
@@ -74,8 +72,7 @@ trait IntermediateCatchEventTrait
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED, $this, $token);
         });
 
-        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function(TransitionInterface $transition, Collection $consumedTokens)  {
-
+        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function (TransitionInterface $transition, Collection $consumedTokens) {
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistCatchEventTokenPassed($this, $consumedTokens);
@@ -177,5 +174,25 @@ trait IntermediateCatchEventTrait
     public function registerCatchEvents(EngineInterface $engine)
     {
         return $this;
+    }
+
+    /**
+     * Get the activation transition of the element
+     *
+     * @return TransitionInterface
+     */
+    public function getActivationTransition()
+    {
+        return $this->transition;
+    }
+
+    /**
+     * Get the active state of the element
+     *
+     * @return StateInterface
+     */
+    public function getActiveState()
+    {
+        return $this->activeState;
     }
 }

@@ -4,32 +4,22 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
- * End event behavior's implementation.
+ * Base implementation for a event based gateway.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-trait IntermediateThrowEventTrait
+trait EventBasedGatewayTrait
 {
-    use FlowNodeTrait;
+    use ParallelGatewayTrait;
 
     /**
-     * Receive tokens.
-     *
-     * @var StateInterface
-     */
-    private $endState;
-
-    /**
-     * Close the tokens.
-     *
-     * @var EndTransition
+     * @var TransitionInterface
      */
     private $transition;
 
@@ -41,17 +31,9 @@ trait IntermediateThrowEventTrait
     public function buildTransitions(RepositoryInterface $factory)
     {
         $this->setRepository($factory);
-
-        $this->transition = new IntermediateThrowEventTransition($this);
-
-        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function (TransitionInterface $interface, Collection $consumedTokens) {
-            foreach ($consumedTokens as $token) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistThrowEventTokenPassed($this, $token);
-            }
-
-            $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED, $this);
+        $this->transition = new ExclusiveGatewayTransition($this);
+        $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function () {
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);
         });
     }
 
@@ -65,24 +47,19 @@ trait IntermediateThrowEventTrait
         $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-            $collaboration = $this->getEventDefinitions()->item(0)->getPayload()->getMessageFlow()->getCollaboration();
-            $collaboration->send($this->getEventDefinitions()->item(0), $token);
-
             $this->getRepository()
                 ->getTokenRepository()
-                ->persistThrowEventTokenArrives($this, $token);
+                ->persistGatewayTokenArrives($this, $token);
 
-            $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES, $this, $token);
         });
-
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
             $this->getRepository()
                 ->getTokenRepository()
-                ->persistThrowEventTokenConsumed($this, $token);
+                ->persistGatewayTokenConsumed($this, $token);
 
-            $this->notifyEvent(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED, $this, $token);
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED, $this, $token);
         });
-
         return $incomingPlace;
     }
 
@@ -95,7 +72,25 @@ trait IntermediateThrowEventTrait
      */
     protected function buildConnectionTo(FlowNodeInterface $target)
     {
-        $this->transition->connectTo($target->getInputPlace());
+        $outgoingPlace = new State($this, GatewayInterface::TOKEN_STATE_OUTGOING);
+        $outgoingTransition = new EventBasedTransition($this, $target);
+        $this->transition->connectTo($outgoingPlace);
+        $outgoingPlace->connectTo($outgoingTransition);
+        $outgoingTransition->connectTo($target->getInputPlace());
         return $this;
+    }
+
+    /**
+     * Get the next Event Elements after the gateway
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface[]
+     */
+    public function getNextEventElements()
+    {
+        $nextElements = [];
+        foreach ($this->getOutgoingFlows() as $outgoing) {
+            $nextElements[] = $outgoing->getTarget();
+        }
+        return new Collection($nextElements);
     }
 }
