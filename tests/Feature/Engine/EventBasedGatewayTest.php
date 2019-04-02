@@ -4,6 +4,7 @@ namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
@@ -11,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
 
 /**
  * Test the event based gateway element.

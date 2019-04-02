@@ -2,10 +2,10 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
+use ProcessMaker\Nayra\Bpmn\EventBasedGatewayTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
-use ProcessMaker\Nayra\Bpmn\EventBasedGatewayTrait;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**

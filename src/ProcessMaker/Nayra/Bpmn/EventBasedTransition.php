@@ -2,14 +2,14 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 
 /**
  * Verify the condition to transit following the exclusive transition rules.
@@ -26,7 +26,15 @@ class EventBasedTransition implements TransitionInterface
      */
     private $condition;
 
-    protected function initEventBasedTransition($owner, CatchEventInterface $event)
+    /**
+     * Initialize the transition
+     *
+     * @param EventBasedGatewayInterface $owner
+     * @param CatchEventInterface $event
+     *
+     * @return void
+     */
+    protected function initEventBasedTransition(EventBasedGatewayInterface $owner, CatchEventInterface $event)
     {
         $event->getActivationTransition()->attachEvent(TransitionInterface::EVENT_AFTER_TRANSIT, function (IntermediateCatchEventTransition $transition, CollectionInterface $passedTokens) {
             $passedToken = $passedTokens->item(0);
@@ -43,7 +51,16 @@ class EventBasedTransition implements TransitionInterface
      *
      * @return $this
      */
-    private function removeTokenFromConnectedEvents(FlowElementInterface $activatedEvent, $token)
+
+    /**
+     * Removes a token from the next events to the EventBasedGateway
+     *
+     * @param FlowElementInterface $activatedEvent
+     * @param TokenInterface $token
+     *
+     * @return void
+     */
+    private function removeTokenFromConnectedEvents(FlowElementInterface $activatedEvent, TokenInterface $token)
     {
         $consumedTokens = [];
         foreach ($this->owner->getNextEventElements() as $event) {
@@ -64,7 +81,7 @@ class EventBasedTransition implements TransitionInterface
     /**
      * Condition required to transit the element.
      *
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      * @param ExecutionInstanceInterface $executionInstance
      *
      * @return mixed
