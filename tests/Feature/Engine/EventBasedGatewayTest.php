@@ -11,6 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
 
 /**
  * Test the event based gateway element.
@@ -51,8 +52,12 @@ class EventBasedGatewayTest extends EngineTestCase
         $catch2 = $bpmnRepository->getIntermediateCatchEvent('_27');
 
         $task2 = $bpmnRepository->getScriptTask('_29');
-        $task3 = $bpmnRepository->getScriptTask('_31');
-        //$timer = $bpmnRepository->getIntermediateCatchEvent('IntermediateCatchEvent_Timer');
+
+        // Get the event based gateway reference
+        $eventGateway = $bpmnRepository->getEventBasedGateway('_9');
+
+        // Assertion: $eventGateway is an instance of EventBasedGateway
+        $this->assertInstanceOf(EventBasedGatewayInterface::class, $eventGateway);
 
         // Start the process
         $this->instance = $process->call();
@@ -222,6 +227,25 @@ class EventBasedGatewayTest extends EngineTestCase
         // Assertion: We have one token in the main process (and it is in the task 3)
         $this->assertEquals(1, $this->instance->getTokens()->count());
         $this->assertEquals(1, $task3->getTokens($this->instance)->count());
+    }
+
+    /**
+     * Test parallel gateway can not have conditioned outgoing flows.
+     *
+     */
+    public function testEventBasedGatewayCanNotHaveConditionedOutgoingFlow()
+    {
+        //Create a parallel gateway and an activity.
+        $gatewayA = $this->repository->createEventBasedGateway();
+        $eventA = $this->repository->createIntermediateCatchEvent();
+
+        //Assertion: Throw exception when creating a conditioned flow from parallel.
+        $this->expectException('ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException');
+        $gatewayA->createConditionedFlowTo($eventA, function () {}, false, $this->repository);
+        $process = $this->repository->createProcess();
+        $process
+            ->addEvent($eventA)
+            ->addGateway($gatewayA);
     }
 
     /**
