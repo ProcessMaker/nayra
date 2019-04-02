@@ -228,6 +228,7 @@ class EventBasedGatewayTest extends EngineTestCase
      * Complete an active task
      *
      * @param ActivityInterface $task
+     * @param ExecutionInstanceInterface $instance
      *
      * @return void
      */
