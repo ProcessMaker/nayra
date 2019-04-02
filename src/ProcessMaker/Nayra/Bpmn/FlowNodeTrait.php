@@ -2,7 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
@@ -70,7 +69,7 @@ trait FlowNodeTrait
     public function getTokens(ExecutionInstanceInterface $instance)
     {
         $tokens = [];
-        foreach($this->getStates() as $state) {
+        foreach ($this->getStates() as $state) {
             $tokens = array_merge($tokens, $state->getTokens($instance)->toArray());
         }
         return new Collection($tokens);
@@ -132,7 +131,7 @@ trait FlowNodeTrait
     {
         $this->setRepository($factory);
         $flows = $this->getFlows();
-        foreach($flows as $flow) {
+        foreach ($flows as $flow) {
             $this->buildConnectionTo($flow->getTarget());
         }
     }
@@ -187,7 +186,7 @@ trait FlowNodeTrait
      * @return $this
      * @internal param FlowRepositoryInterface $flowRepository
      */
-    public function createFlowTo(FlowNodeInterface $target, RepositoryInterface $factory, $properties=[])
+    public function createFlowTo(FlowNodeInterface $target, RepositoryInterface $factory, $properties = [])
     {
         $flow = $factory->createFlow();
         $flow->setSource($this);
@@ -210,6 +209,16 @@ trait FlowNodeTrait
     public function getIncomingFlows()
     {
         return $this->getProperty(FlowNodeInterface::BPMN_PROPERTY_INCOMING);
+    }
+
+    /**
+     * Get the outgoing flows.
+     *
+     * @return FlowCollectionInterface
+     */
+    public function getOutgoingFlows()
+    {
+        return $this->getProperty(FlowNodeInterface::BPMN_PROPERTY_OUTGOING);
     }
 
     /**
