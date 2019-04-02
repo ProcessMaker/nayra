@@ -3,8 +3,6 @@
 namespace ProcessMaker\Nayra\Contracts;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\InstanceRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Repository interface to create BPMN objects.
@@ -12,7 +10,6 @@ use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
  */
 interface RepositoryInterface
 {
-
     /**
      * Creates an instance of the interface passed
      *
@@ -78,6 +75,13 @@ interface RepositoryInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface
      */
     public function createEndEvent();
+
+    /**
+     * Create instance of ExclusiveGateway.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface
+     */
+    public function createEventBasedGateway();
 
     /**
      * Create instance of ErrorEventDefinition.
