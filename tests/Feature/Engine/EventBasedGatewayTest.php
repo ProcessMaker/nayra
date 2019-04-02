@@ -227,8 +227,8 @@ class EventBasedGatewayTest extends EngineTestCase
     /**
      * Complete an active task
      *
-     * @param ActivityInterface $task
-     * @param ExecutionInstanceInterface $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface $task
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
      *
      * @return void
      */
