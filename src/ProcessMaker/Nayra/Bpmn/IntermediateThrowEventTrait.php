@@ -17,7 +17,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  */
 trait IntermediateThrowEventTrait
 {
-
     use FlowNodeTrait;
 
     /**
@@ -43,10 +42,9 @@ trait IntermediateThrowEventTrait
     {
         $this->setRepository($factory);
 
-        $this->transition=new IntermediateThrowEventTransition($this);
+        $this->transition = new IntermediateThrowEventTransition($this);
 
-        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function(TransitionInterface $interface, Collection $consumedTokens)  {
-
+        $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function (TransitionInterface $interface, Collection $consumedTokens) {
             foreach ($consumedTokens as $token) {
                 $this->getRepository()
                     ->getTokenRepository()
@@ -64,7 +62,7 @@ trait IntermediateThrowEventTrait
      */
     public function getInputPlace()
     {
-        $incomingPlace=new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
+        $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $collaboration = $this->getEventDefinitions()->item(0)->getPayload()->getMessageFlow()->getCollaboration();
@@ -78,7 +76,6 @@ trait IntermediateThrowEventTrait
         });
 
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistThrowEventTokenConsumed($this, $token);

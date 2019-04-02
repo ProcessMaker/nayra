@@ -2,10 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
-use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Bpmn\ObservableTrait;
-use ProcessMaker\Nayra\Bpmn\TraversableTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
@@ -19,7 +15,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 trait StateTrait
 {
-
     use BaseTrait,
         TraversableTrait,
         ObservableTrait;
@@ -127,9 +122,9 @@ trait StateTrait
      */
     public function getTokens(ExecutionInstanceInterface $instance = null)
     {
-        return $this->tokens->find(function(TokenInterface $token) use ($instance) {
-                return $token->getInstance() === $instance;
-            });
+        return $this->tokens->find(function (TokenInterface $token) use ($instance) {
+            return $token->getInstance() === $instance;
+        });
     }
 
     /**
