@@ -237,16 +237,4 @@ class EventBasedGatewayTest extends EngineTestCase
         $task->complete($token);
         $this->engine->runToNextState();
     }
-
-    /**
-     * Execute an BPMN event for the element
-     *
-     * @param CatchEventInterface $event
-     * @return void
-     */
-    private function executeEvent(CatchEventInterface $event)
-    {
-        $event->execute($event->getEventDefinitions()->item(0), $this->instance);
-        $this->engine->runToNextState();
-    }
 }
