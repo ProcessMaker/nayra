@@ -1,0 +1,96 @@
+<?php
+
+namespace ProcessMaker\Nayra\Bpmn;
+
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\RepositoryInterface;
+
+/**
+ * Base implementation for a event based gateway.
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
+trait EventBasedGatewayTrait
+{
+    use ParallelGatewayTrait;
+
+    /**
+     * @var TransitionInterface
+     */
+    private $transition;
+
+    /**
+     * Build the transitions that define the element.
+     *
+     * @param RepositoryInterface $factory
+     */
+    public function buildTransitions(RepositoryInterface $factory)
+    {
+        $this->setRepository($factory);
+        $this->transition = new ExclusiveGatewayTransition($this);
+        $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function () {
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);
+        });
+    }
+
+    /**
+     * Get an input to the element.
+     *
+     * @return StateInterface
+     */
+    public function getInputPlace()
+    {
+        $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
+        $incomingPlace->connectTo($this->transition);
+        $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistGatewayTokenArrives($this, $token);
+
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES, $this, $token);
+        });
+        $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+            $this->getRepository()
+                ->getTokenRepository()
+                ->persistGatewayTokenConsumed($this, $token);
+
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED, $this, $token);
+        });
+        return $incomingPlace;
+    }
+
+    /**
+     * Create a connection to a target node.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     *
+     * @return $this
+     */
+    protected function buildConnectionTo(FlowNodeInterface $target)
+    {
+        $outgoingPlace = new State($this, GatewayInterface::TOKEN_STATE_OUTGOING);
+        $outgoingTransition = new EventBasedTransition($this, $target);
+        $this->transition->connectTo($outgoingPlace);
+        $outgoingPlace->connectTo($outgoingTransition);
+        $outgoingTransition->connectTo($target->getInputPlace());
+        return $this;
+    }
+
+    /**
+     * Get the next Event Elements after the gateway
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface[]
+     */
+    public function getNextEventElements()
+    {
+        $nextElements = [];
+        foreach ($this->getOutgoingFlows() as $outgoing) {
+            $nextElements[] = $outgoing->getTarget();
+        }
+        return new Collection($nextElements);
+    }
+}
