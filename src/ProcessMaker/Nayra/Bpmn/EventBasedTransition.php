@@ -71,9 +71,11 @@ class EventBasedTransition implements TransitionInterface
             $state = $event->getActiveState();
             $tokens = $state->getTokens($token->getInstance())->toArray();
             $token = array_shift($tokens);
-            $token->setStatus(IntermediateCatchEventInterface::TOKEN_STATE_CLOSED);
-            $state->consumeToken($token);
-            $consumedTokens[] = $token;
+            if ($token) {
+                $token->setStatus(IntermediateCatchEventInterface::TOKEN_STATE_CLOSED);
+                $state->consumeToken($token);
+                $consumedTokens[] = $token;
+            }
         }
         return new Collection($consumedTokens);
     }
