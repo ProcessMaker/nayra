@@ -92,7 +92,7 @@ trait ActivityTrait
                 $sequenceFlow = $source ? $source->getProperty('sequenceFlow') : null;
                 $this->getRepository()
                     ->getTokenRepository()
-                    ->persistActivityActivated($this, $token, $sequenceFlow);
+                    ->persistActivityActivated($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token, $sequenceFlow);
             }
         );

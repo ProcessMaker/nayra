@@ -7,7 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventBasedGatewayInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
@@ -50,11 +49,10 @@ interface TokenRepositoryInterface
      *
      * @param ActivityInterface $activity
      * @param TokenInterface $token
-     * @param FlowInterface $sequenceFlow
      *
      * @return mixed
      */
-    public function persistActivityActivated(ActivityInterface $activity, TokenInterface $token, FlowInterface $sequenceFlow);
+    public function persistActivityActivated(ActivityInterface $activity, TokenInterface $token);
 
     /**
      * Persists instance and token data when a token within an activity change to error state
