@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -16,7 +16,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  */
 trait ParallelGatewayTrait
 {
-
     use FlowNodeTrait;
 
     /**
@@ -32,8 +31,8 @@ trait ParallelGatewayTrait
     public function buildTransitions(RepositoryInterface $factory)
     {
         $this->setRepository($factory);
-        $this->transition=new ParallelGatewayTransition($this);
-        $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function()  {
+        $this->transition = new ParallelGatewayTransition($this);
+        $this->transition->attachEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, function () {
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_ACTIVATED, $this);
         });
     }
@@ -41,13 +40,15 @@ trait ParallelGatewayTrait
     /**
      * Get an input to the element.
      *
+     * @param FlowInterface|null $targetFlow
+     *
      * @return StateInterface
      */
-    public function getInputPlace() {
-        $incomingPlace=new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
+    public function getInputPlace(FlowInterface $targetFlow = null)
+    {
+        $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
         $incomingPlace->connectTo($this->transition);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistGatewayTokenArrives($this, $token);
@@ -55,7 +56,6 @@ trait ParallelGatewayTrait
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES, $this, $token);
         });
         $incomingPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistGatewayTokenConsumed($this, $token);
@@ -68,18 +68,17 @@ trait ParallelGatewayTrait
     /**
      * Create a connection to a target node.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface $targetFlow
      *
      * @return $this
      */
-    protected function buildConnectionTo(FlowNodeInterface $target)
+    protected function buildConnectionTo(FlowInterface $targetFlow)
     {
         $outgoingPlace = new State($this, GatewayInterface::TOKEN_STATE_OUTGOING);
         $outgoingTransition = new Transition($this);
         $outgoingTransition->attachEvent(
             TransitionInterface::EVENT_AFTER_CONSUME,
-            function(TransitionInterface $transition, Collection $consumedTokens)  {
-
+            function (TransitionInterface $transition, Collection $consumedTokens) {
                 foreach ($consumedTokens as $token) {
                     $this->getRepository()
                         ->getTokenRepository()
@@ -91,7 +90,7 @@ trait ParallelGatewayTrait
         );
         $this->transition->connectTo($outgoingPlace);
         $outgoingPlace->connectTo($outgoingTransition);
-        $outgoingTransition->connectTo($target->getInputPlace());
+        $outgoingTransition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
         return $this;
     }
 }

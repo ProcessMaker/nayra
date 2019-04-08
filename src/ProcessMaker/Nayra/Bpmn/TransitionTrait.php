@@ -108,10 +108,10 @@ trait TransitionTrait
         $this->outgoing()->find(function (ConnectionInterface $flow) use ($consumeTokens, $executionInstance, $consumedTokensCount) {
             if ($this->preserveToken && $consumedTokensCount == 1) {
                 $consumeTokens->find(function (TokenInterface $token) use ($flow, $executionInstance) {
-                    $flow->targetState()->addToken($executionInstance, $token);
+                    $flow->targetState()->addToken($executionInstance, $token, false, $this);
                 });
             } else {
-                $flow->targetState()->addNewToken($executionInstance);
+                $flow->targetState()->addNewToken($executionInstance, [], $this);
             }
         });
 

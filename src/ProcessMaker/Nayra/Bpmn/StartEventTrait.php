@@ -5,7 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
@@ -19,7 +19,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  */
 trait StartEventTrait
 {
-
     use CatchEventTrait;
     /**
      *
@@ -43,7 +42,7 @@ trait StartEventTrait
         $this->transition = new Transition($this);
         $this->transition->attachEvent(
             TransitionInterface::EVENT_BEFORE_TRANSIT,
-            function(TransitionInterface $transition, CollectionInterface $consumeTokens) {
+            function (TransitionInterface $transition, CollectionInterface $consumeTokens) {
                 $this->getRepository()
                     ->getTokenRepository()
                     ->persistStartEventTriggered($this, $consumeTokens);
@@ -52,7 +51,7 @@ trait StartEventTrait
         );
 
         $eventDefinitions = $this->getEventDefinitions();
-        foreach($eventDefinitions as $index => $eventDefinition) {
+        foreach ($eventDefinitions as $index => $eventDefinition) {
             $this->triggerPlace[$index] = new State($this, $eventDefinition->getId());
             $this->triggerPlace[$index]->connectTo($this->transition);
         }
@@ -65,9 +64,11 @@ trait StartEventTrait
     /**
      * Get the input place. Start event does not have an input place.
      *
+     * @param FlowInterface|null $targetFlow
+     *
      * @return null
      */
-    public function getInputPlace()
+    public function getInputPlace(FlowInterface $targetFlow = null)
     {
         return null;
     }
@@ -75,13 +76,13 @@ trait StartEventTrait
     /**
      * Create a flow to a target node.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface $targetFlow
      *
      * @return $this
      */
-    protected function buildConnectionTo(FlowNodeInterface $target)
+    protected function buildConnectionTo(FlowInterface $targetFlow)
     {
-        $this->transition->connectTo($target->getInputPlace());
+        $this->transition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
         return $this;
     }
 

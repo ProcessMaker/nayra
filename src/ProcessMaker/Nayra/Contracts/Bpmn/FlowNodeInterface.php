@@ -122,7 +122,9 @@ interface FlowNodeInterface extends FlowElementInterface
     /**
      * Get an input to the element.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface|null $targetFlow
+     *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
-    public function getInputPlace();
+    public function getInputPlace(FlowInterface $targetFlow = null);
 }

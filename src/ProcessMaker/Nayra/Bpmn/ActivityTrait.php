@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -88,11 +88,12 @@ trait ActivityTrait
 
         $this->activeState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
-            function (TokenInterface $token) {
+            function (TokenInterface $token, TransitionInterface $source) {
+                $sequenceFlow = $source ? $source->getProperty('sequenceFlow') : null;
                 $this->getRepository()
                     ->getTokenRepository()
-                    ->persistActivityActivated($this, $token);
-                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token);
+                    ->persistActivityActivated($this, $token, $sequenceFlow);
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token, $sequenceFlow);
             }
         );
         $this->failingState->attachEvent(
@@ -129,28 +130,32 @@ trait ActivityTrait
     /**
      * Get an input to the element.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface|null $targetFlow
+     *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
-    public function getInputPlace()
+    public function getInputPlace(FlowInterface $targetFlow = null)
     {
         $ready = new State($this);
         $transition = new Transition($this, false);
         $ready->connectTo($transition);
         $transition->connectTo($this->activeState);
         $this->addInput($ready);
+        $transition->setProperty('sequenceFlow', $targetFlow);
         return $ready;
     }
 
     /**
      * Create a connection to a target node.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface $targetFlow
      *
      * @return $this
      */
-    protected function buildConnectionTo(FlowNodeInterface $target)
+    protected function buildConnectionTo(FlowInterface $targetFlow)
     {
-        $place = $target->getInputPlace();
+        $target = $targetFlow->getTarget();
+        $place = $target->getInputPlace($targetFlow);
         $this->transition->connectTo($place);
         $place->attachEvent(
             StateInterface::EVENT_TOKEN_CONSUMED,

@@ -19,7 +19,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  */
 class InclusiveGateway implements InclusiveGatewayInterface
 {
-
     use InclusiveGatewayTrait;
 
     /**

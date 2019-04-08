@@ -2,7 +2,6 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -29,10 +28,11 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
      *
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
      * @param array $properties
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
      *
      * @return TokenInterface
      */
-    public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = []);
+    public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = [], TransitionInterface $source = null);
 
     /**
      * Add a new token to the current state.
@@ -40,10 +40,11 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
      * @param bool $skipEvents
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
      *
      * @return bool
      */
-    public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token, $skipEvents = false);
+    public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token, $skipEvents = false, TransitionInterface $source = null);
 
     /**
      * Get the collection of tokens.

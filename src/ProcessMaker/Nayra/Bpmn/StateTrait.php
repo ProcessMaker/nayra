@@ -6,6 +6,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -76,10 +77,11 @@ trait StateTrait
      *
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
      * @param array $properties
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
      *
      * @return TokenInterface
      */
-    public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = [])
+    public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = [], TransitionInterface $source = null)
     {
         $token = $this->getRepository()->getTokenRepository()->createTokenInstance();
         $token->setOwner($this);
@@ -89,7 +91,7 @@ trait StateTrait
         $this->getName() ? $token->setStatus($this->getName()) : '';
         !$instance ?: $instance->addToken($token);
         $this->tokens->push($token);
-        $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token);
+        $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
         return $token;
     }
 
@@ -99,17 +101,18 @@ trait StateTrait
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
      * @param boolean $skipEvents
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
      *
      * @return TokenInterface
      */
-    public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token, $skipEvents = false)
+    public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token, $skipEvents = false, TransitionInterface $source = null)
     {
         $token->setOwner($this);
         $token->setInstance($instance);
         $this->getName() ? $token->setStatus($this->getName()) : '';
         $instance->addToken($token);
         $this->tokens->push($token);
-        $skipEvents ?: $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token);
+        $skipEvents ?: $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
         return $token;
     }
 
