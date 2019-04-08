@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionedTransitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
@@ -34,14 +35,14 @@ trait ConditionedGatewayTrait
      * Concrete gateway class should implement the logic of the
      * connection to other nodes.
      *
-     * @param FlowNodeInterface $target
+     * @param FlowInterface $target
      * @param callable $condition
      * @param bool $default
      *
      * @return $this
      */
     abstract protected function buildConditionedConnectionTo(
-        FlowNodeInterface $target,
+        FlowInterface $target,
         callable $condition,
         $default = false
     );
@@ -99,9 +100,9 @@ trait ConditionedGatewayTrait
         foreach ($flows as $flow) {
             $isDefault = $defaultFlow === $flow;
             if ($isDefault || $flow->hasCondition()) {
-                $this->buildConditionedConnectionTo($flow->getTarget(), $flow->getCondition(), $isDefault);
+                $this->buildConditionedConnectionTo($flow, $flow->getCondition(), $isDefault);
             } else {
-                $this->buildConnectionTo($flow->getTarget());
+                $this->buildConnectionTo($flow);
             }
         }
     }

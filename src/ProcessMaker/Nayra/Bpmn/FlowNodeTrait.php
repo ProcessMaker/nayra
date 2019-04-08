@@ -105,11 +105,11 @@ trait FlowNodeTrait
      * Concrete classes like Activities, Gateways, should implement a method
      * that build the connections to other nodes.
      *
-     * @param FlowNodeInterface $target
+     * @param FlowInterface $targetFlow
      *
      * @return $this
      */
-    abstract protected function buildConnectionTo(FlowNodeInterface $target);
+    abstract protected function buildConnectionTo(FlowInterface $targetFlow);
 
     /**
      * Get the transition objects of the node.
@@ -132,7 +132,7 @@ trait FlowNodeTrait
         $this->setRepository($factory);
         $flows = $this->getFlows();
         foreach ($flows as $flow) {
-            $this->buildConnectionTo($flow->getTarget());
+            $this->buildConnectionTo($flow);
         }
     }
 

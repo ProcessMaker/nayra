@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -40,9 +40,11 @@ trait EventBasedGatewayTrait
     /**
      * Get an input to the element.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface|null $targetFlow
+     *
      * @return StateInterface
      */
-    public function getInputPlace()
+    public function getInputPlace(FlowInterface $targetFlow = null)
     {
         $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
         $incomingPlace->connectTo($this->transition);
@@ -66,17 +68,18 @@ trait EventBasedGatewayTrait
     /**
      * Create a connection to a target node.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface $targetFlow
      *
      * @return $this
      */
-    protected function buildConnectionTo(FlowNodeInterface $target)
+    protected function buildConnectionTo(FlowInterface $targetFlow)
     {
+        $target = $targetFlow->getTarget();
         $outgoingPlace = new State($this, GatewayInterface::TOKEN_STATE_OUTGOING);
         $outgoingTransition = new EventBasedTransition($this, $target);
         $this->transition->connectTo($outgoingPlace);
         $outgoingPlace->connectTo($outgoingTransition);
-        $outgoingTransition->connectTo($target->getInputPlace());
+        $outgoingTransition->connectTo($target->getInputPlace($targetFlow));
         return $this;
     }
 

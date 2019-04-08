@@ -5,7 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
@@ -65,9 +65,11 @@ trait EndEventTrait
     /**
      * Get an input to the element.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface|null $targetFlow
+     *
      * @return StateInterface
      */
-    public function getInputPlace()
+    public function getInputPlace(FlowInterface $targetFlow = null)
     {
         //Create an input state
         $input = new State($this);
@@ -79,13 +81,12 @@ trait EndEventTrait
         //if the element has event definition and those event definition have a payload we notify them
         //of the triggered event
         $this->endState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistThrowEventTokenArrives($this, $token);
 
             $this->notifyEvent(ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES, $this, $token);
-            foreach($this->getEventDefinitions() as $eventDefinition) {
+            foreach ($this->getEventDefinitions() as $eventDefinition) {
                 $eventDefinitionClass = get_class($eventDefinition);
                 $payload = method_exists($eventDefinition, 'getPayload') ? $eventDefinition->getPayload() : null;
                 $this->notifyEvent($eventDefinitionClass::EVENT_THROW_EVENT_DEFINITION, $this, $token, $payload);
@@ -98,7 +99,6 @@ trait EndEventTrait
         });
 
         $this->endState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-
             $this->getRepository()
                 ->getTokenRepository()
                 ->persistThrowEventTokenConsumed($this, $token);
@@ -112,11 +112,11 @@ trait EndEventTrait
     /**
      * Create a connection to a target node.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $target
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface $targetFlow
      *
      * @return $this
      */
-    protected function buildConnectionTo(FlowNodeInterface $target)
+    protected function buildConnectionTo(FlowInterface $targetFlow)
     {
         throw new InvalidSequenceFlowException('An end event cannot have outgoing flows.');
     }
