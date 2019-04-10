@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * CallableElement interface.
@@ -11,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
  */
 interface CallableElementInterface extends EntityInterface
 {
-
     /**
      * Set the engine that controls the elements.
      *
@@ -31,6 +31,7 @@ interface CallableElementInterface extends EntityInterface
     /**
      * Call and create an instance of the callable element.
      *
+     * @return ExecutionInstanceInterface
      */
     public function call();
 }
