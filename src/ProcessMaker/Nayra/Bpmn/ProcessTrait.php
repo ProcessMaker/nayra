@@ -430,17 +430,19 @@ trait ProcessTrait
      * Create an instance of the callable element and start it.
      *
      * @param DataStoreInterface|null $dataStore
+     * @param StartEventInterface|null $selectedStart
      *
      * @return ExecutionInstanceInterface
      */
-    public function call(DataStoreInterface $dataStore = null)
+    public function call(DataStoreInterface $dataStore = null, StartEventInterface $selectedStart = null)
     {
         if (empty($dataStore)) {
             $dataStore = $this->getRepository()->createDataStore();
         }
         $instance = $this->getEngine()->createExecutionInstance($this, $dataStore);
-        $this->getEvents()->find(function (EventInterface $event) use ($instance) {
-            if ($event instanceof StartEventInterface && $event->getEventDefinitions()->count() === 0) {
+        $this->getEvents()->find(function (EventInterface $event) use ($instance, $selectedStart) {
+            if ($event instanceof StartEventInterface && $event->getEventDefinitions()->count() === 0
+                && ($selectedStart === null || $selectedStart->getId() === $event->getId())) {
                 $event->start($instance);
             }
         });

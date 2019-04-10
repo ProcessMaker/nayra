@@ -10,7 +10,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
-use ProcessMaker\Nayra\Engine\ExecutionInstance;
 
 /**
  * Engine base behavior.
@@ -19,7 +18,6 @@ use ProcessMaker\Nayra\Engine\ExecutionInstance;
  */
 trait EngineTrait
 {
-
     /**
      * Instances of process.
      *
@@ -56,9 +54,9 @@ trait EngineTrait
         //Execute transitions per instance
         foreach ($this->executionInstances as $executionInstance) {
             $sum += $executionInstance->getTransitions()->sum(function (TransitionInterface $transition) use ($executionInstance) {
-                    $result = $transition->execute($executionInstance) ? 1 : 0;
-                    return $result;
-                }) > 0;
+                $result = $transition->execute($executionInstance) ? 1 : 0;
+                return $result;
+            }) > 0;
         }
         return $sum;
     }
@@ -123,7 +121,7 @@ trait EngineTrait
         if (!$executionInstance) {
             return;
         }
-        
+
         $executionInstance->linkToEngine($this);
         $executionInstance->getProcess()->addInstance($executionInstance);
         $this->executionInstances[] = $executionInstance;
@@ -138,10 +136,12 @@ trait EngineTrait
      */
     public function closeExecutionInstances()
     {
-        $this->executionInstances = array_filter($this->executionInstances,
+        $this->executionInstances = array_filter(
+            $this->executionInstances,
             function (ExecutionInstanceInterface $executionInstance) {
                 return !$executionInstance->close();
-            });
+            }
+        );
         return count($this->executionInstances) === 0;
     }
 
@@ -203,7 +203,7 @@ trait EngineTrait
      *
      * @return StorageInterface
      */
-    private function getStorage()
+    public function getStorage()
     {
         return $this->storage;
     }
