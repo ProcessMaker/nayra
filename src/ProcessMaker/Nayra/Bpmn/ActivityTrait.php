@@ -70,6 +70,7 @@ trait ActivityTrait
         $this->setRepository($factory);
         $this->activeState = new State($this, ActivityInterface::TOKEN_STATE_ACTIVE);
         $this->activityTransition = new ActivityTransition($this, true);
+        $this->closeActiveTransition = new CloseExceptionTransition($this, true);
         $this->failingState = new State($this, ActivityInterface::TOKEN_STATE_FAILING);
         $this->exceptionTransition = new ExceptionTransition($this, true);
         $this->closeExceptionTransition = new CloseExceptionTransition($this, true);
@@ -79,6 +80,7 @@ trait ActivityTrait
 
         $this->activeState->connectTo($this->exceptionTransition);
         $this->activeState->connectTo($this->activityTransition);
+        $this->activeState->connectTo($this->closeActiveTransition);
         $this->failingState->connectTo($this->completeExceptionTransition);
         $this->failingState->connectTo($this->closeExceptionTransition);
         $this->exceptionTransition->connectTo($this->failingState);
@@ -115,6 +117,17 @@ trait ActivityTrait
             }
         );
         $this->closeExceptionTransition->attachEvent(
+            TransitionInterface::EVENT_AFTER_CONSUME,
+            function ($transition, $tokens) {
+                foreach ($tokens as $token) {
+                    $this->getRepository()
+                        ->getTokenRepository()
+                        ->persistActivityCompleted($this, $token);
+                }
+                $this->notifyEvent(ActivityInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $tokens);
+            }
+        );
+        $this->closeActiveTransition->attachEvent(
             TransitionInterface::EVENT_AFTER_CONSUME,
             function ($transition, $tokens) {
                 foreach ($tokens as $token) {
