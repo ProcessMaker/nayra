@@ -3,12 +3,12 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 
 /**
  * Test transitions
@@ -16,7 +16,6 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
  */
 class BasicsTest extends EngineTestCase
 {
-
     /**
      * Create a simple process
      *
@@ -45,7 +44,7 @@ class BasicsTest extends EngineTestCase
 
     /**
      * Sequence flow
-     * 
+     *
      * Test transitions between start event, activity and end event.
      *
      */
@@ -148,9 +147,45 @@ class BasicsTest extends EngineTestCase
         try {
             $end->createFlowTo($activity, $this->repository);
             $this->engine->createExecutionInstance($process, $dataStore);
-        }
-        catch (InvalidSequenceFlowException $e) {
+        } catch (InvalidSequenceFlowException $e) {
             $this->assertNotNull($e->getMessage());
         }
+    }
+
+    /**
+     * Tests that when a script fails, then it is closed
+     */
+    public function testCloseDirectlyActiveTask()
+    {
+        //Load a process
+        $process = $this->createSimpleProcessInstance();
+        $dataStore = $this->repository->createDataStore();
+
+        //create an instance of the process
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        //Get References
+        $start = $process->getEvents()->item(0);
+
+        //start the process an instance of the process
+        $start->start($instance);
+        $this->engine->runToNextState();
+
+        //Assert: that the process is stared and the first activity activated
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        //close the process instance
+        $instance->close();
+        $this->engine->runToNextState();
+
+        //Assertion: Verify that the proces instance was completed
+        $this->assertEvents([
+            ActivityInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+        ]);
     }
 }
