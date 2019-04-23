@@ -166,7 +166,6 @@ class BasicsTest extends EngineTestCase
 
         //Get References
         $start = $process->getEvents()->item(0);
-        $activity1 = $process->getActivities()->item(0);
 
         //start the process an instance of the process
         $start->start($instance);
@@ -179,11 +178,11 @@ class BasicsTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
-        //close the request
+        //close the process instance
         $instance->close();
         $this->engine->runToNextState();
 
-        //Assertion: Verify that the script was
+        //Assertion: Verify that the proces instance was completed
         $this->assertEvents([
             ActivityInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
