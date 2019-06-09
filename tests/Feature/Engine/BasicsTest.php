@@ -76,10 +76,17 @@ class BasicsTest extends EngineTestCase
         //Assertion: Verify the activity has one token
         $this->assertEquals(1, $activity->getTokens($instance)->count());
 
-        //Complete the activity
+        //Get the current token
         $token = $activity->getTokens($instance)->item(0);
+
+        //Assertion: Verify the token refers to the activity
+        $this->assertEquals($activity, $token->getOwnerElement());
+
+        //Complete the activity
         $activity->complete($token);
         $this->engine->runToNextState();
+
+        //Assertion: Verify the close events
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,

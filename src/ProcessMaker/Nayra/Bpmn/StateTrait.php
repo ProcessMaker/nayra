@@ -157,11 +157,22 @@ trait StateTrait
      * Set the owner node.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $owner
+     *
      * @return $this
      */
     public function setOwner(FlowNodeInterface $owner)
     {
         $this->owner = $owner;
         return $this;
+    }
+
+    /**
+     * Get the owner node.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 }

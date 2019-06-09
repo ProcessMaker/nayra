@@ -104,4 +104,14 @@ trait TokenTrait
         $this->setProperty(TokenInterface::BPMN_PROPERTY_STATUS, $status);
         return $this;
     }
+
+    /**
+     * Get the owner element of the token.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface
+     */
+    public function getOwnerElement()
+    {
+        return $this->getOwner()->getOwner();
+    }
 }
