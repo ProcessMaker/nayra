@@ -13,6 +13,7 @@ interface TokenInterface extends EntityInterface
 {
     const BPMN_PROPERTY_MESSAGE = 'message';
     const BPMN_PROPERTY_STATUS = 'status';
+    const BPMN_PROPERTY_INDEX = 'index';
 
     /**
      * Get the owner of the token.
@@ -52,6 +53,22 @@ interface TokenInterface extends EntityInterface
      * @return $this
      */
     public function setStatus($status);
+
+    /**
+     * Get token internal index.
+     *
+     * @return index
+     */
+    public function getIndex();
+
+    /**
+     * Set token internal index.
+     *
+     * @param int $index
+     *
+     * @return $this
+     */
+    public function setIndex($index);
 
     /**
      * Set the owner execution instance of the token.

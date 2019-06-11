@@ -44,6 +44,13 @@ trait FlowNodeTrait
     private $states = [];
 
     /**
+     * States classified by name
+     *
+     * @var array
+     */
+    private $statesByName = [];
+
+    /**
      *
      * @var Process
      */
@@ -146,6 +153,8 @@ trait FlowNodeTrait
     public function addState(StateInterface $state)
     {
         $this->states[] = $state;
+        $this->statesByName[$state->getName()][] = $state;
+        $state->setIndex(count($this->statesByName[$state->getName()]) - 1);
         return $this;
     }
 
@@ -160,6 +169,19 @@ trait FlowNodeTrait
     }
 
     /**
+     * Get state by name and index.
+     *
+     * @param string $state
+     * @param string $index
+     *
+     * @return StateInterface
+     */
+    private function getStateByName($state, $index)
+    {
+        return $this->statesByName[$state][(int) $index];
+    }
+
+    /**
      * Load tokens from array.
      *
      * @param ExecutionInstanceInterface $instance
@@ -169,11 +191,8 @@ trait FlowNodeTrait
      */
     public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
-        foreach ($this->getStates() as $state) {
-            if ($state->getName() === $token->getStatus()) {
-                $state->addToken($instance, $token, true);
-            }
-        }
+        $state = $this->getStateByName($token->getStatus(), $token->getIndex());
+        $state->addToken($instance, $token, true);
         return $this;
     }
 

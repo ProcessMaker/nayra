@@ -72,6 +72,22 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
     public function setName($name);
 
     /**
+     * Get state index
+     *
+     * @return int
+     */
+    public function getIndex();
+
+    /**
+     * Set state name.
+     *
+     * @param int $index
+     *
+     * @return $this
+     */
+    public function setIndex($index);
+
+    /**
      * Set the owner node.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $owner

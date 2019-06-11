@@ -106,6 +106,29 @@ trait TokenTrait
     }
 
     /**
+     * Get token internal index.
+     *
+     * @return index
+     */
+    public function getIndex()
+    {
+        return $this->getProperty(TokenInterface::BPMN_PROPERTY_INDEX, 0);
+    }
+
+    /**
+     * Set token internal index.
+     *
+     * @param int $index
+     *
+     * @return $this
+     */
+    public function setIndex($index)
+    {
+        $this->setProperty(TokenInterface::BPMN_PROPERTY_INDEX, $index);
+        return $this;
+    }
+
+    /**
      * Get the owner element of the token.
      *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface
