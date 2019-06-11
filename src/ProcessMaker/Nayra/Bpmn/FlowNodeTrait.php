@@ -178,7 +178,8 @@ trait FlowNodeTrait
      */
     private function getStateByName($state, $index)
     {
-        return $this->statesByName[$state][(int) $index];
+        return isset($this->statesByName[$state]) && is_array($this->statesByName[$state])
+        ? $this->statesByName[$state][(int) $index] : null;
     }
 
     /**
@@ -192,7 +193,7 @@ trait FlowNodeTrait
     public function addToken(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
         $state = $this->getStateByName($token->getStatus(), $token->getIndex());
-        $state->addToken($instance, $token, true);
+        $state ? $state->addToken($instance, $token, true) : null;
         return $this;
     }
 
