@@ -42,6 +42,12 @@ trait FlowNodeTrait
      * @var StateInterface[]
      */
     private $states = [];
+
+    /**
+     * States classified by name
+     *
+     * @var array
+     */
     private $statesByName = [];
 
     /**
@@ -146,7 +152,6 @@ trait FlowNodeTrait
      */
     public function addState(StateInterface $state)
     {
-        $index = count($this->states);
         $this->states[] = $state;
         $this->statesByName[$state->getName()][] = $state;
         $state->setIndex(count($this->statesByName[$state->getName()]) - 1);
