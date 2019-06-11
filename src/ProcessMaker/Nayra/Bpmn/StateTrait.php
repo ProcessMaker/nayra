@@ -34,6 +34,13 @@ trait StateTrait
     private $name;
 
     /**
+     * State index.
+     *
+     * @var int
+     */
+    private $index;
+
+    /**
      * @var FlowNodeInterface $owner
      */
     private $owner;
@@ -89,6 +96,7 @@ trait StateTrait
         $token->setOwner($this);
         $token->setInstance($instance);
         $this->getName() ? $token->setStatus($this->getName()) : '';
+        $token->setIndex($this->getIndex());
         !$instance ?: $instance->addToken($token);
         $this->tokens->push($token);
         $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
@@ -110,6 +118,7 @@ trait StateTrait
         $token->setOwner($this);
         $token->setInstance($instance);
         $this->getName() ? $token->setStatus($this->getName()) : '';
+        $token->setIndex($this->getIndex());
         $instance->addToken($token);
         $this->tokens->push($token);
         $skipEvents ?: $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
@@ -150,6 +159,29 @@ trait StateTrait
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get state index
+     *
+     * @return int
+     */
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    /**
+     * Set state name.
+     *
+     * @param int $index
+     *
+     * @return $this
+     */
+    public function setIndex($index)
+    {
+        $this->index = $index;
         return $this;
     }
 
