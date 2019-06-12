@@ -47,9 +47,13 @@ class ParallelGatewayTransition implements TransitionInterface
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
-        $incomingWithToken = $this->incoming()->find(function(Connection $flow) use ($executionInstance) {
-            return $flow->originState()->getTokens($executionInstance)->count()>0;
+        $incomingCount = $this->incoming()->count();
+        if (!$incomingCount) {
+            return false;
+        }
+        $incomingWithToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
+            return $flow->originState()->getTokens($executionInstance)->count() > 0;
         });
-        return $incomingWithToken->count() === $this->incoming()->count();
+        return $incomingWithToken->count() === $incomingCount;
     }
 }
