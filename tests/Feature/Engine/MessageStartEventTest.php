@@ -136,6 +136,8 @@ class MessageStartEventTest extends EngineTestCase
         $processA->setDataStores($dataStoreCollectionA);
         $processB->setDataStores($dataStoreCollectionB);
 
+        $this->engine->loadCollaboration($collaboration);
+        $this->engine->loadProcess($processB);
         $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
 
         // we start the process A

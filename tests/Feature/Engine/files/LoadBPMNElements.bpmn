@@ -195,7 +195,7 @@
       <outgoing>_26</outgoing>
       <outputSet/>
       <timerEventDefinition id="_24_ED_1">
-        <timeCycle><![CDATA[R10/2018-06-01T16:24:51/2018-06-30T16:24:51]]></timeCycle>
+        <timeCycle><![CDATA[R10/2018-06-01T16:24:51Z/PT1M]]></timeCycle>
       </timerEventDefinition>
     </startEvent>
     <scriptTask completionQuantity="1" id="_25" isForCompensation="false" name="Script Task" startQuantity="1">
