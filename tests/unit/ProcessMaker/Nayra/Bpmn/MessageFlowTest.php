@@ -2,10 +2,9 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Models\EndEvent;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\EndEvent;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateCatchEvent;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
@@ -29,7 +28,7 @@ class MessageFlowTest extends TestCase
         $target = new IntermediateCatchEvent();
         $source = new EndEvent();
         $message = new Message();
-        $messageEventDef  = new MessageEventDefinition();
+        $messageEventDef = new MessageEventDefinition();
         $messageEventDef->setPayload($message);
 
         $source->getEventDefinitions()->push($messageEventDef);
@@ -45,5 +44,8 @@ class MessageFlowTest extends TestCase
 
         //Assertion: The get target must be equal to the set one
         $this->assertEquals($target, $msgFlow->getTarget());
+
+        //Assertion: The get collaboration must be equal to the set one
+        $this->assertEquals($collaboration, $msgFlow->getCollaboration());
     }
 }
