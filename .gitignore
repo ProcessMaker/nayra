@@ -3,4 +3,5 @@ vendor
 composer.phar
 .DS_store
 nbproject/
-
+coverage/
+composer.lock

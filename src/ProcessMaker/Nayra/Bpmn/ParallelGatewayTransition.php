@@ -43,13 +43,15 @@ class ParallelGatewayTransition implements TransitionInterface
      * The Parallel Gateway is activated if there is at least one token on
      * each incoming Sequence Flow.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
+     *
      * @return bool
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
-        $incomingWithToken = $this->incoming()->find(function(Connection $flow) use ($executionInstance) {
-            return $flow->originState()->getTokens($executionInstance)->count()>0;
+        $incomingWithToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
+            return $flow->originState()->getTokens($executionInstance)->count() > 0;
         });
-        return $incomingWithToken->count() === $this->incoming()->count();
+        return $incomingWithToken->count() === $this->incoming()->count() && $incomingWithToken->count() > 0;
     }
 }
