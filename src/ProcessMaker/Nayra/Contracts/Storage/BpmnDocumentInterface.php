@@ -9,6 +9,9 @@ use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
  * BPMN DOM file interface
  *
  * @package \ProcessMaker\Nayra\Contracts\Storage
+ * 
+ * @method DOMNodeList getElementsByTagName(string $name)
+ * @method DOMNodeList getElementsByTagNameNS(string $namespaceURI, string $localName)
  */
 interface BpmnDocumentInterface extends StorageInterface
 {

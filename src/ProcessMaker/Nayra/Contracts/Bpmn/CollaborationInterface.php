@@ -68,7 +68,7 @@ interface CollaborationInterface extends EntityInterface
      * @param EventDefinitionInterface $message
      * @param TokenInterface $token
      */
-    public function send(EventDefinitionInterface $message, TokenInterface $token);
+    //public function send(EventDefinitionInterface $message, TokenInterface $token);
 
     /**
      * Subscribes an element to the collaboration so that it can listen the messages sent
@@ -80,7 +80,7 @@ interface CollaborationInterface extends EntityInterface
      *
      * @return mixed
      */
-    public function subscribe(MessageListenerInterface $element, $messageId);
+    //public function subscribe(MessageListenerInterface $element, $messageId);
 
     /**
      * Unsuscribes an object to the collaboration, so that it won't listen to the messages sent
@@ -92,5 +92,5 @@ interface CollaborationInterface extends EntityInterface
      *
      * @return mixed
      */
-    public function unsubscribe(MessageListenerInterface $element, $messageId);
+    //public function unsubscribe(MessageListenerInterface $element, $messageId);
 }

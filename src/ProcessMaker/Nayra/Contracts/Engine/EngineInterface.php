@@ -2,13 +2,14 @@
 
 namespace ProcessMaker\Nayra\Contracts\Engine;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 
 /**
  * Engine interface.
@@ -136,4 +137,45 @@ interface EngineInterface
      * @return $this
      */
     public function setJobManager(JobManagerInterface $jobManager = null);
+
+    /**
+     * Get the event definitions bus of the engine
+     *
+     * @return EventDefinitionBusInterface
+     */
+    public function getEventDefinitionBus();
+
+    /**
+     * Set a event definitions bus for the engine
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface $eventDefinitionBus
+     *
+     * @return EngineInterface
+     */
+    public function setEventDefinitionBus(EventDefinitionBusInterface $eventDefinitionBus);
+
+    /**
+     * Load definitions into BPMN Engine
+     *
+     * @param BpmnDocumentInterface $document
+     *
+     * @return EngineInterface
+     */
+    public function loadBpmnDocument(BpmnDocumentInterface $document);
+
+    /**
+     * Load a collaboration
+     *
+     * @param CollaborationInterface $collaboration
+     *
+     * @return EngineInterface
+     */
+    public function loadCollaboration(CollaborationInterface $collaboration);
+
+    /**
+     * Get the repository storage of the engine.
+     *
+     * @return StorageInterface
+     */
+    public function getStorage();
 }
