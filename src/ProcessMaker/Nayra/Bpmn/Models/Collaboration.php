@@ -4,17 +4,10 @@ namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
-use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CorrelationKeyInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Implementation of Collaboration element.
@@ -22,10 +15,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  */
 class Collaboration implements CollaborationInterface
 {
-
     use BaseTrait;
-
-    private $subscribers = [];
 
     /**
      * @var boolean $isClosed
@@ -134,142 +124,6 @@ class Collaboration implements CollaborationInterface
     {
         $this->isClosed = $isClosed;
         return $this;
-    }
-
-    /**
-     * Sends a message
-     *
-     * @param EventDefinitionInterface $message
-     * @param TokenInterface $token
-     */
-    public function send(EventDefinitionInterface $message, TokenInterface $token)
-    {
-        foreach ($this->subscribers as $subscriber) {
-            $this->subscriberReceiveEvent($message, $token, $subscriber);
-        }
-    }
-
-    /**
-     * A subscriber receive a message within a collaboration.
-     *
-     * @param EventDefinitionInterface $message
-     * @param TokenInterface $token
-     * @param array $subscriber
-     */
-    private function subscriberReceiveEvent(EventDefinitionInterface $message, TokenInterface $token, array $subscriber)
-    {
-        $isBroadcast = $message instanceof SignalEventDefinition;
-        foreach ($subscriber['node']->getEventDefinitions() as $subscriberPayload) {
-            $match = !$isBroadcast && $subscriber['key'] === $message->getId()
-                || ($isBroadcast && $subscriberPayload instanceof SignalEventDefinition);
-            if ($match && $subscriber['node'] instanceof StartEventInterface) {
-                $this->startEventReceiveMessage($subscriber['node'], $message, $token);
-            } elseif ($match) {
-                $this->catchEventReceiveMessage($subscriber['node'], $message, $token);
-            }
-        }
-    }
-
-    /**
-     * A Start Event receive a message within a collaboration.
-     *
-     * @param StartEventInterface $startEvent
-     * @param EventDefinitionInterface $message
-     * @param TokenInterface $token
-     */
-    private function startEventReceiveMessage(StartEventInterface $startEvent, EventDefinitionInterface $message, TokenInterface $token)
-    {
-        $process = $startEvent->getOwnerProcess();
-        $dataStorage = $process->getRepository()->createDataStore();
-        $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
-        $instanceRepository = $process->getRepository()->createExecutionInstanceRepository();
-        $participant = $this->getParticipantFor($process);
-        $sourceInstance = $token->getInstance();
-        $sourceParticipant = $this->getParticipantFor($sourceInstance->getProcess());
-        $instanceRepository->persistInstanceCollaboration($instance, $participant, $sourceInstance, $sourceParticipant);
-        $startEvent->execute($message, $instance, $token);
-    }
-
-    /**
-     * A catch event receive a message within a collaboration.
-     *
-     * @param CatchEventInterface $catchEvent
-     * @param EventDefinitionInterface $message
-     * @param TokenInterface $token
-     */
-    private function catchEventReceiveMessage(CatchEventInterface $catchEvent, EventDefinitionInterface $message, TokenInterface $token)
-    {
-        foreach ($this->getInstancesFor($catchEvent, $message, $token) as $instance) {
-            $catchEvent->execute($message, $instance, $token);
-        }
-    }
-
-    /**
-     * Get the participant of a specific $process.
-     *
-     * @param ProcessInterface $process
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ParticipantInterface
-     */
-    private function getParticipantFor(ProcessInterface $process)
-    {
-        $participantFor = null;
-        foreach ($this->getParticipants() as $participant) {
-            if ($participant->getProcess()->getId() === $process->getId()) {
-                $participantFor = $participant;
-                break;
-            }
-        }
-        return $participantFor;
-    }
-
-    /**
-     * Get instances related to the catch event node.
-     *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface $node
-     * @param EventDefinitionInterface $message
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
-     *
-     * @return \ProcessMaker\Nayra\Engine\ExecutionInstance[]
-     */
-    private function getInstancesFor(CatchEventInterface $node, EventDefinitionInterface $message, TokenInterface $token)
-    {
-        return $node->getTargetInstances($message, $token);
-    }
-
-    /**
-     * Subscribes an element to the collaboration so that it can listen the messages sent
-     *
-     * @param MessageListenerInterface $node
-     * @param string $messageId
-     * @internal param string $id
-     * @internal param MessageInterface $message
-     *
-     * @return mixed
-     */
-    public function subscribe(MessageListenerInterface $node, $messageId)
-    {
-        $this->subscribers [] = [
-            'node' => $node,
-            'key' => $messageId
-        ];
-    }
-
-    /**
-     * Unsubscribes an object to the collaboration, so that it won't listen to the messages sent
-     *
-     * @param MessageListenerInterface $node
-     * @param string $messageId
-     *
-     * @internal param string $id
-     * @internal param MessageInterface $message
-     */
-    public function unsubscribe(MessageListenerInterface $node, $messageId)
-    {
-        $this->subscribers = array_filter($this->subscribers,
-            function ($e) use ($messageId) {
-                return $e['key'] !== $messageId;
-            });
     }
 
     /**

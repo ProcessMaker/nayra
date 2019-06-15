@@ -175,6 +175,11 @@ trait IntermediateCatchEventTrait
      */
     public function registerCatchEvents(EngineInterface $engine)
     {
+        foreach ($this->getEventDefinitions() as $eventDefinition) {
+            $engine->getEventDefinitionBus()->registerCatchEvent($this, $eventDefinition, function (EventDefinitionInterface $eventDefinition, ExecutionInstanceInterface $instance) {
+                $this->execute($eventDefinition, $instance);
+            });
+        }
         return $this;
     }
 

@@ -341,6 +341,7 @@ trait ProcessTrait
     public function addEvent(EventInterface $event)
     {
         $event->setOwnerProcess($this);
+        $event->setProcess($this);
         $this->getProperty('events')->push($event);
         return $this;
     }

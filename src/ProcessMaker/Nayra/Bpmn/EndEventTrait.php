@@ -92,8 +92,7 @@ trait EndEventTrait
                 $this->notifyEvent($eventDefinitionClass::EVENT_THROW_EVENT_DEFINITION, $this, $token, $payload);
                 $messageFlow = $payload ? $payload->getMessageFlow() : false;
                 if ($messageFlow) {
-                    $collaboration = $messageFlow->getCollaboration();
-                    $collaboration->send($eventDefinition, $token);
+                    $this->getProcess()->getEngine()->getEventDefinitionBus()->dispatchEventDefinition($this, $eventDefinition, $token);
                 }
             }
         });

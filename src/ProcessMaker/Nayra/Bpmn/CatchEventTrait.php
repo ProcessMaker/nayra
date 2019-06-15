@@ -34,14 +34,4 @@ trait CatchEventTrait
     {
         return $this->getProperty(CatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS);
     }
-
-    /**
-     * @param EventDefinitionInterface $message
-     * @param TokenInterface $token
-     * @return \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface[]
-     */
-    public function getTargetInstances(EventDefinitionInterface $message, TokenInterface $token)
-    {
-        return $this->getOwnerProcess()->getInstances();
-    }
 }

@@ -85,8 +85,8 @@ class MessageFlow implements MessageFlowInterface
     {
         $eventDef = $this->getSource()->getEventDefinitions()->item(0);
         $eventDef->getPayload()->setMessageFlow($this);
-        $this->getCollaboration()->unsubscribe($target, $eventDef->getId());
-        $this->getCollaboration()->subscribe($target, $eventDef->getId());
+        //$this->getCollaboration()->unsubscribe($target, $eventDef->getId());
+        //$this->getCollaboration()->subscribe($target, $eventDef->getId());
         return $this->setProperty(static::BPMN_PROPERTY_TARGET, $target);
     }
 
