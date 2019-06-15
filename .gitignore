@@ -5,3 +5,4 @@ composer.phar
 nbproject/
 coverage/
 composer.lock
+.vscode/
