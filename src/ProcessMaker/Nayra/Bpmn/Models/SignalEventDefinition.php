@@ -106,7 +106,7 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
     {
         $targetPayload = $this->getPayload();
         $sourcePayload = $eventDefinition->getPayload();
-        return $targetPayload && $targetPayload && $targetPayload->getId() === $sourcePayload->getId();
+        return $targetPayload && $sourcePayload && $targetPayload->getId() === $sourcePayload->getId();
     }
 
     /**
