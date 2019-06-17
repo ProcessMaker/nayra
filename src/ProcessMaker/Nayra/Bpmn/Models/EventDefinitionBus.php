@@ -3,27 +3,49 @@
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\ObservableTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface;
 
+/**
+ * Implements a events bus for the bpmn elements.
+ *
+ */
 class EventDefinitionBus implements EventDefinitionBusInterface
 {
     use ObservableTrait;
 
-    private $messageFlows = [];
     private $collaboration;
 
+    /**
+     * Dispatch an event definition
+     *
+     * @param ThrowEventInterface $source
+     * @param EventDefinitionInterface $eventDefinition
+     * @param TokenInterface $token
+     *
+     * @return EventDefinitionBusInterface
+     */
     public function dispatchEventDefinition(ThrowEventInterface $source, EventDefinitionInterface $eventDefinition, TokenInterface $token)
     {
         $this->notifyEvent(get_class($eventDefinition), $source, $eventDefinition, $token);
+        return $this;
     }
 
+    /**
+     * Register a catch event element
+     *
+     * @param CatchEventInterface $catchEvent
+     * @param EventDefinitionInterface $eventDefinition
+     * @param callable $callable
+     *
+     * @return EventDefinitionBusInterface
+     */
     public function registerCatchEvent(CatchEventInterface $catchEvent, EventDefinitionInterface $eventDefinition, callable $callable)
     {
         $this->attachEvent(get_class($eventDefinition), function (ThrowEventInterface $source, EventDefinitionInterface $sourceEventDefinition, TokenInterface $token) use ($catchEvent, $callable, $eventDefinition) {
@@ -48,6 +70,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
                 }
             }
         });
+        return $this;
     }
 
     /**
