@@ -1,0 +1,24 @@
+[
+    {
+        "startEvent": "StartEvent",
+        "data": {},
+        "events": [
+            "IntermediateCatchEvent_2"
+        ],
+        "result": [
+            "start",
+            "task2"
+        ]
+    },
+    {
+        "startEvent": "StartEvent",
+        "data": {},
+        "events": [
+            "IntermediateCatchEvent_1"
+        ],
+        "result": [
+            "start",
+            "task1"
+        ]
+    }
+]

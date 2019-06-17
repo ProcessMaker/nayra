@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/20100501/BPMN20.xsd"
+                   id="EventBasedGateway_SignalsTest"
+                   targetNamespace="http://dsg.wiai.uniba.de/betsy/bpmn/eventBasedGateway_Signals">
+
+    <bpmn2:signal id="signal" name="Signal"/>
+
+    <bpmn2:signal id="signal2" name="Signal2"/>
+
+    <bpmn2:process id="EventBasedGateway_Signals" isExecutable="true">
+
+        <bpmn2:startEvent id="StartEvent">
+            <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+        </bpmn2:startEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="StartEvent" targetRef="start"/>
+
+        <bpmn2:scriptTask id="start" name="Start">
+            <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_12</bpmn2:outgoing>
+            <bpmn2:script>CREATE_LOG_FILE</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_12" name="" sourceRef="start" targetRef="ParallelGateway_1"/>
+
+        <bpmn2:parallelGateway id="ParallelGateway_1" gatewayDirection="Diverging">
+            <bpmn2:incoming>SequenceFlow_12</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_13</bpmn2:outgoing>
+            <bpmn2:outgoing>SequenceFlow_17</bpmn2:outgoing>
+        </bpmn2:parallelGateway>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_17" name="" sourceRef="ParallelGateway_1"
+                            targetRef="IntermediateCatchEvent_2"/>
+
+        <bpmn2:intermediateCatchEvent id="IntermediateCatchEvent_2">
+            <bpmn2:incoming>SequenceFlow_17</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_7</bpmn2:outgoing>
+            <bpmn2:timerEventDefinition id="_TimerEventDefinition_1">
+                <bpmn2:timeDuration xsi:type="bpmn2:tFormalExpression">PT5S</bpmn2:timeDuration>
+            </bpmn2:timerEventDefinition>
+        </bpmn2:intermediateCatchEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_7" name="" sourceRef="IntermediateCatchEvent_2" targetRef="IntermediateThrowEvent_2"/>
+
+        <bpmn2:intermediateThrowEvent id="IntermediateThrowEvent_2">
+            <bpmn2:incoming>SequenceFlow_7</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_20</bpmn2:outgoing>
+            <bpmn2:signalEventDefinition id="SignalEventDefinition_1" signalRef="signal"/>
+        </bpmn2:intermediateThrowEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_20" name="" sourceRef="IntermediateThrowEvent_2"
+                            targetRef="task3"/>
+
+        <bpmn2:scriptTask id="task3" name="Task 1">
+            <bpmn2:incoming>SequenceFlow_20</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_27</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task1</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_27" name="" sourceRef="task3" targetRef="ParallelGateway_2"/>
+
+
+        <bpmn2:sequenceFlow id="SequenceFlow_13" name="" sourceRef="ParallelGateway_1" targetRef="EventBasedGateway_1"/>
+
+        <bpmn2:eventBasedGateway id="EventBasedGateway_1" gatewayDirection="Diverging">
+            <bpmn2:incoming>SequenceFlow_13</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_15</bpmn2:outgoing>
+            <bpmn2:outgoing>SequenceFlow_23</bpmn2:outgoing>
+        </bpmn2:eventBasedGateway>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_15" name="" sourceRef="EventBasedGateway_1"
+                            targetRef="IntermediateCatchEvent_3"/>
+
+        <bpmn2:intermediateCatchEvent id="IntermediateCatchEvent_3">
+            <bpmn2:incoming>SequenceFlow_15</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_21</bpmn2:outgoing>
+            <bpmn2:signalEventDefinition id="SignalEventDefinition_2" signalRef="signal"/>
+        </bpmn2:intermediateCatchEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_21" name="" sourceRef="IntermediateCatchEvent_3" targetRef="task1"/>
+
+        <bpmn2:scriptTask id="task1" name="Task 2">
+            <bpmn2:incoming>SequenceFlow_21</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_22</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task2</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_22" name="" sourceRef="task1" targetRef="ParallelGateway_2"/>
+
+        <bpmn2:parallelGateway id="ParallelGateway_2" gatewayDirection="Converging">
+            <bpmn2:incoming>SequenceFlow_27</bpmn2:incoming>
+            <bpmn2:incoming>SequenceFlow_22</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_14</bpmn2:outgoing>
+        </bpmn2:parallelGateway>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_14" name="" sourceRef="ParallelGateway_2" targetRef="end"/>
+
+        <bpmn2:scriptTask id="end" name="End">
+            <bpmn2:incoming>SequenceFlow_14</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task4</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_5" name="" sourceRef="end" targetRef="EndEvent_1"/>
+
+        <bpmn2:endEvent id="EndEvent_1">
+            <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
+        </bpmn2:endEvent>
+
+
+        <bpmn2:sequenceFlow id="SequenceFlow_23" name="" sourceRef="EventBasedGateway_1"
+                            targetRef="IntermediateCatchEvent_4"/>
+
+        <bpmn2:intermediateCatchEvent id="IntermediateCatchEvent_4">
+            <bpmn2:incoming>SequenceFlow_23</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_24</bpmn2:outgoing>
+            <bpmn2:signalEventDefinition id="SignalEventDefinition_3" signalRef="signal2"/>
+        </bpmn2:intermediateCatchEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_24" name="" sourceRef="IntermediateCatchEvent_4" targetRef="task2"/>
+
+        <bpmn2:scriptTask id="task2" name="Task 3">
+            <bpmn2:incoming>SequenceFlow_24</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_26</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task3</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_26" name="" sourceRef="task2" targetRef="EndEvent_2"/>
+
+        <bpmn2:endEvent id="EndEvent_2">
+            <bpmn2:incoming>SequenceFlow_26</bpmn2:incoming>
+        </bpmn2:endEvent>
+
+    </bpmn2:process>
+</bpmn2:definitions>

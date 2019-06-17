@@ -1,0 +1,15 @@
+[
+    {
+        "startEvent": "StartEvent",
+        "data": {},
+        "events": [
+            "IntermediateCatchEvent_2"
+        ],
+        "result": [
+            "start",
+            "task1",
+            "task3",
+            "end"
+        ]
+    }
+]
