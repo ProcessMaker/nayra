@@ -35,27 +35,4 @@ class Error implements ErrorInterface
     {
         return $this->getProperty(ErrorInterface::BPMN_PROPERTY_ERROR_CODE);
     }
-
-    /**
-     * Sets the message flow to which this signal pertains
-     *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface $messageFlow
-     *
-     * @return $this
-     */
-    public function setMessageFlow(MessageFlowInterface $messageFlow)
-    {
-        $this->messageFlow = $messageFlow;
-        return $this;
-    }
-
-    /**
-     * Returns the message flow to which this signal pertains
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface
-     */
-    public function getMessageFlow()
-    {
-        return $this->messageFlow;
-    }
 }

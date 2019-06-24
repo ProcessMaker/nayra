@@ -81,8 +81,6 @@ class MessageFlow implements MessageFlowInterface
      */
     public function setTarget(CatchEventInterface $target)
     {
-        $eventDef = $this->getSource()->getEventDefinitions()->item(0);
-        $eventDef->getPayload()->setMessageFlow($this);
         return $this->setProperty(static::BPMN_PROPERTY_TARGET, $target);
     }
 

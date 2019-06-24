@@ -43,23 +43,6 @@ interface MessageInterface extends EntityInterface
     public function getName();
 
     /**
-     * Sets the message flow to which this message pertains
-     *
-     * @param MessageFlowInterface $messageFlow
-     *
-     * @return mixed
-     */
-    public function setMessageFlow(MessageFlowInterface $messageFlow);
-
-
-    /**
-     * Returns the message flow to which this message pertains
-     *
-     * @return mixed
-     */
-    public function getMessageFlow();
-
-    /**
      * Allows to set the item
      *
      * @param ItemDefinitionInterface $item

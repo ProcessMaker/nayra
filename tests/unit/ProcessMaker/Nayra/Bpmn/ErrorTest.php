@@ -25,7 +25,6 @@ class ErrorTest extends TestCase
         $testString = 'oneString';
 
         //set process and state object to the data store
-        $error->setMessageFlow($message);
         $error->setProperty(ErrorInterface::BPMN_PROPERTY_NAME, $testString);
         $error->setProperty(ErrorInterface::BPMN_PROPERTY_ERROR_CODE, $testString);
 
