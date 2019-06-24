@@ -90,10 +90,7 @@ trait EndEventTrait
                 $eventDefinitionClass = get_class($eventDefinition);
                 $payload = method_exists($eventDefinition, 'getPayload') ? $eventDefinition->getPayload() : null;
                 $this->notifyEvent($eventDefinitionClass::EVENT_THROW_EVENT_DEFINITION, $this, $token, $payload);
-                $messageFlow = $payload ? $payload->getMessageFlow() : false;
-                if ($messageFlow) {
-                    $this->getProcess()->getEngine()->getEventDefinitionBus()->dispatchEventDefinition($this, $eventDefinition, $token);
-                }
+                $this->getProcess()->getEngine()->getEventDefinitionBus()->dispatchEventDefinition($this, $eventDefinition, $token);
             }
         });
 
