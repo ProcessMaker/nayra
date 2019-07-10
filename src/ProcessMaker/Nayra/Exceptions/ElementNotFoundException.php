@@ -10,6 +10,7 @@ use OutOfBoundsException;
  */
 class ElementNotFoundException extends OutOfBoundsException
 {
+    public $elementId;
 
     /**
      * Exception constructor.
@@ -18,6 +19,7 @@ class ElementNotFoundException extends OutOfBoundsException
      */
     public function __construct($id)
     {
-        parent::__construct('Element instance for id "' . $id . '" was not found');
+        $this->elementId = $id;
+        parent::__construct('Element "' . $id . '" was not found');
     }
 }
