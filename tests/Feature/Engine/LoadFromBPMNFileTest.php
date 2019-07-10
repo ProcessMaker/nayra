@@ -67,7 +67,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Create a data store with data.
         $dataStore = $this->repository->createDataStore();
 
-        //Load the process
+        //Create a process instance
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References by id
