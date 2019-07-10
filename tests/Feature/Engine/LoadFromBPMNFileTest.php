@@ -540,6 +540,30 @@ class LoadFromBPMNFileTest extends EngineTestCase
     }
 
     /**
+     * Test skip loading of non implemented elements.
+     *
+     */
+    public function testSkipCustomElementNotImplemented()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setSkipElementsNotImplemented(true);
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->setBpmnElementMapping('http://www.processmaker.org/spec/PM/20100607/MODEL', 'task', [
+                ActivityInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ]
+            ]);
+        $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
+        
+        //Try to get custom element
+        $bpmnRepository->getActivity('PROCESS_1');
+    }
+
+    /**
      * Test to get a missing BPMN element.
      *
      */
