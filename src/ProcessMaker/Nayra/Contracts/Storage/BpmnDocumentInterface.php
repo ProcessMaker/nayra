@@ -74,6 +74,29 @@ interface BpmnDocumentInterface extends StorageInterface
      * @return bool
      */
     public function hasElementInstance($id);
+
+    /**
+     * Get skipElementsNotImplemented property.
+     *
+     * If set to TRUE, skip loading elements that are not implemented
+     * If set to FALSE, throw ElementNotImplementedException
+     *
+     * @return bool
+     */
+    public function getSkipElementsNotImplemented();
+
+    /**
+     * Set skipElementsNotImplemented property.
+     *
+     * If set to TRUE, skip loading elements that are not implemented
+     * If set to FALSE, throw ElementNotImplementedException
+     *
+     * @param bool $skipElementsNotImplemented
+     *
+     * @return BpmnDocument
+     */
+    public function setSkipElementsNotImplemented($skipElementsNotImplemented);
+
     /**
      * Validate document with BPMN schemas.
      *
