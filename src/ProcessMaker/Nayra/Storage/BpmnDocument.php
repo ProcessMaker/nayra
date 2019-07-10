@@ -77,6 +77,11 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     private $factory;
 
     /**
+     * @var bool $skipElementsNotImplemented
+     */
+    private $skipElementsNotImplemented = false;
+
+    /**
      * BPMNValidator errors.
      *
      * @var array $validationErrors
@@ -518,6 +523,35 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     {
         $element = $this->findElementById($id);
         return !empty($element) && !empty($element->getBpmnElementInstance());
+    }
+
+    /**
+     * Get skipElementsNotImplemented property.
+     *
+     * If set to TRUE, skip loading elements that are not implemented
+     * If set to FALSE, throw ElementNotImplementedException
+     *
+     * @return bool
+     */
+    public function getSkipElementsNotImplemented()
+    {
+        return $this->skipElementsNotImplemented;
+    }
+
+    /**
+     * Set skipElementsNotImplemented property.
+     *
+     * If set to TRUE, skip loading elements that are not implemented
+     * If set to FALSE, throw ElementNotImplementedException
+     *
+     * @param bool $skipElementsNotImplemented
+     *
+     * @return BpmnDocument
+     */
+    public function setSkipElementsNotImplemented($skipElementsNotImplemented)
+    {
+        $this->skipElementsNotImplemented = $skipElementsNotImplemented;
+        return $this;
     }
 
     /**

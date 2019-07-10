@@ -6,10 +6,10 @@ use DOMAttr;
 use DOMElement;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
 use ProcessMaker\Nayra\Exceptions\ElementNotImplementedException;
 use ProcessMaker\Nayra\Exceptions\NamespaceNotImplementedException;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 
 /**
  * Description of BpmnFileElement
@@ -37,7 +37,9 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
         if (!array_key_exists($this->namespaceURI, $map)) {
             throw new NamespaceNotImplementedException($this->namespaceURI);
         }
-        if (!array_key_exists($this->localName, $map[$this->namespaceURI])) {
+        if (!array_key_exists($this->localName, $map[$this->namespaceURI]) && $this->ownerDocument->getSkipElementsNotImplemented()) {
+            return null;
+        } elseif (!array_key_exists($this->localName, $map[$this->namespaceURI])) {
             throw new ElementNotImplementedException($this->localName);
         }
         if ($map[$this->namespaceURI][$this->localName] === BpmnDocument::SKIP_ELEMENT) {
