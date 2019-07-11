@@ -67,7 +67,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         //Create a data store with data.
         $dataStore = $this->repository->createDataStore();
 
-        //Load the process
+        //Create a process instance
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
 
         //Get References by id
@@ -505,12 +505,12 @@ class LoadFromBPMNFileTest extends EngineTestCase
      */
     public function testCustomNameSpaceNotImplemented()
     {
+        $this->expectException(NamespaceNotImplementedException::class);
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
-        $this->expectException(NamespaceNotImplementedException::class);
         $bpmnRepository->getActivity('_2');
     }
 
@@ -520,6 +520,8 @@ class LoadFromBPMNFileTest extends EngineTestCase
      */
     public function testCustomElementNotImplemented()
     {
+        //Assertion: An ElementNotImplementedException expected
+        $this->expectException(ElementNotImplementedException::class);
         //Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
@@ -534,8 +536,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
         
         //Try to get custom element
-        //Assertion: An ElementNotImplementedException expected
-        $this->expectException(ElementNotImplementedException::class);
         $bpmnRepository->getActivity('_2');
     }
 

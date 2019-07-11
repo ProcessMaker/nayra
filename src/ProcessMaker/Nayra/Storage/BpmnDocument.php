@@ -122,6 +122,13 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                 ]
             ],
+            'userTask' => [
+                ActivityInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ]
+            ],
             'scriptTask' => [
                 ScriptTaskInterface::class,
                 [
@@ -220,6 +227,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 ]
             ],
             'extensionElements' => self::SKIP_ELEMENT,
+            'documentation' => self::SKIP_ELEMENT,
             'inputSet' => [
                 InputSetInterface::class,
                 [

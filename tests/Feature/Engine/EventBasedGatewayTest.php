@@ -37,6 +37,7 @@ class EventBasedGatewayTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/WCP16_DeferredChoiceEBG.bpmn');
+        $this->engine->loadBpmnDocument($bpmnRepository);
 
         // Load the collaboration
         $bpmnRepository->getProcess('COLLABORATION_1');
@@ -140,6 +141,7 @@ class EventBasedGatewayTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->load(__DIR__ . '/files/WCP16_DeferredChoiceEBG.bpmn');
+        $this->engine->loadBpmnDocument($bpmnRepository);
 
         // Load the collaboration
         $bpmnRepository->getProcess('COLLABORATION_1');

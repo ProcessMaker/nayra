@@ -3,6 +3,7 @@
 namespace ProcessMaker\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
@@ -33,12 +34,14 @@ class TestEngine implements EngineInterface
      * @param \ProcessMaker\Nayra\Contracts\RepositoryInterface $repository
      * @param \ProcessMaker\Nayra\Contracts\EventBusInterface $dispatcher
      * @param \ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface|null $jobManager
+     * @param \ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface|null $eventDefinitionBus
      */
-    public function __construct(RepositoryInterface $repository, EventBusInterface $dispatcher, JobManagerInterface $jobManager = null)
+    public function __construct(RepositoryInterface $repository, EventBusInterface $dispatcher, JobManagerInterface $jobManager = null, EventDefinitionBusInterface $eventDefinitionBus = null)
     {
         $this->setRepository($repository);
         $this->setDispatcher($dispatcher);
         $this->setJobManager($jobManager);
+        $eventDefinitionBus ? $this->setEventDefinitionBus($eventDefinitionBus) : null;
     }
 
     /**

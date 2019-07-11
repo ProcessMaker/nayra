@@ -5,7 +5,6 @@ namespace ProcessMaker\Nayra\Bpmn\Models;
 use ProcessMaker\Nayra\Bpmn\MessageFlowTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
@@ -17,7 +16,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
  */
 class MessageFlow implements MessageFlowInterface
 {
-
     use MessageFlowTrait;
 
     private $message;
@@ -83,13 +81,8 @@ class MessageFlow implements MessageFlowInterface
      */
     public function setTarget(CatchEventInterface $target)
     {
-        $eventDef = $this->getSource()->getEventDefinitions()->item(0);
-        $eventDef->getPayload()->setMessageFlow($this);
-        $this->getCollaboration()->unsubscribe($target, $eventDef->getId());
-        $this->getCollaboration()->subscribe($target, $eventDef->getId());
         return $this->setProperty(static::BPMN_PROPERTY_TARGET, $target);
     }
-
 
     /**
      * Sets the collaboration of this element

@@ -251,6 +251,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $dataStoreB = $this->repository->createDataStore();
         $dataStoreB->putData('B', '1');
 
+        $this->engine->loadCollaboration($collaboration);
         $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
         $instanceB = $this->engine->createExecutionInstance($processB, $dataStoreB);
 
@@ -340,15 +341,6 @@ class IntermediateMessageEventTest extends EngineTestCase
         $participant->setProcess($processB);
         $participant->setParticipantMultiplicity(['maximum' => 1, 'minimum' => 0]);
         $collaboration->getParticipants()->push($participant);
-
-        //Create mmessage flow from intemediate events A to B
-        $eventA = $processA->getEvents()->item(1);
-        $eventB = $processB->getEvents()->item(1);
-        $messageFlow = $this->repository->createMessageFlow();
-        $messageFlow->setCollaboration($collaboration);
-        $messageFlow->setSource($eventA);
-        $messageFlow->setTarget($eventB);
-        $collaboration->addMessageFlow($messageFlow);
 
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);

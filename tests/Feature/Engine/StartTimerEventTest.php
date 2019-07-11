@@ -78,7 +78,6 @@ class StartTimerEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDateExpression.bpmn');
 
         //Create a default environment data
         $environmentData = $this->repository->createDataStore();
@@ -89,6 +88,7 @@ class StartTimerEventTest extends EngineTestCase
         $environmentData->putData('calculatedDate', $calculatedDate);
 
         //Load a process from a bpmn repository by Id
+        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDateExpression.bpmn');
         $process = $bpmnRepository->getProcess('Process');
         $startEvent = $bpmnRepository->getStartEvent('_9');
         $this->engine->loadProcess($process);
@@ -115,11 +115,8 @@ class StartTimerEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycleExpression.bpmn');
-
         //Create a default environment data
         $environmentData = $this->repository->createDataStore();
-
         $this->engine->setDataStore($environmentData);
 
         //Calculate a iso8601 string for a cyclic timer of 1 minute from 2018-05-01 at 00:00 UTC
@@ -129,6 +126,7 @@ class StartTimerEventTest extends EngineTestCase
         $environmentData->putData('calculatedCycle', $calculatedCycle);
 
         //Load a process from a bpmn repository by Id
+        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycleExpression.bpmn');
         $process = $bpmnRepository->getProcess('Process');
         $startEvent = $bpmnRepository->getStartEvent('_9');
         $this->engine->loadProcess($process);

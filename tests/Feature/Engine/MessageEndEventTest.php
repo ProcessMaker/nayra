@@ -133,6 +133,7 @@ class MessageEndEventTest extends EngineTestCase
         $processA->setDataStores($dataStoreCollectionA);
         $processB->setDataStores($dataStoreCollectionB);
 
+        $this->engine->loadCollaboration($collaboration);
         $instanceA = $this->engine->createExecutionInstance($processA, $dataStoreA);
         $instanceB = $this->engine->createExecutionInstance($processB, $dataStoreB);
 

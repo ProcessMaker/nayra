@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Feature\Engine;
 
 use DateInterval;
@@ -6,6 +7,7 @@ use DatePeriod;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
+use ProcessMaker\Nayra\Bpmn\Models\EventDefinitionBus;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
@@ -95,18 +97,18 @@ class EngineTestCase extends TestCase
             ->getMock();
         $fakeDispatcher->expects($this->any())
             ->method('dispatch')
-            ->will($this->returnCallback(function($event, ...$payload) {
+            ->will($this->returnCallback(function ($event, ...$payload) {
                 $this->firedEvents[] = $event;
                 if (empty($this->listeners[$event])) {
                     return;
                 }
-                foreach($this->listeners[$event] as $listener) {
+                foreach ($this->listeners[$event] as $listener) {
                     call_user_func_array($listener, $payload);
                 }
             }));
         $fakeDispatcher->expects($this->any())
             ->method('listen')
-            ->will($this->returnCallback(function($event, $listener) {
+            ->will($this->returnCallback(function ($event, $listener) {
                 $this->listeners[$event][] = $listener;
             }));
         //Initialize the engine
@@ -116,7 +118,7 @@ class EngineTestCase extends TestCase
             ->getMock();
         $this->jobManager->expects($this->any())
             ->method('scheduleDate')
-            ->will($this->returnCallback(function(DateTime $date, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+            ->will($this->returnCallback(function (DateTime $date, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
                 $this->jobs[] = [
                     'repeat' => false,
                     'timer' => $date,
@@ -127,7 +129,7 @@ class EngineTestCase extends TestCase
             }));
         $this->jobManager->expects($this->any())
             ->method('scheduleCycle')
-            ->will($this->returnCallback(function(DatePeriod $cycle, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+            ->will($this->returnCallback(function (DatePeriod $cycle, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
                 $this->jobs[] = [
                     'repeat' => true,
                     'timer' => $cycle,
@@ -138,7 +140,7 @@ class EngineTestCase extends TestCase
             }));
         $this->jobManager->expects($this->any())
             ->method('scheduleDuration')
-            ->will($this->returnCallback(function(DateInterval $duration, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
+            ->will($this->returnCallback(function (DateInterval $duration, TimerEventDefinitionInterface $timerDefinition, FlowElementInterface $element, TokenInterface $token = null) {
                 $this->jobs[] = [
                     'repeat' => false,
                     'timer' => $duration,
@@ -147,9 +149,11 @@ class EngineTestCase extends TestCase
                     'token' => $token,
                 ];
             }));
+        $this->eventDefinitionBus = new EventDefinitionBus;
         //Initialize the engine
-        $this->engine = new TestEngine($this->repository, $fakeDispatcher, $this->jobManager);
+        $this->engine = new TestEngine($this->repository, $fakeDispatcher, $this->jobManager, $this->eventDefinitionBus);
     }
+
     /**
      * Tear down the test case.
      *
@@ -159,6 +163,7 @@ class EngineTestCase extends TestCase
         $this->engine->closeExecutionInstances();
         parent::tearDown();
     }
+
     /**
      * Assert that events were fired.
      *
@@ -183,9 +188,10 @@ class EngineTestCase extends TestCase
      *
      * @param int $expectedCalls
      */
-    protected function assertRepositoryCalls ($expectedCalls) {
+    protected function assertRepositoryCalls($expectedCalls)
+    {
         $count = 0;
-        foreach($this->firedEvents as $event) {
+        foreach ($this->firedEvents as $event) {
             $count += (in_array($event, $this->eventsToPersist)) ? 1 : 0;
         }
 
@@ -209,8 +215,9 @@ class EngineTestCase extends TestCase
                 $found = true;
             }
         }
-        $this->assertTrue($found, "Failed asserting that a date timer (" . json_encode($date) . ") was scheduled:\n " . json_encode($scheduled));
+        $this->assertTrue($found, 'Failed asserting that a date timer (' . json_encode($date) . ") was scheduled:\n " . json_encode($scheduled));
     }
+
     /**
      * Assert that a cyclic timer was scheduled.
      *
@@ -229,8 +236,9 @@ class EngineTestCase extends TestCase
                 $found = true;
             }
         }
-        $this->assertTrue($found, "Failed asserting that a cycle timer (" . json_encode($cycle) . ") was scheduled:\n " . json_encode($scheduled));
+        $this->assertTrue($found, 'Failed asserting that a cycle timer (' . json_encode($cycle) . ") was scheduled:\n " . json_encode($scheduled));
     }
+
     /**
      * Assert that a duration timer was scheduled.
      *
@@ -248,6 +256,7 @@ class EngineTestCase extends TestCase
         }
         $this->assertTrue($found, 'Failed asserting that a duration timer was scheduled');
     }
+
     /**
      * Helper to dispatch a job from the JobManager mock
      *

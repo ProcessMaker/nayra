@@ -3,8 +3,8 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 
 /**
  * Tests for the Collaboration class
@@ -27,10 +27,6 @@ class CollaborationTest extends TestCase
         // Use the setters of the collaboration
         $collaboration->setClosed(false);
         $collaboration->setMessageFlows($messageCollection);
-
-        //subscribe and unsubscribe a listener
-        $collaboration->subscribe($listener, $testMessageId);
-        $collaboration->unsubscribe($listener, $testMessageId);
 
         //Assertion: The properties must be accessible with the getters
         $this->assertEquals(0, $collaboration->getCorrelationKeys()->count());

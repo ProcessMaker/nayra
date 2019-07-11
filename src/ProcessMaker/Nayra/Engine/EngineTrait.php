@@ -2,14 +2,20 @@
 
 namespace ProcessMaker\Nayra\Engine;
 
+use ProcessMaker\Nayra\Bpmn\Models\EventDefinitionBus;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
+use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Engine base behavior.
@@ -42,6 +48,13 @@ trait EngineTrait
     private $storage;
 
     protected $jobManager;
+
+    /**
+     * Event definition bus
+     *
+     * @var EventDefinitionBusInterface
+     */
+    protected $eventDefinitionBus;
 
     /**
      * Execute all the process transitions.
@@ -177,10 +190,44 @@ trait EngineTrait
      */
     public function loadProcess(ProcessInterface $process)
     {
-        if (!in_array($process, $this->processes)) {
+        $process->setEngine($this);
+        if (!in_array($process, $this->processes, true)) {
             $this->processes[] = $process;
             $this->registerCatchEvents($process);
         }
+        return $this;
+    }
+
+    /**
+     * Load definitions into BPMN Engine
+     *
+     * @param BpmnDocumentInterface $document
+     *
+     * @return EngineInterface
+     */
+    public function loadBpmnDocument(BpmnDocumentInterface $document)
+    {
+        $nodes = $document->getElementsByTagNameNS(BpmnDocument::BPMN_MODEL, 'collaboration');
+        foreach ($nodes as $node) {
+            $this->loadCollaboration($node->getBpmnElementInstance());
+        }
+        $processes = $document->getElementsByTagNameNS(BpmnDocument::BPMN_MODEL, 'process');
+        foreach ($processes as $process) {
+            $this->loadProcess($process->getBpmnElementInstance());
+        }
+        return $this;
+    }
+
+    /**
+     * Load a collaboration
+     *
+     * @param CollaborationInterface $collaboration
+     *
+     * @return EngineInterface
+     */
+    public function loadCollaboration(CollaborationInterface $collaboration)
+    {
+        $this->getEventDefinitionBus()->setCollaboration($collaboration);
         return $this;
     }
 
@@ -239,5 +286,29 @@ trait EngineTrait
     {
         $this->jobManager = $jobManager;
         return $this;
+    }
+
+    /**
+     * Set a event definitions bus for the engine
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface $eventDefinitionBus
+     *
+     * @return EngineInterface
+     */
+    public function setEventDefinitionBus(EventDefinitionBusInterface $eventDefinitionBus)
+    {
+        $this->eventDefinitionBus = $eventDefinitionBus;
+        return $this;
+    }
+
+    /**
+     * Get the event definitions bus of the engine
+     *
+     * @return EventDefinitionBusInterface
+     */
+    public function getEventDefinitionBus()
+    {
+        $this->eventDefinitionBus = $this->eventDefinitionBus ?: new EventDefinitionBus;
+        return $this->eventDefinitionBus;
     }
 }

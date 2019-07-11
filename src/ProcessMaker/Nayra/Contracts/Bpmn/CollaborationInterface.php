@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-
 /**
  * A collaboration is a collection of participants and the messages they exchange.
  *
@@ -61,36 +59,4 @@ interface CollaborationInterface extends EntityInterface
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $messageFlows
      */
     public function setMessageFlows(CollectionInterface $messageFlows);
-
-    /**
-     * Sends a message
-     *
-     * @param EventDefinitionInterface $message
-     * @param TokenInterface $token
-     */
-    public function send(EventDefinitionInterface $message, TokenInterface $token);
-
-    /**
-     * Subscribes an element to the collaboration so that it can listen the messages sent
-     *
-     * @param MessageListenerInterface $element
-     * @param string $messageId
-     * @internal param string $id
-     * @internal param MessageInterface $message
-     *
-     * @return mixed
-     */
-    public function subscribe(MessageListenerInterface $element, $messageId);
-
-    /**
-     * Unsuscribes an object to the collaboration, so that it won't listen to the messages sent
-     *
-     * @param MessageListenerInterface $element
-     * @param string $messageId
-     * @internal param string $id
-     * @internal param MessageInterface $message
-     *
-     * @return mixed
-     */
-    public function unsubscribe(MessageListenerInterface $element, $messageId);
 }
