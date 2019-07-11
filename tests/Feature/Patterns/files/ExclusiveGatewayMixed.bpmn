@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/20100501/BPMN20.xsd"
+                   id="ExclusiveGatewayMixedTest"
+                   targetNamespace="http://dsg.wiai.uniba.de/betsy/bpmn/exclusiveGatewayMixed">
+    <bpmn2:process id="ExclusiveGatewayMixed" isExecutable="true">
+
+        <bpmn2:startEvent id="StartEvent">
+            <bpmn2:outgoing>SequenceFlow_10</bpmn2:outgoing>
+        </bpmn2:startEvent>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_10" name="" sourceRef="StartEvent" targetRef="start"/>
+
+        <bpmn2:scriptTask id="start" name="Start">
+            <bpmn2:incoming>SequenceFlow_10</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_9</bpmn2:outgoing>
+            <bpmn2:script>CREATE_LOG_FILE</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_9" name="" sourceRef="start" targetRef="ExclusiveGateway_1"/>
+
+        <bpmn2:exclusiveGateway id="ExclusiveGateway_1" gatewayDirection="Diverging">
+            <bpmn2:incoming>SequenceFlow_9</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+            <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+        </bpmn2:exclusiveGateway>
+
+
+        <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="ExclusiveGateway_1" targetRef="ScriptTask_2">
+            <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">
+                <![CDATA[test.contains("b")]]></bpmn2:conditionExpression>
+        </bpmn2:sequenceFlow>
+
+        <bpmn2:scriptTask id="ScriptTask_2" name="Task 2">
+            <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task1</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_3" name="" sourceRef="ScriptTask_2" targetRef="ExclusiveGateway_X"/>
+
+
+        <bpmn2:sequenceFlow id="SequenceFlow_2" name="" sourceRef="ExclusiveGateway_1" targetRef="ScriptTask_1">
+            <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">
+                <![CDATA[test.contains("a")]]></bpmn2:conditionExpression>
+        </bpmn2:sequenceFlow>
+
+        <bpmn2:scriptTask id="ScriptTask_1" name="Task 1">
+            <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_4</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task2</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_4" name="" sourceRef="ScriptTask_1" targetRef="ExclusiveGateway_X"/>
+
+
+        <bpmn2:exclusiveGateway id="ExclusiveGateway_X" gatewayDirection="Mixed">
+            <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>
+            <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
+            <bpmn2:outgoing>SequenceFlow_6</bpmn2:outgoing>
+        </bpmn2:exclusiveGateway>
+
+
+        <bpmn2:sequenceFlow id="SequenceFlow_5" name="" sourceRef="ExclusiveGateway_X" targetRef="ScriptTask_4">
+            <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">
+                <![CDATA[test.contains("b")]]></bpmn2:conditionExpression>
+        </bpmn2:sequenceFlow>
+
+        <bpmn2:scriptTask id="ScriptTask_4" name="Task 4">
+            <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_7</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task3</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_7" name="" sourceRef="ScriptTask_4" targetRef="ExclusiveGateway_2"/>
+
+
+        <bpmn2:sequenceFlow id="SequenceFlow_6" name="" sourceRef="ExclusiveGateway_X" targetRef="ScriptTask_3">
+            <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">
+                <![CDATA[test.contains("a")]]></bpmn2:conditionExpression>
+        </bpmn2:sequenceFlow>
+
+        <bpmn2:scriptTask id="ScriptTask_3" name="Task 3">
+            <bpmn2:incoming>SequenceFlow_6</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_8</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task4</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_8" name="" sourceRef="ScriptTask_3" targetRef="ExclusiveGateway_2"/>
+
+
+        <bpmn2:exclusiveGateway id="ExclusiveGateway_2" gatewayDirection="Converging">
+            <bpmn2:incoming>SequenceFlow_7</bpmn2:incoming>
+            <bpmn2:incoming>SequenceFlow_8</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_11</bpmn2:outgoing>
+        </bpmn2:exclusiveGateway>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_11" name="" sourceRef="ExclusiveGateway_2" targetRef="end"/>
+
+        <bpmn2:scriptTask id="end" name="End">
+            <bpmn2:incoming>SequenceFlow_11</bpmn2:incoming>
+            <bpmn2:outgoing>SequenceFlow_12</bpmn2:outgoing>
+            <bpmn2:script>SCRIPT_task5</bpmn2:script>
+        </bpmn2:scriptTask>
+
+        <bpmn2:sequenceFlow id="SequenceFlow_12" name="" sourceRef="end" targetRef="EndEvent"/>
+
+        <bpmn2:endEvent id="EndEvent">
+            <bpmn2:incoming>SequenceFlow_12</bpmn2:incoming>
+        </bpmn2:endEvent>
+
+
+    </bpmn2:process>
+</bpmn2:definitions>

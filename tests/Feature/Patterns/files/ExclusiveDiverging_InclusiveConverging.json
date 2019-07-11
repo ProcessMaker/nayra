@@ -1,0 +1,36 @@
+[
+    {
+        "startEvent": "StartEvent",
+        "data": {
+            "a": 1
+        },
+        "result": [
+            "start",
+            "task1",
+            "end"
+        ]
+    },
+    {
+        "startEvent": "StartEvent",
+        "data": {
+            "b": 1
+        },
+        "result": [
+            "start",
+            "task2",
+            "end"
+        ]
+    },
+    {
+        "startEvent": "StartEvent",
+        "data": {
+            "a": 1,
+            "b": 1
+        },
+        "result": [
+            "start",
+            "task1",
+            "end"
+        ]
+    }
+]
