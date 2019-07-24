@@ -308,7 +308,7 @@ class ScriptTaskTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
-            ActivityInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }

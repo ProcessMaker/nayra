@@ -15,6 +15,7 @@ interface ActivityInterface extends FlowNodeInterface
     const EVENT_ACTIVITY_ACTIVATED = 'ActivityActivated';
     const EVENT_ACTIVITY_COMPLETED = 'ActivityCompleted';
     const EVENT_ACTIVITY_EXCEPTION = 'ActivityException';
+    const EVENT_ACTIVITY_CANCELLED = 'ActivityCancelled';
     const EVENT_ACTIVITY_CLOSED = 'ActivityClosed';
     const EVENT_EVENT_TRIGGERED = 'EventTriggered';
 

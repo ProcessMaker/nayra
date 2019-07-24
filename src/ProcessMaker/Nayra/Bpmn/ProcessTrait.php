@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
@@ -284,19 +285,30 @@ trait ProcessTrait
         foreach ($this->getProperty('gateways') as $gateway) {
             $transitions = array_merge($transitions, $gateway->getTransitions());
         }
-        //Catch the conclusion of a process
-        $this->attachEvent(EventInterface::EVENT_EVENT_TRIGGERED, function (FlowNodeInterface $node, TransitionInterface $transition, CollectionInterface $tokens) {
-            $instance = $tokens->item(0)->getInstance();
-            if ($instance->getTokens()->count() !== 0) {
-                return;
-            }
-
-            $instanceRepo = $this->getRepository()->createExecutionInstanceRepository();
-            $instanceRepo->persistInstanceCompleted($instance);
-            $this->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED, $instance, $node);
-        });
+        // Catch end events and cancel activities to check if the process was completed
+        $this->attachEvent(EndEventInterface::EVENT_EVENT_TRIGGERED, [$this, 'checkProcessCompleted']);
+        $this->attachEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, [$this, 'checkProcessCompleted']);
         $this->transitions = new Collection($transitions);
         return $this->transitions;
+    }
+
+    /**
+     * Check if the process was completed
+     *
+     * @param FlowNodeInterface $node
+     * @param TransitionInterface $transition
+     * @param CollectionInterface $tokens
+     */
+    public function checkProcessCompleted(FlowNodeInterface $node, TransitionInterface $transition, CollectionInterface $tokens)
+    {
+        $instance = $tokens->item(0)->getInstance();
+        if ($instance->getTokens()->count() !== 0) {
+            return;
+        }
+
+        $instanceRepo = $this->getRepository()->createExecutionInstanceRepository();
+        $instanceRepo->persistInstanceCompleted($instance);
+        $this->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED, $instance, $node);
     }
 
     /**

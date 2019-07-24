@@ -5,10 +5,10 @@ namespace Tests\Feature\Engine;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DiagramInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 
 /**
  * Test transitions
@@ -191,7 +191,7 @@ class BasicsTest extends EngineTestCase
 
         //Assertion: Verify that the proces instance was completed
         $this->assertEvents([
-            ActivityInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
