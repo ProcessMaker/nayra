@@ -8,6 +8,7 @@ use DateTime;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
 use ProcessMaker\Nayra\Bpmn\Models\EventDefinitionBus;
+use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
@@ -64,6 +65,8 @@ class EngineTestCase extends TestCase
      * @var array
      */
     protected $eventsToPersist = [
+        BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
+        BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
         EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
         EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
         GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
