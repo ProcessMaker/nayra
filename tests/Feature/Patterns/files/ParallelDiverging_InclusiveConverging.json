@@ -4,8 +4,8 @@
         "data": {},
         "result": [
             "start",
-            "task2",
             "task1",
+            "task2",
             "end"
         ]
     }
