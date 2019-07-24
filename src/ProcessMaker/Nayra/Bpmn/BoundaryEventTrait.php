@@ -53,7 +53,7 @@ trait BoundaryEventTrait
 
             // Cancel the attachedTo activity
             if ($this->getCancelActivity()) {
-                foreach ($this->getAttachedTo()->getActiveState()->getTokens($token->getInstance()) as $token) {
+                foreach ($this->getAttachedTo()->getTokens($token->getInstance()) as $token) {
                     $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
                 }
             }
@@ -114,6 +114,9 @@ trait BoundaryEventTrait
         $this->registerCatchEvents($engine);
         $this->getAttachedTo()->attachEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, function (ActivityInterface $activity, TokenInterface $token) {
             $this->scheduleTimerEvents($token);
+        });
+        $this->getAttachedTo()->attachEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, function (ActivityInterface $activity, TokenInterface $token) {
+            $this->triggerPlace->addNewToken($token->getInstance());
         });
         return $this;
     }

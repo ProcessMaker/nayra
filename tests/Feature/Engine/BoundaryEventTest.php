@@ -10,6 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
@@ -47,7 +48,7 @@ class BoundaryEventTest extends EngineTestCase
         $start->start($instance);
         $this->engine->runToNextState();
 
-        // Assert: that the process is stared and two tasks were activated
+        // Assert: The process is started and two tasks were activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -86,7 +87,7 @@ class BoundaryEventTest extends EngineTestCase
     }
 
     /**
-     * Tests the a process with a cycle timer boundary event
+     * Tests a process with a cycle timer boundary event
      */
     public function testCycleTimerBoundaryEvent()
     {
@@ -113,7 +114,7 @@ class BoundaryEventTest extends EngineTestCase
         $start->start($instance);
         $this->engine->runToNextState();
 
-        // Assert: that the process is stared and two tasks were activated
+        // Assert: The process is started, a task is activated and a timer event scheduled
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -131,7 +132,7 @@ class BoundaryEventTest extends EngineTestCase
         $boundaryEvent->execute($boundaryEvent->getEventDefinitions()->item(0), $instance);
         $this->engine->runToNextState();
 
-        // Assertion: Boundary event was catch, the first task cancelled and continue to the task 2
+        // Assertion: Boundary event was caught, the first task cancelled and continue to the task 2
         $this->assertEvents([
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
@@ -143,7 +144,72 @@ class BoundaryEventTest extends EngineTestCase
         $task2->complete($task2->getTokens($instance)->item(0));
         $this->engine->runToNextState();
 
-        // Assert: Task 2 is completed, an end event Signal is thrown, then caught by the boundary event
+        // Assert: Task 2 is completed, and the process is completed
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+        ]);
+    }
+
+    /**
+     * Tests a process with a error boundary event
+     */
+    public function testErrorBoundaryEventScriptTask()
+    {
+        // Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/files/Error_BoundaryEvent_ScriptTask.bpmn');
+
+        // Load a process from a bpmn repository by Id
+        $process = $bpmnRepository->getProcess('PROCESS_1');
+        $dataStore = $this->repository->createDataStore();
+
+        // create an instance of the process
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        // Get References
+        $start = $bpmnRepository->getStartEvent('_2');
+        $task1 = $bpmnRepository->getScriptTask('_5');
+        $task2 = $bpmnRepository->getActivity('_12');
+        $boundaryEvent = $bpmnRepository->getBoundaryEvent('_11');
+
+        // Start a process instance
+        $start->start($instance);
+        $this->engine->runToNextState();
+
+        // Assert: The process is started and the script activated
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+        ]);
+
+        // Run the script task
+        $activeToken = $task1->getTokens($instance)->item(0);
+        $task1->runScript($activeToken);
+        $this->engine->runToNextState();
+
+        // Assertion: Script task throws an exception
+        $this->assertEvents([
+            ScriptTaskInterface::EVENT_ACTIVITY_EXCEPTION,
+            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
+            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
+            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete second task
+        $task2->complete($task2->getTokens($instance)->item(0));
+        $this->engine->runToNextState();
+
+        // Assert: Task 2 is completed, and the process is completed 
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
