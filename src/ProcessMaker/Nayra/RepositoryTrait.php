@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use ProcessMaker\Nayra\Bpmn\Lane;
 use ProcessMaker\Nayra\Bpmn\LaneSet;
 use ProcessMaker\Nayra\Bpmn\Models\Activity;
+use ProcessMaker\Nayra\Bpmn\Models\BoundaryEvent;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\ConditionalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\DataInput;
@@ -422,6 +423,16 @@ trait RepositoryTrait
     public function createTimerEventDefinition()
     {
         return new TimerEventDefinition();
+    }
+
+    /**
+     * Create instance of BoundaryEvent
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface
+     */
+    public function createBoundaryEvent()
+    {
+        return new BoundaryEvent();
     }
 
     /**

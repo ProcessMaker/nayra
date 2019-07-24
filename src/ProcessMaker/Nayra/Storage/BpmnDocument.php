@@ -6,7 +6,9 @@ use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface;
@@ -392,6 +394,15 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
             'dataStore' => [
                 DataStoreInterface::class,
                 []
+            ],
+            'boundaryEvent' => [
+                BoundaryEventInterface::class,
+                [
+                    BoundaryEventInterface::BPMN_PROPERTY_CANCEL_ACTIVITY => self::IS_BOOLEAN,
+                    BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO => ['1', [BpmnDocument::BPMN_MODEL, BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO_REF]],
+                    CatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ]
             ],
         ]
     ];
