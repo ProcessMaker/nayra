@@ -20,6 +20,7 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 trait StartEventTrait
 {
     use CatchEventTrait;
+
     /**
      *
      * @var StartTransition
@@ -125,19 +126,16 @@ trait StartEventTrait
     }
 
     /**
-     * Register catch events.
+     * Register the BPMN elements with the engine.
      *
      * @param EngineInterface $engine
      *
-     * @return $this
+     * @return FlowElementInterface
      */
-    public function registerCatchEvents(EngineInterface $engine)
+    public function registerWithEngine(EngineInterface $engine)
     {
-        foreach ($this->getEventDefinitions() as $eventDefinition) {
-            if (is_callable([$eventDefinition, 'registerCatchEvents'])) {
-                $eventDefinition->registerCatchEvents($engine, $this, null);
-            }
-        }
+        $this->registerCatchEvents($engine);
+        $this->scheduleTimerEvents(null);
         return $this;
     }
 }

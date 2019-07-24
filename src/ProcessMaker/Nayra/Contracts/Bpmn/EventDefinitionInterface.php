@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -47,4 +48,14 @@ interface EventDefinitionInterface extends EntityInterface
      * @return $this
      */
     public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null);
+
+    /**
+     * Register event with a catch event
+     *
+     * @param EngineInterface $engine
+     * @param CatchEventInterface $element
+     *
+     * @return void
+     */
+    public function registerWithCatchEvent(EngineInterface $engine, CatchEventInterface $element);
 }

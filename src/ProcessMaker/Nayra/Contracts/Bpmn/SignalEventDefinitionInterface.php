@@ -2,8 +2,6 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
-
 /**
  * MessageEventDefinition interface.
  *
@@ -41,13 +39,4 @@ interface SignalEventDefinitionInterface extends EventDefinitionInterface
      * @return bool
      */
     public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition);
-
-    /**
-     * Register in catch events.
-     *
-     * @param EngineInterface $engine
-     * @param FlowElementInterface $element
-     * @param TokenInterface|null $token
-     */
-    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null);
 }

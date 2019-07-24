@@ -146,7 +146,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             if ($node->name === $name && $property === BpmnDocument::IS_BOOLEAN) {
                 $value = strtolower($node->value) === 'true';
                 $setter = 'set' . $name;
-                method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($ref)
+                method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($value)
                     : $bpmnElement->setProperty($name, $value);
                 return;
             }

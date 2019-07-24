@@ -67,5 +67,5 @@ interface TimerEventDefinitionInterface extends EventDefinitionInterface
      * @param FlowElementInterface $element
      * @param TokenInterface|null $token
      */
-    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null);
+    public function scheduleTimerEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null);
 }

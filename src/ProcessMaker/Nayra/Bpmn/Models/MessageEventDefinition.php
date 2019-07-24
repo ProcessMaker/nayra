@@ -2,15 +2,13 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -19,7 +17,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class MessageEventDefinition implements MessageEventDefinitionInterface
 {
-    use BaseTrait;
+    use EventDefinitionTrait;
 
     /**
      * Get the message.
@@ -106,19 +104,5 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
         $sourcePayload = $eventDefinition->getPayload();
         return (!$targetPayload && !$sourcePayload)
             || ($targetPayload && $sourcePayload && $targetPayload->getId() === $sourcePayload->getId());
-    }
-
-    /**
-     * Register in catch events.
-     *
-     * @param EngineInterface $engine
-     * @param FlowElementInterface $element
-     * @param TokenInterface|null $token
-     */
-    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
-    {
-        $engine->getEventDefinitionBus()->registerCatchEvent($element, $this, function (EventDefinitionInterface $eventDefinition, ExecutionInstanceInterface $instance = null, TokenInterface $token = null) use ($element) {
-            $element->execute($eventDefinition, $instance, $token);
-        });
     }
 }

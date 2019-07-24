@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
@@ -18,7 +18,8 @@ use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
  */
 class TimerEventDefinition implements TimerEventDefinitionInterface
 {
-    use BaseTrait;
+    use EventDefinitionTrait;
+
     /**
      * Get the date expression for the timer event definition.
      *
@@ -28,6 +29,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         return $this->getProperty(self::BPMN_PROPERTY_TIME_DATE);
     }
+
     /**
      * Get the cycle expression for the timer event definition.
      *
@@ -37,6 +39,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         return $this->getProperty(self::BPMN_PROPERTY_TIME_CYCLE);
     }
+
     /**
      * Get the duration expression for the timer event definition.
      *
@@ -48,6 +51,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     {
         return $this->getProperty(self::BPMN_PROPERTY_TIME_DURATION);
     }
+
     /**
      * Assert the event definition rule for trigger the event.
      *
@@ -69,7 +73,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      * @param FlowElementInterface $element
      * @param TokenInterface|null $token
      */
-    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
+    public function scheduleTimerEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
     {
         $this->scheduleTimeDuration($engine, $element, $token);
         $this->scheduleTimeDate($engine, $element, $token);

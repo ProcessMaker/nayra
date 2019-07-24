@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
@@ -16,8 +16,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class ErrorEventDefinition implements ErrorEventDefinitionInterface
 {
-
-    use BaseTrait;
+    use EventDefinitionTrait;
 
     /**
      * Assert the event definition rule to trigger the event.

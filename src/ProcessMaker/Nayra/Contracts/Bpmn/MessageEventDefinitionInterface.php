@@ -60,11 +60,10 @@ interface MessageEventDefinitionInterface extends EventDefinitionInterface
     public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition);
 
     /**
-     * Register in catch events.
+     * Register event with a catch event
      *
      * @param EngineInterface $engine
-     * @param FlowElementInterface $element
-     * @param TokenInterface|null $token
+     * @param CatchEventInterface $element
      */
-    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null);
+    public function registerWithCatchEvent(EngineInterface $engine, CatchEventInterface $element);
 }

@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
@@ -15,8 +15,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
 {
-
-    use BaseTrait;
+    use EventDefinitionTrait;
 
     /**
      * Assert the event definition rule for trigger the event.

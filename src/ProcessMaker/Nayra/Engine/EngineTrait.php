@@ -240,7 +240,7 @@ trait EngineTrait
     {
         foreach ($process->getEvents() as $event) {
             if ($event instanceof CatchEventInterface) {
-                $event->registerCatchEvents($this);
+                $event->registerWithEngine($this);
             }
         }
     }

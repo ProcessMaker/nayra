@@ -8,10 +8,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
@@ -61,7 +59,8 @@ trait IntermediateCatchEventTrait
                 ->persistCatchEventTokenArrives($this, $token);
 
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
-            $this->notifyTimerEvents($this->getEventDefinitions(), $token);
+            // If there are timer event definitions, register them to send the corresponding timer events
+            $this->scheduleTimerEvents($token);
         });
 
         $this->activeState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
@@ -142,43 +141,9 @@ trait IntermediateCatchEventTrait
      */
     public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
     {
-        if ($instance !== null) {
+        if ($instance !== null && $this->getActiveState()->getTokens($instance)->count() > 0) {
             // with a new token in the trigger place, the event catch element will be fired
             $this->triggerPlace->addNewToken($instance);
-        }
-        return $this;
-    }
-
-    /**
-     * If there are timer event definitions, register them to send the corresponding timer events
-     *
-     * @param CollectionInterface $eventDefinitions
-     * @param TokenInterface $token
-     */
-    private function notifyTimerEvents(CollectionInterface $eventDefinitions, TokenInterface $token)
-    {
-        foreach ($eventDefinitions as $eventDefinition) {
-            if (!is_a($eventDefinition, TimerEventDefinitionInterface::class)) {
-                continue;
-            }
-
-            $eventDefinition->registerCatchEvents($this->getOwnerProcess()->getEngine(), $this, $token);
-        }
-    }
-
-    /**
-     * Register catch events.
-     *
-     * @param EngineInterface $engine
-     *
-     * @return $this
-     */
-    public function registerCatchEvents(EngineInterface $engine)
-    {
-        foreach ($this->getEventDefinitions() as $eventDefinition) {
-            $engine->getEventDefinitionBus()->registerCatchEvent($this, $eventDefinition, function (EventDefinitionInterface $eventDefinition, ExecutionInstanceInterface $instance) {
-                $this->execute($eventDefinition, $instance);
-            });
         }
         return $this;
     }
