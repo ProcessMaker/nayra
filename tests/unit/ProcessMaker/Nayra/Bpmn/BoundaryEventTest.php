@@ -5,6 +5,9 @@ namespace ProcessMaker\Nayra\Bpmn;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Models\BoundaryEvent;
 
+/**
+ * Unit tests for the BoundaryEvent class
+ */
 class BoundaryEventTest extends TestCase
 {
     /**
