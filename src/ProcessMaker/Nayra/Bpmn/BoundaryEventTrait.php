@@ -2,20 +2,16 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Bpmn\Events\ActivityActivatedEvent;
 
 /**
  * Boundary event implementation.
@@ -57,7 +53,7 @@ trait BoundaryEventTrait
 
             // Cancel the attachedTo activity
             if ($this->getCancelActivity()) {
-                foreach($this->getAttachedTo()->getActiveState()->getTokens($token->getInstance()) as $token) {
+                foreach ($this->getAttachedTo()->getActiveState()->getTokens($token->getInstance()) as $token) {
                     $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
                 }
             }

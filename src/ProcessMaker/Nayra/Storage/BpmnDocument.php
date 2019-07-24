@@ -1066,6 +1066,18 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     }
 
     /**
+     * Get BoundaryEvent instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface
+     */
+    public function getBoundaryEvent($id)
+    {
+        return $this->getElementInstanceById($id);
+    }
+
+    /**
      * Returns the document engine
      *
      * @return \ProcessMaker\Nayra\Contracts\Engine\EngineInterface

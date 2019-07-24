@@ -464,4 +464,13 @@ interface StorageInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface
      */
     public function getConditionalEventDefinition($id);
+
+    /**
+     * Get BoundaryEvent instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface
+     */
+    public function getBoundaryEvent($id);
 }

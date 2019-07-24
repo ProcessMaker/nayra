@@ -234,7 +234,6 @@ class EngineTestCase extends TestCase
         $scheduled = [];
         foreach ($this->jobs as $job) {
             $scheduled[] = $job['timer'];
-            //var_dump([json_encode($job['timer']) === json_encode($cycle)]);
             if (isset($job['timer']) && $job['timer'] == $cycle && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }

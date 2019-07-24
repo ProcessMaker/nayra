@@ -32,4 +32,13 @@ interface CatchEventInterface extends EventInterface
      * @return $this
      */
     public function registerCatchEvents(EngineInterface $engine);
+
+    /**
+     * Register the BPMN elements with the engine.
+     *
+     * @param EngineInterface $engine
+     *
+     * @return FlowElementInterface
+     */
+    public function registerWithEngine(EngineInterface $engine);
 }
