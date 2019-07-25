@@ -51,4 +51,11 @@ interface ActivityInterface extends FlowNodeInterface
      * @return $this
      */
     public function complete(TokenInterface $token);
+
+    /**
+     * Get the active state of the element
+     *
+     * @return StateInterface
+     */
+    public function getActiveState();
 }
