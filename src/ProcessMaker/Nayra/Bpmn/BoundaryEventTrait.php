@@ -2,9 +2,12 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
@@ -12,9 +15,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
-use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
-use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 
 /**
  * Boundary event implementation.
@@ -136,7 +136,8 @@ trait BoundaryEventTrait
     /**
      * Catch an error event message
      *
-     * @param ErrorEventDefinition $error
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface|null $error
      */
     private function catchErrorEvent(TokenInterface $token, ErrorInterface $error = null)
     {
