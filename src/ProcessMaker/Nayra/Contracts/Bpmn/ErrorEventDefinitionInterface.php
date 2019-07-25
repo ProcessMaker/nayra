@@ -39,4 +39,13 @@ interface ErrorEventDefinitionInterface extends EventDefinitionInterface
      * @return $this
      */
     public function setError(ErrorInterface $error);
+
+    /**
+     * Check if the $eventDefinition should be catch
+     *
+     * @param EventDefinitionInterface $eventDefinition
+     *
+     * @return bool
+     */
+    public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition);
 }

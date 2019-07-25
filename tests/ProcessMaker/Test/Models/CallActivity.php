@@ -44,9 +44,10 @@ class CallActivity implements CallActivityInterface
                 );
                 $this->getCalledElement()->attachEvent(
                     ErrorEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
-                    function ($element, $innerToken, $errorEvent) use($token, $instance) {
+                    function ($element, $innerToken, $error) use($token, $instance) {
                         if ($innerToken->getInstance() === $instance) {
                             $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
+                            $token->setProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR, $error);
                         }
                     }
                 );

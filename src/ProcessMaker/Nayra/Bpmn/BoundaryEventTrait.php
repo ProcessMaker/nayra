@@ -12,6 +12,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
+use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 
 /**
  * Boundary event implementation.
@@ -111,14 +114,40 @@ trait BoundaryEventTrait
      */
     public function registerWithEngine(EngineInterface $engine)
     {
-        $this->registerCatchEvents($engine);
+        // Register Catch Events, except Errors that will be catch through EVENT_ACTIVITY_EXCEPTION
+        foreach ($this->getEventDefinitions() as $eventDefinition) {
+            if ($eventDefinition instanceof ErrorEventDefinitionInterface) {
+                continue;
+            }
+            $eventDefinition->registerWithCatchEvent($engine, $this);
+        }
+        // Schedule timer events when Activity is Activated
         $this->getAttachedTo()->attachEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, function (ActivityInterface $activity, TokenInterface $token) {
             $this->scheduleTimerEvents($token);
         });
+        // Catch EVENT_ACTIVITY_EXCEPTION
         $this->getAttachedTo()->attachEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, function (ActivityInterface $activity, TokenInterface $token) {
-            $this->triggerPlace->addNewToken($token->getInstance());
+            $error = $token->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR);
+            $this->catchErrorEvent($token, $error);
         });
         return $this;
+    }
+
+    /**
+     * Catch an error event message
+     *
+     * @param ErrorEventDefinition $error
+     */
+    private function catchErrorEvent(TokenInterface $token, ErrorInterface $error = null)
+    {
+        $errorDef = new ErrorEventDefinition();
+        $error ? $errorDef->setError($error) : null;
+        foreach ($this->getEventDefinitions() as $eventDefinition) {
+            if ($eventDefinition instanceof ErrorEventDefinitionInterface
+                && $eventDefinition->shouldCatchEventDefinition($errorDef)) {
+                $this->triggerPlace->addNewToken($token->getInstance());
+            }
+        }
     }
 
     /**

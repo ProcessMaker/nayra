@@ -79,4 +79,18 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
     {
         return $this;
     }
+
+    /**
+     * Check if the $eventDefinition should be catch
+     *
+     * @param EventDefinitionInterface $eventDefinition
+     *
+     * @return bool
+     */
+    public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition)
+    {
+        $targetPayloadId = $this->getPayload() ? $this->getPayload()->getId() : $this->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF);
+        $sourcePayloadId = $eventDefinition->getPayload() ? $eventDefinition->getPayload()->getId() : $eventDefinition->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF);
+        return !$targetPayloadId || ($targetPayloadId && $sourcePayloadId && $targetPayloadId === $sourcePayloadId);
+    }
 }

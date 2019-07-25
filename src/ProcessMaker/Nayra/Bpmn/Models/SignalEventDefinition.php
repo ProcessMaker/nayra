@@ -103,8 +103,8 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
      */
     public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition)
     {
-        $targetPayload = $this->getPayload();
-        $sourcePayload = $eventDefinition->getPayload();
-        return $targetPayload && $sourcePayload && $targetPayload->getId() === $sourcePayload->getId();
+        $targetPayloadId = $this->getPayload() ? $this->getPayload()->getId() : $this->getProperty(SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF);
+        $sourcePayloadId = $eventDefinition->getPayload() ? $eventDefinition->getPayload()->getId() : $eventDefinition->getProperty(SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF);
+        return $targetPayloadId && $sourcePayloadId && $targetPayloadId === $sourcePayloadId;
     }
 }
