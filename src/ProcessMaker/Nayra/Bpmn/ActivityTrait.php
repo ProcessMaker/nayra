@@ -124,7 +124,7 @@ trait ActivityTrait
                         ->getTokenRepository()
                         ->persistActivityCompleted($this, $token);
                 }
-                $this->notifyEvent(ActivityInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $tokens);
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
             }
         );
         $this->closeActiveTransition->attachEvent(
@@ -135,7 +135,7 @@ trait ActivityTrait
                         ->getTokenRepository()
                         ->persistActivityCompleted($this, $token);
                 }
-                $this->notifyEvent(ActivityInterface::EVENT_EVENT_TRIGGERED, $this, $transition, $tokens);
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
             }
         );
     }
@@ -194,5 +194,15 @@ trait ActivityTrait
     {
         $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
         return $this;
+    }
+
+    /**
+     * Get the active state of the element
+     *
+     * @return StateInterface
+     */
+    public function getActiveState()
+    {
+        return $this->activeState;
     }
 }

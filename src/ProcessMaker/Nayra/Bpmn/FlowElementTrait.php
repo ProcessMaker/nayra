@@ -3,7 +3,6 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 
 /**
  * Flow Element is an abstract class for all the elements that can appear in

@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
@@ -16,8 +16,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class ErrorEventDefinition implements ErrorEventDefinitionInterface
 {
-
-    use BaseTrait;
+    use EventDefinitionTrait;
 
     /**
      * Assert the event definition rule to trigger the event.
@@ -79,5 +78,19 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
     public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         return $this;
+    }
+
+    /**
+     * Check if the $eventDefinition should be catch
+     *
+     * @param EventDefinitionInterface $eventDefinition
+     *
+     * @return bool
+     */
+    public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition)
+    {
+        $targetPayloadId = $this->getPayload() ? $this->getPayload()->getId() : $this->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF);
+        $sourcePayloadId = $eventDefinition->getPayload() ? $eventDefinition->getPayload()->getId() : $eventDefinition->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF);
+        return !$targetPayloadId || ($targetPayloadId && $sourcePayloadId && $targetPayloadId === $sourcePayloadId);
     }
 }

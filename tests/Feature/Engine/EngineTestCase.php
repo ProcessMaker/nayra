@@ -8,6 +8,7 @@ use DateTime;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
 use ProcessMaker\Nayra\Bpmn\Models\EventDefinitionBus;
+use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
@@ -64,6 +65,8 @@ class EngineTestCase extends TestCase
      * @var array
      */
     protected $eventsToPersist = [
+        BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
+        BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
         EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
         EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
         GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
@@ -209,13 +212,15 @@ class EngineTestCase extends TestCase
     {
         $found = false;
         $scheduled = [];
+        $logScheduled = '';
         foreach ($this->jobs as $job) {
+            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
             $scheduled[] = $job['timer'];
             if (isset($job['timer']) && $job['timer'] == $date && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, 'Failed asserting that a date timer (' . json_encode($date) . ") was scheduled:\n " . json_encode($scheduled));
+        $this->assertTrue($found, "Failed asserting that a date timer:\n" . $this->representJob($date, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
     }
 
     /**
@@ -229,14 +234,15 @@ class EngineTestCase extends TestCase
     {
         $found = false;
         $scheduled = [];
+        $logScheduled = '';
         foreach ($this->jobs as $job) {
+            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
             $scheduled[] = $job['timer'];
-            //var_dump([json_encode($job['timer']) === json_encode($cycle)]);
             if (isset($job['timer']) && $job['timer'] == $cycle && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, 'Failed asserting that a cycle timer (' . json_encode($cycle) . ") was scheduled:\n " . json_encode($scheduled));
+        $this->assertTrue($found, "Failed asserting that a cycle timer:\n" . $this->representJob($cycle, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
     }
 
     /**
@@ -249,12 +255,32 @@ class EngineTestCase extends TestCase
     protected function assertScheduledDurationTimer($duration, FlowElementInterface $element, TokenInterface $token = null)
     {
         $found = false;
+        $logScheduled = '';
         foreach ($this->jobs as $job) {
+            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
             if (isset($job['timer']) && $job['timer'] === $duration && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, 'Failed asserting that a duration timer was scheduled');
+        $this->assertTrue($found, "Failed asserting that a duration timer was scheduled:\n" . $this->representJob($duration, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
+    }
+
+    /**
+     * String representation of a job
+     *
+     * @param mixed $timer
+     * @param FlowElementInterface $element
+     * @param TokenInterface|null $token
+     * @return void
+     */
+    private function representJob($timer, FlowElementInterface $element, TokenInterface $token = null)
+    {
+        return sprintf(
+                '(%s) at "%s" token "%s"',
+                (is_object($timer) ? get_class($timer) : gettype($timer)),
+                $element->getId(),
+                $token ? $token->getId() : 'null'
+        );
     }
 
     /**

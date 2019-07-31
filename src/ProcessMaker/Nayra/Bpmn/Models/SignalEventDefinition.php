@@ -2,14 +2,12 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -18,7 +16,8 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class SignalEventDefinition implements SignalEventDefinitionInterface
 {
-    use BaseTrait;
+    use EventDefinitionTrait;
+
     /**
      * @var string $id
      */
@@ -104,22 +103,8 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
      */
     public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition)
     {
-        $targetPayload = $this->getPayload();
-        $sourcePayload = $eventDefinition->getPayload();
-        return $targetPayload && $sourcePayload && $targetPayload->getId() === $sourcePayload->getId();
-    }
-
-    /**
-     * Register in catch events.
-     *
-     * @param EngineInterface $engine
-     * @param FlowElementInterface $element
-     * @param TokenInterface|null $token
-     */
-    public function registerCatchEvents(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
-    {
-        $engine->getEventDefinitionBus()->registerCatchEvent($element, $this, function (EventDefinitionInterface $eventDefinition, ExecutionInstanceInterface $instance = null, TokenInterface $token = null) use ($element) {
-            $element->execute($eventDefinition, $instance, $token);
-        });
+        $targetPayloadId = $this->getPayload() ? $this->getPayload()->getId() : $this->getProperty(SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF);
+        $sourcePayloadId = $eventDefinition->getPayload() ? $eventDefinition->getPayload()->getId() : $eventDefinition->getProperty(SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF);
+        return $targetPayloadId && $sourcePayloadId && $targetPayloadId === $sourcePayloadId;
     }
 }

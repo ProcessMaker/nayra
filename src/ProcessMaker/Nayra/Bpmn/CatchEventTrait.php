@@ -3,8 +3,9 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 
 /**
  * Implementation of the behavior for a catch event.
@@ -28,10 +29,55 @@ trait CatchEventTrait
     /**
      * Get the event definitions.
      *
-     * @return EventDefinitionInterface[]
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
      */
     public function getEventDefinitions()
     {
         return $this->getProperty(CatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS);
+    }
+
+    /**
+     * Register catch events.
+     *
+     * @param EngineInterface $engine
+     *
+     * @return $this
+     */
+    public function registerCatchEvents(EngineInterface $engine)
+    {
+        foreach ($this->getEventDefinitions() as $eventDefinition) {
+            $eventDefinition->registerWithCatchEvent($engine, $this);
+        }
+        return $this;
+    }
+
+    /**
+     * Register catch events.
+     *
+     * @param TokenInterface|null $token
+     *
+     * @return $this
+     */
+    private function scheduleTimerEvents(TokenInterface $token = null)
+    {
+        foreach ($this->getEventDefinitions() as $eventDefinition) {
+            if ($eventDefinition instanceof TimerEventDefinitionInterface) {
+                $eventDefinition->scheduleTimerEvents($this->getOwnerProcess()->getEngine(), $this, $token);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Register the BPMN elements with the engine.
+     *
+     * @param EngineInterface $engine
+     *
+     * @return FlowElementInterface
+     */
+    public function registerWithEngine(EngineInterface $engine)
+    {
+        $this->registerCatchEvents($engine);
+        return $this;
     }
 }

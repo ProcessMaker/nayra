@@ -33,9 +33,11 @@ class PatternsTest extends EngineTestCase
     /**
      * Tests the bpmn process completing all active tasks
      *
+     * @param string $bpmnFile
+     *
      * @dataProvider testCaseProvider
      */
-    public function testProcessWithServiceTask($bpmnFile)
+    public function testProcessPatterns($bpmnFile)
     {
         $file = $this->basePath . $bpmnFile;
         $jsonFile = substr($file, 0, -4) . 'json';
@@ -123,6 +125,7 @@ class PatternsTest extends EngineTestCase
                             $element->complete($token);
                             $this->engine->runToNextState();
                             $submited = true;
+                            break;
                         }
                         if ($element instanceof IntermediateCatchEventInterface && $status === IntermediateCatchEventInterface::TOKEN_STATE_ACTIVE) {
                             if ($events && $element->getId() === $events[0]) {

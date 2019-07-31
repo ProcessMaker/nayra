@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
@@ -19,40 +17,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  */
 class CallActivity implements CallActivityInterface
 {
-
     use ActivitySubProcessTrait;
-
-    /**
-     * Configure the activity to go to a FAILING status when activated.
-     *
-     */
-    protected function initActivity()
-    {
-        $this->attachEvent(
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            function ($self, TokenInterface $token) {
-                $instance = $this->getCalledElement()->call();
-                $this->getCalledElement()->attachEvent(
-                    ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
-                    function ($self, $closedInstance) use($token, $instance) {
-                        if ($closedInstance === $instance) {
-                            if ($token->getStatus() !== ActivityInterface::TOKEN_STATE_FAILING) {
-                                $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
-                            }
-                        }
-                    }
-                );
-                $this->getCalledElement()->attachEvent(
-                    ErrorEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
-                    function ($element, $innerToken, $errorEvent) use($token, $instance) {
-                        if ($innerToken->getInstance() === $instance) {
-                            $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
-                        }
-                    }
-                );
-            }
-        );
-    }
 
     /**
      * Array map of custom event classes for the bpmn element.
