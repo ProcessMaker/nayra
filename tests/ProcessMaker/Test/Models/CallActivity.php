@@ -20,21 +20,6 @@ class CallActivity implements CallActivityInterface
     use ActivitySubProcessTrait;
 
     /**
-     * Configure the activity to go to a FAILING status when activated.
-     *
-     */
-    protected function initActivity()
-    {
-        $this->attachEvent(
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            function ($self, TokenInterface $token) {
-                $instance = $this->callSubprocess();
-                $this->linkProcesses($token, $instance);
-            }
-        );
-    }
-
-    /**
      * Array map of custom event classes for the bpmn element.
      *
      * @return array

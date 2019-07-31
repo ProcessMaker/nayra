@@ -19,6 +19,21 @@ trait ActivitySubProcessTrait
     use ActivityTrait;
 
     /**
+     * Configure the activity to go to a FAILING status when activated.
+     *
+     */
+    protected function initActivity()
+    {
+        $this->attachEvent(
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            function ($self, TokenInterface $token) {
+                $instance = $this->callSubprocess();
+                $this->linkProcesses($token, $instance);
+            }
+        );
+    }
+
+    /**
      * Call the subprocess
      *
      * @return ExecutionInstanceInterface
@@ -40,9 +55,10 @@ trait ActivitySubProcessTrait
     {
         $this->getCalledElement()->attachEvent(
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
-            function ($self, $closedInstance) use ($token, $instance) {
-                if ($closedInstance === $instance) {
-                    $this->completeSubprocess($token);
+            function ($self, ExecutionInstanceInterface $closedInstance) use ($token, $instance) {
+                if ($closedInstance->getId() === $instance->getId()
+                && $token->getStatus() !== ActivityInterface::TOKEN_STATE_FAILING) {
+                    $this->completeSubprocess($token, $closedInstance, $instance);
                 }
             }
         );
@@ -50,7 +66,7 @@ trait ActivitySubProcessTrait
             ErrorEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
             function ($element, $innerToken, $error) use ($token, $instance) {
                 if ($innerToken->getInstance() === $instance) {
-                    $this->catchSubprocessError($token, $error);
+                    $this->catchSubprocessError($token, $error, $instance);
                 }
             }
         );
@@ -74,9 +90,7 @@ trait ActivitySubProcessTrait
      */
     protected function completeSubprocess(TokenInterface $token)
     {
-        if ($token->getStatus() !== ActivityInterface::TOKEN_STATE_FAILING) {
-            $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
-        }
+        $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
     }
 
     /**
