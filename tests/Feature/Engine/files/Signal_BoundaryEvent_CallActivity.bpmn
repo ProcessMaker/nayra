@@ -2,11 +2,6 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://sourceforge.net/bpmn/definitions/_1563996985053" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:yaoqiang="http://bpmn.sourceforge.net" exporter="Yaoqiang BPMN Editor" exporterVersion="5.3" expressionLanguage="http://www.w3.org/1999/XPath" id="_1563996985053" name="" targetNamespace="http://sourceforge.net/bpmn/definitions/_1563996985053" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
   <error errorCode="403" id="ERR_1" name="Error"/>
   <collaboration id="COLLABORATION_1" isClosed="false">
-    <extensionElements>
-      <yaoqiang:description/>
-      <yaoqiang:pageFormat height="841.8897637795276" imageableHeight="831.8897637795276" imageableWidth="588.1102362204724" imageableX="5.0" imageableY="5.0" orientation="0" width="598.1102362204724"/>
-      <yaoqiang:page background="#FFFFFF" horizontalCount="1" verticalCount="1"/>
-    </extensionElements>
     <participant id="_2" name="Main" processRef="PROCESS_1">
       <participantMultiplicity maximum="1" minimum="0"/>
     </participant>
@@ -49,7 +44,6 @@
     </endEvent>
     <sequenceFlow id="_16" sourceRef="_13" targetRef="_15"/>
   </process>
-  <globalTask id="GT_1" name="Global Task"/>
   <process id="PROCESS_2" isClosed="false" isExecutable="true" processType="None">
     <startEvent id="_9" isInterrupting="true" parallelMultiple="false">
       <outgoing>_19</outgoing>

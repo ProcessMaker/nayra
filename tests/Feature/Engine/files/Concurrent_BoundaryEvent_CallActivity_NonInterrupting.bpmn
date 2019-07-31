@@ -91,7 +91,6 @@
       <inputSet/>
     </endEvent>
   </process>
-  <globalTask id="GT_1" name="Global Task"/>
   <process id="PROCESS_2" isClosed="false" isExecutable="true" processType="None">
     <startEvent id="_9" isInterrupting="true" parallelMultiple="false">
       <outgoing>_26</outgoing>

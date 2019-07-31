@@ -49,7 +49,6 @@
     </endEvent>
     <sequenceFlow id="_16" sourceRef="_13" targetRef="_15"/>
   </process>
-  <globalTask id="GT_1" name="Global Task"/>
   <process id="PROCESS_2" isClosed="false" isExecutable="true" processType="None">
     <startEvent id="_9" isInterrupting="true" parallelMultiple="false">
       <outgoing>_19</outgoing>
