@@ -37,7 +37,6 @@ trait BoundaryEventTrait
     {
         $this->setRepository($factory);
         $this->triggerPlace = new State($this, CatchEventInterface::TOKEN_STATE_EVENT_CATCH);
-        //$transitionClass = $this->getCancelActivity() ? InterruptingTransition::class : NonInterruptingTransition::class;
         $this->transition = new Transition($this);
         $this->triggerPlace->connectTo($this->transition);
 
@@ -48,17 +47,21 @@ trait BoundaryEventTrait
             $this->notifyEvent(BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH, $this, $token);
         });
 
-        $this->triggerPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-            $this->getRepository()
-                ->getTokenRepository()
-                ->persistCatchEventMessageConsumed($this, $token);
-            $this->notifyEvent(BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED, $this, $token);
+        $this->transition->attachEvent(Transition::EVENT_AFTER_TRANSIT, function ($transition, Collection $tokens) {
+            foreach($tokens as $token) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistCatchEventMessageConsumed($this, $token);
+                $this->notifyEvent(BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED, $this, $token);
 
-            // Cancel the attachedTo activity
-            if ($this->getCancelActivity()) {
-                foreach ($this->getAttachedTo()->getTokens($token->getInstance()) as $token) {
-                    $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
-                }
+                $this->getProcess()->getEngine()->nextState(function () use($token) {
+                    // Cancel the attachedTo activity
+                    if ($this->getCancelActivity()) {
+                        foreach ($this->getAttachedTo()->getTokens($token->getInstance()) as $token) {
+                            $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                        }
+                    }
+                });
             }
         });
     }

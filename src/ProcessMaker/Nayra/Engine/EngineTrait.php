@@ -50,6 +50,13 @@ trait EngineTrait
     protected $jobManager;
 
     /**
+     * Actions to be executed after runToNextState is solved
+     *
+     * @var array
+     */
+    private $onNextState = [];
+
+    /**
      * Event definition bus
      *
      * @var EventDefinitionBusInterface
@@ -71,6 +78,12 @@ trait EngineTrait
                 return $result;
             }) > 0;
         }
+        //If there are no pending transitions, next state callbacks are executed
+        if (!$sum && $sum = count($this->onNextState)) {
+            while ($action = array_shift($this->onNextState)) {
+                $action();
+            }
+        }
         return $sum;
     }
 
@@ -90,6 +103,19 @@ trait EngineTrait
             }
         }
         return true;
+    }
+
+    /**
+     * Defer the callback to be executed after the next state cycle.
+     *
+     * @param callable $callable
+     *
+     * @return EngineInterface
+     */
+    public function nextState(callable $callable)
+    {
+        $this->onNextState[] = $callable;
+        return $this;
     }
 
     /**
@@ -135,6 +161,7 @@ trait EngineTrait
             return;
         }
 
+        $this->loadProcess($executionInstance->getProcess());
         $executionInstance->linkToEngine($this);
         $executionInstance->getProcess()->addInstance($executionInstance);
         $this->executionInstances[] = $executionInstance;

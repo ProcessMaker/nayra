@@ -16,6 +16,8 @@ interface BoundaryEventInterface extends CatchEventInterface
     const EVENT_BOUNDARY_EVENT_CATCH = 'BoundaryEventCatch';
     const EVENT_BOUNDARY_EVENT_CONSUMED = 'BoundaryEventConsumed';
 
+    const TOKEN_STATE_DISPATCH = 'BoundaryEventDispatch';
+
     /**
      * Denotes whether the Activity should be cancelled or not.
      *
