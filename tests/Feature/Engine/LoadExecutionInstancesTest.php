@@ -16,7 +16,6 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
  */
 class LoadExecutionInstancesTest extends EngineTestCase
 {
-
     /**
      * Set data for a sequential process
      *
@@ -284,7 +283,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $token = $thirdActivity->getTokens($instance)->item(0);
         $this->assertEquals(ActivityInterface::TOKEN_STATE_FAILING, $token->getStatus());
     }
-    
+
     /**
      * Test load a non existing execution instance from repository
      *
@@ -303,5 +302,30 @@ class LoadExecutionInstancesTest extends EngineTestCase
 
         //Assertion: The returned value must be null
         $this->assertNull($instance);
+    }
+
+    /**
+     * Test load the same execution instance twice
+     *
+     */
+    public function testLoadTheSameExistingInstanceTwice()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $this->engine->setRepository($this->repository);
+        $this->engine->setStorage($bpmnRepository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+
+        //Set test data to load the sequential process
+        $this->prepareSequentialProcess($bpmnRepository);
+
+        //Load the execution instance twice
+        $instance1 = $this->engine->loadExecutionInstance('executionInstanceId');
+        $instance2 = $this->engine->loadExecutionInstance('executionInstanceId');
+
+        //Assertion: Both variables point to the same instance
+        $this->assertEquals($instance1, $instance2);
     }
 }

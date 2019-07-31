@@ -155,6 +155,13 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id)
     {
+        // If exists return the already loaded instance by id 
+        foreach($this->executionInstances as $executionInstance) {
+            if ($executionInstance->getId() === $id) {
+                return $executionInstance;
+            }
+        }
+        // Create and load an instance by id
         $repository = $this->getRepository()->createExecutionInstanceRepository();
         $executionInstance = $repository->loadExecutionInstanceByUid($id, $this->getStorage());
         if (!$executionInstance) {
