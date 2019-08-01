@@ -125,14 +125,17 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
         $expression = $this->getTimeDate();
         if ($expression) {
             $date = $this->evaluateTimer($expression, $this->getDataFrom($engine, $token));
-            $engine->getJobManager()->scheduleDate($date, $this, $element, $token);
-            $engine->getDispatcher()->dispatch(
-                JobManagerInterface::EVENT_SCHEDULE_DATE,
-                $date,
-                $this,
-                $element,
-                $token
-            );
+            $dates = is_array($date) ? $date : [$date];
+            foreach ($dates as $date) {
+                $engine->getJobManager()->scheduleDate($date, $this, $element, $token);
+                $engine->getDispatcher()->dispatch(
+                    JobManagerInterface::EVENT_SCHEDULE_DATE,
+                    $date,
+                    $this,
+                    $element,
+                    $token
+                );
+            }
         }
     }
 
@@ -148,14 +151,17 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
         $expression = $this->getTimeCycle();
         if ($expression) {
             $cycle = $this->evaluateTimer($expression, $this->getDataFrom($engine, $token));
-            $engine->getJobManager()->scheduleCycle($cycle, $this, $element, $token);
-            $engine->getDispatcher()->dispatch(
-                JobManagerInterface::EVENT_SCHEDULE_CYCLE,
-                $cycle,
-                $this,
-                $element,
-                $token
-            );
+            $cycles = is_array($cycle) ? $cycle : [$cycle];
+            foreach ($cycles as $cycle) {
+                $engine->getJobManager()->scheduleCycle($cycle, $this, $element, $token);
+                $engine->getDispatcher()->dispatch(
+                    JobManagerInterface::EVENT_SCHEDULE_CYCLE,
+                    $cycle,
+                    $this,
+                    $element,
+                    $token
+                );
+            }
         }
     }
 
@@ -171,14 +177,17 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
         $expression = $this->getTimeDuration();
         if ($expression) {
             $duration = $this->evaluateTimer($expression, $this->getDataFrom($engine, $token));
-            $engine->getJobManager()->scheduleDuration($duration, $this, $element, $token);
-            $engine->getDispatcher()->dispatch(
-                JobManagerInterface::EVENT_SCHEDULE_DURATION,
-                $duration,
-                $this,
-                $element,
-                $token
-            );
+            $durations = is_array($duration) ? $duration : [$duration];
+            foreach ($durations as $duration) {
+                $engine->getJobManager()->scheduleDuration($duration, $this, $element, $token);
+                $engine->getDispatcher()->dispatch(
+                    JobManagerInterface::EVENT_SCHEDULE_DURATION,
+                    $duration,
+                    $this,
+                    $element,
+                    $token
+                );
+            }
         }
     }
 
