@@ -161,7 +161,7 @@ trait BoundaryEventTrait
      */
     public function getCancelActivity()
     {
-        return $this->getProperty(BoundaryEventInterface::BPMN_PROPERTY_CANCEL_ACTIVITY);
+        return $this->getProperty(BoundaryEventInterface::BPMN_PROPERTY_CANCEL_ACTIVITY, true);
     }
 
     /**
