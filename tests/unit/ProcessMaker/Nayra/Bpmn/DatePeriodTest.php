@@ -2,13 +2,13 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
-use DateTimeZone;
-use DateTime;
 use DateInterval;
 use DatePeriod as GlobalDatePeriod;
+use DateTime;
+use DateTimeZone;
 use Exception;
+use PHPUnit\Framework\TestCase;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 
 /**
  * Tests for the DatePeriod class
@@ -33,6 +33,24 @@ class DatePeriodTest extends TestCase
         $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array)$cycle->interval);
         $this->assertEquals('2018-10-07 12:00:00', $cycle->end->setTimeZone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
+    }
+
+    /**
+     * Tests DatePeriod of type R[n]/start/interval/end
+     */
+    public function testPeriodsCompleteIso8601String()
+    {
+        $cycle = new DatePeriod('R3/2018-10-02T08:00:00Z/P1D/2018-10-07T08:00:00-04:00');
+        $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
+        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array)$cycle->interval);
+        $this->assertEquals('2018-10-07 12:00:00', $cycle->end->setTimeZone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
+        $this->assertEquals(4, $cycle->recurrences);
+
+        $cycle = new DatePeriod($cycle->start, $cycle->interval, [$cycle->end, $cycle->recurrences - 1]);
+        $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
+        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array)$cycle->interval);
+        $this->assertEquals('2018-10-07 12:00:00', $cycle->end->setTimeZone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
+        $this->assertEquals(4, $cycle->recurrences);
     }
 
     /**

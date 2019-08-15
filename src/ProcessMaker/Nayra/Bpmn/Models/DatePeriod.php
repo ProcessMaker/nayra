@@ -2,15 +2,15 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use DateTime;
 use DateInterval;
+use DateTime;
 use DateTimeInterface;
 use Exception;
 
 /**
- * Application
+ * DatePeriod represents an ISO8601 Repeating intervals
  *
- * @package ProcessMaker\Models
+ * @package ProcessMaker\Nayra\Bpmn\Models
  */
 class DatePeriod
 {
@@ -49,15 +49,22 @@ class DatePeriod
     const INF_RECURRENCES = 0;
     const EXCLUDE_START_DATE = 1;
 
+    /**
+     * Initialize a DatePeriod.
+     *
+     * Parameters could be:
+     * - ISO8601 Repeating intervals  R[n]/start/interval/end
+     * - start, interval, [end|array(end,recurences-1)]
+     */
     public function __construct(...$args)
     {
         $expression = is_string($args[0]) ? $args[0] : null;
         //Improve Repeating intervals (R/start/interval/end) configuration
-        if (preg_match('/^R\/([^\/]+)\/([^\/]+)\/([^\/]+)$/', $expression, $repeating)) {
-            $this->start = new DateTime($repeating[1]);
-            $this->interval = new DateInterval($repeating[2]);
-            $this->end = new DateTime($repeating[3]);
-            $this->recurrences = self::INF_RECURRENCES;
+        if (preg_match('/^R(\d*)\/([^\/]+)\/([^\/]+)\/([^\/]+)$/', $expression, $repeating)) {
+            $this->start = new DateTime($repeating[2]);
+            $this->interval = new DateInterval($repeating[3]);
+            $this->end = new DateTime($repeating[4]);
+            $this->recurrences = $repeating[1] ? $repeating[1] + 1 : self::INF_RECURRENCES;
         //Improve Repeating intervals (R[n]/start/interval) or (R[n]/interval/end) configuration
         } elseif (preg_match('/^R(\d*)\/([^\/]+)\/([^\/]+)$/', $expression, $repeating)) {
             $withoutStart = substr($repeating[2], 0, 1) === 'P';
