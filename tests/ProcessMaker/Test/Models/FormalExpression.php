@@ -3,10 +3,10 @@
 namespace ProcessMaker\Test\Models;
 
 use DateInterval;
-use DatePeriod;
 use DateTime;
 use Exception;
 use ProcessMaker\Nayra\Bpmn\FormalExpressionTrait;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Test\Models\TestBetsy;
 

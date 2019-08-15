@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Engine;
 
-use DatePeriod;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;

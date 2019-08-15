@@ -3,10 +3,10 @@
 namespace Tests\Feature\Engine;
 
 use DateInterval;
-use DatePeriod;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use ProcessMaker\Nayra\Bpmn\Models\EventDefinitionBus;
 use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
