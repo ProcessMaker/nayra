@@ -8,6 +8,7 @@ use DateTimeZone;
 use DateTime;
 use DateInterval;
 use DatePeriod as GlobalDatePeriod;
+use Exception;
 
 /**
  * Tests for the DatePeriod class
@@ -207,5 +208,59 @@ class DatePeriodTest extends TestCase
         $this->assertEquals($cycle0->start, $cycle->start);
         $this->assertEquals($cycle0->interval, $cycle->interval);
         $this->assertEquals($cycle0->end, $cycle->end);
+    }
+
+    /**
+     * Invalid DatePeriod initialization. Only start
+     */
+    public function testInvalidInitializationStart()
+    {
+        $this->expectException(Exception::class);
+        new DatePeriod(new DateTime('2018-10-02 08:00:00Z'));
+    }
+
+    /**
+     * Invalid DatePeriod initialization. Only interval
+     */
+    public function testInvalidInitializationInterval()
+    {
+        $this->expectException(Exception::class);
+        new DatePeriod(null, new DateInterval('2018-10-02 08:00:00Z'));
+    }
+
+    /**
+     * Invalid DatePeriod initialization. Invalid start
+     */
+    public function testInvalidInitializationInvalidStart()
+    {
+        $this->expectException(Exception::class);
+        new DatePeriod('', new DateInterval('P1D'), [new DateTime('2018-10-02 08:00:00Z'), 0]);
+    }
+
+    /**
+     * Invalid DatePeriod initialization. Invalid interval
+     */
+    public function testInvalidInitializationInvalidInterval()
+    {
+        $this->expectException(Exception::class);
+        new DatePeriod(new DateTime('2018-10-02 08:00:00Z'), '', [new DateTime('2018-10-02 08:00:00Z'), 0]);
+    }
+
+    /**
+     * Invalid DatePeriod initialization. Invalid end
+     */
+    public function testInvalidInitializationInvalidEnd()
+    {
+        $this->expectException(Exception::class);
+        new DatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), ['', 0]);
+    }
+
+    /**
+     * Invalid DatePeriod initialization. Invalid recurrence
+     */
+    public function testInvalidInitializationInvalidRecurrence()
+    {
+        $this->expectException(Exception::class);
+        new DatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), [new DateTime('2018-10-02 08:00:00Z'), -2]);
     }
 }

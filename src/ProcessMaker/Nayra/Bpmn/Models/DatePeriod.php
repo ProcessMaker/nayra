@@ -2,10 +2,10 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-use DatePeriod as DatePeriodBase;
 use DateTime;
 use DateInterval;
 use DateTimeInterface;
+use Exception;
 
 /**
  * Application
@@ -82,11 +82,20 @@ class DatePeriod
             $this->end = isset($args[2]) && $args[2] instanceof DateTimeInterface ? $args[2] : null;
             $this->recurrences = isset($args[2]) && is_int($args[2]) ? $args[2] + 1 : self::INF_RECURRENCES;
         } else {
-            $cycle = new DatePeriodBase(...$args);
-            $this->start = $cycle->start;
-            $this->interval = $cycle->interval;
-            $this->end = $cycle->end;
-            $this->recurrences = $cycle->recurrences;
+            throw new Exception('Invalid DatePeriod definition');
+        }
+        // Validate properties
+        if (isset($this->start) && !($this->start instanceof DateTimeInterface)) {
+            throw new Exception('Invalid DatePeriod::start definition');
+        }
+        if (!($this->interval instanceof DateInterval)) {
+            throw new Exception('Invalid DatePeriod::interval definition');
+        }
+        if (isset($this->end) && !($this->end instanceof DateTimeInterface)) {
+            throw new Exception('Invalid DatePeriod::end definition');
+        }
+        if (!($this->recurrences >= 0)) {
+            throw new Exception('Invalid DatePeriod::recurrences definition');
         }
     }
 }
