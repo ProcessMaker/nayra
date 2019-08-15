@@ -2,8 +2,8 @@
 
 namespace ProcessMaker\Nayra\Engine;
 
-use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use DateTimeInterface;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 
 /**
  * JobManagerTrait

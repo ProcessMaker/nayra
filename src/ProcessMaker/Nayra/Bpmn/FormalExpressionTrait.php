@@ -3,10 +3,10 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use DateInterval;
-use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use DateTime;
 use Exception;
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 
 /**

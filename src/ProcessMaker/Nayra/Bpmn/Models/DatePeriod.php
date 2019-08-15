@@ -7,13 +7,14 @@ use DateTime;
 use DateTimeInterface;
 use Exception;
 use Iterator;
+use ProcessMaker\Nayra\Contracts\Bpmn\DatePeriodInterface;
 
 /**
  * DatePeriod represents an ISO8601 Repeating intervals
  *
  * @package ProcessMaker\Nayra\Bpmn\Models
  */
-class DatePeriod implements Iterator
+class DatePeriod implements DatePeriodInterface
 {
     /**
      * Start date of the period
@@ -59,6 +60,7 @@ class DatePeriod implements Iterator
      * Parameters could be:
      * - ISO8601 Repeating intervals  R[n]/start/interval/end
      * - start, interval, [end|array(end,recurences-1)]
+     * 
      */
     public function __construct(...$args)
     {
