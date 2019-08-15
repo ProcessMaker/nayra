@@ -21,12 +21,7 @@ class DatePeriod
      */
     public $start;
 
-    /**
-     * Interval of the period
-     *
-     * @var DateInterval
-     */
-    public $interval;
+    public $current;
 
     /**
      * End date of the period
@@ -36,11 +31,20 @@ class DatePeriod
     public $end;
 
     /**
+     * Interval of the period
+     *
+     * @var DateInterval
+     */
+    public $interval;
+
+    /**
      * Number of recurrences of the period
      *
      * @var int
      */
     public $recurrences;
+
+    public $include_start_date = true;
 
     const INF_RECURRENCES = 0;
     const EXCLUDE_START_DATE = 1;

@@ -159,8 +159,13 @@ class DatePeriodTest extends TestCase
         $this->assertEquals(4, $cycle->recurrences);
     }
 
+    /**
+     * Compare DatePeriod with GlobalDatePeriod
+     *
+     */
     public function testStandardDatePeriod()
     {
+        // Compare standar initialization
         $cycle0 = new GlobalDatePeriod('R3/2018-10-02T08:00:00Z/P1D');
         $cycle = new DatePeriod('R3/2018-10-02T08:00:00Z/P1D');//new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), 2);
         $this->assertEquals($cycle0->start, $cycle->start);
@@ -168,11 +173,39 @@ class DatePeriodTest extends TestCase
         $this->assertEquals($cycle0->end, $cycle->end);
         $this->assertEquals($cycle0->recurrences, $cycle->recurrences);
 
+        // Compare parameter initialization
         $cycle0 = new GlobalDatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), 2);
         $cycle = new DatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), 2);
         $this->assertEquals($cycle0->start, $cycle->start);
         $this->assertEquals($cycle0->interval, $cycle->interval);
         $this->assertEquals($cycle0->end, $cycle->end);
         $this->assertEquals($cycle0->recurrences, $cycle->recurrences);
+
+        // Compare json_encode
+        $this->assertEquals(json_encode($cycle), json_encode($cycle0));
+
+        // Compare parameter initialization
+        $cycle0 = new GlobalDatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), 0);
+        $cycle = new DatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), 0);
+        $this->assertEquals($cycle0->start, $cycle->start);
+        $this->assertEquals($cycle0->interval, $cycle->interval);
+        $this->assertEquals($cycle0->end, $cycle->end);
+        $this->assertEquals($cycle0->recurrences, $cycle->recurrences);
+
+        // Compare parameter initialization
+        $cycle0 = new GlobalDatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), -1);
+        $cycle = new DatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), -1);
+        $this->assertEquals($cycle0->start, $cycle->start);
+        $this->assertEquals($cycle0->interval, $cycle->interval);
+        $this->assertEquals($cycle0->end, $cycle->end);
+        $this->assertEquals($cycle0->recurrences, $cycle->recurrences);
+
+        // Compare parameter initialization without end.
+        // Recurrences are not the same, because DatePeriod supports periods without end
+        $cycle0 = new GlobalDatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), null);
+        $cycle = new DatePeriod(new DateTime('2018-10-02 08:00:00Z'), new DateInterval('P1D'), null);
+        $this->assertEquals($cycle0->start, $cycle->start);
+        $this->assertEquals($cycle0->interval, $cycle->interval);
+        $this->assertEquals($cycle0->end, $cycle->end);
     }
 }
