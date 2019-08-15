@@ -3,7 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use DateInterval;
-use DatePeriod;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use DateTime;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
@@ -132,7 +132,7 @@ class StartTimerEventTest extends EngineTestCase
         $this->engine->loadProcess($process);
 
         //Assertion: The jobs manager receive a scheduling request to trigger the start event time cycle specified in the process
-        $this->assertScheduledCyclicTimer(new \DatePeriod($calculatedCycle), $startEvent);
+        $this->assertScheduledCyclicTimer(new DatePeriod($calculatedCycle), $startEvent);
 
         //Assertion: The calculated value should conform to the ISO-8601 format for date and time representations.
         $value = $this->jobs[0]['timer'];

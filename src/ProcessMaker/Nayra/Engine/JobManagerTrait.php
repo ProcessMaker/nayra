@@ -2,7 +2,7 @@
 
 namespace ProcessMaker\Nayra\Engine;
 
-use DatePeriod;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use DateTimeInterface;
 
 /**
@@ -23,7 +23,7 @@ trait JobManagerTrait
     protected function getNextDateTimeCycle(DatePeriod $cycle, DateTimeInterface $last)
     {
         $nextDateTime = null;
-        foreach ($cycle as $dateTime) {
+        foreach ($cycle as $i => $dateTime) {
             if ($last < $dateTime) {
                 $nextDateTime = $dateTime;
                 break;

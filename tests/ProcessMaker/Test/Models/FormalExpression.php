@@ -3,7 +3,7 @@
 namespace ProcessMaker\Test\Models;
 
 use DateInterval;
-use DatePeriod;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use DateTime;
 use Exception;
 use ProcessMaker\Nayra\Bpmn\FormalExpressionTrait;

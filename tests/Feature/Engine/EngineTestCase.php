@@ -3,7 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use DateInterval;
-use DatePeriod;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Bpmn\TestEngine;

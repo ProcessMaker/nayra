@@ -6,13 +6,14 @@ use DateInterval;
 use DateTime;
 use DateTimeInterface;
 use Exception;
+use Iterator;
 
 /**
  * DatePeriod represents an ISO8601 Repeating intervals
  *
  * @package ProcessMaker\Nayra\Bpmn\Models
  */
-class DatePeriod
+class DatePeriod implements Iterator
 {
     /**
      * Start date of the period
@@ -45,6 +46,9 @@ class DatePeriod
     public $recurrences;
 
     public $include_start_date = true;
+
+    private $position = 0;
+    private $last;
 
     const INF_RECURRENCES = 0;
     const EXCLUDE_START_DATE = 1;
@@ -104,5 +108,95 @@ class DatePeriod
         if (!($this->recurrences >= 0)) {
             throw new Exception('Invalid DatePeriod::recurrences definition');
         }
+    }
+
+    /**
+     * Get start date time
+     *
+     * @return DateTimeInterface
+     */
+    public function getStartDate()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Get date interval
+     *
+     * @return DateInterval
+     */
+    public function getDateInterval()
+    {
+        return $this->interval;
+    }
+
+    /**
+     * Get current datetime for an iteration
+     *
+     * @return DateTimeInterface
+     */
+    public function current()
+    {
+        return $this->current;
+    }
+
+    /**
+     * Get current position for an iteration
+     *
+     * @return int
+     */
+    public function key()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Iterate to the next datetime
+     *
+     */
+    public function next()
+    {
+        $this->position++;
+        $this->current = $this->calc($this->current, 1);
+    }
+
+    /**
+     * Rewind iteration to the first datetime
+     *
+     */
+    public function rewind()
+    {
+        $this->current = $this->start ?: ($this->end ? $this->calc($this->end, -$this->recurrences) : new DateTime());
+        $this->last = $this->end ?: $this->calc($this->current, $this->recurrences);
+        $this->position = 0;
+    }
+
+    /**
+     * Check if iteration continues
+     *
+     * @return bool
+     */
+    public function valid()
+    {
+        return $this->current <= $this->last;
+    }
+
+    /**
+     * Calculate next/previos date
+     *
+     * @param DateTimeInterface $date
+     * @param int $count
+     *
+     * @return DateTimeInterface
+     */
+    private function calc(DateTimeInterface $date, $count)
+    {
+        $date = clone $date;
+        while ($count) {
+            $count <= 0 ?: $date->add($this->interval);
+            $count >= 0 ?: $date->sub($this->interval);
+            $count > 0 ? $count-- : $count++;
+        }
+        return $date;
     }
 }

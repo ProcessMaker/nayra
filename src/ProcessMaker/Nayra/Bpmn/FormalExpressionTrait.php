@@ -3,7 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use DateInterval;
-use DatePeriod;
+use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use DateTime;
 use Exception;
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
@@ -42,7 +42,7 @@ trait FormalExpressionTrait
      * Ex. R4/2018-05-01T00:00:00Z/PT1M
      *     R/2018-05-01T00:00:00Z/PT1M/2025-10-02T00:00:00Z
      *
-     * @return \DatePeriod
+     * @return DatePeriod
      */
     protected function getCycleExpression()
     {

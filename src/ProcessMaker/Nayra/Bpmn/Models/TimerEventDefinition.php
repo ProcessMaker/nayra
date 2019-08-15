@@ -100,7 +100,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      * @param callable $expression
      * @param array $data
      *
-     * @return \DateTime|\DatePeriod|\DateInterval
+     * @return DateTime|DatePeriod|DateInterval
      */
     private function evaluateTimer(callable $expression, array $data)
     {
