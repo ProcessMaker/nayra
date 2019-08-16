@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Bpmn\Events\ActivityClosedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * This activity will raise an exception when executed.
@@ -46,11 +44,11 @@ class CallActivity implements CallActivityInterface
     /**
      * Set the called element by the activity.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface $callableElement
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface|string $callableElement
      *
      * @return $this
      */
-    public function setCalledElement(CallableElementInterface $callableElement)
+    public function setCalledElement($callableElement)
     {
         $this->setProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT, $callableElement);
         return $this;

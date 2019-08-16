@@ -22,9 +22,9 @@ interface CallActivityInterface extends ActivityInterface
     /**
      * Set the called element by the activity.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface $callableElement
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface|string $callableElement
      *
      * @return $this
      */
-    public function setCalledElement(CallableElementInterface $callableElement);
+    public function setCalledElement($callableElement);
 }
