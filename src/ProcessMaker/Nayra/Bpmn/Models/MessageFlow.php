@@ -67,7 +67,7 @@ class MessageFlow implements MessageFlowInterface
      *
      * @return $this
      */
-    public function setSource(ThrowEventInterface $source)
+    public function setSource($source)
     {
         return $this->setProperty(static::BPMN_PROPERTY_SOURCE, $source);
     }
@@ -79,7 +79,7 @@ class MessageFlow implements MessageFlowInterface
      *
      * @return $this
      */
-    public function setTarget(CatchEventInterface $target)
+    public function setTarget($target)
     {
         return $this->setProperty(static::BPMN_PROPERTY_TARGET, $target);
     }

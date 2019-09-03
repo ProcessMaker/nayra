@@ -51,7 +51,7 @@ interface MessageFlowInterface extends EntityInterface
      *
      * @return $this
      */
-    public function setSource(ThrowEventInterface $source);
+    public function setSource($source);
 
     /**
      * Set the target of the message flow.
@@ -60,7 +60,7 @@ interface MessageFlowInterface extends EntityInterface
      *
      * @return $this
      */
-    public function setTarget(CatchEventInterface $target);
+    public function setTarget($target);
 
     /**
      * Sets the collaboration
