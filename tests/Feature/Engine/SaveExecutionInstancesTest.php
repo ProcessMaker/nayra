@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Engine;
 
+use Exception;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityClosedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
@@ -13,6 +14,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
+use ProcessMaker\Test\Models\TokenRepository;
 
 /**
  * Test to save execution instances
@@ -190,6 +192,35 @@ class SaveExecutionInstancesTest extends EngineTestCase
             ['elementId' => 'task2', 'status' => ActivityInterface::TOKEN_STATE_CLOSED],
             ['elementId' => 'task3', 'status' => ActivityInterface::TOKEN_STATE_CLOSED],
         ]);
+    }
+
+    /**
+     * Test save execution with an exception.
+     *
+     * @return void
+     */
+    public function testFailSaveToken()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+
+        //Call the process
+        $process = $bpmnRepository->getProcess('ParallelProcess');
+        $instance = $process->call();
+        $this->engine->runToNextState();
+
+        //Completes the first task
+        $firstTask = $bpmnRepository->getActivity('task1');
+        $token = $firstTask->getTokens($instance)->item(0);
+
+        //Assertion: Expected Exception when save token
+        $this->expectException(Exception::class);
+        TokenRepository::failNextPersistanceCall();
+        $firstTask->complete($token);
+        $this->engine->runToNextState();
     }
 
     /**

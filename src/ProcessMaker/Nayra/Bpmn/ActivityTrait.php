@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use Exception;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
@@ -91,11 +92,16 @@ trait ActivityTrait
         $this->activeState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token, TransitionInterface $source) {
-                $sequenceFlow = $source ? $source->getProperty('sequenceFlow') : null;
-                $this->getRepository()
+                try {
+                    $sequenceFlow = $source ? $source->getProperty('sequenceFlow') : null;
+                    $this->getRepository()
                     ->getTokenRepository()
                     ->persistActivityActivated($this, $token);
-                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token, $sequenceFlow);
+                    $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token, $sequenceFlow);
+                } catch (Exception $exception) {
+                    $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
+                    $token->logError($exception, $this);
+                }
             }
         );
         $this->failingState->attachEvent(

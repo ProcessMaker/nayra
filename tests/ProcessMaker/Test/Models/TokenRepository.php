@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Test\Models;
 
+use Exception;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
@@ -22,6 +23,13 @@ use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 class TokenRepository implements TokenRepositoryInterface
 {
     public $persistCalls = 0;
+
+    static $failNextPersistanceCall = false;
+
+    public static function failNextPersistanceCall()
+    {
+        static::$failNextPersistanceCall = true;
+    }
 
     /**
      * Create a token instance.
@@ -67,6 +75,10 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityActivated(ActivityInterface $activity, TokenInterface $token)
     {
+        if (static::$failNextPersistanceCall) {
+            static::$failNextPersistanceCall = false;
+            throw new Exception('Failure expected when activity persists');
+        }
     }
 
     /**
