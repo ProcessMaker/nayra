@@ -2,9 +2,11 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use Throwable;
 
 /**
  * Trait for a token.
@@ -136,5 +138,16 @@ trait TokenTrait
     public function getOwnerElement()
     {
         return $this->getOwner()->getOwner();
+    }
+
+    /**
+     * Log an error when executing the token
+     *
+     * @param \Throwable $error
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface $bpmnElement
+     */
+    public function logError(Throwable $error, FlowElementInterface $bpmnElement)
+    {
+        throw $error;
     }
 }

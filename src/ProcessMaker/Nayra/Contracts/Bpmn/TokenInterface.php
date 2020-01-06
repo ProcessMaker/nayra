@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use Throwable;
 
 /**
  * Token of a process instance.
@@ -92,4 +93,12 @@ interface TokenInterface extends EntityInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface
      */
     public function getOwnerElement();
+
+    /**
+     * Log an error when executing the token
+     *
+     * @param \Throwable $error
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface $bpmnElement
+     */
+    public function logError(Throwable $error, FlowElementInterface $bpmnElement);
 }
