@@ -1,19 +1,24 @@
 {
-    "name": "processmaker/nayra",
-    "description": "BPMN compliant engine",
-    "license": "Apache-2.0",
-    "autoload": {
-        "psr-4": {
-            "ProcessMaker\\": "src/ProcessMaker/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\Feature\\": "tests/Feature/",
-            "ProcessMaker\\": ["src/ProcessMaker/", "tests/unit/ProcessMaker/", "tests/ProcessMaker/"]
-        }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^5.7"
-    }
+	"name": "processmaker/nayra",
+	"description": "BPMN compliant engine",
+	"version": "1.0.0",
+	"license": "Apache-2.0",
+	"autoload": {
+		"psr-4": {
+			"ProcessMaker\\": "src/ProcessMaker/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\Feature\\": "tests/Feature/",
+			"ProcessMaker\\": [
+				"src/ProcessMaker/",
+				"tests/unit/ProcessMaker/",
+				"tests/ProcessMaker/"
+			]
+		}
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^5.7"
+	}
 }
