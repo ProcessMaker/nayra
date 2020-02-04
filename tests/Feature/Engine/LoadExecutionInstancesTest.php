@@ -127,14 +127,13 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $this->engine->setRepository($this->repository);
-        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareSequentialProcess($bpmnRepository);
 
         //Load the execution instance
-        $instance = $this->engine->loadExecutionInstance('executionInstanceId');
+        $instance = $this->engine->loadExecutionInstance('executionInstanceId', $bpmnRepository);
 
         //Get References by id
         $secondActivity = $bpmnRepository->getScriptTask('second');
@@ -166,14 +165,13 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $this->engine->setRepository($this->repository);
-        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareParallelProcess($bpmnRepository);
 
         //Load the execution instance
-        $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
+        $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId', $bpmnRepository);
 
         //Get References by id
         $secondActivity = $bpmnRepository->getScriptTask('task2');
@@ -220,14 +218,13 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $this->engine->setRepository($this->repository);
-        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareParallelProcessWithActivityCompleted($bpmnRepository);
 
         //Load the execution instance
-        $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
+        $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId', $bpmnRepository);
 
         //Get References by id
         $secondActivity = $bpmnRepository->getScriptTask('task2');
@@ -267,14 +264,13 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareParallelProcessWithException($bpmnRepository);
 
         //Load the execution instance
-        $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId');
+        $instance = $this->engine->loadExecutionInstance('otherExecutionInstanceId', $bpmnRepository);
 
         //Get References by id
         $thirdActivity = $bpmnRepository->getActivity('task3');
@@ -294,11 +290,10 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Load the execution instance
-        $instance = $this->engine->loadExecutionInstance('nonExistingInstance');
+        $instance = $this->engine->loadExecutionInstance('nonExistingInstance', $bpmnRepository);
 
         //Assertion: The returned value must be null
         $this->assertNull($instance);
@@ -315,15 +310,14 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $this->engine->setRepository($this->repository);
-        $this->engine->setStorage($bpmnRepository);
         $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareSequentialProcess($bpmnRepository);
 
         //Load the execution instance twice
-        $instance1 = $this->engine->loadExecutionInstance('executionInstanceId');
-        $instance2 = $this->engine->loadExecutionInstance('executionInstanceId');
+        $instance1 = $this->engine->loadExecutionInstance('executionInstanceId', $bpmnRepository);
+        $instance2 = $this->engine->loadExecutionInstance('executionInstanceId', $bpmnRepository);
 
         //Assertion: Both variables point to the same instance
         $this->assertEquals($instance1, $instance2);

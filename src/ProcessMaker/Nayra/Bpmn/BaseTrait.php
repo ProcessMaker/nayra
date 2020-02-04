@@ -19,9 +19,16 @@ trait BaseTrait
     /**
      * Factory used to build this element.
      *
-     * @var StorageInterface $factory
+     * @var RepositoryInterface $factory
      */
     private $repository;
+
+    /**
+     * BPMN document of this object.
+     *
+     * @var StorageInterface $ownerDocument
+     */
+    private $ownerDocument;
 
     /**
      * BaseTrait constructor.
@@ -69,6 +76,29 @@ trait BaseTrait
     public function setRepository(RepositoryInterface $repository)
     {
         $this->repository = $repository;
+        return $this;
+    }
+
+    /**
+     * Get the owner BPMN document of this object.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\StorageInterface
+     */
+    public function getOwnerDocument()
+    {
+        return $this->ownerDocument;
+    }
+
+    /**
+     * Set the owner BPMN document of this object.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface $ownerDocument
+     *
+     * @return $this
+     */
+    public function setOwnerDocument(StorageInterface $ownerDocument)
+    {
+        $this->ownerDocument = $ownerDocument;
         return $this;
     }
 

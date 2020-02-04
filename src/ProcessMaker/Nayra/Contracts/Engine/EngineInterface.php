@@ -86,11 +86,11 @@ interface EngineInterface
      * Load an execution instance from the storage.
      *
      * @param string $id
-     * @param DataStoreInterface $data
+     * @param StorageInterface $storage
      *
      * @return ExecutionInstanceInterface
      */
-    public function loadExecutionInstance($id);
+    public function loadExecutionInstance($id, StorageInterface $storage);
 
     /**
      * Close all the execution instances.
@@ -114,13 +114,6 @@ interface EngineInterface
      * @return $this
      */
     public function setDataStore(DataStoreInterface $dataStore);
-
-    /**
-     * Set the repository storage of the engine.
-     *
-     * @param StorageInterface $repository
-     */
-    public function setStorage(StorageInterface $repository);
 
     /**
      * Get the engine job manager for timer tasks and events.
@@ -171,11 +164,4 @@ interface EngineInterface
      * @return EngineInterface
      */
     public function loadCollaboration(CollaborationInterface $collaboration);
-
-    /**
-     * Get the repository storage of the engine.
-     *
-     * @return StorageInterface
-     */
-    public function getStorage();
 }
