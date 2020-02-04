@@ -147,7 +147,7 @@ trait EngineTrait
      * Load an execution instance from the storage.
      *
      * @param string $id
-     * @param DataStoreInterface $data
+     * @param StorageInterface $storage
      *
      * @return ExecutionInstanceInterface|null
      */

@@ -92,7 +92,7 @@ trait BaseTrait
     /**
      * Set the owner BPMN document of this object.
      *
-     * @param \ProcessMaker\Nayra\Contracts\StorageInterface $ownerDocument
+     * @param \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface $ownerDocument
      *
      * @return $this
      */
