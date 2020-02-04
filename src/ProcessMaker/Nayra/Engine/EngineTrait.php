@@ -45,8 +45,6 @@ trait EngineTrait
      */
     private $dataStore;
 
-    private $storage;
-
     protected $jobManager;
 
     /**
@@ -153,7 +151,7 @@ trait EngineTrait
      *
      * @return ExecutionInstanceInterface|null
      */
-    public function loadExecutionInstance($id)
+    public function loadExecutionInstance($id, StorageInterface $storage)
     {
         // If exists return the already loaded instance by id 
         foreach($this->executionInstances as $executionInstance) {
@@ -163,7 +161,7 @@ trait EngineTrait
         }
         // Create and load an instance by id
         $repository = $this->getRepository()->createExecutionInstanceRepository();
-        $executionInstance = $repository->loadExecutionInstanceByUid($id, $this->getStorage());
+        $executionInstance = $repository->loadExecutionInstanceByUid($id, $storage);
         if (!$executionInstance) {
             return;
         }
@@ -277,26 +275,6 @@ trait EngineTrait
                 $event->registerWithEngine($this);
             }
         }
-    }
-
-    /**
-     * Get the repository storage of the engine.
-     *
-     * @return StorageInterface
-     */
-    public function getStorage()
-    {
-        return $this->storage;
-    }
-
-    /**
-     * Set the repository storage of the engine.
-     *
-     * @param StorageInterface $storage
-     */
-    public function setStorage(StorageInterface $storage)
-    {
-        $this->storage = $storage;
     }
 
     /**
