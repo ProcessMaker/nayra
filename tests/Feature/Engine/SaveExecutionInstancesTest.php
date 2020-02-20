@@ -176,7 +176,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
         //Assertion: Saved data show the first activity was closed, the second is completed, and the third is active
         $this->assertSavedTokens($instance->getId(), [
             ['elementId' => 'task1', 'status' => ActivityInterface::TOKEN_STATE_CLOSED],
-            ['elementId' => 'task2', 'status' => ActivityInterface::TOKEN_STATE_COMPLETED],
+            ['elementId' => 'task2', 'status' => ActivityInterface::TOKEN_STATE_CLOSED],
             ['elementId' => 'task3', 'status' => ActivityInterface::TOKEN_STATE_ACTIVE],
         ]);
 

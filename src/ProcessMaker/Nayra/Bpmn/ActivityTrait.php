@@ -53,7 +53,19 @@ trait ActivityTrait
      *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
+    private $completeCloseTransition;
+
+    /**
+     *
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
+     */
     private $transition;
+
+    /**
+     *
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    private $completedState;
 
     /**
      *
@@ -76,8 +88,10 @@ trait ActivityTrait
         $this->exceptionTransition = new ExceptionTransition($this, true);
         $this->closeExceptionTransition = new CloseExceptionTransition($this, true);
         $this->completeExceptionTransition = new CompleteExceptionTransition($this, true);
-        $this->transition = new Transition($this, true);
-        $this->closedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
+        $this->completedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
+        $this->completeCloseTransition = new Transition($this, true);
+        $this->closedState = new State($this, ActivityInterface::TOKEN_STATE_CLOSED);
+        $this->transition = new Transition($this);
 
         $this->activeState->connectTo($this->exceptionTransition);
         $this->activeState->connectTo($this->activityTransition);
@@ -85,9 +99,11 @@ trait ActivityTrait
         $this->failingState->connectTo($this->completeExceptionTransition);
         $this->failingState->connectTo($this->closeExceptionTransition);
         $this->exceptionTransition->connectTo($this->failingState);
-        $this->activityTransition->connectTo($this->closedState);
+        $this->activityTransition->connectTo($this->completedState);
+        $this->completedState->connectTo($this->completeCloseTransition);
+        $this->completeCloseTransition->connectTo($this->closedState);
         $this->closedState->connectTo($this->transition);
-        $this->completeExceptionTransition->connectTo($this->closedState);
+        $this->completeExceptionTransition->connectTo($this->completedState);
 
         $this->activeState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
@@ -113,7 +129,7 @@ trait ActivityTrait
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, $this, $token);
             }
         );
-        $this->closedState->attachEvent(
+        $this->completedState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token) {
                 $this->getRepository()
@@ -142,6 +158,16 @@ trait ActivityTrait
                         ->persistActivityCompleted($this, $token);
                 }
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
+            }
+        );
+        $this->closedState->attachEvent(
+            StateInterface::EVENT_TOKEN_CONSUMED,
+            function (TokenInterface $token) {
+                $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistActivityClosed($this, $token);
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $token);
             }
         );
     }
@@ -176,16 +202,6 @@ trait ActivityTrait
         $target = $targetFlow->getTarget();
         $place = $target->getInputPlace($targetFlow);
         $this->transition->connectTo($place);
-        $place->attachEvent(
-            StateInterface::EVENT_TOKEN_CONSUMED,
-            function (TokenInterface $token) {
-                $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistActivityClosed($this, $token);
-                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $token);
-            }
-        );
         return $this;
     }
 
