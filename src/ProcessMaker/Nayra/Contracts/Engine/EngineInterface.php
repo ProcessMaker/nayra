@@ -86,11 +86,11 @@ interface EngineInterface
      * Load an execution instance from the storage.
      *
      * @param string $id
-     * @param DataStoreInterface $data
+     * @param StorageInterface $data
      *
      * @return ExecutionInstanceInterface
      */
-    public function loadExecutionInstance($id);
+    public function loadExecutionInstance($id, StorageInterface $storage);
 
     /**
      * Close all the execution instances.

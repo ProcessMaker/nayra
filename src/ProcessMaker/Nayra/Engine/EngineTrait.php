@@ -153,7 +153,7 @@ trait EngineTrait
      *
      * @return ExecutionInstanceInterface|null
      */
-    public function loadExecutionInstance($id)
+    public function loadExecutionInstance($id, StorageInterface $storage)
     {
         // If exists return the already loaded instance by id 
         foreach($this->executionInstances as $executionInstance) {
@@ -163,7 +163,7 @@ trait EngineTrait
         }
         // Create and load an instance by id
         $repository = $this->getRepository()->createExecutionInstanceRepository();
-        $executionInstance = $repository->loadExecutionInstanceByUid($id, $this->getStorage());
+        $executionInstance = $repository->loadExecutionInstanceByUid($id, $storage);
         if (!$executionInstance) {
             return;
         }
