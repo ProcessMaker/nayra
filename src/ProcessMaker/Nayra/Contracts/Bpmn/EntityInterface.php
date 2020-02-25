@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
@@ -56,7 +57,7 @@ interface EntityInterface
     public function addProperty($name, $value);
 
     /**
-     * @return \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface
+     * @return \ProcessMaker\Nayra\Contracts\RepositoryInterface
      */
     public function getRepository();
 
@@ -98,4 +99,16 @@ interface EntityInterface
      * @return $this
      */
     public function setName($name);
+
+    /**
+     * @return \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface
+     */
+    public function getOwnerDocument();
+
+    /**
+     * @param StorageInterface $ownerDocument
+     *
+     * @return $this
+     */
+    public function setOwnerDocument(StorageInterface $ownerDocument);
 }

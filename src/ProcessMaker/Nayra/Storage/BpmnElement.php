@@ -76,6 +76,9 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             $this->loadBodyContent($mapProperties, $bpmnElement);
             $this->loadChildElements($bpmnElement, $mapProperties);
         }
+        if ($bpmnElement instanceof EntityInterface) {
+            $bpmnElement->setOwnerDocument($this->ownerDocument);
+        }
         return $bpmnElement;
     }
 
