@@ -23,7 +23,7 @@ interface EventDefinitionBusInterface extends ObservableInterface
      *
      * @return void
      */
-    public function dispatchEventDefinition(ThrowEventInterface $source, EventDefinitionInterface $eventDefinition, TokenInterface $token);
+    public function dispatchEventDefinition(ThrowEventInterface $source, EventDefinitionInterface $eventDefinition, TokenInterface $token = null);
 
     /**
      * Register a catch event

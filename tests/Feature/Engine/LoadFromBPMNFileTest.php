@@ -77,6 +77,13 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $activityB = $bpmnRepository->getScriptTask('ScriptTask_2');
         $endActivity = $bpmnRepository->getScriptTask('end');
 
+        //Assertion: Check reference to BpmnDocument
+        $this->assertEquals($bpmnRepository, $start->getOwnerDocument());
+        $this->assertEquals($bpmnRepository, $startActivity->getOwnerDocument());
+        $this->assertEquals($bpmnRepository, $activityA->getOwnerDocument());
+        $this->assertEquals($bpmnRepository, $activityB->getOwnerDocument());
+        $this->assertEquals($bpmnRepository, $endActivity->getOwnerDocument());
+
         //Start the process
         $start->start($instance);
         $this->engine->runToNextState();
