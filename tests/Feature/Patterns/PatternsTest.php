@@ -107,8 +107,15 @@ class PatternsTest extends EngineTestCase
         $process = $start->getProcess();
         $dataStore = $this->repository->createDataStore();
         $dataStore->setData($data);
+        // create instance with initial data
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
-        $start->start($instance);
+        // set global data storage
+        $this->engine->setDataStore($dataStore);
+        if ($start->getEventDefinitions()->count() > 0) {
+            $start->execute($start->getEventDefinitions()->item(0), $instance);
+        } else {
+            $start->start($instance);
+        }
         $this->engine->runToNextState();
         $tokens = $instance->getTokens();
         $tasks = [];
