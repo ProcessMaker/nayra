@@ -31,7 +31,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
      *
      * @return EventDefinitionBusInterface
      */
-    public function dispatchEventDefinition(ThrowEventInterface $source, EventDefinitionInterface $eventDefinition, TokenInterface $token)
+    public function dispatchEventDefinition(ThrowEventInterface $source, EventDefinitionInterface $eventDefinition, TokenInterface $token = null)
     {
         $this->notifyEvent(get_class($eventDefinition), $source, $eventDefinition, $token);
         return $this;
@@ -48,7 +48,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
      */
     public function registerCatchEvent(CatchEventInterface $catchEvent, EventDefinitionInterface $eventDefinition, callable $callable)
     {
-        $this->attachEvent(get_class($eventDefinition), function (ThrowEventInterface $source, EventDefinitionInterface $sourceEventDefinition, TokenInterface $token) use ($catchEvent, $callable, $eventDefinition) {
+        $this->attachEvent(get_class($eventDefinition), function (ThrowEventInterface $source, EventDefinitionInterface $sourceEventDefinition, TokenInterface $token = null) use ($catchEvent, $callable, $eventDefinition) {
             if (get_class($sourceEventDefinition) === get_class($eventDefinition)) {
                 $match = $eventDefinition->shouldCatchEventDefinition($sourceEventDefinition);
                 if ($match && $eventDefinition instanceof MessageEventDefinitionInterface) {
