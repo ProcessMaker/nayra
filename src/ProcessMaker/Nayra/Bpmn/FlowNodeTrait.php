@@ -140,6 +140,7 @@ trait FlowNodeTrait
         $flows = $this->getFlows();
         foreach ($flows as $flow) {
             $this->buildConnectionTo($flow);
+            $targetFlow->registerFlowEvents();
         }
     }
 

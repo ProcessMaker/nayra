@@ -6,7 +6,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  * FlowInterface
  *
  */
-interface FlowInterface extends EntityInterface
+interface FlowInterface extends EntityInterface, ObservableInterface
 {
 
     /**
@@ -24,6 +24,8 @@ interface FlowInterface extends EntityInterface
     const TYPE_DEFAULT = 'DEFAULT';
     const TYPE_SEQUENCE = 'SEQUENCE';
     const TYPE_MESSAGE = 'MESSAGE';
+
+    const EVENT_FLOW_ACTIVATED = 'EVENT_FLOW_ACTIVATED';
 
     /**
      * Properties.
@@ -109,4 +111,24 @@ interface FlowInterface extends EntityInterface
      * @return bool
      */
     public function isDefault();
+
+    /**
+     * Register the flow events during the process building
+     */
+    public function registerFlowEvents();
+
+    /**
+     * Get the transition object that is triggered when
+     * this flow is activated.
+     *
+     * @return TransitionInterface
+     */
+    public function getTransition();
+
+    /**
+     * Set the transition object that triggers this flow object
+     *
+     * @return void
+     */
+    public function setTransition(TransitionInterface $transition);
 }
