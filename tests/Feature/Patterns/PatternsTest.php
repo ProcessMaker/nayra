@@ -4,6 +4,7 @@ namespace Tests\Feature\Patterns;
 
 use Exception;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 use Tests\Feature\Engine\EngineTestCase;
@@ -127,10 +128,11 @@ class PatternsTest extends EngineTestCase
                     foreach ($ins->getTokens() as $token) {
                         $element = $token->getOwnerElement();
                         $status = $token->getStatus();
-                        if ($element instanceof ActivityInterface && $status === ActivityInterface::TOKEN_STATE_ACTIVE) {
+                        if ($element instanceof ActivityInterface && !($element instanceof CallActivityInterface)
+                            && $status === ActivityInterface::TOKEN_STATE_ACTIVE) {
                             $tasks[] = $element->getId();
                             $element->complete($token);
-                            $this->engine->runToNextState();
+                                $this->engine->runToNextState();
                             $submited = true;
                             break;
                         }
