@@ -135,7 +135,7 @@ trait StartEventTrait
     public function registerWithEngine(EngineInterface $engine)
     {
         $this->registerCatchEvents($engine);
-        $this->scheduleTimerEvents(null);
+        $this->activateCatchEvent(null);
         return $this;
     }
 }

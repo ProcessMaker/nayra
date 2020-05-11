@@ -67,6 +67,20 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     }
 
     /**
+     * Occures when the catch event was activated
+     *
+     * @param EngineInterface $engine
+     * @param FlowElementInterface $element
+     * @param TokenInterface $token
+     *
+     * @return void
+     */
+    public function catchEventActivated(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
+    {
+        $this->scheduleTimerEvents($engine, $element, $token);
+    }
+
+    /**
      * Register in catch events.
      *
      * @param EngineInterface $engine

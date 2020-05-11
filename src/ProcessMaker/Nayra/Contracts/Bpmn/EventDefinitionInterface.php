@@ -58,4 +58,15 @@ interface EventDefinitionInterface extends EntityInterface
      * @return void
      */
     public function registerWithCatchEvent(EngineInterface $engine, CatchEventInterface $element);
+
+    /**
+     * Occures when the catch event was activated
+     *
+     * @param EngineInterface $engine
+     * @param FlowElementInterface $element
+     * @param TokenInterface $token
+     *
+     * @return void
+     */
+    public function catchEventActivated(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null);
 }

@@ -126,7 +126,7 @@ trait BoundaryEventTrait
         }
         // Schedule timer events when Activity is Activated
         $this->getAttachedTo()->attachEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, function (ActivityInterface $activity, TokenInterface $token) {
-            $this->scheduleTimerEvents($token);
+            $this->activateCatchEvent($token);
         });
         // Catch EVENT_ACTIVITY_EXCEPTION
         $this->getAttachedTo()->attachEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, function (ActivityInterface $activity, TokenInterface $token) {

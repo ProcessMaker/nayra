@@ -60,7 +60,7 @@ trait IntermediateCatchEventTrait
 
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
             // If there are timer event definitions, register them to send the corresponding timer events
-            $this->scheduleTimerEvents($token);
+            $this->activateCatchEvent($token);
         });
 
         $this->activeState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {

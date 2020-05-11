@@ -5,8 +5,10 @@ namespace ProcessMaker\Nayra\Bpmn\Models;
 use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -32,7 +34,9 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
         $data = $engine->getDataStore()->getData();
         $condition = $this->getCondition();
         // TODO: code analyzer giving an error here - should be callable
-        return $event instanceof ConditionalEventDefinition && $condition($data);
+        $res = $event instanceof ConditionalEventDefinition && $condition($data);
+        error_log($res ? 'TRUE' : 'FALSE');
+        return $res;
     }
 
     /**
@@ -58,5 +62,21 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
     public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         return $this;
+    }
+
+    /**
+     * Occures when the catch event was activated
+     *
+     * @param EngineInterface $engine
+     * @param FlowElementInterface $element
+     * @param TokenInterface $token
+     *
+     * @return void
+     */
+    public function catchEventActivated(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
+    {
+        $element->execute();
+        error_log('entro');
+        $this->execute($this, $element, $token ? $token->getInstance() : null, $token);
     }
 }

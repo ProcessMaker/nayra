@@ -58,12 +58,10 @@ trait CatchEventTrait
      *
      * @return $this
      */
-    private function scheduleTimerEvents(TokenInterface $token = null)
+    private function activateCatchEvent(TokenInterface $token = null)
     {
         foreach ($this->getEventDefinitions() as $eventDefinition) {
-            if ($eventDefinition instanceof TimerEventDefinitionInterface) {
-                $eventDefinition->scheduleTimerEvents($this->getOwnerProcess()->getEngine(), $this, $token);
-            }
+            $eventDefinition->catchEventActivated($this->getOwnerProcess()->getEngine(), $this, $token);
         }
         return $this;
     }

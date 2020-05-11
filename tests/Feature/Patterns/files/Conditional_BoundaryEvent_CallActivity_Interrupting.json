@@ -3,24 +3,12 @@
         "startEvent": "StartEvent_1",
         "data": {"a":1},
         "events": [
-            "_4"
         ],
         "result": [
             "_6",
             "_20",
             "_4",
             "_9"
-        ]
-    },
-    {
-        "startEvent": "StartEvent_1",
-        "data": {},
-        "events": [
-        ],
-        "result": [
-            "_6",
-            "_20",
-            "_8"
         ]
     }
 ]
