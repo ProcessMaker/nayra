@@ -58,6 +58,18 @@ class Collection implements CollectionInterface
     }
 
     /**
+     * Find first element of the collection that match the $condition.
+     *
+     * @param callable $condition
+     *
+     * @return mixed
+     */
+    public function findFirst(callable $condition)
+    {
+        return current(array_filter($this->items, $condition));
+    }
+
+    /**
      * Add an element to the collection.
      *
      * @param mixed $item
