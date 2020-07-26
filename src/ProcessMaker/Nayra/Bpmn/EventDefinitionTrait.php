@@ -40,7 +40,7 @@ trait EventDefinitionTrait
      *
      * @return void
      */
-    public function catchEventActivated(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
+    public function catchEventActivated(EngineInterface $engine, CatchEventInterface $element, TokenInterface $token = null)
     {
     }
 }

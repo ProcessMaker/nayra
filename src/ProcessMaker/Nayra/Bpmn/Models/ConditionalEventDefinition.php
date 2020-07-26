@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
@@ -30,12 +31,14 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
      */
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null)
     {
-        $engine = $target->getOwnerProcess()->getEngine();
-        $data = $engine->getDataStore()->getData();
+        if ($instance) {
+            $data = $instance->getDataStore()->getData();
+        } else {
+            $engine = $target->getOwnerProcess()->getEngine();
+            $data = $engine->getDataStore()->getData();
+        }
         $condition = $this->getCondition();
-        // TODO: code analyzer giving an error here - should be callable
         $res = $event instanceof ConditionalEventDefinition && $condition($data);
-        error_log($res ? 'TRUE' : 'FALSE');
         return $res;
     }
 
@@ -65,7 +68,7 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
     }
 
     /**
-     * Occures when the catch event was activated
+     * Occures when the catch event is activated
      *
      * @param EngineInterface $engine
      * @param FlowElementInterface $element
@@ -73,10 +76,11 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
      *
      * @return void
      */
-    public function catchEventActivated(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
+    public function catchEventActivated(EngineInterface $engine, CatchEventInterface $element, TokenInterface $token = null)
     {
-        $element->execute();
-        error_log('entro');
-        $this->execute($this, $element, $token ? $token->getInstance() : null, $token);
+        $instance = $token ? $token->getInstance() : null;
+        if ($instance) {
+            $element->execute($this, $instance);
+        }
     }
 }

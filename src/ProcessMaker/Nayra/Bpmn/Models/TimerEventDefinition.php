@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
@@ -75,7 +76,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      *
      * @return void
      */
-    public function catchEventActivated(EngineInterface $engine, FlowElementInterface $element, TokenInterface $token = null)
+    public function catchEventActivated(EngineInterface $engine, CatchEventInterface $element, TokenInterface $token = null)
     {
         $this->scheduleTimerEvents($engine, $element, $token);
     }
