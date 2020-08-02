@@ -60,6 +60,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
         } else {
             $bpmnElement = $this->ownerDocument->getFactory()->create($classInterface);
             $bpmnElement->setOwnerDocument($this->ownerDocument);
+            $bpmnElement->setBpmnElement($this);
             $id ? $this->ownerDocument->indexBpmnElement($id, $bpmnElement) : null;
             $bpmnElement->setRepository($this->ownerDocument->getFactory());
             if ($bpmnElement instanceof CallableElementInterface) {

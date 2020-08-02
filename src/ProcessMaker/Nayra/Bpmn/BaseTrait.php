@@ -2,9 +2,9 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
 use ReflectionClass;
 
 /**
@@ -29,6 +29,13 @@ trait BaseTrait
      * @var StorageInterface $ownerDocument
      */
     private $ownerDocument;
+
+    /**
+     * Bpmn Element of this object.
+     *
+     * @var BpmnElementInterface $bpmnElement
+     */
+    private $bpmnElement;
 
     /**
      * BaseTrait constructor.
@@ -103,6 +110,29 @@ trait BaseTrait
     }
 
     /**
+     * Get DOM element of this object.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface
+     */
+    public function getBpmnElement()
+    {
+        return $this->bpmnElement;
+    }
+
+    /**
+     * Set DOM element of this object.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface $ownerDocument
+     *
+     * @return $this
+     */
+    public function setBpmnElement(BpmnElementInterface $bpmnElement)
+    {
+        $this->bpmnElement = $bpmnElement;
+        return $this;
+    }
+
+    /**
      * Get properties.
      *
      * @return array
@@ -120,7 +150,7 @@ trait BaseTrait
      */
     public function setProperties(array $properties)
     {
-        foreach($properties as $name => $value) {
+        foreach ($properties as $name => $value) {
             $setter = 'set' . $name;
             if (method_exists($this, $setter)) {
                 $this->$setter($value);
