@@ -183,4 +183,18 @@ class CollectionTest extends TestCase
         $this->assertEquals(1, $this->object->key());
         $this->assertEquals(2, $this->object->current());
     }
+
+    /**
+     * Find first element of the collection that match the $condition.
+     *
+     */
+    public function testFindFirst()
+    {
+        $this->assertEquals(2, $this->object->findFirst(function ($item) {
+            return $item === 2;
+        }));
+        $this->assertEquals(1, $this->object->findFirst(function ($item) {
+            return $item % 2;
+        }));
+    }
 }

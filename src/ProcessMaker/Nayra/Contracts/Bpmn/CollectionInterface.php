@@ -29,6 +29,15 @@ interface CollectionInterface extends SeekableIterator
     public function find($condition);
 
     /**
+     * Find first element of the collection that match the $condition.
+     *
+     * @param callable $condition
+     *
+     * @return mixed
+     */
+    public function findFirst(callable $condition);
+
+    /**
      * Add an element to the collection.
      *
      * @param mixed $item
