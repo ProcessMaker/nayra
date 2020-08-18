@@ -176,7 +176,6 @@ trait ActivityTrait
         $target = $targetFlow->getTarget();
         $place = $target->getInputPlace($targetFlow);
         $this->transition->connectTo($place);
-        $targetFlow->setTransition($this->transition);
         $place->attachEvent(
             StateInterface::EVENT_TOKEN_CONSUMED,
             function (TokenInterface $token) {
