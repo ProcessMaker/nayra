@@ -14,6 +14,7 @@ interface TransitionInterface extends ConnectionNodeInterface
     const EVENT_BEFORE_TRANSIT = 'BeforeTransit';
     const EVENT_AFTER_CONSUME = 'AfterConsume';
     const EVENT_AFTER_TRANSIT = 'AfterTransit';
+    const EVENT_CONDITIONED_TRANSITION = 'ConditionedTransition';
 
     /**
      * Execute a transition.

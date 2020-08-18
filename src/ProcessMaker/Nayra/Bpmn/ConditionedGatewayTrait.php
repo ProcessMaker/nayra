@@ -103,7 +103,6 @@ trait ConditionedGatewayTrait
                 $this->buildConditionedConnectionTo($flow, $flow->getCondition(), $isDefault);
             } else {
                 $this->buildConnectionTo($flow);
-                $flow->registerFlowEvents(); //??
             }
         }
     }
