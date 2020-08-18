@@ -11,6 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test transitions
@@ -397,5 +398,37 @@ class ExclusiveGatewayTest extends EngineTestCase
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
+    }
+
+    public function testConditionalExclusiveParameters()
+    {
+        //Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+
+        $bpmnRepository->load(__DIR__ . '/files/ExclusiveGateway.bpmn');
+
+        //Create a data store with data.
+        $dataStore = $this->repository->createDataStore();
+        $dataStore->putData('Age', '8');
+
+        //Load a process from a bpmn repository by Id
+        $process = $bpmnRepository->getProcess('ExclusiveGatewayProcess');
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        //Get start event and event definition references
+        $start = $bpmnRepository->getStartEvent('StartEvent');
+        $activity1 = $bpmnRepository->getStartEvent('Exclusive1');
+
+
+        //Start the process
+        $start->start($instance);
+        $this->engine->runToNextState();
+
+        // Advance the first activity
+        $token0 = $activity1->getTokens($instance)->item(0);
+        $activity1->complete($token0);
+        $this->engine->runToNextState();
     }
 }
