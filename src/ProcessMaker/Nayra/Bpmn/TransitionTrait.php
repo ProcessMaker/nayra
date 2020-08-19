@@ -98,10 +98,15 @@ trait TransitionTrait
      */
     protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
-        if (get_class($this) === ConditionedExclusiveTransition::class && !empty($this->getOwner()->getOwnerDocument())) {
+        if ($this instanceof ConditionedExclusiveTransition && !empty($this->getOwner()->getOwnerDocument())) {
             $source = $this->outgoing()->item(0)->origin()->getOwner();
             $target = $this->outgoing->item(0)->target()->getOwner();
-            $flow = $this->findFlow($source, $target);
+
+            // Find the flow that has the corresponding flow/source
+            $flow = $source->getOutgoingFlows()->findFirst(function ($flowElement) use ($target) {
+                return $flowElement->getTarget() === $target;
+            });
+
             $this->notifyConditionedTransition(TransitionInterface::EVENT_CONDITIONED_TRANSITION, $this, $flow, $executionInstance);
         }
 
@@ -126,27 +131,6 @@ trait TransitionTrait
         $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this, $consumeTokens);
 
         return true;
-    }
-
-    /**
-     * Find the Node's flow that is traversed
-     * @param $origin
-     * @param $target
-     * @return mixed
-     * @throws \ErrorException
-     */
-    private function findFlow($origin, $target)
-    {
-        $bpmnElements = $this->getOwner()->getOwnerDocument()->getBpmnElements();
-        $matchingFlows = array_values(array_filter($bpmnElements, function ($element) use ($origin, $target) {
-            return get_class($element) === Flow::class
-                && $element->getSource()->getId() === $origin->getId()
-                && $element->getTarget()->getId() === $target->getId();
-        }));
-
-        if (count($matchingFlows) == 0) { throw new \ErrorException("The flow can't be found within the bpmn"); }
-
-        return $matchingFlows[0];
     }
 
     /**
