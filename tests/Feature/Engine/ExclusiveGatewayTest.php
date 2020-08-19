@@ -11,6 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
@@ -189,6 +190,7 @@ class ExclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            TransitionInterface::EVENT_CONDITIONED_TRANSITION,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -229,6 +231,7 @@ class ExclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            TransitionInterface::EVENT_CONDITIONED_TRANSITION,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -348,6 +351,7 @@ class ExclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            TransitionInterface::EVENT_CONDITIONED_TRANSITION,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
@@ -364,6 +368,7 @@ class ExclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            TransitionInterface::EVENT_CONDITIONED_TRANSITION,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);

@@ -98,8 +98,7 @@ trait TransitionTrait
      */
     protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
-        if ($this instanceof ConditionedExclusiveTransition
-            && !empty($this->getOwner()->getOwnerDocument())) {
+        if ($this instanceof ConditionedExclusiveTransition) {
             $source = $this->outgoing()->item(0)->origin()->getOwner();
             $target = $this->outgoing->item(0)->target()->getOwner();
 
