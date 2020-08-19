@@ -1120,11 +1120,4 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     {
         return $this->validationErrors;
     }
-
-    /**
-     * @return array|EntityInterface
-     */
-    public function getBpmnElements() {
-        return $this->bpmnElements;
-    }
 }
