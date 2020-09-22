@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Bpmn\Models\Flow;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
@@ -97,6 +98,18 @@ trait TransitionTrait
      */
     protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
+        if ($this instanceof ConditionedExclusiveTransition) {
+            $source = $this->outgoing()->item(0)->origin()->getOwner();
+            $target = $this->outgoing->item(0)->target()->getOwner();
+
+            // Find the flow that has the corresponding flow/source
+            $flow = $source->getOutgoingFlows()->findFirst(function ($flowElement) use ($target) {
+                return $flowElement->getTarget() === $target;
+            });
+
+            $this->notifyConditionedTransition(TransitionInterface::EVENT_CONDITIONED_TRANSITION, $this, $flow, $executionInstance);
+        }
+
         $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this, $consumeTokens);
         $consumedTokensCount = $consumeTokens->count();
         $consumeTokens->find(function (TokenInterface $token) use ($executionInstance) {
@@ -118,6 +131,18 @@ trait TransitionTrait
         $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this, $consumeTokens);
 
         return true;
+    }
+
+    /**
+     * Notify in the bus that a conditioned transition has been activated
+     *
+     * @param $event
+     * @param mixed ...$arguments
+     */
+    protected function notifyConditionedTransition($event, ...$arguments)
+    {
+        $this->getOwner()->getOwnerProcess()->getDispatcher()->dispatch($event, $arguments);
+        array_unshift($arguments, $event);
     }
 
     /**
