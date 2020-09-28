@@ -112,7 +112,7 @@ trait StartEventTrait
     public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
-            if ($eventDefinition->assertsRule($event, $this, $instance)) {
+            if ($eventDefinition->assertsRule($event, $this, $instance, $token)) {
                 if ($instance === null) {
                     $process = $this->getOwnerProcess();
                     $dataStorage = $process->getRepository()->createDataStore();

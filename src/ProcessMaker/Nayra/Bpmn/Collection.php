@@ -54,7 +54,7 @@ class Collection implements CollectionInterface
      */
     public function find($condition)
     {
-        return new Collection(array_filter($this->items, $condition));
+        return new Collection(array_values(array_filter($this->items, $condition)));
     }
 
     /**

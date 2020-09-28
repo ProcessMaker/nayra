@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Engine;
 
 use ProcessMaker\Nayra\Bpmn\Models\EventDefinitionBus;
+use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
@@ -100,6 +101,13 @@ trait EngineTrait
                 return false;
             }
         }
+        $this->dispatchConditionalEvents();
+        while ($this->step()) {
+            $maxIterations--;
+            if ($maxIterations === 0) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -153,8 +161,8 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id, StorageInterface $storage)
     {
-        // If exists return the already loaded instance by id 
-        foreach($this->executionInstances as $executionInstance) {
+        // If exists return the already loaded instance by id
+        foreach ($this->executionInstances as $executionInstance) {
             if ($executionInstance->getId() === $id) {
                 return $executionInstance;
             }
@@ -322,5 +330,15 @@ trait EngineTrait
     {
         $this->eventDefinitionBus = $this->eventDefinitionBus ?: new EventDefinitionBus;
         return $this->eventDefinitionBus;
+    }
+
+    private function dispatchConditionalEvents()
+    {
+        $this->getEventDefinitionBus()
+            ->dispatchEventDefinition(
+                $this,
+                $this->getRepository()->createConditionalEventDefinition(),
+                null
+            );
     }
 }

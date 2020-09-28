@@ -3,7 +3,6 @@
         "startEvent": "StartEvent_1",
         "data": {"a":1},
         "events": [
-            "IntermediateCatchEvent_1"
         ],
         "result": [
             "start",

@@ -8,6 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -26,20 +27,39 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
      * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
      *
      * @return boolean
      */
-    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null)
+    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
-        if ($instance) {
+        // Get context data
+        if ($instance && $target instanceof IntermediateCatchEventInterface) {
             $data = $instance->getDataStore()->getData();
+            $tokenCatch = $target->getActiveState()->getTokens($instance)->item(0);
+            $conditionals = $tokenCatch->getProperty('conditionals', []);
         } else {
-            $engine = $target->getOwnerProcess()->getEngine();
+            $process = $target->getOwnerProcess();
+            $engine = $process->getEngine();
             $data = $engine->getDataStore()->getData();
+            $conditionals = $process->getProperty('conditionals', []);
         }
+        // Get previous value
+        $key = $this->getId() ?: $this->getBpmnElement()->getNodePath();
+        $previous = $conditionals[$key] ?? null;
+        // Evaluate condition
         $condition = $this->getCondition();
-        $res = $event instanceof ConditionalEventDefinition && $condition($data);
-        return $res;
+        $current = $condition($data);
+        // Update previous value
+        $conditionals[$key] = $current;
+        if ($instance && $target instanceof IntermediateCatchEventInterface) {
+            foreach ($target->getActiveState()->getTokens($instance) as $tokenCatch) {
+                $tokenCatch->setProperty('conditionals', $conditionals);
+            }
+        } else {
+            $process->setProperty('conditionals', $conditionals);
+        }
+        return !$previous && $current;
     }
 
     /**
@@ -78,9 +98,17 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
      */
     public function catchEventActivated(EngineInterface $engine, CatchEventInterface $element, TokenInterface $token = null)
     {
-        $instance = $token ? $token->getInstance() : null;
-        if ($instance) {
-            $element->execute($this, $instance);
-        }
+    }
+
+    /**
+     * Every time a data is change the event should be catch
+     *
+     * @param EventDefinitionInterface $eventDefinition
+     *
+     * @return bool
+     */
+    public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition)
+    {
+        return true;
     }
 }

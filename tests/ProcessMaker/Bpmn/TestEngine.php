@@ -41,6 +41,7 @@ class TestEngine implements EngineInterface
         $this->setRepository($repository);
         $this->setDispatcher($dispatcher);
         $this->setJobManager($jobManager);
+        $this->setDataStore($repository->createDataStore());
         $eventDefinitionBus ? $this->setEventDefinitionBus($eventDefinitionBus) : null;
     }
 

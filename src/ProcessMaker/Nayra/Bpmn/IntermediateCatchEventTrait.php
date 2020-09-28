@@ -37,7 +37,11 @@ trait IntermediateCatchEventTrait
     private $transition;
 
     private $activeState;
-    private $triggerPlace;
+
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    private $triggerPlace = [];
 
     /**
      * Build the transitions that define the element.
@@ -48,10 +52,8 @@ trait IntermediateCatchEventTrait
     {
         $this->setRepository($factory);
         $this->activeState = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_ACTIVE);
-        $this->triggerPlace = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_EVENT_CATCH);
         $this->transition = new IntermediateCatchEventTransition($this);
         $this->activeState->connectTo($this->transition);
-        $this->triggerPlace->connectTo($this->transition);
 
         $this->activeState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $this->getRepository()
@@ -86,18 +88,29 @@ trait IntermediateCatchEventTrait
             }
         );
 
-        $this->triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-            $this->getRepository()
-                ->getTokenRepository()
-                ->persistCatchEventMessageArrives($this, $token);
-            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH, $this, $token);
-        });
-        $this->triggerPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-            $this->getRepository()
-                ->getTokenRepository()
-                ->persistCatchEventMessageConsumed($this, $token);
-            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED, $this, $token);
-        });
+        $eventDefinitions = $this->getEventDefinitions();
+        foreach ($eventDefinitions as $index => $eventDefinition) {
+            $this->triggerPlace[$index] = new State($this, $eventDefinition->getId());
+            $this->triggerPlace[$index]->connectTo($this->transition);
+        }
+        if ($eventDefinitions->count() === 0) {
+            $this->triggerPlace[0] = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_EVENT_CATCH);
+            $this->triggerPlace[0]->connectTo($this->transition);
+        }
+        foreach ($this->triggerPlace as $triggerPlace) {
+            $triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistCatchEventMessageArrives($this, $token);
+                $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH, $this, $token);
+            });
+            $triggerPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistCatchEventMessageConsumed($this, $token);
+                $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED, $this, $token);
+            });
+        }
     }
 
     /**
@@ -139,11 +152,20 @@ trait IntermediateCatchEventTrait
      *
      * @return $this
      */
-    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
+    public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         if ($instance !== null && $this->getActiveState()->getTokens($instance)->count() > 0) {
-            // with a new token in the trigger place, the event catch element will be fired
-            $this->triggerPlace->addNewToken($instance);
+            foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
+                if ($eventDefinition->assertsRule($event, $this, $instance, $token)) {
+                    if ($instance === null) {
+                        $process = $this->getOwnerProcess();
+                        $dataStorage = $process->getRepository()->createDataStore();
+                        $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
+                    }
+                    $this->triggerPlace[$index]->addNewToken($instance);
+                    $eventDefinition->execute($event, $this, $instance, $token);
+                }
+            }
         }
         return $this;
     }
