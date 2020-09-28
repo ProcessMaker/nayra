@@ -14,7 +14,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class InclusiveGatewayTransition implements TransitionInterface
 {
-
     use TransitionTrait;
 
     /**
@@ -52,36 +51,38 @@ class InclusiveGatewayTransition implements TransitionInterface
      *     - ends with an incoming Sequence Flow of the inclusive gateway that has a token, and
      *     - does not visit the Inclusive Gateway.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
+     *
      * @return bool
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
-        $withToken = $this->incoming()->find(function(Connection $flow) use ($executionInstance) {
+        $withToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
             return $flow->originState()->getTokens($executionInstance)->count()>0;
         });
-        $withoutToken = $this->incoming()->find(function(Connection $flow) use ($executionInstance) {
+        $withoutToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
             return $flow->originState()->getTokens($executionInstance)->count()===0;
         });
         $rule1 = $withToken->count()>0;
-        $rule2 = $withoutToken->find(function($inFlow) use ($executionInstance) {
-                $paths = $inFlow->origin()->paths(function(Connection $flow) use ($inFlow, $executionInstance) {
-                    return $flow!==$inFlow
+        $rule2 = $withoutToken->find(function ($inFlow) use ($executionInstance) {
+            $paths = $inFlow->origin()->paths(function (Connection $flow) use ($inFlow, $executionInstance) {
+                return $flow!==$inFlow
                         && $flow->origin() instanceof StateInterface
                         && $flow->originState()->getTokens($executionInstance)->count()>0;
-                }, function (Connection $flow) {
-                    return $flow->origin()!==$this; //does not visit
-                });
-                return $paths->count()!==0;
-            })->count()===0;
-        $rule3 = $withToken->find(function($inFlow) use ($executionInstance) {
-                return $inFlow->origin()->paths(function(Connection $flow) use ($inFlow, $executionInstance) {
-                        return $flow!==$inFlow
+            }, function (Connection $flow) {
+                return $flow->origin()!==$this; //does not visit
+            });
+            return $paths->count()!==0;
+        })->count()===0;
+        $rule3 = $withToken->find(function ($inFlow) use ($executionInstance) {
+            return $inFlow->origin()->paths(function (Connection $flow) use ($inFlow, $executionInstance) {
+                return $flow!==$inFlow
                             && $flow->origin() instanceof StateInterface
                             && $flow->originState()->getTokens($executionInstance)->count()>0;
-                    }, function (Connection $flow) {
-                        return $flow->origin()!==$this; //does not visit
-                    })->count()!==0;
-            })->count()===0;
+            }, function (Connection $flow) {
+                return $flow->origin()!==$this; //does not visit
+            })->count()!==0;
+        })->count()===0;
         return $rule1 && $rule2 && $rule3;
     }
 }

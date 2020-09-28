@@ -51,6 +51,8 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
     /**
      * If the condition is not met.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
+     *
      * @return boolean
      */
     protected function conditionIsFalse(ExecutionInstanceInterface $executionInstance)
@@ -62,6 +64,7 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
     /**
      * Consume the input tokens.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
      */
     private function collect(ExecutionInstanceInterface $executionInstance)
     {

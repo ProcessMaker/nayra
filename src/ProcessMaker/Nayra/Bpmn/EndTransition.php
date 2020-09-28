@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Bpmn\TransitionTrait;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -14,14 +13,13 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  */
 class EndTransition implements TransitionInterface
 {
-
     use TransitionTrait;
 
     /**
      * Condition required at end event.
      *
-     * @param TokenInterface $token
-     * @param ExecutionInstanceInterface $executionInstance
+     * @param TokenInterface|null $token
+     * @param ExecutionInstanceInterface|null $executionInstance
      *
      * @return bool
      */
@@ -30,12 +28,20 @@ class EndTransition implements TransitionInterface
         return true;
     }
 
+    /**
+     * Check if transition has all the required tokens to be activated
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return boolean
+     */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $instance)
     {
         return $this->incoming()->count() > 0
                 && $this->incoming()
                         ->find(function ($flow) use ($instance) {
-                            return $flow->origin()->getTokens($instance)->count() === 0;})
+                            return $flow->origin()->getTokens($instance)->count() === 0;
+                        })
                         ->count() === 0;
     }
 }

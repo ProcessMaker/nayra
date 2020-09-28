@@ -43,6 +43,8 @@ class ExclusiveGatewayTransition implements TransitionInterface
     /**
      * In this gateway,  one token should arrive, and every time this happens the gateway is ready to be triggered
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
+     *
      * @return bool
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)

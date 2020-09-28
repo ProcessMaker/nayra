@@ -91,8 +91,8 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
      * Occures when the catch event is activated
      *
      * @param EngineInterface $engine
-     * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param CatchEventInterface $element
+     * @param TokenInterface|null $token
      *
      * @return void
      */

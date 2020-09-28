@@ -123,7 +123,7 @@ trait BaseTrait
     /**
      * Set DOM element of this object.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Repositories\StorageInterface $ownerDocument
+     * @param \ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface $bpmnElement
      *
      * @return $this
      */

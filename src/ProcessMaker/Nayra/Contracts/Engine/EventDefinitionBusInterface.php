@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ObservableInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -17,9 +16,9 @@ interface EventDefinitionBusInterface extends ObservableInterface
     /**
      * Dispatch an event definition
      *
-     * @param $source
+     * @param mixed $source
      * @param EventDefinitionInterface $eventDefinition
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      *
      * @return void
      */

@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -35,8 +34,8 @@ trait EventDefinitionTrait
      * Occures when the catch event was activated
      *
      * @param EngineInterface $engine
-     * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param CatchEventInterface $element
+     * @param TokenInterface|null $token
      *
      * @return void
      */

@@ -24,7 +24,7 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
      * @param ExecutionInstanceInterface|null $instance
-     * @param TokenInterface|null $instance
+     * @param TokenInterface|null $token
      *
      * @return boolean
      */

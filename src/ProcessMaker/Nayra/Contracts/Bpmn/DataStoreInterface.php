@@ -55,8 +55,8 @@ interface DataStoreInterface extends ItemAwareElementInterface
     /**
      * Get data from store.
      *
-     * @param $name
-     * @param $default
+     * @param string $name
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -65,7 +65,7 @@ interface DataStoreInterface extends ItemAwareElementInterface
     /**
      * Set data of the store.
      *
-     * @param $data
+     * @param mixed $data
      *
      * @return $this
      */
@@ -74,8 +74,8 @@ interface DataStoreInterface extends ItemAwareElementInterface
     /**
      * Put data to store.
      *
-     * @param $name
-     * @param $data
+     * @param string $name
+     * @param mixed $data
      *
      * @return $this
      */

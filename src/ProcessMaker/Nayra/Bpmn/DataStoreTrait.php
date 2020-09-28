@@ -5,6 +5,11 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
+/**
+ * Implementation of the behavior for a data store.
+ *
+ * @package ProcessMaker\Nayra\Bpmn
+ */
 trait DataStoreTrait
 {
     use FlowElementTrait;
@@ -51,7 +56,8 @@ trait DataStoreTrait
     /**
      * Get data from store.
      *
-     * @param mixed $name
+     * @param string $name
+     * @param mixed $default
      *
      * @return mixed
      */

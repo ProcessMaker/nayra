@@ -64,8 +64,8 @@ interface EventDefinitionInterface extends EntityInterface
      * Occures when the catch event was activated
      *
      * @param EngineInterface $engine
-     * @param FlowElementInterface $element
-     * @param TokenInterface $token
+     * @param CatchEventInterface $element
+     * @param TokenInterface|null $token
      *
      * @return void
      */

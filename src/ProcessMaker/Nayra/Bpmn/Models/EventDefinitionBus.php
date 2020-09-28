@@ -24,9 +24,9 @@ class EventDefinitionBus implements EventDefinitionBusInterface
     /**
      * Dispatch an event definition
      *
-     * @param $source
+     * @param mixed $source
      * @param EventDefinitionInterface $eventDefinition
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      *
      * @return EventDefinitionBusInterface
      */

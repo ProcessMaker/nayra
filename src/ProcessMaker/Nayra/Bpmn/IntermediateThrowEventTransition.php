@@ -18,7 +18,8 @@ class IntermediateThrowEventTransition implements TransitionInterface
     /**
      * Condition required at end event.
      *
-     * @param TokenInterface $token
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface|null $token
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $executionInstance
      *
      * @return bool
      */

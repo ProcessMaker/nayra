@@ -147,8 +147,9 @@ trait IntermediateCatchEventTrait
     /**
      * To implement the MessageListener interface
      *
-     * @param EventDefinitionInterface $message
+     * @param EventDefinitionInterface $event
      * @param ExecutionInstanceInterface|null $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface|null $token
      *
      * @return $this
      */

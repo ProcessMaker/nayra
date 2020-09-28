@@ -3,7 +3,6 @@
 namespace ProcessMaker\Nayra\Engine;
 
 use ProcessMaker\Nayra\Bpmn\Models\EventDefinitionBus;
-use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
@@ -332,6 +331,11 @@ trait EngineTrait
         return $this->eventDefinitionBus;
     }
 
+    /**
+     * Dispatch conditional events
+     *
+     * @return void
+     */
     private function dispatchConditionalEvents()
     {
         $this->getEventDefinitionBus()

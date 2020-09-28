@@ -32,7 +32,7 @@ class Transition implements TransitionInterface
      * Condition required to transit the element.
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface|null $token
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $executionInstance
      *
      * @return bool
      */
