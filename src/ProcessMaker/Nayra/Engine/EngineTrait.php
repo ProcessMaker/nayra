@@ -94,14 +94,13 @@ trait EngineTrait
      */
     public function runToNextState($maxIterations = 0)
     {
-        while ($this->step()) {
-            $maxIterations--;
-            if ($maxIterations === 0) {
-                return false;
+        $step = true;
+        while ($step) {
+            $step = $this->step();
+            if (!$step) {
+                $this->dispatchConditionalEvents();
+                $step = $this->step();
             }
-        }
-        $this->dispatchConditionalEvents();
-        while ($this->step()) {
             $maxIterations--;
             if ($maxIterations === 0) {
                 return false;

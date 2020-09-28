@@ -52,6 +52,6 @@ trait EventDefinitionTrait
      */
     public function shouldCatchEventDefinition(EventDefinitionInterface $sourceEvent)
     {
-        return $sourceEvent instanceof static;
+        return true;
     }
 }

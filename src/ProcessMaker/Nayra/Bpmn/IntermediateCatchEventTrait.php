@@ -90,14 +90,8 @@ trait IntermediateCatchEventTrait
 
         $eventDefinitions = $this->getEventDefinitions();
         foreach ($eventDefinitions as $index => $eventDefinition) {
-            $this->triggerPlace[$index] = new State($this, $eventDefinition->getId());
-            $this->triggerPlace[$index]->connectTo($this->transition);
-        }
-        if ($eventDefinitions->count() === 0) {
-            $this->triggerPlace[0] = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_EVENT_CATCH);
-            $this->triggerPlace[0]->connectTo($this->transition);
-        }
-        foreach ($this->triggerPlace as $triggerPlace) {
+            $triggerPlace = new State($this, $eventDefinition->getId());
+            $triggerPlace->connectTo($this->transition);
             $triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
                 $this->getRepository()
                     ->getTokenRepository()
@@ -110,6 +104,7 @@ trait IntermediateCatchEventTrait
                     ->persistCatchEventMessageConsumed($this, $token);
                 $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED, $this, $token);
             });
+            $this->triggerPlace[$index] = $triggerPlace;
         }
     }
 
@@ -158,11 +153,6 @@ trait IntermediateCatchEventTrait
         if ($instance !== null && $this->getActiveState()->getTokens($instance)->count() > 0) {
             foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
                 if ($eventDefinition->assertsRule($event, $this, $instance, $token)) {
-                    if ($instance === null) {
-                        $process = $this->getOwnerProcess();
-                        $dataStorage = $process->getRepository()->createDataStore();
-                        $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
-                    }
                     $this->triggerPlace[$index]->addNewToken($instance);
                     $eventDefinition->execute($event, $this, $instance, $token);
                 }

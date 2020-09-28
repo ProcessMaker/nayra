@@ -6,7 +6,6 @@ use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
@@ -98,17 +97,5 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
      */
     public function catchEventActivated(EngineInterface $engine, CatchEventInterface $element, TokenInterface $token = null)
     {
-    }
-
-    /**
-     * Every time a data is change the event should be catch
-     *
-     * @param EventDefinitionInterface $eventDefinition
-     *
-     * @return bool
-     */
-    public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition)
-    {
-        return true;
     }
 }
