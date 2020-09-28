@@ -3,7 +3,6 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 

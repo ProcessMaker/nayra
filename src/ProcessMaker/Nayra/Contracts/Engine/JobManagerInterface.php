@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Contracts\Engine;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;

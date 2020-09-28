@@ -33,10 +33,10 @@ class InclusiveGatewayTransition implements TransitionInterface
      * outgoing flow transition.
      *
      * @param TokenInterface|null $token
-     * @param ExecutionInstanceInterface $executionInstance
+     * @param ExecutionInstanceInterface|null $executionInstance
      * @return bool
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         return true;
     }

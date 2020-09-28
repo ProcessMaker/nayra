@@ -22,7 +22,7 @@ class IntermediateCatchEventTransition implements TransitionInterface
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         return true;
     }

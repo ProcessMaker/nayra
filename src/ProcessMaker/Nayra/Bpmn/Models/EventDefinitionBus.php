@@ -8,7 +8,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface;
 
@@ -25,13 +24,13 @@ class EventDefinitionBus implements EventDefinitionBusInterface
     /**
      * Dispatch an event definition
      *
-     * @param ThrowEventInterface $source
+     * @param $source
      * @param EventDefinitionInterface $eventDefinition
      * @param TokenInterface $token
      *
      * @return EventDefinitionBusInterface
      */
-    public function dispatchEventDefinition(ThrowEventInterface $source, EventDefinitionInterface $eventDefinition, TokenInterface $token = null)
+    public function dispatchEventDefinition($source, EventDefinitionInterface $eventDefinition, TokenInterface $token = null)
     {
         $this->notifyEvent(get_class($eventDefinition), $source, $eventDefinition, $token);
         return $this;
@@ -48,7 +47,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
      */
     public function registerCatchEvent(CatchEventInterface $catchEvent, EventDefinitionInterface $eventDefinition, callable $callable)
     {
-        $this->attachEvent(get_class($eventDefinition), function (ThrowEventInterface $source, EventDefinitionInterface $sourceEventDefinition, TokenInterface $token = null) use ($catchEvent, $callable, $eventDefinition) {
+        $this->attachEvent(get_class($eventDefinition), function ($source, EventDefinitionInterface $sourceEventDefinition, TokenInterface $token = null) use ($catchEvent, $callable, $eventDefinition) {
             if (get_class($sourceEventDefinition) === get_class($eventDefinition)) {
                 $match = $eventDefinition->shouldCatchEventDefinition($sourceEventDefinition);
                 if ($match && $eventDefinition instanceof MessageEventDefinitionInterface) {

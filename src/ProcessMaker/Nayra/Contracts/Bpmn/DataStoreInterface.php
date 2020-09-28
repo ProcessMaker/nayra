@@ -21,8 +21,8 @@ interface DataStoreInterface extends ItemAwareElementInterface
      */
     const PROPERTIES = [
         'APP_UID' => '',
-        'APP_TITLE' => NULL,
-        'APP_DESCRIPTION' => NULL,
+        'APP_TITLE' => null,
+        'APP_DESCRIPTION' => null,
         'APP_NUMBER' => '0',
         'APP_PARENT' => '0',
         'APP_STATUS' => '',
@@ -33,16 +33,16 @@ interface DataStoreInterface extends ItemAwareElementInterface
         'APP_PARALLEL' => 'NO',
         'APP_INIT_USER' => '',
         'APP_CUR_USER' => '',
-        'APP_CREATE_DATE' => NULL,
-        'APP_INIT_DATE' => NULL,
-        'APP_FINISH_DATE' => NULL,
-        'APP_UPDATE_DATE' => NULL,
-        'APP_DATA' => NULL,
+        'APP_CREATE_DATE' => null,
+        'APP_INIT_DATE' => null,
+        'APP_FINISH_DATE' => null,
+        'APP_UPDATE_DATE' => null,
+        'APP_DATA' => null,
         'APP_PIN' => '',
         'APP_DURATION' => '0',
         'APP_DELAY_DURATION' => '0',
         'APP_DRIVE_FOLDER_UID' => '',
-        'APP_ROUTING_DATA' => NULL
+        'APP_ROUTING_DATA' => null
     ];
 
     /**
@@ -56,10 +56,11 @@ interface DataStoreInterface extends ItemAwareElementInterface
      * Get data from store.
      *
      * @param $name
+     * @param $default
      *
      * @return mixed
      */
-    public function getData($name = null);
+    public function getData($name = null, $default = null);
 
     /**
      * Set data of the store.

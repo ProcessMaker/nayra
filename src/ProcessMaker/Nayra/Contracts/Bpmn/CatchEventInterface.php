@@ -21,7 +21,7 @@ interface CatchEventInterface extends EventInterface
     /**
      * Get EventDefinitions that are triggers expected for a catch Event.
      *
-     * @return EventDefinitionInterface[]
+     * @return EventDefinitionInterface[]|CollectionInterface
      */
     public function getEventDefinitions();
 

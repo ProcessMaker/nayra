@@ -68,10 +68,11 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
      * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
      *
      * @return boolean
      */
-    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null)
+    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         return true;
     }

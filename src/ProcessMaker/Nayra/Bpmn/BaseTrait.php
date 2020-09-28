@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
 use ReflectionClass;
 
@@ -89,7 +90,7 @@ trait BaseTrait
     /**
      * Get the owner BPMN document of this object.
      *
-     * @return \ProcessMaker\Nayra\Contracts\StorageInterface
+     * @return \ProcessMaker\Nayra\Contracts\StorageInterface|BpmnDocumentInterface
      */
     public function getOwnerDocument()
     {

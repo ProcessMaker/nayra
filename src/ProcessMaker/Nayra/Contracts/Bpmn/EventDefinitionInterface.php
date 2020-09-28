@@ -32,10 +32,11 @@ interface EventDefinitionInterface extends EntityInterface
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
      * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
      *
      * @return boolean
      */
-    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null);
+    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null);
 
     /**
      * Implement the event definition behavior when an event is triggered.
@@ -69,4 +70,13 @@ interface EventDefinitionInterface extends EntityInterface
      * @return void
      */
     public function catchEventActivated(EngineInterface $engine, CatchEventInterface $element, TokenInterface $token = null);
+
+    /**
+     * Check if the event definition should be catched
+     *
+     * @param EventDefinitionInterface $sourceEvent
+     *
+     * @return bool
+     */
+    public function shouldCatchEventDefinition(EventDefinitionInterface $sourceEvent);
 }

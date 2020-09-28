@@ -30,11 +30,11 @@ class ExceptionTransition implements TransitionInterface
      * Condition required to transit the element.
      *
      * @param TokenInterface|null $token
-     * @param ExecutionInstanceInterface $executionInstance
+     * @param ExecutionInstanceInterface|null $executionInstance
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         return $token->getStatus() === ActivityInterface::TOKEN_STATE_FAILING;
     }

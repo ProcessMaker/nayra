@@ -25,12 +25,12 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
     /**
      * Condition required to transit the element.
      *
-     * @param TokenInterface $token
-     * @param ExecutionInstanceInterface $executionInstance
+     * @param TokenInterface|null $token
+     * @param ExecutionInstanceInterface|null $executionInstance
      *
      * @return mixed
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $result = false;
         $myIndex = $this->owner->getConditionedTransitions()->indexOf($this);
@@ -99,4 +99,3 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
         });
     }
 }
-
