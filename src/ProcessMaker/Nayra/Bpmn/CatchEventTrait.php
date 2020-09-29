@@ -13,13 +13,14 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  * Implementation of the behavior for a catch event.
  *
  * @package ProcessMaker\Nayra\Bpmn
+ * @see CatchEventInterface
  */
 trait CatchEventTrait
 {
     use FlowNodeTrait;
 
     /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface[]
      */
     private $triggerPlace = [];
 
@@ -130,7 +131,7 @@ trait CatchEventTrait
     {
         $eventDefinitions = $this->getEventDefinitions();
         foreach ($eventDefinitions as $index => $eventDefinition) {
-            $triggerPlace = new State($this, $eventDefinition->getId());
+            $triggerPlace = new State($this, CatchEventInterface::TOKEN_STATE_EVENT_CATCH);
             $triggerPlace->connectTo($this->transition);
             $triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) use ($catchedEventName) {
                 $this->getRepository()
