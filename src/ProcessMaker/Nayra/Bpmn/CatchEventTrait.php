@@ -3,8 +3,11 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Implementation of the behavior for a catch event.
@@ -14,6 +17,11 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 trait CatchEventTrait
 {
     use FlowNodeTrait;
+
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    private $triggerPlace = [];
 
     /**
      * Initialize catch event.
@@ -76,5 +84,67 @@ trait CatchEventTrait
     {
         $this->registerCatchEvents($engine);
         return $this;
+    }
+
+    /**
+     * To implement the MessageListener interface
+     *
+     * @param EventDefinitionInterface $event
+     * @param ExecutionInstanceInterface|null $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface|null $token
+     *
+     * @return $this
+     */
+    public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
+    {
+        if ($instance !== null && $this->getActiveState()->getTokens($instance)->count() > 0) {
+            foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
+                if ($eventDefinition->assertsRule($event, $this, $instance, $token)) {
+                    $this->triggerPlace[$index]->addNewToken($instance);
+                    $eventDefinition->execute($event, $this, $instance, $token);
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Get the active state of the element
+     *
+     * @return StateInterface
+     */
+    public function getActiveState()
+    {
+        return null;
+    }
+
+    /**
+     * Build events definitions transitions
+     *
+     * @param string $catchedEventName
+     * @param string $consumedEventName
+     *
+     * @return void
+     */
+    private function buildEventDefinitionsTransitions($catchedEventName, $consumedEventName)
+    {
+        $eventDefinitions = $this->getEventDefinitions();
+        foreach ($eventDefinitions as $index => $eventDefinition) {
+            $triggerPlace = new State($this, $eventDefinition->getId());
+            $triggerPlace->connectTo($this->transition);
+            $triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) use ($catchedEventName) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistCatchEventMessageArrives($this, $token);
+                $this->notifyEvent($catchedEventName, $this, $token);
+            });
+            $triggerPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) use ($consumedEventName) {
+                $this->getRepository()
+                    ->getTokenRepository()
+                    ->persistCatchEventMessageConsumed($this, $token);
+                $this->notifyEvent($consumedEventName, $this, $token);
+            });
+            $this->triggerPlace[$index] = $triggerPlace;
+        }
     }
 }

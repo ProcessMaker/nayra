@@ -166,5 +166,6 @@ class PatternsTest extends EngineTestCase
                 throw new Exception('The process got stuck in elements:' . $elements);
             }
         }
+        $this->assertEquals($result, $tasks);
     }
 }

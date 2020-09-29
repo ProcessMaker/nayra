@@ -52,4 +52,11 @@ interface CatchEventInterface extends EventInterface
      * @return $this
      */
     public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null);
+
+    /**
+     * Get the active state of the element
+     *
+     * @return StateInterface
+     */
+    public function getActiveState();
 }

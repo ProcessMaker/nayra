@@ -33,7 +33,7 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         // Get context data
-        if ($instance && $target instanceof IntermediateCatchEventInterface) {
+        if ($instance && $target instanceof CatchEventInterface) {
             $data = $instance->getDataStore()->getData();
             $tokenCatch = $target->getActiveState()->getTokens($instance)->item(0);
             $conditionals = $tokenCatch->getProperty('conditionals', []);
@@ -51,13 +51,15 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
         $current = $condition($data);
         // Update previous value
         $conditionals[$key] = $current;
-        if ($instance && $target instanceof IntermediateCatchEventInterface) {
+        if ($instance && $target instanceof CatchEventInterface) {
             foreach ($target->getActiveState()->getTokens($instance) as $tokenCatch) {
                 $tokenCatch->setProperty('conditionals', $conditionals);
             }
         } else {
             $process->setProperty('conditionals', $conditionals);
         }
+        //\Log::info('====================');
+        //\Log::info(compact('previous', 'current'));
         return !$previous && $current;
     }
 

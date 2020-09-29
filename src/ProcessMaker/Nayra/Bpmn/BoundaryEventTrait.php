@@ -5,15 +5,12 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
-use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
@@ -26,8 +23,6 @@ trait BoundaryEventTrait
 {
     use CatchEventTrait;
 
-    private $triggerPlace;
-
     /**
      * Build the transitions that define the element.
      *
@@ -36,25 +31,16 @@ trait BoundaryEventTrait
     public function buildTransitions(RepositoryInterface $factory)
     {
         $this->setRepository($factory);
-        $this->triggerPlace = new State($this, CatchEventInterface::TOKEN_STATE_EVENT_CATCH);
         $this->transition = new Transition($this);
-        $this->triggerPlace->connectTo($this->transition);
 
-        $this->triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-            $this->getRepository()
-                ->getTokenRepository()
-                ->persistCatchEventMessageArrives($this, $token);
-            $this->notifyEvent(BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH, $this, $token);
-        });
+        $this->buildEventDefinitionsTransitions(
+            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
+            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED
+        );
 
         $this->transition->attachEvent(Transition::EVENT_AFTER_TRANSIT, function ($transition, Collection $tokens) {
-            foreach($tokens as $token) {
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistCatchEventMessageConsumed($this, $token);
-                $this->notifyEvent(BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED, $this, $token);
-
-                $this->getProcess()->getEngine()->nextState(function () use($token) {
+            foreach ($tokens as $token) {
+                $this->getProcess()->getEngine()->nextState(function () use ($token) {
                     // Cancel the attachedTo activity
                     if ($this->getCancelActivity()) {
                         foreach ($this->getAttachedTo()->getTokens($token->getInstance()) as $token) {
@@ -88,23 +74,6 @@ trait BoundaryEventTrait
     protected function buildConnectionTo(FlowInterface $targetFlow)
     {
         $this->transition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
-        return $this;
-    }
-
-    /**
-     * To implement the MessageListener interface
-     *
-     * @param EventDefinitionInterface $message
-     * @param ExecutionInstanceInterface|null $instance
-     *
-     * @return $this
-     */
-    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
-    {
-        if ($instance !== null && $this->getAttachedTo()->getActiveState()->getTokens($instance)->count() > 0) {
-            // with a new token in the trigger place, the event catch element will be fired
-            $this->triggerPlace->addNewToken($instance);
-        }
         return $this;
     }
 
@@ -146,10 +115,10 @@ trait BoundaryEventTrait
     {
         $errorDef = new ErrorEventDefinition();
         $error ? $errorDef->setError($error) : null;
-        foreach ($this->getEventDefinitions() as $eventDefinition) {
+        foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
             if ($eventDefinition instanceof ErrorEventDefinitionInterface
                 && $eventDefinition->shouldCatchEventDefinition($errorDef)) {
-                $this->triggerPlace->addNewToken($token->getInstance());
+                $this->triggerPlace[$index]->addNewToken($token->getInstance());
             }
         }
     }
@@ -196,5 +165,15 @@ trait BoundaryEventTrait
     public function setAttachedTo(ActivityInterface $activity)
     {
         return $this->setProperty(BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO, $activity);
+    }
+
+    /**
+     * Get the active state of the element
+     *
+     * @return StateInterface
+     */
+    public function getActiveState()
+    {
+        return $this->getAttachedTo()->getActiveState();
     }
 }

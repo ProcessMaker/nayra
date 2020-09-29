@@ -405,6 +405,10 @@ class ExclusiveGatewayTest extends EngineTestCase
         ]);
     }
 
+    /**
+     * Test exclusive gateway with custom data
+     *
+     */
     public function testConditionalExclusiveParameters()
     {
         //Load a BpmnFile Repository
