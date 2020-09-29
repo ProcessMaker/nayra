@@ -7,7 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -58,8 +57,6 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
         } else {
             $process->setProperty('conditionals', $conditionals);
         }
-        //\Log::info('====================');
-        //\Log::info(compact('previous', 'current'));
         return !$previous && $current;
     }
 
