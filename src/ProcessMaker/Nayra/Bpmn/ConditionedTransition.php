@@ -32,7 +32,9 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $condition = $this->condition;
-        return $condition($executionInstance->getDataStore()->getData());
+        $dataStore = $executionInstance ? $executionInstance->getDataStore()
+            : $this->getOwnerProcess()->getEngine()->getDataStore();
+        return $condition($dataStore->getData());
     }
 
     /**

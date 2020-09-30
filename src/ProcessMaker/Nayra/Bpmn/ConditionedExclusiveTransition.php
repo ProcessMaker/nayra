@@ -35,7 +35,9 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
         $result = false;
         $myIndex = $this->owner->getConditionedTransitions()->indexOf($this);
         $condition = $this->condition;
-        $myCondition = $condition($executionInstance->getDataStore()->getData());
+        $dataStore = $executionInstance ? $executionInstance->getDataStore()
+            : $this->getOwnerProcess()->getEngine()->getDataStore();
+        $myCondition = $condition($dataStore->getData());
 
         $firstIndexTrue = $myIndex;
         if ($myCondition) {
