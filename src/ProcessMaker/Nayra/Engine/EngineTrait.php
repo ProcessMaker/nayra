@@ -94,7 +94,13 @@ trait EngineTrait
      */
     public function runToNextState($maxIterations = 0)
     {
-        while ($this->step()) {
+        $step = true;
+        while ($step) {
+            $step = $this->step();
+            if (!$step) {
+                $this->dispatchConditionalEvents();
+                $step = $this->step();
+            }
             $maxIterations--;
             if ($maxIterations === 0) {
                 return false;
@@ -153,8 +159,8 @@ trait EngineTrait
      */
     public function loadExecutionInstance($id, StorageInterface $storage)
     {
-        // If exists return the already loaded instance by id 
-        foreach($this->executionInstances as $executionInstance) {
+        // If exists return the already loaded instance by id
+        foreach ($this->executionInstances as $executionInstance) {
             if ($executionInstance->getId() === $id) {
                 return $executionInstance;
             }
@@ -322,5 +328,20 @@ trait EngineTrait
     {
         $this->eventDefinitionBus = $this->eventDefinitionBus ?: new EventDefinitionBus;
         return $this->eventDefinitionBus;
+    }
+
+    /**
+     * Dispatch conditional events
+     *
+     * @return void
+     */
+    private function dispatchConditionalEvents()
+    {
+        $this->getEventDefinitionBus()
+            ->dispatchEventDefinition(
+                $this,
+                $this->getRepository()->createConditionalEventDefinition(),
+                null
+            );
     }
 }

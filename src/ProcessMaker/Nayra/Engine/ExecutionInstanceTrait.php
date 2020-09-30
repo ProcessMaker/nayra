@@ -41,7 +41,7 @@ trait ExecutionInstanceTrait
     private $transitions;
 
     /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface[]
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface[]|\ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
      */
     private $tokens;
 
@@ -122,7 +122,7 @@ trait ExecutionInstanceTrait
     /**
      * Get transitions.
      *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface[]
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface[]|\ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
      */
     public function getTransitions()
     {

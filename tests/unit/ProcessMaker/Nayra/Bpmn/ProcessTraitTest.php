@@ -11,6 +11,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface;
 
+/**
+ * Test the process base behavior.
+ *
+ */
 class ProcessTraitTest extends TestCase
 {
     /**
@@ -18,12 +22,21 @@ class ProcessTraitTest extends TestCase
      */
     private $object;
 
+    /**
+     * Initialize process object
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
         $this->object = new Process();
     }
 
+    /**
+     * Test get process collection of elements by type
+     *
+     */
     public function testCollections()
     {
         $this->assertInstanceOf(ActivityCollectionInterface::class, $this->object->getActivities());

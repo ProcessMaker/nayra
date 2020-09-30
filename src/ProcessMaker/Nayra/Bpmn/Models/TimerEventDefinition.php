@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\EventDefinitionTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
@@ -58,12 +59,27 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      * @param EventDefinitionInterface $event
      * @param FlowNodeInterface $target
      * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
      *
      * @return boolean
      */
-    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null)
+    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         return true;
+    }
+
+    /**
+     * Occures when the catch event was activated
+     *
+     * @param EngineInterface $engine
+     * @param CatchEventInterface $element
+     * @param TokenInterface|null $token
+     *
+     * @return void
+     */
+    public function catchEventActivated(EngineInterface $engine, CatchEventInterface $element, TokenInterface $token = null)
+    {
+        $this->scheduleTimerEvents($engine, $element, $token);
     }
 
     /**

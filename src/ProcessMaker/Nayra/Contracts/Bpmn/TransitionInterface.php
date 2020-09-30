@@ -29,10 +29,11 @@ interface TransitionInterface extends ConnectionNodeInterface
      * Evaluates if the transition condition evaluates to true using the data of the execution instance
      *
      * @param TokenInterface|null $token
-     * @param ExecutionInstanceInterface $executionInstance
+     * @param ExecutionInstanceInterface|null $executionInstance
+     *
      * @return mixed
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance);
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null);
 
     /**
      * Get transition owner element

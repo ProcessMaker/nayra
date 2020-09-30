@@ -18,11 +18,12 @@ class IntermediateCatchEventTransition implements TransitionInterface
     /**
      * Condition required at end event.
      *
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $executionInstance
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         return true;
     }

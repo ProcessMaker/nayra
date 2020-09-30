@@ -24,15 +24,17 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
     /**
      * Condition required to transit the element.
      *
-     * @param TokenInterface $token
-     * @param ExecutionInstanceInterface $executionInstance
+     * @param TokenInterface|null $token
+     * @param ExecutionInstanceInterface|null $executionInstance
      *
      * @return mixed
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $condition = $this->condition;
-        return $condition($executionInstance->getDataStore()->getData());
+        $dataStore = $executionInstance ? $executionInstance->getDataStore()
+            : $this->getOwnerProcess()->getEngine()->getDataStore();
+        return $condition($dataStore->getData());
     }
 
     /**
@@ -51,6 +53,8 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
     /**
      * If the condition is not met.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
+     *
      * @return boolean
      */
     protected function conditionIsFalse(ExecutionInstanceInterface $executionInstance)
@@ -62,6 +66,7 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
     /**
      * Consume the input tokens.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
      */
     private function collect(ExecutionInstanceInterface $executionInstance)
     {

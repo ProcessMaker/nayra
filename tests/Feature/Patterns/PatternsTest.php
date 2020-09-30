@@ -4,6 +4,7 @@ namespace Tests\Feature\Patterns;
 
 use Exception;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 use Tests\Feature\Engine\EngineTestCase;
@@ -107,11 +108,23 @@ class PatternsTest extends EngineTestCase
         $process = $start->getProcess();
         $dataStore = $this->repository->createDataStore();
         $dataStore->setData($data);
-        $instance = $this->engine->createExecutionInstance($process, $dataStore);
-        $start->start($instance);
+        // set global data storage
+        $this->engine->setDataStore($dataStore);
+        // create instance with initial data
+        if ($start->getEventDefinitions()->count() > 0) {
+            $start->execute($start->getEventDefinitions()->item(0));
+            $instance = $process->getInstances()->count() ?  $process->getInstances()->item(0) : null;
+        } else {
+            $instance = $this->engine->createExecutionInstance($process, $dataStore);
+            $start->start($instance);
+        }
         $this->engine->runToNextState();
-        $tokens = $instance->getTokens();
         $tasks = [];
+        if (!$instance) {
+            $this->assertEquals($result, $tasks);
+            return;
+        }
+        $tokens = $instance->getTokens();
         $processes = $bpmnRepository->getElementsByTagNameNS(BpmnDocument::BPMN_MODEL, 'process');
         while ($tokens->count()) {
             $submited = false;
@@ -120,7 +133,8 @@ class PatternsTest extends EngineTestCase
                     foreach ($ins->getTokens() as $token) {
                         $element = $token->getOwnerElement();
                         $status = $token->getStatus();
-                        if ($element instanceof ActivityInterface && $status === ActivityInterface::TOKEN_STATE_ACTIVE) {
+                        if ($element instanceof ActivityInterface && !($element instanceof CallActivityInterface)
+                            && $status === ActivityInterface::TOKEN_STATE_ACTIVE) {
                             $tasks[] = $element->getId();
                             $element->complete($token);
                             $this->engine->runToNextState();

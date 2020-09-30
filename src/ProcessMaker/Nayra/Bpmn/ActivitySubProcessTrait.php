@@ -27,7 +27,7 @@ trait ActivitySubProcessTrait
         $this->attachEvent(
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             function ($self, TokenInterface $token) {
-                $instance = $this->callSubprocess();
+                $instance = $this->callSubprocess($token);
                 $this->linkProcesses($token, $instance);
             }
         );
@@ -36,11 +36,15 @@ trait ActivitySubProcessTrait
     /**
      * Call the subprocess
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     *
      * @return ExecutionInstanceInterface
      */
-    protected function callSubprocess()
+    protected function callSubprocess(TokenInterface $token)
     {
-        return $this->getCalledElement()->call();
+        $dataStore = $this->getRepository()->createDataStore();
+        $dataStore->setData($token->getInstance()->getDataStore()->getData());
+        return $this->getCalledElement()->call($dataStore);
     }
 
     /**

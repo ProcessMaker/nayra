@@ -3,14 +3,12 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
@@ -37,7 +35,6 @@ trait IntermediateCatchEventTrait
     private $transition;
 
     private $activeState;
-    private $triggerPlace;
 
     /**
      * Build the transitions that define the element.
@@ -48,10 +45,8 @@ trait IntermediateCatchEventTrait
     {
         $this->setRepository($factory);
         $this->activeState = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_ACTIVE);
-        $this->triggerPlace = new State($this, IntermediateCatchEventInterface::TOKEN_STATE_EVENT_CATCH);
         $this->transition = new IntermediateCatchEventTransition($this);
         $this->activeState->connectTo($this->transition);
-        $this->triggerPlace->connectTo($this->transition);
 
         $this->activeState->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $this->getRepository()
@@ -60,7 +55,7 @@ trait IntermediateCatchEventTrait
 
             $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES, $this, $token);
             // If there are timer event definitions, register them to send the corresponding timer events
-            $this->scheduleTimerEvents($token);
+            $this->activateCatchEvent($token);
         });
 
         $this->activeState->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
@@ -86,18 +81,10 @@ trait IntermediateCatchEventTrait
             }
         );
 
-        $this->triggerPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
-            $this->getRepository()
-                ->getTokenRepository()
-                ->persistCatchEventMessageArrives($this, $token);
-            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH, $this, $token);
-        });
-        $this->triggerPlace->attachEvent(State::EVENT_TOKEN_CONSUMED, function (TokenInterface $token) {
-            $this->getRepository()
-                ->getTokenRepository()
-                ->persistCatchEventMessageConsumed($this, $token);
-            $this->notifyEvent(IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED, $this, $token);
-        });
+        $this->buildEventDefinitionsTransitions(
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
+            IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED
+        );
     }
 
     /**
@@ -128,23 +115,6 @@ trait IntermediateCatchEventTrait
     protected function buildConnectionTo(FlowInterface $targetFlow)
     {
         $this->transition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
-        return $this;
-    }
-
-    /**
-     * To implement the MessageListener interface
-     *
-     * @param EventDefinitionInterface $message
-     * @param ExecutionInstanceInterface|null $instance
-     *
-     * @return $this
-     */
-    public function execute(EventDefinitionInterface $message, ExecutionInstanceInterface $instance = null)
-    {
-        if ($instance !== null && $this->getActiveState()->getTokens($instance)->count() > 0) {
-            // with a new token in the trigger place, the event catch element will be fired
-            $this->triggerPlace->addNewToken($instance);
-        }
         return $this;
     }
 

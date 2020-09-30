@@ -29,4 +29,29 @@ trait EventDefinitionTrait
             $element->execute($eventDefinition, $instance, $token);
         });
     }
+
+    /**
+     * Occures when the catch event was activated
+     *
+     * @param EngineInterface $engine
+     * @param CatchEventInterface $element
+     * @param TokenInterface|null $token
+     *
+     * @return void
+     */
+    public function catchEventActivated(EngineInterface $engine, CatchEventInterface $element, TokenInterface $token = null)
+    {
+    }
+
+    /**
+     * Check if the event definition should be catched
+     *
+     * @param EventDefinitionInterface $sourceEvent
+     *
+     * @return bool
+     */
+    public function shouldCatchEventDefinition(EventDefinitionInterface $sourceEvent)
+    {
+        return true;
+    }
 }
