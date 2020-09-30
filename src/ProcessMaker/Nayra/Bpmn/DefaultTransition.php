@@ -19,12 +19,12 @@ class DefaultTransition implements TransitionInterface
     /**
      * Returns true if the condition of the transition is met with the DataStore of the passed execution instance
      *
-     * @param TokenInterface $token
-     * @param ExecutionInstanceInterface $executionInstance
+     * @param TokenInterface|null $token
+     * @param ExecutionInstanceInterface|null $executionInstance
      *
      * @return bool
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $executeDefaultTransition = true;
         foreach($this->owner->getConditionedTransitions() as $transition) {

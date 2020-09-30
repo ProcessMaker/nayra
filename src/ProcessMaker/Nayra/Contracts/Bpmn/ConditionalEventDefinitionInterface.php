@@ -17,4 +17,13 @@ interface ConditionalEventDefinitionInterface extends EventDefinitionInterface
      * @return FormalExpressionInterface
      */
     public function getCondition();
+
+    /**
+     * Check if the $eventDefinition should be catch
+     *
+     * @param EventDefinitionInterface $eventDefinition
+     *
+     * @return bool
+     */
+    public function shouldCatchEventDefinition(EventDefinitionInterface $eventDefinition);
 }

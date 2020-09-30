@@ -25,17 +25,19 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
     /**
      * Condition required to transit the element.
      *
-     * @param TokenInterface $token
-     * @param ExecutionInstanceInterface $executionInstance
+     * @param TokenInterface|null $token
+     * @param ExecutionInstanceInterface|null $executionInstance
      *
      * @return mixed
      */
-    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance)
+    public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $result = false;
         $myIndex = $this->owner->getConditionedTransitions()->indexOf($this);
         $condition = $this->condition;
-        $myCondition = $condition($executionInstance->getDataStore()->getData());
+        $dataStore = $executionInstance ? $executionInstance->getDataStore()
+            : $this->getOwnerProcess()->getEngine()->getDataStore();
+        $myCondition = $condition($dataStore->getData());
 
         $firstIndexTrue = $myIndex;
         if ($myCondition) {
@@ -99,4 +101,3 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
         });
     }
 }
-

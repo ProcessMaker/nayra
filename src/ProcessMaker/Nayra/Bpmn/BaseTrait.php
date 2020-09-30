@@ -2,9 +2,10 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
+use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
 use ReflectionClass;
 
 /**
@@ -29,6 +30,13 @@ trait BaseTrait
      * @var StorageInterface $ownerDocument
      */
     private $ownerDocument;
+
+    /**
+     * Bpmn Element of this object.
+     *
+     * @var BpmnElementInterface $bpmnElement
+     */
+    private $bpmnElement;
 
     /**
      * BaseTrait constructor.
@@ -82,7 +90,7 @@ trait BaseTrait
     /**
      * Get the owner BPMN document of this object.
      *
-     * @return \ProcessMaker\Nayra\Contracts\StorageInterface
+     * @return \ProcessMaker\Nayra\Contracts\StorageInterface|BpmnDocumentInterface
      */
     public function getOwnerDocument()
     {
@@ -99,6 +107,29 @@ trait BaseTrait
     public function setOwnerDocument(StorageInterface $ownerDocument)
     {
         $this->ownerDocument = $ownerDocument;
+        return $this;
+    }
+
+    /**
+     * Get DOM element of this object.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface
+     */
+    public function getBpmnElement()
+    {
+        return $this->bpmnElement;
+    }
+
+    /**
+     * Set DOM element of this object.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface $bpmnElement
+     *
+     * @return $this
+     */
+    public function setBpmnElement(BpmnElementInterface $bpmnElement)
+    {
+        $this->bpmnElement = $bpmnElement;
         return $this;
     }
 
@@ -120,7 +151,7 @@ trait BaseTrait
      */
     public function setProperties(array $properties)
     {
-        foreach($properties as $name => $value) {
+        foreach ($properties as $name => $value) {
             $setter = 'set' . $name;
             if (method_exists($this, $setter)) {
                 $this->$setter($value);

@@ -54,7 +54,7 @@ class Collection implements CollectionInterface
      */
     public function find($condition)
     {
-        return new Collection(array_filter($this->items, $condition));
+        return new Collection(array_values(array_filter($this->items, $condition)));
     }
 
     /**
@@ -122,14 +122,18 @@ class Collection implements CollectionInterface
      */
     public function sum(callable $callback)
     {
-        return array_reduce($this->items,
-                            function($carry, $item) use($callback) {
-            return $carry + $callback($item);
-        });
+        return array_reduce(
+            $this->items,
+            function ($carry, $item) use ($callback) {
+                return $carry + $callback($item);
+            }
+        );
     }
 
     /**
      * Get a item by index
+     *
+     * @param int $index
      *
      * @return mixed
      */
@@ -141,9 +145,9 @@ class Collection implements CollectionInterface
     /**
      * Remove a portion of the collection and replace it with something else.
      *
-     * @param $offset
-     * @param null $length
-     * @param null $replacement
+     * @param int $offset
+     * @param mixed $length
+     * @param mixed $replacement
      * @return array
      */
     public function splice($offset, $length = null, $replacement = null)
@@ -205,7 +209,7 @@ class Collection implements CollectionInterface
     /**
      * Seeks to a position
      *
-     * @param int $position The position to seek to.
+     * @param int $index The position to seek to.
      *
      * @return void
      */

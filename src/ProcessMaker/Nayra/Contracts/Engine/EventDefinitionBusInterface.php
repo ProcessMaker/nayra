@@ -6,7 +6,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ObservableInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
@@ -17,13 +16,13 @@ interface EventDefinitionBusInterface extends ObservableInterface
     /**
      * Dispatch an event definition
      *
-     * @param ThrowEventInterface $source
+     * @param mixed $source
      * @param EventDefinitionInterface $eventDefinition
-     * @param TokenInterface $token
+     * @param TokenInterface|null $token
      *
      * @return void
      */
-    public function dispatchEventDefinition(ThrowEventInterface $source, EventDefinitionInterface $eventDefinition, TokenInterface $token = null);
+    public function dispatchEventDefinition($source, EventDefinitionInterface $eventDefinition, TokenInterface $token = null);
 
     /**
      * Register a catch event

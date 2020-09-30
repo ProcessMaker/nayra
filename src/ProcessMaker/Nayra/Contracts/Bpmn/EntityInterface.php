@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
+use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
 
 /**
  * Entity could get and set properties for an bpmn element.
@@ -12,7 +13,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  */
 interface EntityInterface
 {
-
     const BPMN_PROPERTY_ID = 'id';
     const BPMN_PROPERTY_NAME = 'name';
 
@@ -106,9 +106,25 @@ interface EntityInterface
     public function getOwnerDocument();
 
     /**
+     * Get DOM element of this object.
+     *
      * @param StorageInterface $ownerDocument
      *
      * @return $this
      */
     public function setOwnerDocument(StorageInterface $ownerDocument);
+
+    /**
+     * @return \ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface
+     */
+    public function getBpmnElement();
+
+    /**
+     * Set DOM element of this object.
+     *
+     * @param BpmnElementInterface $domElement
+     *
+     * @return $this
+     */
+    public function setBpmnElement(BpmnElementInterface $ownerDocument);
 }

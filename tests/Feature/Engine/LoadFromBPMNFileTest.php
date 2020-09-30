@@ -5,6 +5,7 @@ namespace Tests\Feature\Engine;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataOutputInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
@@ -83,6 +84,10 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $this->assertEquals($bpmnRepository, $activityA->getOwnerDocument());
         $this->assertEquals($bpmnRepository, $activityB->getOwnerDocument());
         $this->assertEquals($bpmnRepository, $endActivity->getOwnerDocument());
+
+        //Assertion: Check reference to BPMN element
+        $this->assertEquals($bpmnRepository->findElementById('StartEvent'), $start->getBpmnElement());
+        $this->assertEquals($bpmnRepository->findElementById('start'), $startActivity->getBpmnElement());
 
         //Start the process
         $start->start($instance);
@@ -481,6 +486,11 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $element = $bpmnRepository->getTimerEventDefinition('_72_ED_1');
         //Assertion: Verify it is a timer event definition.
         $this->assertInstanceOf(TimerEventDefinitionInterface::class, $element);
+
+        //Get a conditional event definition element
+        $element = $bpmnRepository->getConditionalEventDefinition('_23_ED_1');
+        //Assertion: Verify it is a timer event definition.
+        $this->assertInstanceOf(ConditionalEventDefinitionInterface::class, $element);
     }
 
     /**

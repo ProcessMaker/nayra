@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:pm="http://processmaker.com/BPMN/2.0/Schema.xsd" xmlns:tns="http://sourceforge.net/bpmn/definitions/_1530553328908" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bpmn.io/schema/bpmn" exporter="ProcessMaker Modeler" exporterVersion="1.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
+  <bpmn:process id="ExclusiveGatewayProcess" name="ProcessName" isExecutable="true">
+    <bpmn:startEvent id="StartEvent" name="Start Event" pm:allowInterstitial="false">
+      <bpmn:outgoing>node_6</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:scriptTask id="Exclusive1" name="Exclusive1" pm:screenRef="27" pm:allowInterstitial="false" pm:assignment="requester">
+      <bpmn:incoming>node_6</bpmn:incoming>
+      <bpmn:outgoing>node_7</bpmn:outgoing>
+      <bpmn:script>CREATE_LOG_FILE</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:exclusiveGateway id="node_3" name="Exclusive Gateway">
+      <bpmn:incoming>node_7</bpmn:incoming>
+      <bpmn:outgoing>node_8</bpmn:outgoing>
+      <bpmn:outgoing>node_9</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:scriptTask id="node_4" name="exclusive2" pm:screenRef="27" pm:allowInterstitial="false" pm:assignment="requester">
+      <bpmn:incoming>node_8</bpmn:incoming>
+      <bpmn:outgoing>node_11</bpmn:outgoing>
+      <bpmn:script>CREATE_LOG_FILE</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="node_5" name="Age&#60;=10" pm:screenRef="27" pm:allowInterstitial="false" pm:assignment="requester">
+      <bpmn:incoming>node_9</bpmn:incoming>
+      <bpmn:outgoing>node_12</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="node_6" sourceRef="StartEvent" targetRef="Exclusive1" />
+    <bpmn:sequenceFlow id="node_7" sourceRef="Exclusive1" targetRef="node_3" />
+    <bpmn:sequenceFlow id="node_8" name="Mayor_10" sourceRef="node_3" targetRef="node_4">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">test.data['Age']&gt;10</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="node_9" name="Menor_igual_10" sourceRef="node_3" targetRef="node_5">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">test.data['Age']&lt;=10</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="node_10" name="End Event">
+      <bpmn:incoming>node_11</bpmn:incoming>
+      <bpmn:incoming>node_12</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="node_11" sourceRef="node_4" targetRef="node_10" />
+    <bpmn:sequenceFlow id="node_12" sourceRef="node_5" targetRef="node_10" />
+  </bpmn:process>
+</bpmn:definitions>

@@ -164,4 +164,13 @@ interface EngineInterface
      * @return EngineInterface
      */
     public function loadCollaboration(CollaborationInterface $collaboration);
+
+    /**
+     * Defer the callback to be executed after the next state cycle.
+     *
+     * @param callable $callable
+     *
+     * @return EngineInterface
+     */
+    public function nextState(callable $callable);
 }
