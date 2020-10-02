@@ -162,12 +162,12 @@ class MessageStartEventTest extends EngineTestCase
         //Assertion: The process1 activity should be finished and a new instance of the second process must be created
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
             //events triggered when the catching event runs
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
 
             //Actibity activated in the first process

@@ -303,6 +303,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion: The throwing process must advances to activity B an the catching process to activity D
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
@@ -313,7 +314,6 @@ class IntermediateMessageEventTest extends EngineTestCase
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);
@@ -405,6 +405,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         //Assertion: The throwing process must advances to activity B an the catching process to activity D
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
 
@@ -415,7 +416,6 @@ class IntermediateMessageEventTest extends EngineTestCase
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED
         ]);
