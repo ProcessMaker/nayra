@@ -1,0 +1,13 @@
+[
+    {
+        "startEvent": "node_1",
+        "data": {
+        },
+        "result": [
+            "node_2",
+            "node_6",
+            "node_8",
+            "node_4"
+        ]
+    }
+]
