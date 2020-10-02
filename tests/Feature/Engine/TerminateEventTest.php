@@ -66,10 +66,10 @@ class TerminateEventTest extends EngineTestCase
         //Assertion: The terminate event was activated and the process was ended
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,

@@ -76,7 +76,7 @@ trait ActivityTrait
         $this->exceptionTransition = new ExceptionTransition($this, true);
         $this->closeExceptionTransition = new CloseExceptionTransition($this, true);
         $this->completeExceptionTransition = new CompleteExceptionTransition($this, true);
-        $this->transition = new Transition($this, true);
+        $this->transition = new Transition($this, false);
         $this->closedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
 
         $this->activeState->connectTo($this->exceptionTransition);
@@ -155,7 +155,7 @@ trait ActivityTrait
      */
     public function getInputPlace(FlowInterface $targetFlow = null)
     {
-        $ready = new State($this);
+        $ready = new State($this, 'INCOMING');
         $transition = new Transition($this, false);
         $ready->connectTo($transition);
         $transition->connectTo($this->activeState);
@@ -176,10 +176,12 @@ trait ActivityTrait
         $target = $targetFlow->getTarget();
         $place = $target->getInputPlace($targetFlow);
         $this->transition->connectTo($place);
-        $place->attachEvent(
-            StateInterface::EVENT_TOKEN_CONSUMED,
-            function (TokenInterface $token) {
-                $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+        $this->transition->attachEvent(
+            TransitionInterface::EVENT_AFTER_CONSUME,
+            function (TransitionInterface $transition, Collection $consumedTokens) {
+                foreach ($consumedTokens as $token) {
+                    $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                }
                 $this->getRepository()
                     ->getTokenRepository()
                     ->persistActivityClosed($this, $token);

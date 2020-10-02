@@ -108,6 +108,7 @@ class NayraModelTest extends EngineTestCase
         //Assertion: Verify the triggered engine events. The activity is closed.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
         ]);
 
@@ -119,12 +120,11 @@ class NayraModelTest extends EngineTestCase
         //Assertion: Verify the triggered engine events. The activity is closed and process is ended.
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
