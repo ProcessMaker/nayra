@@ -37,11 +37,11 @@ interface StorageInterface
     /**
      * Set the document engine.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Engine\EngineInterface $engine
+     * @param \ProcessMaker\Nayra\Contracts\Engine\EngineInterface|null $engine
      *
      * @return $this
      */
-    public function setEngine(EngineInterface $engine);
+    public function setEngine(EngineInterface $engine = null);
 
     /**
      * Get the BPMN elements mapping.

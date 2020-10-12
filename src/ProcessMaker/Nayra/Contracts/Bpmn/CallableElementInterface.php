@@ -15,11 +15,11 @@ interface CallableElementInterface extends EntityInterface
     /**
      * Set the engine that controls the elements.
      *
-     * @param EngineInterface $engine
+     * @param EngineInterface|null $engine
      *
      * @return EngineInterface
      */
-    public function setEngine(EngineInterface $engine);
+    public function setEngine(EngineInterface $engine = null);
 
     /**
      * Get the engine that controls the elements.
