@@ -419,11 +419,11 @@ trait ProcessTrait
     /**
      * Set the engine that controls the elements.
      *
-     * @param EngineInterface $engine
+     * @param EngineInterface|null $engine
      *
      * @return EngineInterface
      */
-    public function setEngine(EngineInterface $engine)
+    public function setEngine(EngineInterface $engine = null)
     {
         $this->engine = $engine;
         return $this;
