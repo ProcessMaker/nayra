@@ -96,8 +96,10 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
         if ($instance && get_class($event) === SignalEventDefinition::class && $event->getPayload()->getItem()) {
             $instanceData = $instance->getDataStore()->getData();
             $eventData = json_decode($event->getPayload()->getItem()->getProperty(ItemDefinitionInterface::BPMN_PROPERTY_STRUCTURE), true);
-            $newData = array_merge($instanceData, $eventData);
-            $instance->getDataStore()->setData($newData);
+            if ($instanceData !== null && $eventData !== null) {
+                $newData = array_merge($instanceData, $eventData);
+                $instance->getDataStore()->setData($newData);
+            }
         }
         return $this;
     }
