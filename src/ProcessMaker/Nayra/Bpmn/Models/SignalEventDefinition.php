@@ -93,7 +93,7 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
      */
     public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
-        if ($instance && get_class($event) === SignalEventDefinition::class) {
+        if ($instance && get_class($event) === SignalEventDefinition::class && $event->getPayload()->getItem()) {
             $instanceData = $instance->getDataStore()->getData();
             $eventData = json_decode($event->getPayload()->getItem()->getProperty(ItemDefinitionInterface::BPMN_PROPERTY_STRUCTURE), true);
             $newData = array_merge($instanceData, $eventData);
