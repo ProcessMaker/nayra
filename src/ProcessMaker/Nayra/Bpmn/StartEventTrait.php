@@ -2,10 +2,12 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
@@ -116,6 +118,10 @@ trait StartEventTrait
                 if ($instance === null) {
                     $process = $this->getOwnerProcess();
                     $dataStorage = $process->getRepository()->createDataStore();
+                    if (get_class($event) === SignalEventDefinition::class) {
+                        $eventData = json_decode($event->getPayload()->getItem()->getProperty(ItemDefinitionInterface::BPMN_PROPERTY_STRUCTURE), true);
+                        $dataStorage->setData($eventData);
+                    }
                     $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
                 }
                 $this->triggerPlace[$index]->addNewToken($instance);

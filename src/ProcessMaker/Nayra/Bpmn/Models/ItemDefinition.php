@@ -35,6 +35,11 @@ class ItemDefinition implements ItemDefinitionInterface
         return $this->getProperty(ItemDefinitionInterface::BPMN_PROPERTY_STRUCTURE);
     }
 
+    public function setStructure($structure)
+    {
+        return $this->setProperty(ItemDefinitionInterface::BPMN_PROPERTY_STRUCTURE, $structure);
+    }
+
     /**
      * Get true if the data structure represents a collection.
      *

@@ -59,6 +59,10 @@ class EventDefinitionBus implements EventDefinitionBusInterface
                     }
                     $match = $match && $matchMessageFlow;
                 }
+
+                // Copy throw event data to catch data
+                $eventDefinition->getPayload()->setItem($sourceEventDefinition->getPayload()->getItem());
+
                 if ($match && $catchEvent instanceof StartEventInterface) {
                     $callable($eventDefinition, null, $token);
                 } elseif ($match) {

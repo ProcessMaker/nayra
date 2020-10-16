@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 
@@ -24,6 +25,12 @@ class Signal implements SignalInterface
      * @var string $id
      */
     private $name;
+
+    /**
+     * @var ItemDefinitionInterface $item
+     */
+    private $item;
+
 
     /** @var MessageFlowInterface */
     private $messageFlow;
@@ -66,4 +73,29 @@ class Signal implements SignalInterface
     {
         $this->name = $value;
     }
+
+
+    /**
+     * Get the ItemDefinition is used to define the payload of the Message.
+     *
+     * @return ItemDefinitionInterface
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * Allows to set the item
+     *
+     * @param ItemDefinitionInterface $item
+     *
+     * @return $this
+     */
+    public function setItem(ItemDefinitionInterface $item)
+    {
+        $this->item = $item;
+        return $this;
+    }
+
 }
