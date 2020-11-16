@@ -148,7 +148,7 @@ class MessageStartEventTest extends EngineTestCase
         $this->engine->runToNextState();
 
         //Assertion: messageFlow resources set and get should be equal
-        $this->assertEquals($messageFlow->getSource(), $messageFlow->setSource());
+        $this->assertEquals($messageFlow->getSource(), $eventA);
 
         //Assertion: The activity must be activated
         $this->assertEvents([
