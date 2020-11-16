@@ -143,13 +143,16 @@ class NayraModelTest extends EngineTestCase
     /**
      * Tests a event bus with a collaboration
      */
-    public function testEventBusSetCollaboration()
+    public function testEventBusSetAndGetCollaboration()
     {
         //Create a collaboration
         $collaboration = new Collaboration;
 
         $eventBus = new EventDefinitionBus;
         $eventBus->setCollaboration($collaboration);
+
+        //Assert that the collaboration is correctly set
+        $this->assertEquals($collaboration, $eventBus->getCollaboration());
     }
 
     /**
