@@ -147,6 +147,9 @@ class MessageStartEventTest extends EngineTestCase
         $startA->start($instanceA);
         $this->engine->runToNextState();
 
+        //Assertion: messageFlow resources set and get should be equal
+        $this->assertEquals($messageFlow->getSource(), $messageFlow->setSource());
+
         //Assertion: The activity must be activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
