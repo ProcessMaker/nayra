@@ -2,6 +2,10 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
+use ProcessMaker\Nayra\Bpmn\Models\DataStoreCollection;
+use ProcessMaker\Nayra\Bpmn\Models\EventDefinitionBus;
+use ProcessMaker\Nayra\Bpmn\Models\Participant;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
@@ -9,7 +13,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
@@ -131,6 +138,21 @@ class NayraModelTest extends EngineTestCase
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
+    }
+
+    /**
+     * Tests a event bus with a collaboration
+     */
+    public function testEventBusSetAndGetCollaboration()
+    {
+        //Create a collaboration
+        $collaboration = new Collaboration;
+
+        $eventBus = new EventDefinitionBus;
+        $eventBus->setCollaboration($collaboration);
+
+        //Assert that the collaboration is correctly set
+        $this->assertEquals($collaboration, $eventBus->getCollaboration());
     }
 
     /**

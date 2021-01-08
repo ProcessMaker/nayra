@@ -238,7 +238,7 @@ class EngineTestCase extends TestCase
         foreach ($this->jobs as $job) {
             $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
             $scheduled[] = $job['timer'];
-            if (isset($job['timer']) && $job['timer'] == $cycle && $job['element'] === $element && $job['token'] === $token) {
+            if (isset($job['timer']) && json_encode($job['timer']) == json_encode($cycle) && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }

@@ -50,15 +50,6 @@ class EventDefinitionBus implements EventDefinitionBusInterface
         $this->attachEvent(get_class($eventDefinition), function ($source, EventDefinitionInterface $sourceEventDefinition, TokenInterface $token = null) use ($catchEvent, $callable, $eventDefinition) {
             if (get_class($sourceEventDefinition) === get_class($eventDefinition)) {
                 $match = $eventDefinition->shouldCatchEventDefinition($sourceEventDefinition);
-                if ($match && $eventDefinition instanceof MessageEventDefinitionInterface) {
-                    $matchMessageFlow = false;
-                    foreach ($this->getCollaboration()->getMessageFlows() as $messageFlow) {
-                        $matchMessageFlow = $matchMessageFlow ||
-                         ($messageFlow->getSource()->getId() === $source->getId() &&
-                         $messageFlow->getTarget()->getId() === $catchEvent->getId());
-                    }
-                    $match = $match && $matchMessageFlow;
-                }
                 if ($match && $catchEvent instanceof StartEventInterface) {
                     $callable($eventDefinition, null, $token);
                 } elseif ($match) {
