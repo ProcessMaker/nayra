@@ -7,7 +7,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface ActivityInterface extends FlowNodeInterface
+interface LoopCardinalityInterface extends FlowNodeInterface
 {
     /**
      * Events defined for Activity
