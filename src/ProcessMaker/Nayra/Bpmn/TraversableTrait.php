@@ -5,6 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface;
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Bpmn\Path;
+use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
 
 /**
  * Implements the search of paths through elements.
@@ -38,11 +39,17 @@ trait TraversableTrait
         return $this->incoming;
     }
 
+    /**
+     * @param ConnectionNodeInterface $target
+     *
+     * @return ConnectionInterface
+     */
     public function connectTo(ConnectionNodeInterface $target)
     {
         $flow = new Connection($this, $target);
         $this->outgoing()->push($flow);
         $target->incoming()->push($flow);
+        return $flow;
     }
 
     /**

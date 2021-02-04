@@ -7,6 +7,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -124,7 +125,7 @@ trait TransitionTrait
                     $flow->targetState()->addToken($executionInstance, $token, false, $this);
                 });
             } else {
-                $flow->targetState()->addNewToken($executionInstance, [], $this);
+                $this->activateNextState($flow, $executionInstance, $consumeTokens, [], $this);
             }
         });
 
@@ -262,5 +263,21 @@ trait TransitionTrait
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * Activate the next state.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface $nextState
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
+     * @param CollectionInterface $consumeTokens
+     * @param array $properties
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
+     *
+     * @return TokenInterface
+     */
+    protected function activateNextState(ConnectionInterface $flow, ExecutionInstanceInterface $instance, CollectionInterface $consumeTokens, array $properties = [], TransitionInterface $source = null)
+    {
+        $flow->targetState()->addNewToken($instance, $properties, $source);
     }
 }

@@ -5,6 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 use Exception;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -76,8 +77,10 @@ trait ActivityTrait
         $this->exceptionTransition = new ExceptionTransition($this, true);
         $this->closeExceptionTransition = new CloseExceptionTransition($this, true);
         $this->completeExceptionTransition = new CompleteExceptionTransition($this, true);
-        $this->transition = new Transition($this, false);
+        $this->transition = new DataOutputTransition($this, false);
         $this->closedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
+        $this->loopTransition = new LoopCharacteristicsTransition($this, false);
+        $this->loopTransition->connectTo($this->activeState);
 
         $this->activeState->connectTo($this->exceptionTransition);
         $this->activeState->connectTo($this->activityTransition);
@@ -116,6 +119,10 @@ trait ActivityTrait
         $this->closedState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token) {
+                $loop = $this->getLoopCharacteristics();
+                if ($loop) {
+                    $loop->onTokenCompleted($token);
+                }
                 $this->getRepository()
                     ->getTokenRepository()
                     ->persistActivityCompleted($this, $token);
@@ -125,7 +132,11 @@ trait ActivityTrait
         $this->closeExceptionTransition->attachEvent(
             TransitionInterface::EVENT_AFTER_CONSUME,
             function ($transition, $tokens) {
+                $loop = $this->getLoopCharacteristics();
                 foreach ($tokens as $token) {
+                    if ($loop) {
+                        $loop->onTokenTerminated($token);
+                    }
                     $this->getRepository()
                         ->getTokenRepository()
                         ->persistActivityCompleted($this, $token);
@@ -136,7 +147,11 @@ trait ActivityTrait
         $this->closeActiveTransition->attachEvent(
             TransitionInterface::EVENT_AFTER_CONSUME,
             function ($transition, $tokens) {
+                $loop = $this->getLoopCharacteristics();
                 foreach ($tokens as $token) {
+                    if ($loop) {
+                        $loop->onTokenTerminated($token);
+                    }
                     $this->getRepository()
                         ->getTokenRepository()
                         ->persistActivityCompleted($this, $token);
@@ -156,7 +171,7 @@ trait ActivityTrait
     public function getInputPlace(FlowInterface $targetFlow = null)
     {
         $ready = new State($this, 'INCOMING');
-        $transition = new Transition($this, false);
+        $transition = new DataInputTransition($this, false);
         $ready->connectTo($transition);
         $transition->connectTo($this->activeState);
         $this->addInput($ready);
@@ -212,5 +227,18 @@ trait ActivityTrait
     public function getActiveState()
     {
         return $this->activeState;
+    }
+
+    /**
+     * @return LoopCharacteristicsInterface
+     */
+    public function getLoopCharacteristics()
+    {
+        return $this->getProperty(ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS);
+    }
+
+    public function setLoopCharacteristics(LoopCharacteristicsInterface $loopCharacteristics)
+    {
+        return $this->setProperty(ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS, $loopCharacteristics);
     }
 }

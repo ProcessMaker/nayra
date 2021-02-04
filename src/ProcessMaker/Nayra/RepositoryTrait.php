@@ -26,6 +26,7 @@ use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\MessageFlow;
+use ProcessMaker\Nayra\Bpmn\Models\MultiInstanceLoopCharacteristics;
 use ProcessMaker\Nayra\Bpmn\Models\Operation;
 use ProcessMaker\Nayra\Bpmn\Models\OutputSet;
 use ProcessMaker\Nayra\Bpmn\Models\ParallelGateway;
@@ -423,6 +424,16 @@ trait RepositoryTrait
     public function createTimerEventDefinition()
     {
         return new TimerEventDefinition();
+    }
+
+    /**
+     * Create instance of MultiInstanceLoopCharacteristics.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\MultiInstanceLoopCharacteristicsInterface
+     */
+    public function createMultiInstanceLoopCharacteristics()
+    {
+        return new MultiInstanceLoopCharacteristics();
     }
 
     /**
