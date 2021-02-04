@@ -24,6 +24,10 @@ trait LoopCharacteristicsTrait
             $loopCharacteristics['sourceToken'] = $token->getId();
         }
         $properties[LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY] = $loopCharacteristics;
+        $token->setProperty(
+            LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY,
+            $properties[LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY]
+        );
         return $properties;
     }
 

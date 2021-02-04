@@ -80,6 +80,7 @@ trait ActivityTrait
         $this->transition = new DataOutputTransition($this, false);
         $this->closedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
         $this->loopTransition = new LoopCharacteristicsTransition($this, false);
+        $this->closedState->connectTo($this->loopTransition);
         $this->loopTransition->connectTo($this->activeState);
 
         $this->activeState->connectTo($this->exceptionTransition);
