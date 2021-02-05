@@ -11,6 +11,8 @@ interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsI
     const BPMN_PROPERTY_NONE_BEHAVIOR_EVENT_REF = 'oneBehaviorEventRef';
     const BPMN_PROPERTY_LOOP_DATA_INPUT_REF = 'loopDataInputRef';
     const BPMN_PROPERTY_LOOP_DATA_OUTPUT_REF = 'loopDataOutputRef';
+    const BPMN_PROPERTY_LOOP_DATA_INPUT = 'loopDataInputRef';
+    const BPMN_PROPERTY_LOOP_DATA_OUTPUT = 'loopDataOutputRef';
     const BPMN_PROPERTY_INPUT_DATA_ITEM = 'inputDataItem';
     const BPMN_PROPERTY_OUTPUT_DATA_ITEM = 'outputDataItem';
     const BPMN_PROPERTY_COMPLEX_BEHAVIOR_DEFINITION = 'complexBehaviorDefinition';
@@ -107,6 +109,21 @@ interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsI
     public function setLoopDataInputRef($loopDataInputRef);
 
     /**
+     * Gets as loopDataInputRef
+     *
+     * @return DataInputInterface
+     */
+    public function getLoopDataInput();
+
+    /**
+     * Sets a new loopDataInputRef
+     *
+     * @param DataInputInterface $loopDataInput
+     * @return self
+     */
+    public function setLoopDataInput(DataInputInterface $loopDataInput);
+
+    /**
      * Gets as loopDataOutputRef
      *
      * @return string
@@ -120,6 +137,21 @@ interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsI
      * @return self
      */
     public function setLoopDataOutputRef($loopDataOutputRef);
+
+    /**
+     * Gets as loopDataOutputRef
+     *
+     * @return DataOutputInterface
+     */
+    public function getLoopDataOutput();
+
+    /**
+     * Sets a new loopDataOutputRef
+     *
+     * @param string $loopDataOutput
+     * @return self
+     */
+    public function setLoopDataOutput(DataOutputInterface $loopDataOutput);
 
     /**
      * Gets as inputDataItem

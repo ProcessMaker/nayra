@@ -19,6 +19,7 @@ use ProcessMaker\Nayra\Bpmn\Models\EventBasedGateway;
 use ProcessMaker\Nayra\Bpmn\Models\ExclusiveGateway;
 use ProcessMaker\Nayra\Bpmn\Models\Flow;
 use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Models\InputOutputSpecification;
 use ProcessMaker\Nayra\Bpmn\Models\InputSet;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateCatchEvent;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
@@ -434,6 +435,11 @@ trait RepositoryTrait
     public function createMultiInstanceLoopCharacteristics()
     {
         return new MultiInstanceLoopCharacteristics();
+    }
+
+    public function createInputOutputSpecification()
+    {
+        return new InputOutputSpecification();
     }
 
     /**

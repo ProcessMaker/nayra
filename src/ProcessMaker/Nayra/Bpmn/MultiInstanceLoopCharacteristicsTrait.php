@@ -77,6 +77,19 @@ trait MultiInstanceLoopCharacteristicsTrait
         return $this->setProperty(MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT_REF, $loopDataInputRef);
     }
 
+    /**
+     * @return DataInputInterface
+     */
+    public function getLoopDataInput()
+    {
+        return $this->getProperty(MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT);
+    }
+
+    public function setLoopDataInput(DataInputInterface $loopDataInput)
+    {
+        return $this->setProperty(MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT, $loopDataInput);
+    }
+
     public function getLoopDataOutputRef()
     {
         return $this->getProperty(MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT_REF);
@@ -85,6 +98,19 @@ trait MultiInstanceLoopCharacteristicsTrait
     public function setLoopDataOutputRef($loopDataOutputRef)
     {
         return $this->setProperty(MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT_REF, $loopDataOutputRef);
+    }
+
+    /**
+     * @return DataOutputInterface
+     */
+    public function getLoopDataOutput()
+    {
+        return $this->getProperty(MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT);
+    }
+
+    public function setLoopDataOutput(DataOutputInterface $loopDataOutput)
+    {
+        return $this->setProperty(MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT, $loopDataOutput);
     }
 
     public function getInputDataItem()
