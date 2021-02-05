@@ -42,7 +42,7 @@ trait LoopCharacteristicsTrait
         $ds->putData(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, $data);
     }
 
-    public function getLoopInstanceProperty(TokenInterface $token, $key, $defaultValue = null)
+    private function getLoopInstanceProperty(TokenInterface $token, $key, $defaultValue = null)
     {
         $loopCharacteristics = $token->getProperty(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, []);
         $outerInstance = $loopCharacteristics['sourceToken'];

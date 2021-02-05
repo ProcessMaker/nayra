@@ -197,11 +197,11 @@ trait ActivityTrait
             function (TransitionInterface $transition, Collection $consumedTokens) {
                 foreach ($consumedTokens as $token) {
                     $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                    $this->getRepository()
+                        ->getTokenRepository()
+                        ->persistActivityClosed($this, $token);
+                    $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $token);
                 }
-                $this->getRepository()
-                    ->getTokenRepository()
-                    ->persistActivityClosed($this, $token);
-                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $token);
             }
         );
         return $this;
