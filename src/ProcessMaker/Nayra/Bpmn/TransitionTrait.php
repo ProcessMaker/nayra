@@ -137,7 +137,7 @@ trait TransitionTrait
     /**
      * Notify in the bus that a conditioned transition has been activated
      *
-     * @param $event
+     * @param mixed $event
      * @param mixed ...$arguments
      */
     protected function notifyConditionedTransition($event, ...$arguments)
@@ -268,9 +268,9 @@ trait TransitionTrait
     /**
      * Activate the next state.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface $nextState
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
-     * @param CollectionInterface $consumeTokens
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface $flow
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $consumeTokens
      * @param array $properties
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
      *

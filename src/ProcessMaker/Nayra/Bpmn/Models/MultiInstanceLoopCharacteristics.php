@@ -21,6 +21,13 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
 {
     use MultiInstanceLoopCharacteristicsTrait;
 
+    /**
+     * Calculate the number of intances for the MI activity
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return integer
+     */
     private function calcNumberOfInstances(ExecutionInstanceInterface $instance)
     {
         $dataStore = $instance->getDataStore();
@@ -33,11 +40,27 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         }
     }
 
+    /**
+     * Get input data runtime value
+     *
+     * @param DataInputInterface $dataInput
+     * @param DataStoreInterface $dataStore
+     *
+     * @return CollectionInterface|array
+     */
     private function getInputDataValue(DataInputInterface $dataInput, DataStoreInterface $dataStore)
     {
         return $dataStore->getData($dataInput->getName(), []);
     }
 
+    /**
+     * Get item of the input data collection by index
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param integer $index
+     *
+     * @return mixed
+     */
     private function getInputDataItemValue(ExecutionInstanceInterface $instance, $index)
     {
         $dataStore = $instance->getDataStore();
@@ -48,6 +71,17 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         return $this->getInputDataValue($dataInput, $dataStore)[$index - 1];
     }
 
+    /**
+     * Iterate to next active state
+     *
+     * @param StateInterface $nextState
+     * @param ExecutionInstanceInterface $instance
+     * @param CollectionInterface $consumeTokens
+     * @param array $properties
+     * @param TransitionInterface|null $source
+     *
+     * @return void
+     */
     public function iterateNextState(StateInterface $nextState, ExecutionInstanceInterface $instance, CollectionInterface $consumeTokens, array $properties = [], TransitionInterface $source = null)
     {
         $inputDataItem = $this->getInputDataItem() ? $this->getInputDataItem()->getName() : null;
@@ -103,12 +137,12 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
     private function createInstance(
         ExecutionInstanceInterface $instance,
         array $properties,
-        int $loopCounter,
+        $loopCounter,
         $inputDataItem,
         StateInterface $nextState,
         TransitionInterface $source,
-        int $numberOfActiveInstances,
-        int $numberOfInstances
+        $numberOfActiveInstances,
+        $numberOfInstances
     ) {
         $item = $this->getInputDataItemValue($instance, $loopCounter);
         $properties['data'] = [
@@ -121,7 +155,6 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $this->setLoopInstanceProperty($newToken, 'numberOfActiveInstances', $numberOfActiveInstances);
         $this->setLoopInstanceProperty($newToken, 'numberOfInstances', $numberOfInstances);
         $this->setLoopInstanceProperty($newToken, 'loopCounter', $loopCounter);
-
     }
 
     /**

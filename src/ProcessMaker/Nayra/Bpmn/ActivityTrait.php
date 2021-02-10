@@ -238,6 +238,11 @@ trait ActivityTrait
         return $this->getProperty(ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS);
     }
 
+    /**
+     * @param LoopCharacteristicsInterface $loopCharacteristics
+     *
+     * @return static
+     */
     public function setLoopCharacteristics(LoopCharacteristicsInterface $loopCharacteristics)
     {
         return $this->setProperty(ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS, $loopCharacteristics);

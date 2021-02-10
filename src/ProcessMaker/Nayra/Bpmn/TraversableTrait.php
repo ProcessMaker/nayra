@@ -2,10 +2,8 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface;
-use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Bpmn\Path;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface;
 
 /**
  * Implements the search of paths through elements.
@@ -23,17 +21,31 @@ trait TraversableTrait
     private $incoming;
     private $outgoing;
 
+    /**
+     * Initialize incomig/outgoing flows
+     *
+     */
     protected function initFlowElementBehavior()
     {
         $this->outgoing = new Collection;
         $this->incoming = new Collection;
     }
 
+    /**
+     * This attribute identifies the outgoing Sequence Flow of the FlowNode.
+     *
+     * @return Collection
+     */
     public function outgoing()
     {
         return $this->outgoing;
     }
 
+    /**
+     * This attribute identifies the incoming Sequence Flow of the FlowNode.
+     *
+     * @return Collection
+     */
     public function incoming()
     {
         return $this->incoming;
@@ -65,8 +77,7 @@ trait TraversableTrait
      */
     public function paths(callable $condition, callable $while, $path = [], &$passedthru = [], &$paths = [])
     {
-        $this->incoming()->find(function($flow)
-            use($condition, $while, $path, &$passedthru, &$paths) {
+        $this->incoming()->find(function ($flow) use ($condition, $while, $path, &$passedthru, &$paths) {
             if (array_search($flow, $passedthru, true) !== false) {
                 return;
             }

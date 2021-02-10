@@ -14,7 +14,15 @@ trait LoopCharacteristicsTrait
 {
     use BaseTrait;
 
-    private function startLoopInstanceProperty(TokenInterface $token, array $properties = [])
+    /**
+     * Prepare Loop Instance properties for execution
+     *
+     * @param TokenInterface $token
+     * @param array $properties
+     *
+     * @return array
+     */
+    private function prepareLoopInstanceProperties(TokenInterface $token, array $properties = [])
     {
         $loopCharacteristics = $token->getProperty(
             LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY,
@@ -31,6 +39,15 @@ trait LoopCharacteristicsTrait
         return $properties;
     }
 
+    /**
+     * Set Loop Instance property during execution
+     *
+     * @param TokenInterface $token
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return self
+     */
     private function setLoopInstanceProperty(TokenInterface $token, $key, $value)
     {
         $loopCharacteristics = $token->getProperty(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, []);
@@ -40,8 +57,18 @@ trait LoopCharacteristicsTrait
         $data[$outerInstance] = $data[$outerInstance] ?? [];
         $data[$outerInstance][$key] = $value;
         $ds->putData(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, $data);
+        return $this;
     }
 
+    /**
+     * Get Loop Instance property during execution
+     *
+     * @param TokenInterface $token
+     * @param string $key
+     * @param mixed $defaultValue
+     *
+     * @return mixed
+     */
     private function getLoopInstanceProperty(TokenInterface $token, $key, $defaultValue = null)
     {
         $loopCharacteristics = $token->getProperty(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, []);

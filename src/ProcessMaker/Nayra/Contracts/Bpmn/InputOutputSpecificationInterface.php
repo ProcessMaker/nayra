@@ -20,7 +20,8 @@ interface InputOutputSpecificationInterface extends EntityInterface
     public function getDataOutput();
 
     /**
-     * @param string $dataOutput
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $dataOutput
+     *
      * @return self
      */
     public function setDataOutput(CollectionInterface $dataOutput);
@@ -31,7 +32,8 @@ interface InputOutputSpecificationInterface extends EntityInterface
     public function getDataInput();
 
     /**
-     * @param DataInputInterface[] $dataInput
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $dataInput
+     *
      * @return self
      */
     public function setDataInput(CollectionInterface $dataInput);

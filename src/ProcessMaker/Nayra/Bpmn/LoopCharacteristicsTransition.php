@@ -45,8 +45,9 @@ class LoopCharacteristicsTransition implements TransitionInterface
     /**
      * Activate the next state.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface $nextState
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface $flow
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $consumeTokens
      * @param array $properties
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
      *

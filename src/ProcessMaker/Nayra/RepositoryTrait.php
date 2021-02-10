@@ -437,6 +437,11 @@ trait RepositoryTrait
         return new MultiInstanceLoopCharacteristics();
     }
 
+    /**
+     * Create instance of InputOutputSpecification
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\InputOutputSpecificationInterface
+     */
     public function createInputOutputSpecification()
     {
         return new InputOutputSpecification();

@@ -20,12 +20,6 @@ class DataOutputTransition implements TransitionInterface
     use TransitionTrait;
 
     /**
-     * @var ConnectionInterface
-     */
-    private $loopConnection;
-
-
-    /**
      * Initialize the transition.
      *
      * @param FlowNodeInterface $owner
@@ -34,18 +28,6 @@ class DataOutputTransition implements TransitionInterface
     protected function initDataOutputTransition()
     {
         $this->setTokensConsumedPerIncoming(-1);
-    }
-
-    /**
-     * Connect close to acive in activity with loop characteristics
-     *
-     * @param StateInterface $state
-     *
-     * @return ConnectionInterface
-     */
-    public function loopConnectTo(StateInterface $state)
-    {
-        return $this->loopConnection = $this->connectTo($state);
     }
 
     /**
@@ -75,8 +57,9 @@ class DataOutputTransition implements TransitionInterface
     /**
      * Activate the next state.
      *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface $nextState
-     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface $flow
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface $consumeTokens
      * @param array $properties
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
      *

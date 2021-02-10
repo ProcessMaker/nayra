@@ -2,6 +2,15 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+/**
+ * MultiInstanceLoopCharacteristics interface allows for creation of a desired
+ * number of Activity instances. The instances MAY execute in parallel or MAY
+ * be sequential. Either an Expression is used to specify or calculate the
+ * desired number of instances or a data driven setup can be used. In that case
+ * a data input can be specified, which is able to
+ *
+ * @package ProcessMaker\Nayra\Contracts\Bpmn
+ */
 interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsInterface
 {
     const BPMN_PROPERTY_IS_SEQUENTIAL = 'isSequential';
@@ -28,7 +37,8 @@ interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsI
     /**
      * Sets a new isSequential
      *
-     * @param boolean $isSequential
+     * @param bool $isSequential
+     *
      * @return self
      */
     public function setIsSequential(bool $isSequential);
@@ -148,7 +158,8 @@ interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsI
     /**
      * Sets a new loopDataOutputRef
      *
-     * @param string $loopDataOutput
+     * @param DataOutputInterface $loopDataOutput
+     *
      * @return self
      */
     public function setLoopDataOutput(DataOutputInterface $loopDataOutput);
@@ -186,17 +197,17 @@ interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsI
     /**
      * Gets as complexBehaviorDefinition
      *
-     * @return array
+     * @return ComplexBehaviorDefinitionInterface
      */
     public function getComplexBehaviorDefinition();
 
     /**
      * Sets a new complexBehaviorDefinition
      *
-     * @param array $complexBehaviorDefinition
+     * @param ComplexBehaviorDefinitionInterface $complexBehaviorDefinition
      * @return self
      */
-    public function setComplexBehaviorDefinition($complexBehaviorDefinition);
+    public function setComplexBehaviorDefinition(ComplexBehaviorDefinitionInterface $complexBehaviorDefinition);
 
     /**
      * Gets as completionCondition

@@ -75,6 +75,8 @@ interface ActivityInterface extends FlowNodeInterface
     /**
      * Get loop characteristics of the activity
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\LoopCharacteristicsInterface $loopCharacteristics
+     *
      * @return LoopCharacteristicsInterface
      */
     public function setLoopCharacteristics(LoopCharacteristicsInterface $loopCharacteristics);
