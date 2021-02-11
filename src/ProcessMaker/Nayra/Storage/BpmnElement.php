@@ -117,7 +117,9 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             if ($isThisProperty && $multiplicity === 'n') {
                 $to->addProperty($name, $value);
             } elseif ($isThisProperty && $multiplicity === '1') {
-                $to->setProperty($name, $value);
+                $setter = 'set' . $name;
+                method_exists($to, $setter) ? $to->$setter($value)
+                    : $to->setProperty($name, $value);
             }
         }
     }
