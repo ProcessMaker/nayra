@@ -637,4 +637,221 @@ class MultiInstanceTest extends EngineTestCase
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
+
+    /**
+     * Tests a multi-instance with input-output data
+     *
+     * @return void
+     */
+    public function testMultiInstanceInputOutput()
+    {
+        // Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/files/MultiInstance_InputOutput.bpmn');
+
+        // Load a process from a bpmn repository by Id
+        $process = $bpmnRepository->getProcess('MultiInstance_Process');
+
+        // Get 'start' activity of the process
+        $activity = $bpmnRepository->getActivity('start');
+
+        // Get 'MultiInstanceTask' activity of the process
+        $miTask = $bpmnRepository->getScriptTask('MultiInstanceTask');
+
+        // Get 'last task' activity
+        $lastTask = $bpmnRepository->getActivity('end');
+
+        // Start the process
+        $instance = $process->call();
+        $instance->getDataStore()->putData('users', [
+            ['name' => 'Marco', 'age' => 20],
+            ['name' => 'Jonas', 'age' => 23],
+        ]);
+        $this->engine->runToNextState();
+
+        // Assertion: A process has started.
+        $this->assertEquals(1, $process->getInstances()->count());
+
+        // Assertion: The process has started and the first activity was actived
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the first activity.
+        $token = $activity->getTokens($instance)->item(0);
+        $activity->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The first activity was completed then 2 script task are started
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+        ]);
+
+        // Complete the MI activity.
+        $token1 = $miTask->getTokens($instance)->item(0);
+        $token2 = $miTask->getTokens($instance)->item(1);
+        $miTask->runScript($token1);
+        $miTask->runScript($token2);
+        $this->engine->runToNextState();
+
+        // Assertion: The MI task was completed and next task is activated
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the last task
+        $token = $lastTask->getTokens($instance)->item(0);
+        $activity->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The last task was completed and process is completed
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
+
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+        ]);
+
+        // Assertion: Output data 'result' should contain the expected result
+        $data = $instance->getDataStore()->getData();
+        $this->assertArrayHasKey('result', $data);
+        $this->assertEquals([
+            [
+                'name' => 'Marco',
+                'age' => 21,
+            ],
+            [
+                'name' => 'Jonas',
+                'age' => 24,
+            ],
+        ], $data['result']);
+    }
+
+    /**
+     * Tests a multi-instance with input-output data but without inputDataItem
+     * nor outputDataItem
+     *
+     * @return void
+     */
+    public function testMultiInstanceInputOutputWithoutInputItemOututItem()
+    {
+        // Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/files/MultiInstance_InputOutput_WithoutIODataItem.bpmn');
+
+        // Load a process from a bpmn repository by Id
+        $process = $bpmnRepository->getProcess('MultiInstance_Process');
+
+        // Get 'start' activity of the process
+        $activity = $bpmnRepository->getActivity('start');
+
+        // Get 'MultiInstanceTask' activity of the process
+        $miTask = $bpmnRepository->getScriptTask('MultiInstanceTask');
+
+        // Get 'last task' activity
+        $lastTask = $bpmnRepository->getActivity('end');
+
+        // Start the process
+        $instance = $process->call();
+        $instance->getDataStore()->putData('users', [
+            ['name' => 'Marco', 'age' => 20],
+            ['name' => 'Jonas', 'age' => 23],
+        ]);
+        $this->engine->runToNextState();
+
+        // Assertion: A process has started.
+        $this->assertEquals(1, $process->getInstances()->count());
+
+        // Assertion: The process has started and the first activity was actived
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the first activity.
+        $token = $activity->getTokens($instance)->item(0);
+        $activity->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The first activity was completed then 2 script task are started
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+        ]);
+
+        // Complete the MI activity.
+        $token1 = $miTask->getTokens($instance)->item(0);
+        $token2 = $miTask->getTokens($instance)->item(1);
+        $miTask->runScript($token1);
+        $miTask->runScript($token2);
+        $this->engine->runToNextState();
+
+        // Assertion: The MI task was completed and next task is activated
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the last task
+        $token = $lastTask->getTokens($instance)->item(0);
+        $activity->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The last task was completed and process is completed
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
+
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+        ]);
+
+        // Assertion: Output data 'result' should contain the expected result
+        $data = $instance->getDataStore()->getData();
+        $this->assertArrayHasKey('result', $data);
+        $this->assertEquals([
+            [
+                'name' => 'Marco',
+                'age' => 21,
+                'loopCounter' => 1,
+            ],
+            [
+                'name' => 'Jonas',
+                'age' => 24,
+                'loopCounter' => 2,
+            ],
+        ], $data['result']);
+    }
 }

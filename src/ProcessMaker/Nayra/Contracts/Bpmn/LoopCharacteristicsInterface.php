@@ -73,4 +73,14 @@ interface LoopCharacteristicsInterface extends EntityInterface
      * @return boolean
      */
     public function isExecutable();
+
+    /**
+     * Merge output data
+     *
+     * @param CollectionInterface $consumedTokens
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return void
+     */
+    public function mergeOutputData(CollectionInterface $consumedTokens, ExecutionInstanceInterface $instance);
 }

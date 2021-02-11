@@ -5,7 +5,6 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -69,7 +68,7 @@ class DataOutputTransition implements TransitionInterface
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
         if ($loop && $loop->isExecutable()) {
-            //@todo merge output data
+            $loop->mergeOutputData($consumeTokens, $instance);
         }
         $nextState = $flow->targetState();
         $nextState->addNewToken($instance, $properties, $source);

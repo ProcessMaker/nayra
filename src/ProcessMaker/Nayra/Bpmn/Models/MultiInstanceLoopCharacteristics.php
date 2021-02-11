@@ -11,7 +11,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Exceptions\LoopUnderspecifiedException;
 
 /**
  * Multiinstance implementation.
@@ -82,6 +81,23 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
             return null;
         }
         return $this->getInputDataValue($dataInput, $dataStore)[$index - 1];
+    }
+
+    /**
+     * Get item of the output data from token
+     *
+     * @param TokenInterface $token
+     *
+     * @return array
+     */
+    private function getOutputDataItemValue(TokenInterface $token)
+    {
+        $data = $token->getProperty('data', []);
+        $name = $this->getOutputDataItem() ? $this->getOutputDataItem()->getName() : null;
+        if ($name) {
+            return $data[$name] ?? null;
+        }
+        return $data;
     }
 
     /**
@@ -158,12 +174,13 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $numberOfInstances
     ) {
         $item = $this->getInputDataItemValue($instance, $loopCounter);
-        $properties['data'] = [
-            'loopCounter' => $loopCounter,
-        ];
+        $properties['data'] = [];
         if ($inputDataItem) {
             $properties['data'][$inputDataItem] = $item;
+        } elseif ($item) {
+            $properties['data'] = array_merge($properties['data'], (array) $item);
         }
+        $properties['data']['loopCounter'] = $loopCounter;
         $newToken = $nextState->addNewToken($instance, $properties, $source);
         $this->setLoopInstanceProperty($newToken, 'numberOfActiveInstances', $numberOfActiveInstances);
         $this->setLoopInstanceProperty($newToken, 'numberOfInstances', $numberOfInstances);
@@ -226,5 +243,25 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $numberOfTerminatedInstances++;
         $this->setLoopInstanceProperty($token, 'numberOfActiveInstances', $numberOfActiveInstances);
         $this->setLoopInstanceProperty($token, 'numberOfTerminatedInstances', $numberOfTerminatedInstances);
+    }
+
+    /**
+     * Merge output data into instance data
+     *
+     * @param CollectionInterface $consumedTokens
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return void
+     */
+    public function mergeOutputData(CollectionInterface $consumedTokens, ExecutionInstanceInterface $instance)
+    {
+        $outputVariable = $this->getLoopDataOutput() ? $this->getLoopDataOutput()->getName() : null;
+        if ($outputVariable) {
+            $result = [];
+            foreach ($consumedTokens as $token) {
+                $result[] = $this->getOutputDataItemValue($token);
+            }
+            $instance->getDataStore()->putData($outputVariable, $result);
+        }
     }
 }
