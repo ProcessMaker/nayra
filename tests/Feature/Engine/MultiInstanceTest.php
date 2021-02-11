@@ -98,6 +98,8 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
 
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
@@ -183,7 +185,7 @@ class MultiInstanceTest extends EngineTestCase
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_FAILING);
         $this->engine->runToNextState();
 
-        // Assertion: Fail thrid MI task, the MI Activity hangs until the failing instance is closed
+        // Assertion: Fail thrid MI task
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
@@ -192,15 +194,14 @@ class MultiInstanceTest extends EngineTestCase
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
         $this->engine->runToNextState();
 
-        // Assertion: The MI Activity is cancelled
+        // Assertion: The thrid MI task was cancelled, the MI Activity hangs because it could not close all the parallel instances
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
-            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 
     /**
-     * Test MI task cancell instance
+     * Test MI task cancel instance
      *
      */
     public function testMultiInstanceParallelLoopCardinalityCancellInstance()
@@ -273,15 +274,14 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
         ]);
 
-        // Cancell the third MI activity.
+        // Cancel the third MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
         $this->engine->runToNextState();
 
-        // Assertion: The thrid MI task was completed, all MI token are closed, then continue to next task
+        // Assertion: The thrid MI task was cancelled, the MI Activity hangs because it could not close all the parallel instances
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
-            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
 
@@ -364,7 +364,7 @@ class MultiInstanceTest extends EngineTestCase
         $activity->complete($token);
         $this->engine->runToNextState();
 
-        // Assertion: The thrid MI task was completed, all MI token are closed, then continue to next task
+        // Assertion: The thrid MI task was completed, closed, then continue to next task
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
@@ -462,7 +462,7 @@ class MultiInstanceTest extends EngineTestCase
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
         $this->engine->runToNextState();
 
-        // Assertion: The MI Activity is cancelled
+        // Assertion: The third and last MI Activity is cancelled, then the process is closed
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
@@ -470,10 +470,10 @@ class MultiInstanceTest extends EngineTestCase
     }
 
     /**
-     * Test MI task cancell instance
+     * Test MI task cancel instance
      *
      */
-    public function testMultiInstanceSequentialLoopCardinalityCancellInstance()
+    public function testMultiInstanceSequentialLoopCardinalityCancelInstance()
     {
         // Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
@@ -543,12 +543,12 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
-        // Cancell the third MI activity.
+        // Cancel the third MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
         $this->engine->runToNextState();
 
-        // Assertion: The thrid MI task was completed, all MI token are closed, then continue to next task
+        // Assertion: The thrid and last MI task was cancelled, then the process is completed
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,

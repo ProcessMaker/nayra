@@ -156,8 +156,8 @@ trait ActivityTrait
                     $this->getRepository()
                         ->getTokenRepository()
                         ->persistActivityCompleted($this, $token);
+                    $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
                 }
-                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
             }
         );
     }
