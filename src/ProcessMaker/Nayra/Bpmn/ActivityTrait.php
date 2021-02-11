@@ -121,7 +121,7 @@ trait ActivityTrait
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token) {
                 $loop = $this->getLoopCharacteristics();
-                if ($loop) {
+                if ($loop && $loop->isExecutable()) {
                     $loop->onTokenCompleted($token);
                 }
                 $this->getRepository()
@@ -135,7 +135,7 @@ trait ActivityTrait
             function ($transition, $tokens) {
                 $loop = $this->getLoopCharacteristics();
                 foreach ($tokens as $token) {
-                    if ($loop) {
+                    if ($loop && $loop->isExecutable()) {
                         $loop->onTokenTerminated($token);
                     }
                     $this->getRepository()
@@ -150,7 +150,7 @@ trait ActivityTrait
             function ($transition, $tokens) {
                 $loop = $this->getLoopCharacteristics();
                 foreach ($tokens as $token) {
-                    if ($loop) {
+                    if ($loop && $loop->isExecutable()) {
                         $loop->onTokenTerminated($token);
                     }
                     $this->getRepository()

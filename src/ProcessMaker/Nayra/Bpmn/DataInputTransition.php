@@ -57,7 +57,7 @@ class DataInputTransition implements TransitionInterface
     {
         $nextState = $flow->targetState();
         $loop = $this->getOwner()->getLoopCharacteristics();
-        if ($loop) {
+        if ($loop && $loop->isExecutable()) {
             $loop->iterateNextState($nextState, $instance, $consumeTokens, $properties, $source);
         } else {
             $nextState->addNewToken($instance, $properties, $source);

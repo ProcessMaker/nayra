@@ -66,4 +66,11 @@ interface LoopCharacteristicsInterface extends EntityInterface
      * @return bool
      */
     public function continueLoop(ExecutionInstanceInterface $instance, TokenInterface $token);
+
+    /**
+     * Check if the loop can be formally executed
+     *
+     * @return boolean
+     */
+    public function isExecutable();
 }

@@ -11,6 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Exceptions\LoopUnderspecifiedException;
 
 /**
  * Multiinstance implementation.
@@ -35,9 +36,21 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $loopDataInput = $this->getLoopDataInput();
         if ($loopCardinality) {
             return $loopCardinality($dataStore->getData());
-        } elseif ($loopDataInput) {
+        } else {
             return count($this->getInputDataValue($loopDataInput, $dataStore));
         }
+    }
+
+    /**
+     * Check if the loop can be formally executed
+     *
+     * @return boolean
+     */
+    public function isExecutable()
+    {
+        $loopCardinality = $this->getLoopCardinality();
+        $loopDataInput = $this->getLoopDataInput();
+        return $loopCardinality || $loopDataInput;
     }
 
     /**
@@ -180,7 +193,6 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
      */
     public function isLoopCompleted(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
-        $data = $instance->getDataStore()->getData();
         $numberOfInstances = $this->getLoopInstanceProperty($token, 'numberOfInstances', 0);
         $completed = $this->getLoopInstanceProperty($token, 'numberOfCompletedInstances', 0);
         return $completed >= $numberOfInstances;

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
@@ -551,6 +552,88 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: The thrid and last MI task was cancelled, then the process is completed
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+        ]);
+    }
+
+    /**
+     * Tests a process with MI as marker but not executable
+     *
+     * @return void
+     */
+    public function testUnderspecifiedLoop()
+    {
+        // Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/files/MultiInstance_DocumentOnly.bpmn');
+
+        // Load a process from a bpmn repository by Id
+        $process = $bpmnRepository->getProcess('MultiInstance_DocumentOnly');
+
+        // Get 'start' activity of the process
+        $activity = $bpmnRepository->getActivity('start');
+
+        // Get 'MultiInstanceTask' activity of the process
+        $miTask = $bpmnRepository->getActivity('MultiInstanceTask');
+
+        // Get 'last task' activity
+        $lastTask = $bpmnRepository->getActivity('node_8');
+
+        // Start the process
+        $instance = $process->call();
+        $this->engine->runToNextState();
+
+        // Assertion: A process has started.
+        $this->assertEquals(1, $process->getInstances()->count());
+
+        // Assertion: The process has started and the first activity was actived
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the first activity.
+        $token = $activity->getTokens($instance)->item(0);
+        $activity->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The first activity was completed then only 1 task are activated (as a normal task)
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the MI activity.
+        $token = $miTask->getTokens($instance)->item(0);
+        $activity->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The MI task was completed and next task is activated
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the last task
+        $token = $lastTask->getTokens($instance)->item(0);
+        $activity->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The last task was completed and process is completed
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
+
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }

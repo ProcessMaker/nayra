@@ -41,7 +41,7 @@ class DataOutputTransition implements TransitionInterface
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
-        return !$loop || $loop->isLoopCompleted($executionInstance, $token);
+        return !$loop || !$loop->isExecutable() || $loop->isLoopCompleted($executionInstance, $token);
     }
 
     /**
@@ -68,7 +68,7 @@ class DataOutputTransition implements TransitionInterface
     protected function activateNextState(ConnectionInterface $flow, ExecutionInstanceInterface $instance, CollectionInterface $consumeTokens, array $properties = [], TransitionInterface $source = null)
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
-        if ($loop) {
+        if ($loop && $loop->isExecutable()) {
             //@todo merge output data
         }
         $nextState = $flow->targetState();
