@@ -29,7 +29,7 @@ class LoopCharacteristicsTransition implements TransitionInterface
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
-        return $loop && $loop->continueLoop($executionInstance, $token);
+        return $loop && $loop->isExecutable() && $loop->continueLoop($executionInstance, $token);
     }
 
     /**
@@ -57,10 +57,6 @@ class LoopCharacteristicsTransition implements TransitionInterface
     {
         $nextState = $flow->targetState();
         $loop = $this->getOwner()->getLoopCharacteristics();
-        if ($loop && $loop->isExecutable()) {
-            $loop->iterateNextState($nextState, $instance, $consumeTokens, $properties, $source);
-        } else {
-            $nextState->addNewToken($instance, $properties, $source);
-        }
+        $loop->iterateNextState($nextState, $instance, $consumeTokens, $properties, $source);
     }
 }
