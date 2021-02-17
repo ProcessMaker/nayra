@@ -27,15 +27,18 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\InputOutputSpecificationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\InputSetInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\LaneInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\LaneSetInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MultiInstanceLoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\OutputSetInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
@@ -122,6 +125,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
                 ]
             ],
             'userTask' => [
@@ -129,6 +134,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
                 ]
             ],
             'scriptTask' => [
@@ -137,6 +144,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     ScriptTaskInterface::BPMN_PROPERTY_SCRIPT => ['1', [BpmnDocument::BPMN_MODEL, ScriptTaskInterface::BPMN_PROPERTY_SCRIPT]],
+                    ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
                 ]
             ],
             'serviceTask' => [
@@ -144,6 +153,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 [
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
                 ]
             ],
             FlowNodeInterface::BPMN_PROPERTY_OUTGOING => [self::IS_REFERENCE, []],
@@ -162,6 +173,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT => ['1', [BpmnDocument::BPMN_MODEL, CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT]],
+                    ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
                 ]
             ],
             'parallelGateway' => [
@@ -402,6 +415,48 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO => ['1', [BpmnDocument::BPMN_MODEL, BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO_REF]],
                     CatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
                     FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ]
+            ],
+            'multiInstanceLoopCharacteristics' => [
+                MultiInstanceLoopCharacteristicsInterface::class,
+                [
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_IS_SEQUENTIAL => self::IS_BOOLEAN,
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CARDINALITY => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CARDINALITY]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT_REF]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT_REF]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_INPUT_DATA_ITEM => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_INPUT_DATA_ITEM]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_OUTPUT_DATA_ITEM => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_OUTPUT_DATA_ITEM]],
+                ]
+            ],
+            'loopCardinality' => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            'ioSpecification' => [
+                InputOutputSpecificationInterface::class,
+                [
+                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT => ['n', [BpmnDocument::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT]],
+                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT => ['n', [BpmnDocument::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT]],
+                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT_SET => ['1', [BpmnDocument::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT_SET]],
+                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT_SET => ['1', [BpmnDocument::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT_SET]],
+                ]
+            ],
+            'loopDataInputRef' => [self::IS_REFERENCE, []],
+            'loopDataOutputRef' => [self::IS_REFERENCE, []],
+            'inputDataItem' => [
+                DataInputInterface::class,
+                [
+                    DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
+                    DataInputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
+                ]
+            ],
+            'outputDataItem' => [
+                DataOutputInterface::class,
+                [
+                    DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
+                    DataOutputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
                 ]
             ],
         ]

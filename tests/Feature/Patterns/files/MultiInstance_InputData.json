@@ -1,0 +1,15 @@
+[
+  {
+    "startEvent": "_3",
+    "data": {
+      "Users": [{ "name": "David" }, { "name": "Dante" }, { "name": "Marco" }]
+    },
+    "result": [
+      "Init",
+      "MITask",
+      "MITask",
+      "MITask",
+      "End"
+    ]
+  }
+]

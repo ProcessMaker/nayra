@@ -1,0 +1,14 @@
+[
+  {
+    "comment": "Sequential MI task is terminated",
+    "startEvent": "start",
+    "data": {
+    },
+    "result": [
+      "task1",
+      "task2",
+      "mi_task",
+      "terminate"
+    ]
+  }
+]

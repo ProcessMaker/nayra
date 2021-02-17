@@ -19,6 +19,7 @@ use ProcessMaker\Nayra\Bpmn\Models\EventBasedGateway;
 use ProcessMaker\Nayra\Bpmn\Models\ExclusiveGateway;
 use ProcessMaker\Nayra\Bpmn\Models\Flow;
 use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
+use ProcessMaker\Nayra\Bpmn\Models\InputOutputSpecification;
 use ProcessMaker\Nayra\Bpmn\Models\InputSet;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateCatchEvent;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
@@ -26,6 +27,7 @@ use ProcessMaker\Nayra\Bpmn\Models\ItemDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\MessageEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\MessageFlow;
+use ProcessMaker\Nayra\Bpmn\Models\MultiInstanceLoopCharacteristics;
 use ProcessMaker\Nayra\Bpmn\Models\Operation;
 use ProcessMaker\Nayra\Bpmn\Models\OutputSet;
 use ProcessMaker\Nayra\Bpmn\Models\ParallelGateway;
@@ -423,6 +425,26 @@ trait RepositoryTrait
     public function createTimerEventDefinition()
     {
         return new TimerEventDefinition();
+    }
+
+    /**
+     * Create instance of MultiInstanceLoopCharacteristics.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\MultiInstanceLoopCharacteristicsInterface
+     */
+    public function createMultiInstanceLoopCharacteristics()
+    {
+        return new MultiInstanceLoopCharacteristics();
+    }
+
+    /**
+     * Create instance of InputOutputSpecification
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\InputOutputSpecificationInterface
+     */
+    public function createInputOutputSpecification()
+    {
+        return new InputOutputSpecification();
     }
 
     /**

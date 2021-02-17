@@ -41,4 +41,17 @@ interface TransitionInterface extends ConnectionNodeInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface
      */
     public function getOwner();
+
+    /**
+     * Find all the paths that complies with the $condition and $while.
+     *
+     * @param callable $condition
+     * @param callable $while
+     * @param array $path
+     * @param array $passedthru
+     * @param array $paths
+     *
+     * @return Collection
+     */
+    public function paths(callable $condition, callable $while, $path = [], &$passedthru = [], &$paths = []);
 }

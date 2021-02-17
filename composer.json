@@ -19,7 +19,8 @@
 		}
 	},
 	"scripts": {
-		"test": "phpunit"
+		"test": "phpunit",
+		"coverage": "phpunit -d memory_limit=-1 --coverage-html coverage"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^5.7"

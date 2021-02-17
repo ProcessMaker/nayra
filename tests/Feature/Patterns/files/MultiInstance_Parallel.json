@@ -1,0 +1,14 @@
+[
+    {
+        "startEvent": "StartEvent",
+        "data": {
+        },
+        "result": [
+            "start",
+            "MultiInstanceTask",
+            "MultiInstanceTask",
+            "MultiInstanceTask",
+            "end"
+        ]
+    }
+]

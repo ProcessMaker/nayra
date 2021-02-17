@@ -7,7 +7,7 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface ActivityInterface extends FlowNodeInterface
+interface LoopCardinalityInterface extends FlowNodeInterface
 {
     /**
      * Events defined for Activity
@@ -23,7 +23,6 @@ interface ActivityInterface extends FlowNodeInterface
      * Properties and composed elements
      */
     const BPMN_PROPERTY_LOOP_CHARACTERISTICS = 'loopCharacteristics';
-    const BPMN_PROPERTY_IO_SPECIFICATION = 'ioSpecification';
 
     /**
      * Token states defined for Activity
