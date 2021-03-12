@@ -83,4 +83,15 @@ interface LoopCharacteristicsInterface extends EntityInterface
      * @return void
      */
     public function mergeOutputData(CollectionInterface $consumedTokens, ExecutionInstanceInterface $instance);
+
+    /**
+     * Get Loop Instance property during execution
+     *
+     * @param TokenInterface $token
+     * @param string $key
+     * @param mixed $defaultValue
+     *
+     * @return mixed
+     */
+    public function getLoopInstanceProperty(TokenInterface $token, $key, $defaultValue = null);
 }
