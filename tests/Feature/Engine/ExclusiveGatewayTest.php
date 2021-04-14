@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Engine;
 
+use ProcessMaker\Nayra\Bpmn\DefaultTransition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
@@ -267,6 +268,7 @@ class ExclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            DefaultTransition::EVENT_CONDITIONED_TRANSITION,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);

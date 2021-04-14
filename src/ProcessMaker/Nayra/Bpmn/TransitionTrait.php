@@ -99,7 +99,7 @@ trait TransitionTrait
      */
     protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
-        if ($this instanceof ConditionedExclusiveTransition) {
+        if ($this instanceof ConditionedExclusiveTransition || $this instanceof DefaultTransition) {
             $source = $this->outgoing()->item(0)->origin()->getOwner();
             $target = $this->outgoing->item(0)->target()->getOwner();
 
