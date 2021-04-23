@@ -1,0 +1,25 @@
+[
+  {
+    "startEvent": "_3",
+    "data": {
+      "Users": [{ "name": "David" }, { "name": "Dante" }, { "name": "Marco" }]
+    },
+    "result": ["Init", "MITask", "MITask", "MITask", "End"],
+    "output": {
+      "Users": [{ "name": "David" }, { "name": "Dante" }, { "name": "Marco" }],
+      "loopCharacteristics": {
+        "*token": {
+          "numberOfActiveInstances": 0,
+          "numberOfInstances": 3,
+          "loopCounter": 3,
+          "numberOfCompletedInstances": 3
+        }
+      },
+      "Result": [
+        { "User": {"name": "David"}, "loopCounter": 1 },
+        { "User": {"name": "Dante"}, "loopCounter": 2 },
+        { "User": {"name": "Marco"}, "loopCounter": 3 }
+      ]
+    }
+  }
+]
