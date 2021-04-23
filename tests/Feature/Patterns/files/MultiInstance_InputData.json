@@ -4,12 +4,22 @@
     "data": {
       "Users": [{ "name": "David" }, { "name": "Dante" }, { "name": "Marco" }]
     },
-    "result": [
-      "Init",
-      "MITask",
-      "MITask",
-      "MITask",
-      "End"
-    ]
+    "result": ["Init", "MITask", "MITask", "MITask", "End"],
+    "output": {
+      "Users": [{ "name": "David" }, { "name": "Dante" }, { "name": "Marco" }],
+      "loopCharacteristics": {
+        "*token": {
+          "numberOfActiveInstances": 0,
+          "numberOfInstances": 3,
+          "loopCounter": 3,
+          "numberOfCompletedInstances": 3
+        }
+      },
+      "Result": [
+        null,
+        null,
+        null
+      ]
+    }
   }
 ]
