@@ -181,10 +181,11 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
             $properties['data'] = array_merge($properties['data'], (array) $item);
         }
         $properties['data']['loopCounter'] = $loopCounter;
-        $newToken = $nextState->addNewToken($instance, $properties, $source);
+        $newToken = $nextState->createToken($instance, $properties, $source);
         $this->setLoopInstanceProperty($newToken, 'numberOfActiveInstances', $numberOfActiveInstances);
         $this->setLoopInstanceProperty($newToken, 'numberOfInstances', $numberOfInstances);
         $this->setLoopInstanceProperty($newToken, 'loopCounter', $loopCounter);
+        $nextState->addToken($instance, $newToken, false, $source);
     }
 
     /**
