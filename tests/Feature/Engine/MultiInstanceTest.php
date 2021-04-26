@@ -955,10 +955,9 @@ class MultiInstanceTest extends EngineTestCase
     /**
      * Verify that the data of the instance coincide with the data stored
      *
-     * @param string $instanceId
-     * @param BpmnDocument $bpmnRepository
+     * @param ExecutionInstanceInterface $instance
      *
-     * @return ExecutionInstanceInterface
+     * @return void
      */
     private function verifyStoredInstanceData(ExecutionInstanceInterface $instance)
     {

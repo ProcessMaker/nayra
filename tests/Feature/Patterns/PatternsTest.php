@@ -96,6 +96,7 @@ class PatternsTest extends EngineTestCase
      * @param string $startEvent
      * @param array $result
      * @param array $events
+     * @param mixed $output
      *
      * @return void
      */
@@ -182,6 +183,7 @@ class PatternsTest extends EngineTestCase
      * @param mixed $subset
      * @param mixed $data
      * @param string $message
+     * @param bool $skip
      *
      * @return mixed
      */

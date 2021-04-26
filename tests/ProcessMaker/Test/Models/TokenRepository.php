@@ -26,6 +26,11 @@ class TokenRepository implements TokenRepositoryInterface
 
     static $failNextPersistanceCall = false;
 
+    /**
+     * Sets to fail on next persistance call
+     *
+     * @return void
+     */
     public static function failNextPersistanceCall()
     {
         static::$failNextPersistanceCall = true;

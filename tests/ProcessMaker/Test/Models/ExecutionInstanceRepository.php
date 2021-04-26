@@ -69,6 +69,8 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     /**
      * Get instance data
      *
+     * @param  $instanceId
+     *
      * @return array Data
      */
     public function getInstanceData($instanceId)
