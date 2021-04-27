@@ -1,0 +1,13 @@
+[
+  {
+    "comment": "If the cardinality value is 0 then the multi-instance activity is skipped and no instances are created.",
+    "startEvent": "node_1",
+    "data": {
+      "times": 0
+    },
+    "result": [
+      "task_1",
+      "task_3"
+    ]
+  }
+]

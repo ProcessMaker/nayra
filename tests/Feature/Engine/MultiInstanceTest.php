@@ -969,4 +969,154 @@ class MultiInstanceTest extends EngineTestCase
 
         $this->assertEquals($instanceData, $storageData);
     }
+
+    /**
+     * Tests a process with MI with empty InputItems
+     *
+     * @return void
+     */
+    public function testLoopWithEmptyInputItems()
+    {
+        // Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_EmptyInputItems.bpmn');
+
+        // Load a process from a bpmn repository by Id
+        $process = $bpmnRepository->getProcess('ProcessId');
+
+        // Get 'task_1' activity of the process
+        $taskOne = $bpmnRepository->getActivity('task_1');
+
+        // Get 'MultiInstanceTask' activity of the process
+        $miTask = $bpmnRepository->getActivity('task_2');
+
+        // Get 'last task' activity
+        $lastTask = $bpmnRepository->getActivity('task_3');
+
+        // Start the process with empty input items
+        $instance = $process->call();
+        $instance->getDataStore()->putData('items', []);
+        $this->engine->runToNextState();
+
+        // Assertion: A process has started.
+        $this->assertEquals(1, $process->getInstances()->count());
+
+        // Assertion: The process has started and the first activity was actived
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the first activity.
+        $token = $taskOne->getTokens($instance)->item(0);
+        $taskOne->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The first activity was completed, the task of multiple instances skipped and continued to the last task.
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+
+            ActivityInterface::EVENT_ACTIVITY_SKIPPED,
+
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
+        // Complete the last task
+        $token = $lastTask->getTokens($instance)->item(0);
+        $taskOne->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The last task was completed and process is completed
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
+
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+        ]);
+    }
+
+    /**
+     * Tests a process with MI with empty InputItems
+     *
+     * @return void
+     */
+    public function testLoopWithCardinalityZero()
+    {
+        // Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_CardinalityZero.bpmn');
+
+        // Load a process from a bpmn repository by Id
+        $process = $bpmnRepository->getProcess('ProcessId');
+
+        // Get 'task_1' activity of the process
+        $taskOne = $bpmnRepository->getActivity('task_1');
+
+        // Get 'MultiInstanceTask' activity of the process
+        $miTask = $bpmnRepository->getActivity('task_2');
+
+        // Get 'last task' activity
+        $lastTask = $bpmnRepository->getActivity('task_3');
+
+        // Start the process with empty input items
+        $instance = $process->call();
+        $instance->getDataStore()->putData('times', 0);
+        $this->engine->runToNextState();
+
+        // Assertion: A process has started.
+        $this->assertEquals(1, $process->getInstances()->count());
+
+        // Assertion: The process has started and the first activity was actived
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Complete the first activity.
+        $token = $taskOne->getTokens($instance)->item(0);
+        $taskOne->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The first activity was completed, the task of multiple instances skipped and continued to the last task.
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+
+            ActivityInterface::EVENT_ACTIVITY_SKIPPED,
+
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+        ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
+        // Complete the last task
+        $token = $lastTask->getTokens($instance)->item(0);
+        $taskOne->complete($token);
+        $this->engine->runToNextState();
+
+        // Assertion: The last task was completed and process is completed
+        $this->assertEvents([
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
+            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
+            EndEventInterface::EVENT_EVENT_TRIGGERED,
+
+            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+        ]);
+    }
 }

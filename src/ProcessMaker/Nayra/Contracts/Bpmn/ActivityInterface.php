@@ -17,7 +17,7 @@ interface ActivityInterface extends FlowNodeInterface
     const EVENT_ACTIVITY_EXCEPTION = 'ActivityException';
     const EVENT_ACTIVITY_CANCELLED = 'ActivityCancelled';
     const EVENT_ACTIVITY_CLOSED = 'ActivityClosed';
-    const EVENT_EVENT_TRIGGERED = 'EventTriggered';
+    const EVENT_ACTIVITY_SKIPPED = 'ActivitySkipped';
 
     /**
      * Properties and composed elements
@@ -32,6 +32,7 @@ interface ActivityInterface extends FlowNodeInterface
     const TOKEN_STATE_FAILING = 'FAILING';
     const TOKEN_STATE_COMPLETED = 'COMPLETED';
     const TOKEN_STATE_CLOSED = 'CLOSED';
+    const TOKEN_STATE_SKIPPED = 'SKIPPED';
 
     /**
      * Get Process of the activity.

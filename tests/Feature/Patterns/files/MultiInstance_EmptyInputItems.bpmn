@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:pm="http://processmaker.com/BPMN/2.0/Schema.xsd" xmlns:tns="http://sourceforge.net/bpmn/definitions/_1530553328908" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bpmn.io/schema/bpmn" exporter="ProcessMaker Modeler" exporterVersion="1.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
+  <bpmn:process id="ProcessId" name="ProcessName" isExecutable="true">
+    <bpmn:startEvent id="node_1" name="Start Event" pm:allowInterstitial="false">
+      <bpmn:outgoing>node_9</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="task_2" name="Task 2" pm:screenRef="2" pm:allowInterstitial="false" pm:assignment="requester" pm:assignmentLock="false" pm:allowReassignment="false">
+      <bpmn:incoming>node_7</bpmn:incoming>
+      <bpmn:outgoing>node_15</bpmn:outgoing>
+      <bpmn:ioSpecification id="node_6_2">
+        <bpmn:dataInput id="node_3_input_1" name="items" isCollection="true" />
+        <bpmn:dataOutput id="node_3_output_1" name="output_array_node_3" isCollection="true" />
+        <bpmn:inputSet id="node_12_5">
+          <bpmn:dataInputRefs>node_3_input_1</bpmn:dataInputRefs>
+        </bpmn:inputSet>
+        <bpmn:outputSet id="node_13_6">
+          <bpmn:dataOutputRefs>node_3_output_1</bpmn:dataOutputRefs>
+        </bpmn:outputSet>
+      </bpmn:ioSpecification>
+      <bpmn:multiInstanceLoopCharacteristics id="node_2_1">
+        <bpmn:loopDataInputRef>node_3_input_1</bpmn:loopDataInputRef>
+        <bpmn:loopDataOutputRef>node_3_output_1</bpmn:loopDataOutputRef>
+      </bpmn:multiInstanceLoopCharacteristics>
+    </bpmn:task>
+    <bpmn:endEvent id="node_4" name="End Event" pm:screenRef="">
+      <bpmn:incoming>node_17</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="task_1" name="Task 1" pm:screenRef="2" pm:allowInterstitial="false" pm:assignment="requester" pm:assignmentLock="false" pm:allowReassignment="false">
+      <bpmn:incoming>node_9</bpmn:incoming>
+      <bpmn:outgoing>node_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="node_7" sourceRef="task_1" targetRef="task_2" />
+    <bpmn:sequenceFlow id="node_9" sourceRef="node_1" targetRef="task_1" />
+    <bpmn:task id="task_3" name="Task 3" pm:screenRef="2" pm:allowInterstitial="false" pm:assignment="requester" pm:assignmentLock="false" pm:allowReassignment="false">
+      <bpmn:incoming>node_15</bpmn:incoming>
+      <bpmn:outgoing>node_17</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="node_15" sourceRef="task_2" targetRef="task_3" />
+    <bpmn:sequenceFlow id="node_17" sourceRef="task_3" targetRef="node_4" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagramId">
+    <bpmndi:BPMNPlane id="BPMNPlaneId" bpmnElement="ProcessId">
+      <bpmndi:BPMNShape id="node_1_di" bpmnElement="node_1">
+        <dc:Bounds x="270" y="360" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_3_di" bpmnElement="task_2">
+        <dc:Bounds x="630" y="340" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_4_di" bpmnElement="node_4">
+        <dc:Bounds x="1010" y="360" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_12_di" bpmnElement="task_1">
+        <dc:Bounds x="420" y="340" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_7_di" bpmnElement="node_7">
+        <di:waypoint x="478" y="378" />
+        <di:waypoint x="688" y="378" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="node_9_di" bpmnElement="node_9">
+        <di:waypoint x="288" y="378" />
+        <di:waypoint x="478" y="378" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="node_13_di" bpmnElement="task_3">
+        <dc:Bounds x="830" y="340" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_15_di" bpmnElement="node_15">
+        <di:waypoint x="688" y="378" />
+        <di:waypoint x="888" y="378" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="node_17_di" bpmnElement="node_17">
+        <di:waypoint x="888" y="378" />
+        <di:waypoint x="1028" y="378" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
