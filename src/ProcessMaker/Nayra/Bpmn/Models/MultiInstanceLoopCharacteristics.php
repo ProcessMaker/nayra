@@ -214,7 +214,10 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
      */
     public function isLoopCompleted(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
-        $numberOfInstances = $this->getLoopInstanceProperty($token, 'numberOfInstances', 0);
+        $numberOfInstances = $this->getLoopInstanceProperty($token, 'numberOfInstances', null);
+        if ($numberOfInstances === null) {
+            $numberOfInstances = $this->calcNumberOfInstances($instance);
+        }
         $completed = $this->getLoopInstanceProperty($token, 'numberOfCompletedInstances', 0);
         return $completed >= $numberOfInstances;
     }

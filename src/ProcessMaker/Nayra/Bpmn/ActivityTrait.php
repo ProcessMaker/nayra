@@ -63,6 +63,18 @@ trait ActivityTrait
     private $closedState;
 
     /**
+     *
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    private $skippedState;
+
+    /**
+     *
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
+     */
+    private $skippedTransition;
+
+    /**
      * Build the transitions that define the element.
      *
      * @param RepositoryInterface $factory
@@ -82,6 +94,8 @@ trait ActivityTrait
         $this->loopTransition = new LoopCharacteristicsTransition($this, false);
         $this->closedState->connectTo($this->loopTransition);
         $this->loopTransition->connectTo($this->activeState);
+        $this->skippedState = new State($this, ActivityInterface::TOKEN_STATE_SKIPPED);
+        $this->skippedTransition = new Transition($this, false);
 
         $this->activeState->connectTo($this->exceptionTransition);
         $this->activeState->connectTo($this->activityTransition);
@@ -92,6 +106,7 @@ trait ActivityTrait
         $this->activityTransition->connectTo($this->closedState);
         $this->closedState->connectTo($this->transition);
         $this->completeExceptionTransition->connectTo($this->closedState);
+        $this->skippedState->connectTo($this->skippedTransition);
 
         $this->activeState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
@@ -128,6 +143,12 @@ trait ActivityTrait
                     ->getTokenRepository()
                     ->persistActivityCompleted($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_COMPLETED, $this, $token);
+            }
+        );
+        $this->skippedState->attachEvent(
+            StateInterface::EVENT_TOKEN_ARRIVED,
+            function (TokenInterface $token) {
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_SKIPPED, $this, $token);
             }
         );
         $this->closeExceptionTransition->attachEvent(
@@ -173,8 +194,11 @@ trait ActivityTrait
     {
         $ready = new State($this, 'INCOMING');
         $transition = new DataInputTransition($this, false);
+        $emptyDataInput = new EmptyDataInputTransition($this, false);
         $ready->connectTo($transition);
+        $ready->connectTo($emptyDataInput);
         $transition->connectTo($this->activeState);
+        $emptyDataInput->connectTo($this->skippedState);
         $this->addInput($ready);
         $transition->setProperty('sequenceFlow', $targetFlow);
         return $ready;
@@ -204,6 +228,7 @@ trait ActivityTrait
                 }
             }
         );
+        $this->skippedTransition->connectTo($place);
         return $this;
     }
 
