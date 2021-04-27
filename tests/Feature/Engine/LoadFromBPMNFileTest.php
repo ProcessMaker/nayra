@@ -577,7 +577,11 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
         
         //Try to get custom element
-        $bpmnRepository->getActivity('PROCESS_1');
+        $process = $bpmnRepository->getActivity('PROCESS_1');
+
+        // Assertion: Process instance is loaded
+        $this->assertNotEmpty($process);
+        $this->assertInstanceOf(ProcessInterface::class, $process);
     }
 
     /**

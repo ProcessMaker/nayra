@@ -4,14 +4,11 @@ namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Bpmn\DefaultTransition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ExclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ParallelGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
@@ -441,5 +438,22 @@ class ExclusiveGatewayTest extends EngineTestCase
         $token0 = $activity1->getTokens($instance)->item(0);
         $activity1->complete($token0);
         $this->engine->runToNextState();
+
+        //Assertion: Process started, activity completed, gateway executed, script activated
+        $this->assertEvents([
+            ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
+            EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_CLOSED,
+            GatewayInterface::EVENT_GATEWAY_TOKEN_ARRIVES,
+            GatewayInterface::EVENT_GATEWAY_ACTIVATED,
+            GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
+            TransitionInterface::EVENT_CONDITIONED_TRANSITION,
+            GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
+        ]);
     }
 }
