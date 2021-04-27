@@ -26,6 +26,11 @@ class TokenRepository implements TokenRepositoryInterface
 
     static $failNextPersistanceCall = false;
 
+    /**
+     * Sets to fail on next persistance call
+     *
+     * @return void
+     */
     public static function failNextPersistanceCall()
     {
         static::$failNextPersistanceCall = true;
@@ -75,6 +80,8 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityActivated(ActivityInterface $activity, TokenInterface $token)
     {
+        $instanceRepository = $token->getInstance()->getProcess()->getRepository()->createExecutionInstanceRepository();
+        $instanceRepository->persistInstanceUpdated($token->getInstance());
         if (static::$failNextPersistanceCall) {
             static::$failNextPersistanceCall = false;
             throw new Exception('Failure expected when activity persists');
@@ -91,6 +98,8 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityException(ActivityInterface $activity, TokenInterface $token)
     {
+        $instanceRepository = $token->getInstance()->getProcess()->getRepository()->createExecutionInstanceRepository();
+        $instanceRepository->persistInstanceUpdated($token->getInstance());
     }
 
     /**
@@ -103,6 +112,8 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityCompleted(ActivityInterface $activity, TokenInterface $token)
     {
+        $instanceRepository = $token->getInstance()->getProcess()->getRepository()->createExecutionInstanceRepository();
+        $instanceRepository->persistInstanceUpdated($token->getInstance());
     }
 
     /**
@@ -115,6 +126,8 @@ class TokenRepository implements TokenRepositoryInterface
      */
     public function persistActivityClosed(ActivityInterface $activity, TokenInterface $token)
     {
+        $instanceRepository = $token->getInstance()->getProcess()->getRepository()->createExecutionInstanceRepository();
+        $instanceRepository->persistInstanceUpdated($token->getInstance());
     }
 
     /**

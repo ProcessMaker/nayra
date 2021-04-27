@@ -83,7 +83,8 @@ class PatternsTest extends EngineTestCase
         $tests = json_decode(file_get_contents($jsonFile), true);
         foreach ($tests as $json) {
             $events = isset($json['events']) ? $json['events'] : [];
-            $this->runProcess($bpmnFile, $json['data'], $json['startEvent'], $json['result'], $events);
+            $output = isset($json['output']) ? $json['output'] : [];
+            $this->runProcess($bpmnFile, $json['data'], $json['startEvent'], $json['result'], $events, $output);
         }
     }
 
@@ -95,10 +96,11 @@ class PatternsTest extends EngineTestCase
      * @param string $startEvent
      * @param array $result
      * @param array $events
+     * @param mixed $output
      *
      * @return void
      */
-    private function runProcess($filename, $data, $startEvent, $result, $events)
+    private function runProcess($filename, $data, $startEvent, $result, $events, $output)
     {
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
@@ -122,6 +124,9 @@ class PatternsTest extends EngineTestCase
         $tasks = [];
         if (!$instance) {
             $this->assertEquals($result, $tasks);
+            if ($output) {
+                $this->assertEquals($output, $dataStore->getData());
+            }
             return;
         }
         $tokens = $instance->getTokens();
@@ -167,5 +172,50 @@ class PatternsTest extends EngineTestCase
             }
         }
         $this->assertEquals($result, $tasks);
+        if ($output) {
+            $this->assertData($output, $dataStore->getData());
+        }
+    }
+
+    /**
+     * Assert that $data contains the expected $subset
+     *
+     * @param mixed $subset
+     * @param mixed $data
+     * @param string $message
+     * @param bool $skip
+     *
+     * @return mixed
+     */
+    private function assertData($subset, $data, $message = 'data', $skip = false)
+    {
+        if (!is_array($subset) || !is_array($data)) {
+            if ($skip) {
+                return $subset == $data;
+            } else {
+                return $this->assertEquals($subset, $data, "{$message} does not match " . \json_encode($subset));
+            }
+        }
+        foreach ($subset as $key => $value) {
+            if (substr($key, 0, 1) !== '*') {
+                $this->assertData($value, $data[$key], "{$message}.{$key}");
+                unset($subset[$key]);
+                unset($data[$key]);
+            }
+        }
+        foreach ($subset as $key => $value) {
+            foreach ($data as $key1 => $value1) {
+                if ($this->assertData($value, $value1, "{$message}.{$key}", true)) {
+                    unset($subset[$key]);
+                    unset($data[$key1]);
+                    break;
+                }
+            }
+        }
+        if ($skip) {
+            return count($subset) === 0;
+        } else {
+            $this->assertCount(0, $subset, "{$message} does not match");
+        }
     }
 }

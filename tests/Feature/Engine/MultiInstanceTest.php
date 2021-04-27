@@ -7,6 +7,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
@@ -70,6 +71,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the first MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -80,6 +84,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the second MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -89,6 +96,9 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Complete the third MI activity.
         $token = $miTask->getTokens($instance)->item(0);
@@ -105,6 +115,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
     }
 
     /**
@@ -161,6 +174,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the first MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -170,6 +186,9 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Complete the second MI activity.
         $token = $miTask->getTokens($instance)->item(0);
@@ -181,6 +200,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the third MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_FAILING);
@@ -191,6 +213,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Close failing task instance.
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
         $this->engine->runToNextState();
@@ -199,6 +224,9 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
     }
 
     /**
@@ -255,6 +283,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the first MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -264,6 +295,9 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Complete the second MI activity.
         $token = $miTask->getTokens($instance)->item(0);
@@ -275,6 +309,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Cancel the third MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
@@ -284,6 +321,9 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
     }
 
     /**
@@ -336,6 +376,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the first MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -348,6 +391,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the second MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -359,6 +405,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Complete the third MI activity.
         $token = $miTask->getTokens($instance)->item(0);
@@ -373,6 +422,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
     }
 
     /**
@@ -425,6 +477,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the first MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -436,6 +491,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Complete the second MI activity.
         $token = $miTask->getTokens($instance)->item(0);
@@ -449,6 +507,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the third MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_FAILING);
@@ -458,6 +519,9 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Close failing task instance.
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
@@ -520,6 +584,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the first MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -531,6 +598,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Complete the second MI activity.
         $token = $miTask->getTokens($instance)->item(0);
@@ -544,10 +614,16 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Cancel the third MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
         $this->engine->runToNextState();
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Assertion: The thrid and last MI task was cancelled, then the process is completed
         $this->assertEvents([
@@ -608,6 +684,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the MI activity.
         $token = $miTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -620,6 +699,9 @@ class MultiInstanceTest extends EngineTestCase
 
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Complete the last task
         $token = $lastTask->getTokens($instance)->item(0);
@@ -697,6 +779,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the MI activity.
         $token1 = $miTask->getTokens($instance)->item(0);
         $token2 = $miTask->getTokens($instance)->item(1);
@@ -714,6 +799,9 @@ class MultiInstanceTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the last task
         $token = $lastTask->getTokens($instance)->item(0);
         $activity->complete($token);
@@ -729,6 +817,9 @@ class MultiInstanceTest extends EngineTestCase
 
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Assertion: Output data 'result' should contain the expected result
         $data = $instance->getDataStore()->getData();
@@ -805,6 +896,9 @@ class MultiInstanceTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
 
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
+
         // Complete the MI activity.
         $token1 = $miTask->getTokens($instance)->item(0);
         $token2 = $miTask->getTokens($instance)->item(1);
@@ -821,6 +915,9 @@ class MultiInstanceTest extends EngineTestCase
 
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
+
+        // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
+        $this->verifyStoredInstanceData($instance);
 
         // Complete the last task
         $token = $lastTask->getTokens($instance)->item(0);
@@ -853,5 +950,23 @@ class MultiInstanceTest extends EngineTestCase
                 'loopCounter' => 2,
             ],
         ], $data['result']);
+    }
+
+    /**
+     * Verify that the data of the instance coincide with the data stored
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return void
+     */
+    private function verifyStoredInstanceData(ExecutionInstanceInterface $instance)
+    {
+        $instanceId=$instance->getId();
+        $instanceData = $instance->getDataStore()->getData();
+
+        $instanceRepository = $this->repository->createExecutionInstanceRepository();
+        $storageData = $instanceRepository->getInstanceData($instanceId);
+
+        $this->assertEquals($instanceData, $storageData);
     }
 }

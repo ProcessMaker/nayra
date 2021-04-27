@@ -35,6 +35,16 @@ interface StateInterface extends TraversableInterface, ObservableInterface, Conn
     public function addNewToken(ExecutionInstanceInterface $instance = null, array $properties = [], TransitionInterface $source = null);
 
     /**
+     * Create token for the current state.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
+     * @param array $properties
+     *
+     * @return TokenInterface
+     */
+    public function createToken(ExecutionInstanceInterface $instance = null, array $properties = []);
+
+    /**
      * Add a new token to the current state.
      *
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance

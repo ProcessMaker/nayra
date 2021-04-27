@@ -67,6 +67,18 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     }
 
     /**
+     * Get instance data
+     *
+     * @param  $instanceId
+     *
+     * @return array Data
+     */
+    public function getInstanceData($instanceId)
+    {
+        return static::$data[$instanceId]['data'];
+    }
+
+    /**
      * Creates an execution instance.
      *
      * @return \ProcessMaker\Test\Models\ExecutionInstance
@@ -85,7 +97,8 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function persistInstanceCreated(ExecutionInstanceInterface $instance)
     {
-
+        $id = $instance->getId();
+        self::$data[$id]['data'] = $instance->getDataStore()->getData();
     }
 
     /**
@@ -97,6 +110,8 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function persistInstanceCompleted(ExecutionInstanceInterface $instance)
     {
+        $id = $instance->getId();
+        self::$data[$id]['data'] = $instance->getDataStore()->getData();
     }
 
     /**
@@ -109,5 +124,18 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function persistInstanceCollaboration(ExecutionInstanceInterface $target, ParticipantInterface $targetParticipant, ExecutionInstanceInterface $source, ParticipantInterface $sourceParticipant)
     {
+    }
+
+    /**
+     * Persists instance data related to the event Process Instance Completed
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return mixed
+     */
+    public function persistInstanceUpdated(ExecutionInstanceInterface $instance)
+    {
+        $id = $instance->getId();
+        self::$data[$id]['data'] = $instance->getDataStore()->getData();
     }
 }

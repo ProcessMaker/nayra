@@ -104,6 +104,27 @@ trait StateTrait
     }
 
     /**
+     * Create token for the current state.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $instance
+     * @param array $properties
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
+     *
+     * @return TokenInterface
+     */
+    public function createToken(ExecutionInstanceInterface $instance = null, array $properties = [])
+    {
+        $token = $this->getRepository()->getTokenRepository()->createTokenInstance();
+        $token->setOwner($this);
+        $token->setProperties($properties);
+        $token->setOwner($this);
+        $token->setInstance($instance);
+        $this->getName() ? $token->setStatus($this->getName()) : '';
+        $token->setIndex($this->getIndex());
+        return $token;
+    }
+
+    /**
      * Add a new token instance to the state.
      *
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
