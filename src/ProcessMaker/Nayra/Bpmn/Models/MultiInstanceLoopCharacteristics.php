@@ -119,7 +119,13 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
             // The number of instances are calculated once, when entering the activity.
             $numberOfInstances = $this->calcNumberOfInstances($instance);
             if ($this->getIsSequential()) {
+                // LoopInstance Counter
                 $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
+                // Token loopCounter
+                $tokenLoopCounter = $token->getProperty('data', [])['loopCounter'] ?? 0;
+                if ($loopCounter!==$tokenLoopCounter) {
+                    continue;
+                }
                 if ($loopCounter < $numberOfInstances) {
                     $loopCounter++;
                     $numberOfActiveInstances = 1;
