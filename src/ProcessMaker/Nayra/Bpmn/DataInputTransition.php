@@ -5,13 +5,12 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition rule that always pass the token.
+ * Transition to check if the activity is a loop not yet completed or a single instance
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
@@ -29,6 +28,10 @@ class DataInputTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
+        $loop = $this->getOwner()->getLoopCharacteristics();
+        if ($loop && $loop->isExecutable()) {
+            return !$loop->isLoopCompleted($executionInstance, $token);
+        }
         return true;
     }
 
