@@ -123,10 +123,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
                 $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
                 // Token loopCounter
                 $tokenLoopCounter = $token->getProperty('data', [])['loopCounter'] ?? 0;
-                if ($loopCounter!==$tokenLoopCounter) {
-                    continue;
-                }
-                if ($loopCounter < $numberOfInstances) {
+                if ($loopCounter === $tokenLoopCounter && $loopCounter < $numberOfInstances) {
                     $loopCounter++;
                     $numberOfActiveInstances = 1;
                     $this->createInstance(
