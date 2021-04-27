@@ -22,7 +22,7 @@ class PatternsTest extends EngineTestCase
      *
      * @return array
      */
-    public function testCaseProvider()
+    public function caseProvider()
     {
         $data = [];
         foreach (glob($this->basePath . '*.bpmn') as $bpmnFile) {
@@ -36,7 +36,7 @@ class PatternsTest extends EngineTestCase
      *
      * @param string $bpmnFile
      *
-     * @dataProvider testCaseProvider
+     * @dataProvider caseProvider
      */
     public function testProcessPatterns($bpmnFile)
     {
