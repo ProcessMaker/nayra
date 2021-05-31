@@ -112,11 +112,10 @@ trait ActivityTrait
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token, TransitionInterface $source) {
                 try {
-                    $sequenceFlow = $source ? $source->getProperty('sequenceFlow') : null;
                     $this->getRepository()
                     ->getTokenRepository()
                     ->persistActivityActivated($this, $token);
-                    $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token, $sequenceFlow);
+                    $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this, $token);
                 } catch (Exception $exception) {
                     $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
                     $token->logError($exception, $this);
@@ -200,7 +199,6 @@ trait ActivityTrait
         $transition->connectTo($this->activeState);
         $emptyDataInput->connectTo($this->skippedState);
         $this->addInput($ready);
-        $transition->setProperty('sequenceFlow', $targetFlow);
         return $ready;
     }
 
