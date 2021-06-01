@@ -9,7 +9,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  *
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
-interface TransitionInterface extends ConnectionNodeInterface
+interface TransitionInterface extends ConnectionNodeInterface, ObservableInterface
 {
     const EVENT_BEFORE_TRANSIT = 'BeforeTransit';
     const EVENT_AFTER_CONSUME = 'AfterConsume';
