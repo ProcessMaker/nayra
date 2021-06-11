@@ -66,7 +66,7 @@ class PatternsTest extends EngineTestCase
         foreach ($startEvents as $startEvent) {
             $data = [];
             $result = [];
-            $this->runProcess($bpmnFile, $data, $startEvent->getAttribute('id'), $result, []);
+            $this->runProcess($bpmnFile, $data, $startEvent->getAttribute('id'), $result, [], []);
         }
     }
 
