@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
+use Countable;
 use ProcessMaker\Nayra\Bpmn\MultiInstanceLoopCharacteristicsTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface;
@@ -290,7 +291,8 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
             return \is_numeric($cardinality) && $cardinality >= 0;
         } else {
             $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
-            if (!\is_countable($dataInput)) {
+            $isCountable = is_array($dataInput) || $dataInput instanceof Countable;
+            if (!$isCountable) {
                 return false;
             }
             $count = \count($dataInput);
@@ -323,7 +325,8 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         } else {
             $loopDataInputName = $loopDataInput->getName();
             $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
-            if (!\is_countable($dataInput)) {
+            $isCountable = is_array($dataInput) || $dataInput instanceof Countable;
+            if (!$isCountable) {
                 return "Invalid data input ({$loopDataInputName}), it must be a sequential array";
             }
             $count = \count($dataInput);
