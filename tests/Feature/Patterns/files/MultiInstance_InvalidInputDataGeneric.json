@@ -13,5 +13,21 @@
     },
     "result": ["Init", "Error"],
     "errors": [{ "element": "MITask", "error": "INVALID_DATA_INPUT" }]
+  },
+  {
+    "startEvent": "_3",
+    "data": {
+      "Users": "not an array"
+    },
+    "result": ["Init", "Error"],
+    "errors": [{ "element": "MITask", "error": "INVALID_DATA_INPUT" }]
+  },
+  {
+    "startEvent": "_3",
+    "data": {
+      "Users": 123
+    },
+    "result": ["Init", "Error"],
+    "errors": [{ "element": "MITask", "error": "INVALID_DATA_INPUT" }]
   }
 ]
