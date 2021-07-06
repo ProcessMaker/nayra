@@ -99,6 +99,7 @@ class PatternsTest extends EngineTestCase
      * @param array $result
      * @param array $events
      * @param mixed $output
+     * @param array $errors
      *
      * @return void
      */
