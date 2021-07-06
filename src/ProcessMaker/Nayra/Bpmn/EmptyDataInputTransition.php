@@ -29,7 +29,7 @@ class EmptyDataInputTransition implements TransitionInterface
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
-        $isLoopCompleted = $loop && $loop->isExecutable() && $loop->isLoopCompleted($executionInstance, $token);
+        $isLoopCompleted = $loop && $loop->isExecutable() && $loop->isDataInputValid($executionInstance, $token) && $loop->isLoopCompleted($executionInstance, $token);
         return $isLoopCompleted;
     }
 

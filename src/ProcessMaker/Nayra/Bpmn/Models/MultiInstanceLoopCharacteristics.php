@@ -271,4 +271,67 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
             $instance->getDataStore()->putData($outputVariable, $result);
         }
     }
+
+    /**
+     * Check if data input is valid
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     *
+     * @return bool
+     */
+    public function isDataInputValid(ExecutionInstanceInterface $instance, TokenInterface $token)
+    {
+        $dataStore = $instance->getDataStore();
+        $loopCardinality = $this->getLoopCardinality();
+        $loopDataInput = $this->getLoopDataInput();
+        if ($loopCardinality) {
+            $cardinality = $loopCardinality($dataStore->getData());
+            return \is_numeric($cardinality) && $cardinality >= 0;
+        } else {
+            $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
+            if (!\is_countable($dataInput)) {
+                return false;
+            }
+            $count = \count($dataInput);
+            $isSequentialArray = $count ===0 || array_keys($dataInput) === \range(0, $count - 1);
+            if (!$isSequentialArray) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    /**
+     * Check if data input is valid
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     *
+     * @return string
+     */
+    public function getDataInputError(ExecutionInstanceInterface $instance, TokenInterface $token)
+    {
+        $dataStore = $instance->getDataStore();
+        $loopCardinality = $this->getLoopCardinality();
+        $loopDataInput = $this->getLoopDataInput();
+        if ($loopCardinality) {
+            $cardinality = $loopCardinality($dataStore->getData());
+            if (!\is_numeric($cardinality) && $cardinality >=0) {
+                return  "Invalid data input, expected a number";
+            }
+        } else {
+            $loopDataInputName = $loopDataInput->getName();
+            $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
+            if (!\is_countable($dataInput)) {
+                return "Invalid data input ({$loopDataInputName}), it must be a sequential array";
+            }
+            $count = \count($dataInput);
+            $isSequentialArray = $count ===0 || array_keys($dataInput) === \range(0, $count - 1);
+            if (!$isSequentialArray) {
+                return "The data input ({$loopDataInputName}) is an object or an associative array, it must be a sequential array";
+            }
+        }
+        return '';
+    }
 }
