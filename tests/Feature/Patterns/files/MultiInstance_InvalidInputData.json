@@ -1,0 +1,17 @@
+[
+  {
+    "startEvent": "_3",
+    "data": {
+      "Users": {
+        "users": [
+          { "name": "David" },
+          { "name": "Dante" },
+          { "name": "Marco" }
+        ],
+        "groups": []
+      }
+    },
+    "result": ["Init", "Error"],
+    "errors": [{ "element": "MITask", "error": "INVALID_DATA_INPUT" }]
+  }
+]
