@@ -1,0 +1,18 @@
+[
+  {
+    "startEvent": "_3",
+    "data": {
+      "times": "this is not a number"
+    },
+    "result": ["Init", "Error"],
+    "errors": [{ "element": "MITask", "error": "INVALID_DATA_INPUT" }]
+  },
+  {
+    "startEvent": "_3",
+    "data": {
+      "times": -1
+    },
+    "result": ["Init", "Error"],
+    "errors": [{ "element": "MITask", "error": "INVALID_DATA_INPUT" }]
+  }
+]

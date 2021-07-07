@@ -10,11 +10,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition to check if the activity is a loop not yet completed or a single instance
+ * Transition to check if the activity is a loop with an invalid data input
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class DataInputTransition implements TransitionInterface
+class InvalidDataInputTransition implements TransitionInterface
 {
     use TransitionTrait;
 
@@ -29,10 +29,7 @@ class DataInputTransition implements TransitionInterface
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
-        if ($loop && $loop->isExecutable()) {
-            return $loop->isDataInputValid($executionInstance, $token) && !$loop->isLoopCompleted($executionInstance, $token);
-        }
-        return true;
+        return $loop && $loop->isExecutable() && !$loop->isDataInputValid($executionInstance, $token);
     }
 
     /**
@@ -58,12 +55,16 @@ class DataInputTransition implements TransitionInterface
      */
     protected function activateNextState(ConnectionInterface $flow, ExecutionInstanceInterface $instance, CollectionInterface $consumeTokens, array $properties = [], TransitionInterface $source = null)
     {
-        $nextState = $flow->targetState();
         $loop = $this->getOwner()->getLoopCharacteristics();
         if ($loop && $loop->isExecutable()) {
-            $loop->iterateNextState($nextState, $instance, $consumeTokens, $properties, $source);
-        } else {
-            $nextState->addNewToken($instance, $properties, $source);
+            foreach ($consumeTokens as $token) {
+                $errorMessage = $loop->getDataInputError($instance, $token);
+            }
+            $error = $this->getOwner()->getRepository()->createError();
+            $error->setId('INVALID_DATA_INPUT');
+            $error->setName($errorMessage);
+            $properties['error'] = $error;
+            $flow->targetState()->addNewToken($instance, $properties, $source);
         }
     }
 }

@@ -94,4 +94,24 @@ interface LoopCharacteristicsInterface extends EntityInterface
      * @return mixed
      */
     public function getLoopInstanceProperty(TokenInterface $token, $key, $defaultValue = null);
+
+    /**
+     * Check if the loop has a valid data input
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     *
+     * @return boolean
+     */
+    public function isDataInputValid(ExecutionInstanceInterface $instance, TokenInterface $token);
+
+    /**
+     * Get error when the data input is invalid
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     *
+     * @return string
+     */
+    public function getDataInputError(ExecutionInstanceInterface $instance, TokenInterface $token);
 }

@@ -5,6 +5,7 @@ namespace Tests\Feature\Patterns;
 use Exception;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 use Tests\Feature\Engine\EngineTestCase;
@@ -66,7 +67,7 @@ class PatternsTest extends EngineTestCase
         foreach ($startEvents as $startEvent) {
             $data = [];
             $result = [];
-            $this->runProcess($bpmnFile, $data, $startEvent->getAttribute('id'), $result, [], []);
+            $this->runProcess($bpmnFile, $data, $startEvent->getAttribute('id'), $result, [], [], []);
         }
     }
 
@@ -84,7 +85,8 @@ class PatternsTest extends EngineTestCase
         foreach ($tests as $json) {
             $events = isset($json['events']) ? $json['events'] : [];
             $output = isset($json['output']) ? $json['output'] : [];
-            $this->runProcess($bpmnFile, $json['data'], $json['startEvent'], $json['result'], $events, $output);
+            $errors = isset($json['errors']) ? $json['errors'] : [];
+            $this->runProcess($bpmnFile, $json['data'], $json['startEvent'], $json['result'], $events, $output, $errors);
         }
     }
 
@@ -97,10 +99,11 @@ class PatternsTest extends EngineTestCase
      * @param array $result
      * @param array $events
      * @param mixed $output
+     * @param array $errors
      *
      * @return void
      */
-    private function runProcess($filename, $data, $startEvent, $result, $events, $output)
+    private function runProcess($filename, $data, $startEvent, $result, $events, $output, $errors)
     {
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
@@ -131,6 +134,16 @@ class PatternsTest extends EngineTestCase
         }
         $tokens = $instance->getTokens();
         $processes = $bpmnRepository->getElementsByTagNameNS(BpmnDocument::BPMN_MODEL, 'process');
+        $runtimeErrors = [];
+        $this->engine->getDispatcher()->listen('ActivityException', function ($payload) use (&$runtimeErrors) {
+            $error = $payload[1]->getProperty('error');
+            if ($error) {
+                $runtimeErrors[] = [
+                    "element" => $payload[0]->getId(),
+                    "error" => $error instanceof ErrorInterface ? $error->getId() : $error,
+                ];
+            }
+        });
         while ($tokens->count()) {
             $submited = false;
             foreach ($processes as $process) {
@@ -174,6 +187,9 @@ class PatternsTest extends EngineTestCase
         $this->assertEquals($result, $tasks);
         if ($output) {
             $this->assertData($output, $dataStore->getData());
+        }
+        if ($errors) {
+            $this->assertData($errors, $runtimeErrors);
         }
     }
 

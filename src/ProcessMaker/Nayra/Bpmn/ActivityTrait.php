@@ -129,6 +129,7 @@ trait ActivityTrait
                     ->getTokenRepository()
                     ->persistActivityException($this, $token);
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, $this, $token);
+                $error = $token->getProperty('error', ActivityInterface::BPMN_PROPERTY_ERROR, null);
             }
         );
         $this->closedState->attachEvent(
@@ -155,7 +156,7 @@ trait ActivityTrait
             function ($transition, $tokens) {
                 $loop = $this->getLoopCharacteristics();
                 foreach ($tokens as $token) {
-                    if ($loop && $loop->isExecutable()) {
+                    if ($loop && $loop->isExecutable() && $loop->isDataInputValid($token->getInstance(), $token)) {
                         $loop->onTokenTerminated($token);
                     }
                     $this->getRepository()
@@ -194,10 +195,13 @@ trait ActivityTrait
         $ready = new State($this, 'INCOMING');
         $transition = new DataInputTransition($this, false);
         $emptyDataInput = new EmptyDataInputTransition($this, false);
+        $invalidDataInput = new InvalidDataInputTransition($this, false);
         $ready->connectTo($transition);
         $ready->connectTo($emptyDataInput);
+        $ready->connectTo($invalidDataInput);
         $transition->connectTo($this->activeState);
         $emptyDataInput->connectTo($this->skippedState);
+        $invalidDataInput->connectTo($this->failingState);
         $this->addInput($ready);
         return $ready;
     }

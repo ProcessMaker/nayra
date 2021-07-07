@@ -24,6 +24,7 @@ interface ActivityInterface extends FlowNodeInterface
      */
     const BPMN_PROPERTY_LOOP_CHARACTERISTICS = 'loopCharacteristics';
     const BPMN_PROPERTY_IO_SPECIFICATION = 'ioSpecification';
+    const BPMN_PROPERTY_ERROR = 'error';
 
     /**
      * Token states defined for Activity
