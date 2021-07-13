@@ -288,7 +288,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $loopDataInput = $this->getLoopDataInput();
         if ($loopCardinality) {
             $cardinality = $loopCardinality($dataStore->getData());
-            return \is_numeric($cardinality) && $cardinality >= 0;
+            return \is_numeric($cardinality) && $cardinality > 0;
         } else {
             $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
             $isCountable = is_array($dataInput) || $dataInput instanceof Countable;
@@ -296,8 +296,8 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
                 return false;
             }
             $count = \count($dataInput);
-            $isSequentialArray = $count ===0 || array_keys($dataInput) === \range(0, $count - 1);
-            if (!$isSequentialArray) {
+            $isSequentialArray = array_keys($dataInput) === \range(0, $count - 1);
+            if (!$isSequentialArray || $count === 0) {
                 return false;
             }
             return true;
