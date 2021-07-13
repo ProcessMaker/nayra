@@ -1019,30 +1019,11 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-
-            ActivityInterface::EVENT_ACTIVITY_SKIPPED,
-
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
 
         // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
         $this->verifyStoredInstanceData($instance);
-
-        // Complete the last task
-        $token = $lastTask->getTokens($instance)->item(0);
-        $taskOne->complete($token);
-        $this->engine->runToNextState();
-
-        // Assertion: The last task was completed and process is completed
-        $this->assertEvents([
-            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
-            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
-            EndEventInterface::EVENT_EVENT_TRIGGERED,
-
-            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
-        ]);
     }
 
     /**
@@ -1094,29 +1075,10 @@ class MultiInstanceTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-
-            ActivityInterface::EVENT_ACTIVITY_SKIPPED,
-
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
 
         // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
         $this->verifyStoredInstanceData($instance);
-
-        // Complete the last task
-        $token = $lastTask->getTokens($instance)->item(0);
-        $taskOne->complete($token);
-        $this->engine->runToNextState();
-
-        // Assertion: The last task was completed and process is completed
-        $this->assertEvents([
-            ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-            ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
-            EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
-            EndEventInterface::EVENT_EVENT_TRIGGERED,
-
-            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
-        ]);
     }
 }

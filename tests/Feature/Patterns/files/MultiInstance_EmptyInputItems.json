@@ -1,13 +1,15 @@
 [
   {
-    "comment": "If the InputItems is empty then the multi-instance activity is skipped and no instances are created.",
+    "comment": "If the InputItems is empty then the multi-instance activity throw an exception.",
     "startEvent": "node_1",
     "data": {
       "items": []
     },
     "result": [
-      "task_1",
-      "task_3"
+      "task_1"
+    ],
+    "errors": [
+      {"element": "task_2", "error": "INVALID_DATA_INPUT"}
     ]
   }
 ]
