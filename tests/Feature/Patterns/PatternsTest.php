@@ -177,11 +177,21 @@ class PatternsTest extends EngineTestCase
                 foreach ($processes as $process) {
                     foreach ($process->getBpmnElementInstance()->getInstances() as $ins) {
                         foreach ($ins->getTokens() as $token) {
-                            $elements .= ' ' . $token->getOwnerElement()->getId() . ':' . $token->getStatus();
+                            $status = $token->getStatus();
+                            $elements .= ' ' . $token->getOwnerElement()->getId() . ':' . $status;
+                            if ($status == ActivityInterface::TOKEN_STATE_FAILING) {
+                                $error = $token->getProperty('error');
+                                $error = $error instanceof ErrorInterface ? $error->getId() : $error;
+                                $runtimeErrors[] = [
+                                    "element" => $token->getOwnerElement()->getId(),
+                                    "error" => $error,
+                                ];
+                            }
                         }
                     }
                 }
-                throw new Exception('The process got stuck in elements:' . $elements);
+                break;
+                //throw new Exception('The process got stuck in elements:' . $elements);
             }
         }
         $this->assertEquals($result, $tasks);

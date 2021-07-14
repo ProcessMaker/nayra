@@ -1,0 +1,14 @@
+[
+  {
+    "comment": "Test MultiInstance CallActivity do not skip sub tasks",
+    "startEvent": "_2",
+    "data": {
+    },
+    "result": [
+      "_3"
+  ],
+    "errors": [
+      {"element": "_5", "error": "INVALID_DATA_INPUT"}
+    ]
+  }
+]

@@ -6,8 +6,10 @@
       "times": 0
     },
     "result": [
-      "task_1",
-      "task_3"
+      "task_1"
+    ],
+    "errors": [
+      {"element": "task_2", "error": "INVALID_DATA_INPUT"}
     ]
   }
 ]
