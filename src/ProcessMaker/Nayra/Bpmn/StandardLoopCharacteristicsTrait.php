@@ -14,7 +14,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
  */
 trait StandardLoopCharacteristicsTrait
 {
-    use LoopCharacteristicsTrait;
+    use MultiInstanceLoopCharacteristicsTrait;
 
     /**
      * @return bool

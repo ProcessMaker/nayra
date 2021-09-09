@@ -4,15 +4,15 @@ namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Bpmn\StandardLoopCharacteristicsTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
 
 /**
  * Standard implementation.
  *
  * @package ProcessMaker\Models
  */
-class StandardLoopCharacteristics extends MultiInstanceLoopCharacteristics implements StandardLoopCharacteristicsInterface
+class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterface
 {
     use StandardLoopCharacteristicsTrait;
 
