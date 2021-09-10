@@ -7,6 +7,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 use Tests\Feature\Engine\EngineTestCase;
 
@@ -67,7 +68,7 @@ class PatternsTest extends EngineTestCase
         foreach ($startEvents as $startEvent) {
             $data = [];
             $result = [];
-            $this->runProcess($bpmnFile, $data, $startEvent->getAttribute('id'), $result, [], [], []);
+            $this->runProcess($bpmnFile, $data, $startEvent->getAttribute('id'), $result, [], [], [], []);
         }
     }
 
@@ -86,7 +87,7 @@ class PatternsTest extends EngineTestCase
             $events = isset($json['events']) ? $json['events'] : [];
             $output = isset($json['output']) ? $json['output'] : [];
             $errors = isset($json['errors']) ? $json['errors'] : [];
-            $this->runProcess($bpmnFile, $json['data'], $json['startEvent'], $json['result'], $events, $output, $errors);
+            $this->runProcess($bpmnFile, $json['data'], $json['startEvent'], $json['result'], $events, $output, $errors, $json);
         }
     }
 
@@ -103,7 +104,7 @@ class PatternsTest extends EngineTestCase
      *
      * @return void
      */
-    private function runProcess($filename, $data, $startEvent, $result, $events, $output, $errors)
+    private function runProcess($filename, $data, $startEvent, $result, $events, $output, $errors, $json)
     {
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
@@ -154,7 +155,11 @@ class PatternsTest extends EngineTestCase
                         if ($element instanceof ActivityInterface && !($element instanceof CallActivityInterface)
                             && $status === ActivityInterface::TOKEN_STATE_ACTIVE) {
                             $tasks[] = $element->getId();
-                            $element->complete($token);
+                            if ($element instanceof ScriptTaskInterface && $element->getScriptFormat() === 'application/x-betsy') {
+                                $element->runScript($token);
+                            } else {
+                                $element->complete($token);
+                            }
                             $this->engine->runToNextState();
                             $submited = true;
                             break;
@@ -194,7 +199,8 @@ class PatternsTest extends EngineTestCase
                 //throw new Exception('The process got stuck in elements:' . $elements);
             }
         }
-        $this->assertEquals($result, $tasks);
+        $testName = $json['comment'] ?? '';
+        $this->assertEquals($result, $tasks, $testName);
         if ($output) {
             $this->assertData($output, $dataStore->getData());
         }
