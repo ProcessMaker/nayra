@@ -49,6 +49,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ServiceInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ServiceTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
@@ -457,6 +458,26 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 [
                     DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
                     DataOutputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
+                ]
+            ],
+            'standardLoopCharacteristics' => [
+                StandardLoopCharacteristicsInterface::class,
+                [
+                    StandardLoopCharacteristicsInterface::BPMN_PROPERTY_TEST_BEFORE => self::IS_BOOLEAN,
+                    StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM => ['1', [BpmnDocument::BPMN_MODEL, StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM]],
+                    StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION => ['1', [BpmnDocument::BPMN_MODEL, StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION]],
+                ]
+            ],
+            'loopCondition' => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ]
+            ],
+            'loopMaximum' => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
                 ]
             ],
         ]
