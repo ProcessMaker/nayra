@@ -1,0 +1,14 @@
+[
+    {
+        "comment": "The StandardLoopCharacteristics class defines looping behavior based on a boolean condition. The Activity will loop as long as the boolean condition is true.",
+        "startEvent": "StartEvent_1",
+        "data" : {},
+        "result": [
+            "start",
+            "ScriptTask_1",
+            "ScriptTask_1",
+            "ScriptTask_1",
+            "end"
+        ]
+    }
+]

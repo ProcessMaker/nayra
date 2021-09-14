@@ -14,7 +14,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
  */
 trait StandardLoopCharacteristicsTrait
 {
-    use MultiInstanceLoopCharacteristicsTrait;
+    use LoopCharacteristicsTrait;
 
     /**
      * @return bool
@@ -36,26 +36,7 @@ trait StandardLoopCharacteristicsTrait
     }
 
     /**
-     * @return bool
-     */
-    public function getTestAfter()
-    {
-        return $this->getProperty(StandardLoopCharacteristicsInterface::BPMN_PROPERTY_TEST_AFTER);
-    }
-
-    /**
-     * @param bool $testAfter
-     *
-     * 
-     * @return static
-     */
-    public function setTestAfter(bool $testAfter)
-    {
-        return $this->setProperty(StandardLoopCharacteristicsInterface::BPMN_PROPERTY_TEST_AFTER, $testAfter);
-    }
-
-    /**
-     * @return FormalExpressionInterface
+     * @return string
      */
     public function getLoopMaximum()
     {
@@ -63,13 +44,12 @@ trait StandardLoopCharacteristicsTrait
     }
 
     /**
-     * @param FormalExpressionInterface $loopMaximum
+     * @param string $loopMaximum
      *
      * @return static
      */
-    public function setLoopMaximum(FormalExpressionInterface $loopMaximum)
-    {
-        return $this->setProperty(StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM, $loopMaximum);
+    public function setLoopMaximum( $expression) {
+        return $this->setProperty(StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM, $expression);
     }
 
     /**

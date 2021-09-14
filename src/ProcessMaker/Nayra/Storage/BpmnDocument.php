@@ -464,7 +464,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                 StandardLoopCharacteristicsInterface::class,
                 [
                     StandardLoopCharacteristicsInterface::BPMN_PROPERTY_TEST_BEFORE => self::IS_BOOLEAN,
-                    StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM => ['1', [BpmnDocument::BPMN_MODEL, StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM]],
+                    //StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM => ['1', [BpmnDocument::BPMN_MODEL, StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM]],
                     StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION => ['1', [BpmnDocument::BPMN_MODEL, StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION]],
                 ]
             ],
@@ -474,12 +474,12 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
                 ]
             ],
-            'loopMaximum' => [
+            /*'loopMaximum' => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
                 ]
-            ],
+            ],*/
         ]
     ];
 
