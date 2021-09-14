@@ -120,7 +120,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
                     $properties,
                     $loopCounter,
                     $nextState,
-                    $source,
+                    $source
                 );
             }
         }
@@ -174,7 +174,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
                     $properties,
                     $loopCounter,
                     $this->getLoopInstanceProperty($token, 'nextState'),
-                    $this->getLoopInstanceProperty($token, 'source'),
+                    $this->getLoopInstanceProperty($token, 'source')
                 );
             }
         }
