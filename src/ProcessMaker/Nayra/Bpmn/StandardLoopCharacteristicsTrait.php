@@ -48,7 +48,7 @@ trait StandardLoopCharacteristicsTrait
      *
      * @return static
      */
-    public function setLoopMaximum( $expression) {
+    public function setLoopMaximum(string $expression) {
         return $this->setProperty(StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM, $expression);
     }
 

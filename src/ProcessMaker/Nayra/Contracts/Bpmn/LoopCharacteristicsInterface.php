@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
@@ -28,24 +29,6 @@ interface LoopCharacteristicsInterface extends EntityInterface
      * @return void
      */
     public function iterateNextState(StateInterface $nextState, ExecutionInstanceInterface $instance, CollectionInterface $consumeTokens, array $properties = [], TransitionInterface $source = null);
-
-    /**
-     * When a token is completed
-     *
-     * @param TokenInterface $token
-     *
-     * @return void
-     */
-    public function onTokenCompleted(TokenInterface $token);
-
-    /**
-     * When a token is terminated
-     *
-     * @param TokenInterface $token
-     *
-     * @return void
-     */
-    public function onTokenTerminated(TokenInterface $token);
 
     /**
      * Check if the loop was completed
@@ -75,16 +58,6 @@ interface LoopCharacteristicsInterface extends EntityInterface
     public function isExecutable();
 
     /**
-     * Merge output data
-     *
-     * @param CollectionInterface $consumedTokens
-     * @param ExecutionInstanceInterface $instance
-     *
-     * @return void
-     */
-    public function mergeOutputData(CollectionInterface $consumedTokens, ExecutionInstanceInterface $instance);
-
-    /**
      * Get Loop Instance property during execution
      *
      * @param TokenInterface $token
@@ -106,12 +79,21 @@ interface LoopCharacteristicsInterface extends EntityInterface
     public function isDataInputValid(ExecutionInstanceInterface $instance, TokenInterface $token);
 
     /**
-     * Get error when the data input is invalid
+     * When a token is completed
      *
-     * @param ExecutionInstanceInterface $instance
      * @param TokenInterface $token
      *
-     * @return string
+     * @return void
      */
-    public function getDataInputError(ExecutionInstanceInterface $instance, TokenInterface $token);
+    public function onTokenCompleted(TokenInterface $token);
+
+    /**
+     * Merge output data
+     *
+     * @param CollectionInterface $consumedTokens
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return void
+     */
+    public function mergeOutputData(CollectionInterface $consumedTokens, ExecutionInstanceInterface $instance);
 }

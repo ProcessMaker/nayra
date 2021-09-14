@@ -152,8 +152,10 @@ class PatternsTest extends EngineTestCase
                     foreach ($ins->getTokens() as $token) {
                         $element = $token->getOwnerElement();
                         $status = $token->getStatus();
-                        if ($element instanceof ActivityInterface && !($element instanceof CallActivityInterface)
-                            && $status === ActivityInterface::TOKEN_STATE_ACTIVE) {
+                        if (
+                            $element instanceof ActivityInterface && !($element instanceof CallActivityInterface)
+                            && $status === ActivityInterface::TOKEN_STATE_ACTIVE
+                        ) {
                             $tasks[] = $element->getId();
                             if ($element instanceof ScriptTaskInterface && $element->getScriptFormat() === 'application/x-betsy') {
                                 $element->runScript($token);

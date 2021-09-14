@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
+
 /**
  * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
