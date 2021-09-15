@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:pm="http://processmaker.com/BPMN/2.0/Schema.xsd" id="Definitions_03dabax" targetNamespace="http://bpmn.io/schema/bpmn" exporter="ProcessMaker Modeler" exporterVersion="1.0">
+  <bpmn:process id="Process_1" isExecutable="true">
+    <bpmn:startEvent id="node_1" name="Start Event">
+      <bpmn:outgoing>node_4</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="start" name="start" pm:assignment="requester">
+      <bpmn:incoming>node_4</bpmn:incoming>
+      <bpmn:outgoing>node_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="node_4" sourceRef="node_1" targetRef="start" />
+    <bpmn:task id="MultiInstanceTask" name="multi-instance" pm:assignment="requester">
+      <bpmn:incoming>node_7</bpmn:incoming>
+      <bpmn:outgoing>node_10</bpmn:outgoing>
+      <bpmn:ioSpecification id="node_5_inner_1631737198070">
+        <bpmn:dataInput id="node_5_input_1" name="input" isCollection="true" />
+        <bpmn:dataOutput id="node_5_output_1" name="input" isCollection="true" />
+        <bpmn:inputSet id="node_5_inner_1631737198073">
+          <bpmn:dataInputRefs>node_5_input_1</bpmn:dataInputRefs>
+        </bpmn:inputSet>
+        <bpmn:outputSet id="node_5_inner_1631737198074">
+          <bpmn:dataOutputRefs>node_5_output_1</bpmn:dataOutputRefs>
+        </bpmn:outputSet>
+      </bpmn:ioSpecification>
+      <bpmn:multiInstanceLoopCharacteristics id="node_5_inner_1631737198068" isSequential="true">
+        <bpmn:loopDataInputRef>node_5_input_1</bpmn:loopDataInputRef>
+        <bpmn:loopDataOutputRef>node_5_output_1</bpmn:loopDataOutputRef>
+        <bpmn:completionCondition id="node_5_inner_1631737198069">$data['action']=="exit"</bpmn:completionCondition>
+      </bpmn:multiInstanceLoopCharacteristics>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="node_7" sourceRef="start" targetRef="MultiInstanceTask" />
+    <bpmn:task id="end" name="end" pm:assignment="requester">
+      <bpmn:incoming>node_10</bpmn:incoming>
+      <bpmn:outgoing>node_13</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="node_10" sourceRef="MultiInstanceTask" targetRef="end" />
+    <bpmn:endEvent id="node_11" name="End Event">
+      <bpmn:incoming>node_13</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="node_13" sourceRef="end" targetRef="node_11" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="node_1_di" bpmnElement="node_1">
+        <dc:Bounds x="130" y="330" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_2_di" bpmnElement="start">
+        <dc:Bounds x="240" y="310" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_4_di" bpmnElement="node_4">
+        <di:waypoint x="148" y="348" />
+        <di:waypoint x="298" y="348" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="node_5_di" bpmnElement="MultiInstanceTask">
+        <dc:Bounds x="240" y="430" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_7_di" bpmnElement="node_7">
+        <di:waypoint x="298" y="348" />
+        <di:waypoint x="298" y="468" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="node_8_di" bpmnElement="end">
+        <dc:Bounds x="240" y="550" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_10_di" bpmnElement="node_10">
+        <di:waypoint x="298" y="468" />
+        <di:waypoint x="298" y="588" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="node_11_di" bpmnElement="node_11">
+        <dc:Bounds x="430" y="570" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_13_di" bpmnElement="node_13">
+        <di:waypoint x="298" y="588" />
+        <di:waypoint x="448" y="588" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
