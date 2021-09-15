@@ -160,7 +160,11 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      */
     public function continueLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
-        $continue = $this->checkAfterLoop($instance, $token);
+        if ($this->getTestBefore()) {
+            $continue = $this->checkBeforeLoop($instance, $token);
+        } else {
+            $continue = $this->checkAfterLoop($instance, $token);
+        }
         if ($continue) {
             $properties = $this->prepareLoopInstanceProperties($token, []);
             // LoopInstance Counter
@@ -188,20 +192,10 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      */
     public function isLoopCompleted(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
-        $testBefore = $this->getTestBefore() ?: true;
-        $condition = $this->getLoopCondition();
-        $data = $instance->getDataStore()->getData();
-        $evaluatedCondition = $condition($data);
-        $loopMaximum = $this->getLoopMaximumFormalExpression($data);
-        $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
-        $loopCondition = $loopMaximum === null || $loopCounter < $loopMaximum;
-        if ($testBefore && $loopCounter === 0) {
-            return false;
+        if ($this->getTestBefore()) {
+            return !$this->checkBeforeLoop($instance, $token);
         }
-        if ($testBefore && $evaluatedCondition && $loopCondition) {
-            return false;
-        }
-        return true;
+        return !$this->checkAfterLoop($instance, $token);
     }
 
     /**
@@ -209,16 +203,15 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      *
      * @param  ExecutionInstanceInterface $instance
      * @param  TokenInterface $token
-     * @return void
+     * @return bool
      */
-    public function checkBeforeLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
+    private function checkBeforeLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
         $testBefore = $this->getTestBefore();
         $condition = $this->getLoopCondition();
         $data = $instance->getDataStore()->getData();
         $evaluatedCondition = $condition($data);
-        $loopMaximumformal = $this->getLoopMaximumFormalExpression($data);
-        $loopMaximum = $loopMaximumformal($data);
+        $loopMaximum = $this->getLoopMaximumFormalExpression($data);
         $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
         $loopCondition = $loopMaximum === null  || $loopMaximum === 0 || $loopCounter < $loopMaximum;
         if ($testBefore && $evaluatedCondition && $loopCondition) {
@@ -232,9 +225,9 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      *
      * @param  ExecutionInstanceInterface $instance
      * @param  TokenInterface $token
-     * @return void
+     * @return bool
      */
-    public function checkAfterLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
+    private function checkAfterLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
         $testBefore = $this->getTestBefore();
         $condition = $this->getLoopCondition();
@@ -243,6 +236,9 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
         $loopMaximum = $this->getLoopMaximumFormalExpression($data);
         $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
         $loopCondition = $loopMaximum === null || $loopCounter < $loopMaximum;
+        if (!$testBefore && $loopCounter === 0) {
+            return true;
+        }
         if (!$testBefore && $evaluatedCondition && $loopCondition) {
             return true;
         }
@@ -253,9 +249,9 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      * getLoopMaximumFormalExpression
      *
      * @param  array $data
-     * @return void
+     * @return int
      */
-    public function getLoopMaximumFormalExpression(array $data)
+    private function getLoopMaximumFormalExpression(array $data)
     {
         $expression = $this->getLoopMaximum();
         $formalExpression = $this->getRepository()->createFormalExpression();
