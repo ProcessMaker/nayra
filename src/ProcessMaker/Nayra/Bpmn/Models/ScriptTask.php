@@ -8,6 +8,7 @@ use ProcessMaker\Nayra\Bpmn\Events\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityClosedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MultiInstanceLoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
@@ -17,7 +18,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
  */
 class ScriptTask implements ScriptTaskInterface
 {
-
     use ActivityTrait;
 
     /**
@@ -97,8 +97,7 @@ class ScriptTask implements ScriptTaskInterface
         //if the script runs correctly complete te activity, otherwise set the token to failed state
         if ($this->executeScript($token, $this->getScript())) {
             $this->complete($token);
-        }
-        else {
+        } else {
             $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
         }
     }
@@ -114,17 +113,26 @@ class ScriptTask implements ScriptTaskInterface
     {
         $result = true;
         try {
-            $data = $token->getInstance()->getDataStore()->getData();
-            $newData = eval ($script);
+            $element = $token->getOwnerElement();
+            $loop = $element->getLoopCharacteristics();
+            $isMulti = $loop instanceof MultiInstanceLoopCharacteristicsInterface && $loop->isExecutable();
+            if ($isMulti) {
+                $data = $token->getProperty('data', []);
+            } else {
+                $data = $token->getInstance()->getDataStore()->getData();
+            }
+            $newData = eval($script);
             if (gettype($newData) === 'array') {
                 $data = array_merge($data, $newData);
-                $token->getInstance()->getDataStore()->setData($data);
+                if ($isMulti) {
+                    $token->setProperty('data', $data);
+                } else {
+                    $token->getInstance()->getDataStore()->setData($data);
+                }
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $result = false;
         }
         return $result;
     }
-
 }
