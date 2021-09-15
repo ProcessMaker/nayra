@@ -2,8 +2,10 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\LoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\LoopCharacteristicsInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Base implementation for LoopCharacteristicsInterface
@@ -80,5 +82,42 @@ trait LoopCharacteristicsTrait
         $data = $ds->getData(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, []);
         $data[$outerInstance] = $data[$outerInstance] ?? [];
         return $data[$outerInstance][$key] ?? $defaultValue;
+    }
+
+    /**
+     * Check if data input is valid
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     *
+     * @return bool
+     */
+    public function isDataInputValid(ExecutionInstanceInterface $instance, TokenInterface $token)
+    {
+        // todo: check if data input is valid
+        return true;
+    }
+
+    /**
+     * @param TokenInterface $token
+     *
+     * @return void
+     */
+    public function onTokenCompleted(TokenInterface $token)
+    {
+        //required for internal validation
+    }
+
+    /**
+     * Merge output data into instance data
+     *
+     * @param CollectionInterface $consumedTokens
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return void
+     */
+    public function mergeOutputData(CollectionInterface $consumedTokens, ExecutionInstanceInterface $instance)
+    {
+        //required for internal validation
     }
 }

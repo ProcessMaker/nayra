@@ -2,14 +2,14 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
+use ProcessMaker\Nayra\Bpmn\StandardLoopCharacteristicsTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Bpmn\StandardLoopCharacteristicsTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
 
 /**
  * Standard implementation.
@@ -55,43 +55,6 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     {
         $dataStore = $instance->getDataStore();
         return $dataStore;
-    }
-
-    /**
-     * Check if data input is valid
-     *
-     * @param ExecutionInstanceInterface $instance
-     * @param TokenInterface $token
-     *
-     * @return bool
-     */
-    public function isDataInputValid(ExecutionInstanceInterface $instance, TokenInterface $token)
-    {
-        // todo: check if data input is valid
-        return true;
-    }
-
-    /**
-     * @param TokenInterface $token
-     *
-     * @return void
-     */
-    public function onTokenCompleted(TokenInterface $token)
-    {
-        //required for internal validation
-    }
-
-    /**
-     * Merge output data into instance data
-     *
-     * @param CollectionInterface $consumedTokens
-     * @param ExecutionInstanceInterface $instance
-     *
-     * @return void
-     */
-    public function mergeOutputData(CollectionInterface $consumedTokens, ExecutionInstanceInterface $instance)
-    {
-        //required for internal validation
     }
 
     /**
@@ -199,10 +162,11 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     }
 
     /**
-     * Check before the loop should be executed
+     * Checking performed before running the loop
      *
-     * @param  ExecutionInstanceInterface $instance
-     * @param  TokenInterface $token
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     * 
      * @return bool
      */
     private function checkBeforeLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
@@ -221,10 +185,11 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     }
 
     /**
-     * Check after the loop should be executed
+     * Checking performed after running the loop
      *
-     * @param  ExecutionInstanceInterface $instance
-     * @param  TokenInterface $token
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     * 
      * @return bool
      */
     private function checkAfterLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
@@ -248,7 +213,8 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     /**
      * getLoopMaximumFormalExpression
      *
-     * @param  array $data
+     * @param array $data
+     * 
      * @return int
      */
     private function getLoopMaximumFormalExpression(array $data)
