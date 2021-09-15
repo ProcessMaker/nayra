@@ -1,0 +1,49 @@
+[
+    {
+        "comment": "1. The StandardLoopCharacteristics class defines looping behavior based on a boolean condition. The Activity will loop as long as the boolean condition is true.",
+        "startEvent": "StartEvent",
+        "data": {
+            "integerVariable": 4
+        },
+        "result": [
+            "start",
+            "end"
+        ]
+    },
+    {
+        "comment": "2. The StandardLoopCharacteristics class defines looping behavior based on a boolean condition. The Activity will loop as long as the boolean condition is true.",
+        "startEvent": "StartEvent",
+        "data": {
+            "integerVariable": 3
+        },
+        "result": [
+            "start",
+            "end"
+        ]
+    },
+    {
+        "comment": "3. The StandardLoopCharacteristics class defines looping behavior based on a boolean condition. The Activity will loop as long as the boolean condition is true.",
+        "startEvent": "StartEvent",
+        "data": {
+            "integerVariable": 2
+        },
+        "result": [
+            "start",
+            "LoopTask",
+            "end"
+        ]
+    },
+    {
+        "comment": "4. The StandardLoopCharacteristics class defines looping behavior based on a boolean condition. The Activity will loop as long as the boolean condition is true.",
+        "startEvent": "StartEvent",
+        "data": {
+            "integerVariable": 1
+        },
+        "result": [
+            "start",
+            "LoopTask",
+            "LoopTask",
+            "end"
+        ]
+    }
+]

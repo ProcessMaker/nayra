@@ -114,7 +114,12 @@ class ScriptTask implements ScriptTaskInterface
     {
         $result = true;
         try {
-            eval ($script);
+            $data = $token->getInstance()->getDataStore()->getData();
+            $newData = eval ($script);
+            if (gettype($newData) === 'array') {
+                $data = array_merge($data, $newData);
+                $token->getInstance()->getDataStore()->setData($data);
+            }
         }
         catch (Exception $e) {
             $result = false;

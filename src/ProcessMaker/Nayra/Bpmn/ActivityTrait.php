@@ -88,7 +88,7 @@ trait ActivityTrait
         $this->loopTransition = new LoopCharacteristicsTransition($this, false);
         $this->closedState->connectTo($this->loopTransition);
         $this->loopTransition->connectTo($this->activeState);
-        $this->skippedTransition = new Transition($this, false);
+        $this->skippedTransition = new SkipActivityTransition($this, false);
 
         $this->activeState->connectTo($this->exceptionTransition);
         $this->activeState->connectTo($this->activityTransition);
@@ -183,6 +183,7 @@ trait ActivityTrait
         $invalidDataInput = new InvalidDataInputTransition($this, false);
         $ready->connectTo($transition);
         $ready->connectTo($invalidDataInput);
+        $ready->connectTo($this->skippedTransition);
         $transition->connectTo($this->activeState);
         $invalidDataInput->connectTo($this->failingState);
         $this->addInput($ready);

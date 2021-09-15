@@ -283,6 +283,12 @@ interface RepositoryInterface
     public function createExecutionInstanceRepository();
 
     /**
+     * Create a StandardLoopCharacteristics.
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface
+     */
+    public function createStandardLoopCharacteristics();
+
+    /**
      * Creates a TokenRepository
      *
      * @return \ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface

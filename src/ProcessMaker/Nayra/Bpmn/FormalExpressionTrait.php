@@ -28,12 +28,13 @@ trait FormalExpressionTrait
     protected function getDateExpression()
     {
         $expression = $this->getProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY);
-        try {
+        $regexpValidDate ='/^[0-9]{4}-[0-9]{2}-[0-9]{2}[T ][0-9]{2}:[0-9]{2}(:[0-9]{2})?(?:[\+-][0-9]{2}:[0-9]{2}|Z)?/';
+        if (preg_match($regexpValidDate, $expression)) {
             $date = new DateTime($expression);
-        } catch (Exception $e) {
-            $date = false;
+            return $date;
+        } else {
+            return null;
         }
-        return $date;
     }
 
     /**

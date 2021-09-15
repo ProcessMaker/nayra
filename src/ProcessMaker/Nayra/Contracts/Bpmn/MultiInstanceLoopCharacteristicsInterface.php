@@ -2,6 +2,9 @@
 
 namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+
 /**
  * MultiInstanceLoopCharacteristics interface allows for creation of a desired
  * number of Activity instances. The instances MAY execute in parallel or MAY
@@ -223,4 +226,23 @@ interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsI
      * @return self
      */
     public function setCompletionCondition(FormalExpressionInterface $completionCondition);
+
+    /**
+     * Get error when the data input is invalid
+     *
+     * @param ExecutionInstanceInterface $instance
+     * @param TokenInterface $token
+     *
+     * @return string
+     */
+    public function getDataInputError(ExecutionInstanceInterface $instance, TokenInterface $token);
+
+    /**
+     * When a token is terminated
+     *
+     * @param TokenInterface $token
+     *
+     * @return void
+     */
+    public function onTokenTerminated(TokenInterface $token);
 }

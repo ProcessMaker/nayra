@@ -37,6 +37,7 @@ use ProcessMaker\Nayra\Bpmn\Models\ScriptTask;
 use ProcessMaker\Nayra\Bpmn\Models\ServiceTask;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\StandardLoopCharacteristics;
 use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
@@ -468,5 +469,15 @@ trait RepositoryTrait
             $this->tokenRepo = new TokenRepository();
         }
         return $this->tokenRepo;
+    }
+
+    /**
+     * Create a StandardLoopCharacteristics.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface
+     */
+    public function createStandardLoopCharacteristics()
+    {
+        return new StandardLoopCharacteristics();
     }
 }
