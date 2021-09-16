@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use Countable;
+use Exception;
 use ProcessMaker\Nayra\Bpmn\MultiInstanceLoopCharacteristicsTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface;
@@ -220,7 +221,19 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
             $numberOfInstances = $this->calcNumberOfInstances($instance);
         }
         $completed = $this->getLoopInstanceProperty($token, 'numberOfCompletedInstances', 0);
-        return $completed >= $numberOfInstances;
+        $condition = $this->getCompletionCondition();
+        $hasCompletionCondition = $condition && trim($condition->getBody());
+        $completionCondition = false;
+        if ($hasCompletionCondition) {
+            $data = $this->getOutputDataItemValue($token);
+            try {
+                $completionCondition = $condition($data);
+            } catch (Exception $e) {
+                // When the condition can not be evaluated, it is considered false.
+                $completionCondition = false;
+            }
+        }
+        return $completionCondition || $completed >= $numberOfInstances;
     }
 
     /**
