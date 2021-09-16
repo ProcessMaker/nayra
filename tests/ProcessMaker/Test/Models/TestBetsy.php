@@ -2,6 +2,8 @@
 
 namespace ProcessMaker\Test\Models;
 
+use Exception;
+
 /**
  * Test class for evaluate expression used in betsy BPMN files.
  *
@@ -57,5 +59,10 @@ class TestBetsy
         $test = $this;
         $data = $this->data;
         return eval('return ' . $this->code . ';');
+    }
+
+    private function throwException($message)
+    {
+        throw new Exception($message);
     }
 }

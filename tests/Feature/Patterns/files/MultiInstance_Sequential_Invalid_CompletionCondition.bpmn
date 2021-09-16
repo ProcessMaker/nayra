@@ -34,7 +34,7 @@
       <bpmn:multiInstanceLoopCharacteristics id="node_14_inner_1631739473659" isSequential="true">
         <bpmn:loopDataInputRef>node_14_input_1</bpmn:loopDataInputRef>
         <bpmn:loopDataOutputRef>node_14_output_1</bpmn:loopDataOutputRef>
-        <bpmn:completionCondition id="node_14_inner_1631739473660">missing_variable</bpmn:completionCondition>
+        <bpmn:completionCondition id="node_14_inner_1631739473660">$this->throwException('invalid condition')</bpmn:completionCondition>
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="node_7" sourceRef="start" targetRef="MultiInstanceTask" />
