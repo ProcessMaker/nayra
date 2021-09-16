@@ -1,0 +1,30 @@
+[
+    {
+        "comment": "Script task overwrites `action` value to `continue`, then all the sequence should be completed.",
+        "startEvent": "node_1",
+        "data": {
+            "input": [
+                {
+                    "action": "continue"
+                },
+                {
+                    "action": "continue"
+                },
+                {
+                    "action": "exit"
+                },
+                {
+                    "action": "continue"
+                }
+            ]
+        },
+        "result": [
+            "start",
+            "MultiInstanceTask",
+            "MultiInstanceTask",
+            "MultiInstanceTask",
+            "MultiInstanceTask",
+            "end"
+        ]
+    }
+]
