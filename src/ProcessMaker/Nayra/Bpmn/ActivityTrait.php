@@ -120,8 +120,8 @@ trait ActivityTrait
                 $this->getRepository()
                     ->getTokenRepository()
                     ->persistActivityException($this, $token);
-                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, $this, $token);
-                $error = $token->getProperty('error', ActivityInterface::BPMN_PROPERTY_ERROR, null);
+                $error = $token->getProperty(ActivityInterface::BPMN_PROPERTY_ERROR, null);
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, $this, $token, $error);
             }
         );
         $this->closedState->attachEvent(
