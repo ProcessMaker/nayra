@@ -74,6 +74,14 @@ trait ActivitySubProcessTrait
                 }
             }
         );
+        $this->getCalledElement()->attachEvent(
+            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
+            function ($element, $innerToken, $error) use ($token, $instance) {
+                if ($innerToken->getInstance() === $instance) {
+                    $this->catchSubprocessError($token, $error, $instance);
+                }
+            }
+        );
         $this->attachEvent(
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             function ($activity, $transition, $tokens) use ($token, $instance) {
