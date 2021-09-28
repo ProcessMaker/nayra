@@ -3,7 +3,7 @@
         "comment": "The StandardLoopCharacteristics class defines looping behavior based on a boolean condition. The Activity will loop as long as the boolean condition is true.",
         "startEvent": "StartEvent_1",
         "data" : {
-            "integerVariable": 4
+            "integerVariable": 2
         },
         "result": [
             "start",

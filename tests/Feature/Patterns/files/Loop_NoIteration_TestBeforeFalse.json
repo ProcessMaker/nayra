@@ -6,6 +6,8 @@
         "result": [
             "start",
             "LoopTask",
+            "LoopTask",
+            "LoopTask",
             "end"
         ]
     }

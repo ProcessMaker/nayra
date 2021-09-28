@@ -23,7 +23,7 @@
         <bpmn2:scriptTask id="LoopTask" name="Loop">
             <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
             <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
-            <bpmn2:standardLoopCharacteristics testBefore="false">
+            <bpmn2:standardLoopCharacteristics testBefore="false" loopMaximum="3">
                 <bpmn2:loopCondition xsi:type="bpmn2:tFormalExpression">false</bpmn2:loopCondition>
             </bpmn2:standardLoopCharacteristics>
             <bpmn2:script>SCRIPT_task1</bpmn2:script>

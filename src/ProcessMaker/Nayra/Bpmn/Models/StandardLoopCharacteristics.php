@@ -184,8 +184,8 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
             return true;
         }
         if ($condition) {
-            $evaluatedCondition = $condition($data);
-            if (!$testBefore && $evaluatedCondition && $loopCondition) {
+            $exitCondition = $condition($data);
+            if (!$testBefore && !$exitCondition && $loopCondition) {
                 return true;
             }
         } else {
