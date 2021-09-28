@@ -110,8 +110,6 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
         $properties['data']['loopCounter'] = $loopCounter;
         $newToken = $nextState->createToken($instance, $properties, $source);
         $this->setLoopInstanceProperty($newToken, 'loopCounter', $loopCounter);
-        $this->setLoopInstanceProperty($newToken, 'nextState', $nextState);
-        $this->setLoopInstanceProperty($newToken, 'source', $source);
         $nextState->addToken($instance, $newToken, false, $source);
     }
 
@@ -124,28 +122,10 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     public function continueLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
         if ($this->getTestBefore()) {
-            $continue = $this->checkBeforeLoop($instance, $token);
-        } else {
-            $continue = $this->checkAfterLoop($instance, $token);
+            return $this->checkBeforeLoop($instance, $token);
         }
-        if ($continue) {
-            $properties = $this->prepareLoopInstanceProperties($token, []);
-            // LoopInstance Counter
-            $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
-            // Token loopCounter
-            $tokenLoopCounter = $token->getProperty('data', [])['loopCounter'] ?? 0;
-            if ($loopCounter === $tokenLoopCounter) {
-                $loopCounter++;
-                $this->createInstance(
-                    $instance,
-                    $properties,
-                    $loopCounter,
-                    $this->getLoopInstanceProperty($token, 'nextState'),
-                    $this->getLoopInstanceProperty($token, 'source')
-                );
-            }
-        }
-        return $continue;
+
+        return $this->checkAfterLoop($instance, $token);
     }
 
     /**
@@ -197,16 +177,23 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
         $testBefore = $this->getTestBefore();
         $condition = $this->getLoopCondition();
         $data = $instance->getDataStore()->getData();
-        $evaluatedCondition = $condition($data);
         $loopMaximum = $this->getLoopMaximumFormalExpression($data);
         $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
         $loopCondition = $loopMaximum === null || $loopCounter < $loopMaximum;
         if (!$testBefore && $loopCounter === 0) {
             return true;
         }
-        if (!$testBefore && $evaluatedCondition && $loopCondition) {
-            return true;
+        if ($condition) {
+            $evaluatedCondition = $condition($data);
+            if (!$testBefore && $evaluatedCondition && $loopCondition) {
+                return true;
+            }
+        } else {
+            if (!$testBefore && $loopCondition) {
+                return true;
+            }
         }
+
         return false;
     }
 
