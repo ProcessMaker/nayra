@@ -250,4 +250,14 @@ trait MultiInstanceLoopCharacteristicsTrait
     {
         return $this->setProperty(MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_COMPLETION_CONDITION, $completionCondition);
     }
+
+    /**
+     * Should close tokens after each loop?
+     *
+     * @return bool
+     */
+    public function shouldCloseTokensEachLoop()
+    {
+        return false;
+    }
 }

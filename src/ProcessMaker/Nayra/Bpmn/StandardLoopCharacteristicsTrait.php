@@ -9,7 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
  * Base implementation for LoopCharacteristicsInterface
  *
  * @implements ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface
- * 
+ *
  * @package ProcessMaker\Nayra\Bpmn
  */
 trait StandardLoopCharacteristicsTrait
@@ -27,7 +27,7 @@ trait StandardLoopCharacteristicsTrait
     /**
      * @param bool $testBefore
      *
-     * 
+     *
      * @return static
      */
     public function setTestBefore(bool $testBefore)
@@ -48,7 +48,8 @@ trait StandardLoopCharacteristicsTrait
      *
      * @return static
      */
-    public function setLoopMaximum(string $loopMaximum) {
+    public function setLoopMaximum(string $loopMaximum)
+    {
         return $this->setProperty(StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM, $loopMaximum);
     }
 
@@ -68,5 +69,15 @@ trait StandardLoopCharacteristicsTrait
     public function setLoopCondition(FormalExpressionInterface $loopCondition)
     {
         return $this->setProperty(StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION, $loopCondition);
+    }
+
+    /**
+     * Should close tokens after each loop?
+     *
+     * @return bool
+     */
+    public function shouldCloseTokensEachLoop()
+    {
+        return true;
     }
 }
