@@ -69,6 +69,11 @@ trait ActivityTrait
     private $skippedTransition;
 
     /**
+     * @var LoopCharacteristicsTransition
+     */
+    private $loopTransition;
+
+    /**
      * Build the transitions that define the element.
      *
      * @param RepositoryInterface $factory
@@ -164,6 +169,21 @@ trait ActivityTrait
                         ->getTokenRepository()
                         ->persistActivityCompleted($this, $token);
                     $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
+                }
+            }
+        );
+        $this->loopTransition->attachEvent(
+            TransitionInterface::EVENT_AFTER_CONSUME,
+            function (TransitionInterface $transition, Collection $consumedTokens) {
+                if (!$this->loopTransition->shouldCloseTokens()) {
+                    return;
+                }
+                foreach ($consumedTokens as $token) {
+                    $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                    $this->getRepository()
+                        ->getTokenRepository()
+                        ->persistActivityClosed($this, $token);
+                    $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $this, $token);
                 }
             }
         );

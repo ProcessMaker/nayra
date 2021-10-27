@@ -59,4 +59,15 @@ class LoopCharacteristicsTransition implements TransitionInterface
         $loop = $this->getOwner()->getLoopCharacteristics();
         $loop->iterateNextState($nextState, $instance, $consumeTokens, $properties, $source);
     }
+
+    /**
+     * Should close tokens after each loop?
+     *
+     * @return bool
+     */
+    public function shouldCloseTokens()
+    {
+        $loop = $this->getOwner()->getLoopCharacteristics();
+        return $loop && $loop->isExecutable() && $loop->shouldCloseTokensEachLoop();
+    }
 }

@@ -45,7 +45,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -105,7 +105,7 @@ class MultiInstanceTest extends EngineTestCase
         $activity->complete($token);
         $this->engine->runToNextState();
 
-        // Assertion: The thrid MI task was completed, all MI token are closed, then continue to next task
+        // Assertion: The third MI task was completed, all MI token are closed, then continue to next task
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
@@ -148,7 +148,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -208,7 +208,7 @@ class MultiInstanceTest extends EngineTestCase
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_FAILING);
         $this->engine->runToNextState();
 
-        // Assertion: Fail thrid MI task
+        // Assertion: Fail third MI task
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
@@ -220,7 +220,7 @@ class MultiInstanceTest extends EngineTestCase
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
         $this->engine->runToNextState();
 
-        // Assertion: The thrid MI task was cancelled, the MI Activity hangs because it could not close all the parallel instances
+        // Assertion: The third MI task was cancelled, the MI Activity hangs because it could not close all the parallel instances
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
         ]);
@@ -257,7 +257,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -317,7 +317,7 @@ class MultiInstanceTest extends EngineTestCase
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_CLOSED);
         $this->engine->runToNextState();
 
-        // Assertion: The thrid MI task was cancelled, the MI Activity hangs because it could not close all the parallel instances
+        // Assertion: The third MI task was cancelled, the MI Activity hangs because it could not close all the parallel instances
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
         ]);
@@ -354,7 +354,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -414,7 +414,7 @@ class MultiInstanceTest extends EngineTestCase
         $activity->complete($token);
         $this->engine->runToNextState();
 
-        // Assertion: The thrid MI task was completed, closed, then continue to next task
+        // Assertion: The third MI task was completed, closed, then continue to next task
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
@@ -455,7 +455,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was actioned
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -515,7 +515,7 @@ class MultiInstanceTest extends EngineTestCase
         $token->setStatus(ScriptTaskInterface::TOKEN_STATE_FAILING);
         $this->engine->runToNextState();
 
-        // Assertion: Fail thrid MI task, the MI Activity hangs until the failing instance is closed
+        // Assertion: Fail third MI task, the MI Activity hangs until the failing instance is closed
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
@@ -562,7 +562,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -625,7 +625,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: The internal data of the LoopCharacteristics are stored in the instance data.
         $this->verifyStoredInstanceData($instance);
 
-        // Assertion: The thrid and last MI task was cancelled, then the process is completed
+        // Assertion: The third and last MI task was cancelled, then the process is completed
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
@@ -637,7 +637,7 @@ class MultiInstanceTest extends EngineTestCase
      *
      * @return void
      */
-    public function testUnderspecifiedLoop()
+    public function testUnspecifiedLoop()
     {
         // Load a BpmnFile Repository
         $bpmnRepository = new BpmnDocument();
@@ -664,7 +664,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -756,7 +756,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -873,7 +873,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -1003,7 +1003,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,
@@ -1059,7 +1059,7 @@ class MultiInstanceTest extends EngineTestCase
         // Assertion: A process has started.
         $this->assertEquals(1, $process->getInstances()->count());
 
-        // Assertion: The process has started and the first activity was actived
+        // Assertion: The process has started and the first activity was activated
         $this->assertEvents([
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
             EventInterface::EVENT_EVENT_TRIGGERED,

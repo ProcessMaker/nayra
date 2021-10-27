@@ -96,4 +96,11 @@ interface LoopCharacteristicsInterface extends EntityInterface
      * @return void
      */
     public function mergeOutputData(CollectionInterface $consumedTokens, ExecutionInstanceInterface $instance);
+
+    /**
+     * Should close tokens after each loop?
+     *
+     * @return bool
+     */
+    public function shouldCloseTokensEachLoop();
 }
