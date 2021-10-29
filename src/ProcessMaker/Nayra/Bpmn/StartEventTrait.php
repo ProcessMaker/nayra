@@ -115,7 +115,7 @@ trait StartEventTrait
             if ($eventDefinition->assertsRule($event, $this, $instance, $token)) {
                 if ($instance === null) {
                     $process = $this->getOwnerProcess();
-                    $data =  $eventDefinition->getPayloadData($token);
+                    $data =  $eventDefinition->getPayloadData($token, $this);
                     $dataStorage = $process->getRepository()->createDataStore();
                     $dataStorage->setData($data);
                     $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
