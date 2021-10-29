@@ -114,8 +114,8 @@ trait StartEventTrait
         foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
             if ($eventDefinition->assertsRule($event, $this, $instance, $token)) {
                 if ($instance === null) {
-                    $data = $token ? $token->getInstance()->getDataStore()->getData() : [];
                     $process = $this->getOwnerProcess();
+                    $data =  $eventDefinition->getPayloadData($token);
                     $dataStorage = $process->getRepository()->createDataStore();
                     $dataStorage->setData($data);
                     $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);

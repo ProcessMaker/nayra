@@ -44,7 +44,7 @@ trait EventDefinitionTrait
     }
 
     /**
-     * Check if the event definition should be catched
+     * Check if the event definition should be catch
      *
      * @param EventDefinitionInterface $sourceEvent
      *
@@ -53,5 +53,17 @@ trait EventDefinitionTrait
     public function shouldCatchEventDefinition(EventDefinitionInterface $sourceEvent)
     {
         return true;
+    }
+
+    /**
+     * Get data contained in the event payload
+     *
+     * @param TokenInterface|null $token
+     *
+     * @return mixed
+     */
+    public function getPayloadData(TokenInterface $token = null)
+    {
+        return $token ? $token->getInstance()->getDataStore()->getData() : [];
     }
 }
