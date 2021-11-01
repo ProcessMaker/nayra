@@ -4,7 +4,6 @@ namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 use ProcessMaker\Nayra\Bpmn\Models\ErrorEventDefinition;
-use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
@@ -15,6 +14,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateCatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
@@ -75,7 +75,7 @@ class BoundaryEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
-            SignalEventDefinition::EVENT_THROW_EVENT_DEFINITION,
+            SignalEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
@@ -473,7 +473,7 @@ class BoundaryEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
-            SignalEventDefinition::EVENT_THROW_EVENT_DEFINITION,
+            SignalEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
 
