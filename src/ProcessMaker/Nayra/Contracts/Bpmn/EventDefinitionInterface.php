@@ -79,4 +79,14 @@ interface EventDefinitionInterface extends EntityInterface
      * @return bool
      */
     public function shouldCatchEventDefinition(EventDefinitionInterface $sourceEvent);
+
+    /**
+     * Get data contained in the event payload
+     *
+     * @param TokenInterface|null $token
+     * @param CatchEventInterface|null $target
+     *
+     * @return mixed
+     */
+    public function getPayloadData(TokenInterface $token = null, CatchEventInterface $target = null);
 }

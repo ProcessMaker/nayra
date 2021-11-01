@@ -37,7 +37,7 @@ trait CatchEventTrait
     /**
      * Get the event definitions.
      *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface|EventDefinitionInterface[]
      */
     public function getEventDefinitions()
     {
