@@ -31,7 +31,7 @@ trait EventDefinitionTrait
     }
 
     /**
-     * Occures when the catch event was activated
+     * Occurs when the catch event was activated
      *
      * @param EngineInterface $engine
      * @param CatchEventInterface $element
@@ -66,5 +66,28 @@ trait EventDefinitionTrait
     public function getPayloadData(TokenInterface $token = null, CatchEventInterface $target = null)
     {
         return $token ? $token->getInstance()->getDataStore()->getData() : [];
+    }
+
+    /**
+     * Set do not trigger start events
+     *
+     * @param bool $value
+     *
+     * @return $this
+     */
+    public function setDoNotTriggerStartEvents($value)
+    {
+        $this->setProperty('doNotTriggerStartEvents', $value);
+        return $this;
+    }
+
+    /**
+     * Get do not trigger start events value
+     *
+     * @return bool
+     */
+    public function getDoNotTriggerStartEvents()
+    {
+        return $this->getProperty('doNotTriggerStartEvents', false);
     }
 }

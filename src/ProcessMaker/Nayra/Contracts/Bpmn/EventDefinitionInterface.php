@@ -61,7 +61,7 @@ interface EventDefinitionInterface extends EntityInterface
     public function registerWithCatchEvent(EngineInterface $engine, CatchEventInterface $element);
 
     /**
-     * Occures when the catch event was activated
+     * Occurs when the catch event was activated
      *
      * @param EngineInterface $engine
      * @param CatchEventInterface $element
@@ -89,4 +89,20 @@ interface EventDefinitionInterface extends EntityInterface
      * @return mixed
      */
     public function getPayloadData(TokenInterface $token = null, CatchEventInterface $target = null);
+
+    /**
+     * Set do not trigger start events
+     *
+     * @param bool $value
+     *
+     * @return $this
+     */
+    public function setDoNotTriggerStartEvents($value);
+
+    /**
+     * Get do not trigger start events value
+     *
+     * @return bool
+     */
+    public function getDoNotTriggerStartEvents();
 }
