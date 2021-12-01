@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:pm="http://processmaker.com/BPMN/2.0/Schema.xsd" xmlns:tns="http://sourceforge.net/bpmn/definitions/_1530553328908" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bpmn.io/schema/bpmn" exporter="ProcessMaker Modeler" exporterVersion="1.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
+  <bpmn:process id="ProcessId" name="ProcessName" isExecutable="true">
+    <bpmn:task id="node_2" name="Task 1" pm:allowInterstitial="false" pm:assignment="requester" pm:assignmentLock="false" pm:allowReassignment="false">
+      <bpmn:incoming>node_5</bpmn:incoming>
+      <bpmn:outgoing>node_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="node_3" name="End Event">
+      <bpmn:incoming>node_7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="node_7" sourceRef="node_2" targetRef="node_3" />
+    <bpmn:startEvent id="node_8" name="Signal Start Event">
+      <bpmn:outgoing>node_5</bpmn:outgoing>
+      <bpmn:signalEventDefinition signalRef="signal1" />
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="node_5" sourceRef="node_8" targetRef="node_2" />
+  </bpmn:process>
+  <bpmn:signal id="signal1" name="signal1" />
+  <bpmndi:BPMNDiagram id="BPMNDiagramId">
+    <bpmndi:BPMNPlane id="BPMNPlaneId" bpmnElement="ProcessId">
+      <bpmndi:BPMNShape id="node_2_di" bpmnElement="node_2">
+        <dc:Bounds x="320" y="190" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_3_di" bpmnElement="node_3">
+        <dc:Bounds x="510" y="210" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_7_di" bpmnElement="node_7">
+        <di:waypoint x="378" y="228" />
+        <di:waypoint x="528" y="228" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="node_8_di" bpmnElement="node_8">
+        <dc:Bounds x="210" y="210" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_5_di" bpmnElement="node_5">
+        <di:waypoint x="228" y="228" />
+        <di:waypoint x="378" y="228" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

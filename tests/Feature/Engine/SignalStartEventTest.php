@@ -10,6 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test signal start events
@@ -173,5 +174,59 @@ class SignalStartEventTest extends EngineTestCase
             EventInterface::EVENT_EVENT_TRIGGERED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
+    }
+
+    /**
+     * Tests DoNotTriggerStartEvents
+     */
+    public function testSkipStartSignalEvent()
+    {
+        // Load the process from a BPMN file
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+        $bpmnRepository->load(__DIR__ . '/files/Signal_Start_Event.bpmn');
+
+        // Get the process by Id
+        $process = $bpmnRepository->getProcess('ProcessId');
+        $this->engine->loadProcess($process);
+
+        // Prepare a Signal Event to trigger
+        $signalRef = 'signal1';
+        $eventDefinition = $this->repository->createSignalEventDefinition();
+        $signal = $this->repository->createSignal();
+        $signal->setId($signalRef);
+        $eventDefinition->setPayload($signal);
+        $eventDefinition->setProperty('signalRef', $signalRef);
+
+        // Set Do not triggers signal start events with this signal
+        $eventDefinition->setDoNotTriggerStartEvents(true);
+
+        // Dispatch the signal to the engine
+        $this->engine->getEventDefinitionBus()->dispatchEventDefinition(
+            null,
+            $eventDefinition,
+            null
+        );
+
+        $this->engine->runToNextState();
+
+        // Assertion: The start event was not triggered
+        $this->assertCount(0, $process->getInstances());
+
+        // Set Do not triggers signal start events to FALSE to trigger the start event as usual
+        $eventDefinition->setDoNotTriggerStartEvents(false);
+
+        // Dispatch the signal to the engine
+        $this->engine->getEventDefinitionBus()->dispatchEventDefinition(
+            null,
+            $eventDefinition,
+            null
+        );
+
+        $this->engine->runToNextState();
+
+        // Assertion: The start event was not triggered
+        $this->assertCount(1, $process->getInstances());
     }
 }
