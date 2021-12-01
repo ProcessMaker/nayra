@@ -82,4 +82,11 @@ interface ActivityInterface extends FlowNodeInterface
      * @return LoopCharacteristicsInterface
      */
     public function setLoopCharacteristics(LoopCharacteristicsInterface $loopCharacteristics);
+
+    /**
+     * Get the boundary events attached to the activity
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface[]|\ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     */
+    public function getBoundaryEvents();
 }

@@ -4,6 +4,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 use Exception;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\LoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
@@ -277,5 +278,25 @@ trait ActivityTrait
     public function setLoopCharacteristics(LoopCharacteristicsInterface $loopCharacteristics)
     {
         return $this->setProperty(ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS, $loopCharacteristics);
+    }
+
+    /**
+     * Get the boundary events attached to the activity
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface[]|\ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     */
+    public function getBoundaryEvents()
+    {
+        $boundaryElements = [];
+        $process = $this->getProcess();
+        if ($process) {
+            $events = $process->getEvents();
+            foreach ($events as $event) {
+                if ($event instanceof BoundaryEventInterface && $event->getAttachedTo() === $this) {
+                    $boundaryElements[] = $event;
+                }
+            }
+        }
+        return new Collection($boundaryElements);
     }
 }
