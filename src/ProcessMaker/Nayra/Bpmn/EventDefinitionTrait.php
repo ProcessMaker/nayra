@@ -17,6 +17,11 @@ trait EventDefinitionTrait
 {
     use BaseTrait;
 
+    protected function initEventDefinitionTrait()
+    {
+        $this->setId(uniqid('event-definition-', true));
+    }
+
     /**
      * Register event with a catch event
      *
@@ -89,5 +94,15 @@ trait EventDefinitionTrait
     public function getDoNotTriggerStartEvents()
     {
         return $this->getProperty('doNotTriggerStartEvents', false);
+    }
+
+    /**
+     * Returns the event of the event definition (message, signal, etc.)
+     *
+     * @return SignalInterface|MessageInterface|ErrorInterface|mixed
+     */
+    public function getPayload()
+    {
+        return null;
     }
 }

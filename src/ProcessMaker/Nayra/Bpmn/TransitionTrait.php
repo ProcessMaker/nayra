@@ -2,12 +2,10 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\Models\Flow;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -123,7 +121,11 @@ trait TransitionTrait
             if ($this->preserveToken && $consumedTokensCount == 1) {
                 $consumeTokens->find(function (TokenInterface $token) use ($flow, $executionInstance) {
                     $flow->targetState()->addToken($executionInstance, $token, false, $this);
+                    $this->onTokenTransit($token);
                 });
+            } elseif ($this->preserveToken && ($token = $this->mergeTokens($consumeTokens))) {
+                $flow->targetState()->addToken($executionInstance, $token, false, $this);
+                $this->onTokenTransit($token);
             } else {
                 $this->activateNextState($flow, $executionInstance, $consumeTokens, [], $this);
             }
@@ -132,6 +134,21 @@ trait TransitionTrait
         $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this, $consumeTokens);
 
         return true;
+    }
+
+    /**
+     * Merge tokens into one token.
+     *
+     * @param CollectionInterface|TokenInterface[] $tokens
+     *
+     * @return TokenInterface|null
+     */
+    protected function mergeTokens(CollectionInterface $consumeTokens)
+    {
+        if ($this->getMainConnection()) {
+            error_log($this->getMainConnection()->origin()->getName());
+        }
+        return null;
     }
 
     /**
@@ -278,6 +295,16 @@ trait TransitionTrait
      */
     protected function activateNextState(ConnectionInterface $flow, ExecutionInstanceInterface $instance, CollectionInterface $consumeTokens, array $properties = [], TransitionInterface $source = null)
     {
-        $flow->targetState()->addNewToken($instance, $properties, $source);
+        $token = $flow->targetState()->addNewToken($instance, $properties, $source);
+        $this->onTokenTransit($token);
+    }
+
+    /**
+     * When a token transit.
+     *
+     * @param TokenInterface $token
+     */
+    protected function onTokenTransit(TokenInterface $token)
+    {
     }
 }

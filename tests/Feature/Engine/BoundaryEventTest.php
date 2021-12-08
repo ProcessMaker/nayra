@@ -78,10 +78,10 @@ class BoundaryEventTest extends EngineTestCase
             SignalEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
-            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         // Assertion: Task 1 does not have tokens
@@ -141,8 +141,8 @@ class BoundaryEventTest extends EngineTestCase
         $this->assertEvents([
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         // Complete second task
@@ -163,7 +163,7 @@ class BoundaryEventTest extends EngineTestCase
     /**
      * Tests a process with an error boundary event attached to a script task
      */
-    public function testErrorBoundaryEventScriptTask()
+    public function testErrorBoundaryEventScript1Task()
     {
         // Load the process from a BPMN file
         $bpmnRepository = new BpmnDocument();
@@ -204,9 +204,9 @@ class BoundaryEventTest extends EngineTestCase
         $this->assertEvents([
             ScriptTaskInterface::EVENT_ACTIVITY_EXCEPTION,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
+            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
         ]);
 
         // Complete second task
@@ -261,15 +261,15 @@ class BoundaryEventTest extends EngineTestCase
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             ErrorEventDefinition::EVENT_THROW_EVENT_DEFINITION,
-            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
-            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
+            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
 
+            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
         ]);
 
         // Complete second task
@@ -340,8 +340,8 @@ class BoundaryEventTest extends EngineTestCase
         $this->assertEvents([
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
@@ -401,8 +401,8 @@ class BoundaryEventTest extends EngineTestCase
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             CallActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
@@ -477,9 +477,9 @@ class BoundaryEventTest extends EngineTestCase
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
 
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         // Assertion: Task 1 should keep its token
@@ -704,11 +704,11 @@ class BoundaryEventTest extends EngineTestCase
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             ErrorEventDefinition::EVENT_THROW_EVENT_DEFINITION,
-            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
-            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
+            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
 
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
@@ -890,6 +890,9 @@ class BoundaryEventTest extends EngineTestCase
         $timer3Intermediate->execute($timer3Intermediate->getEventDefinitions()->item(0), $subInstance);
         $this->engine->runToNextState();
 
+        // foreach($instance->getTokens() as $token) var_dump($token->getOwnerElement()->getName() . '=' . $token->getStatus());
+        // foreach($subInstance->getTokens() as $token) var_dump($token->getOwnerElement()->getName() . '=' . $token->getStatus());
+
         $this->assertEvents([
             // Assertion: Main process is started
             ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
@@ -913,37 +916,40 @@ class BoundaryEventTest extends EngineTestCase
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
 
-            // Assertion: Task 3 and  Task 4 are activated
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            // Assertion: Call Activity is cancelled
+            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
+
+            // Assertion: Intermediate event is triggered
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
-
-            // Assertion: BoundarySignalEvent catch signal from ThrowSignal
-            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             IntermediateThrowEventInterface::EVENT_EVENT_TRIGGERED,
-            BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
 
-            // Assertion: Task 2 is activated by BoundarySignalEvent
+            // Assertion: Task 3 and  Task 4 are activated
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+
+            // // Assertion: Interrupting BoundaryTimerEvent move token to the next task
+            // BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
+            // BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
+            //
+            // // Assertion: Task 2 is activated by BoundarySignalEvent
+            // ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
 
             // Assertion: ThrowSignal element is completed and goes to next task 5
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-
-            // Assertion: Call Activity is cancelled
-            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
-            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
-            ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+            //
+            // ActivityInterface::EVENT_ACTIVITY_CANCELLED,
+            // ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
 
-        // Assertion: Task 2, Task3, Task 4 are ACTIVE and Task 1 is closed
-        $this->assertEquals(1, $task2->getTokens($instance)->count());
+        // Assertion: Task3, Task 4 are ACTIVE and Task 1 is closed
         $this->assertEquals(1, $task3->getTokens($instance)->count());
         $this->assertEquals(1, $task4->getTokens($instance)->count());
+        $this->assertEquals(1, $task5->getTokens($subInstance)->count());
         $this->assertEquals(0, $task1->getTokens($instance)->count());
     }
 
@@ -1019,9 +1025,7 @@ class BoundaryEventTest extends EngineTestCase
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
 
-            // Assertion: Task 3 and  Task 4 are activated
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+            // Assertion: IntermediateCatchEvent completed
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_MESSAGE_CONSUMED,
             IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_PASSED,
@@ -1032,12 +1036,16 @@ class BoundaryEventTest extends EngineTestCase
             IntermediateThrowEventInterface::EVENT_EVENT_TRIGGERED,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED,
 
-            // Assertion: Task 2 is activated by BoundarySignalEvent
+            // Assertion: Task 3 and  Task 4 are activated
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
 
             // Assertion: ThrowSignal element is completed and goes to next task 5
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
+
+            // Assertion: Task 2 is activated by BoundarySignalEvent
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 

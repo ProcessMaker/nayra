@@ -5,11 +5,15 @@ namespace ProcessMaker\Nayra\Bpmn;
 use Exception;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\LoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
@@ -28,10 +32,20 @@ trait ActivityTrait
     private $activeState;
 
     /**
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    private $interruptingEventState;
+
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
+    private $interruptedState;
+
+    /**
      *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
-    private $activityTransition;
+    private $completedTransition;
 
     /**
      *
@@ -61,7 +75,7 @@ trait ActivityTrait
      *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
-    private $closedState;
+    private $completedState;
 
     /**
      *
@@ -74,6 +88,10 @@ trait ActivityTrait
      */
     private $loopTransition;
 
+    private $caughtInterruptionState;
+
+    private $waitInterruptState;
+
     /**
      * Build the transitions that define the element.
      *
@@ -83,28 +101,61 @@ trait ActivityTrait
     {
         $this->setRepository($factory);
         $this->activeState = new State($this, ActivityInterface::TOKEN_STATE_ACTIVE);
-        $this->activityTransition = new ActivityTransition($this, true);
-        $this->closeActiveTransition = new CloseExceptionTransition($this, true);
         $this->failingState = new State($this, ActivityInterface::TOKEN_STATE_FAILING);
+        $this->completedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
+        $this->interruptedState = new State($this, ActivityInterface::TOKEN_STATE_INTERRUPTED);
+        $this->caughtInterruptionState = new State($this, ActivityInterface::TOKEN_STATE_CAUGHT_INTERRUPTION);
+        $this->interruptingEventState = new State($this, ActivityInterface::TOKEN_STATE_EVENT_INTERRUPTING_EVENT);
+        $this->waitInterruptState = new State($this, ActivityInterface::TOKEN_STATE_WAIT_INTERRUPT);
+
+        $this->activeInterrupted = new ActivityInterruptedTransition($this, true);
+        $this->completedInterrupted = new ActivityInterruptedTransition($this, true);
+
+        $this->activityExceptionTransition = new ActivityExceptionTransition($this, true);
+        $this->boundaryCaughtTransition = new BoundaryCaughtTransition($this, true);
+        $this->closeActiveTransition = new UncaughtCancelTransition($this, true);
+        $this->boundaryExceptionTransition = new BoundaryExceptionTransition($this, true);
+        $this->boundaryCancelActivityTransition = new Transition($this, true);
+
+        $this->completedTransition = new ActivityCompletedTransition($this, true);
+        $this->cancelActiveTransition = new CancelActivityTransition($this, true);
         $this->exceptionTransition = new ExceptionTransition($this, true);
         $this->closeExceptionTransition = new CloseExceptionTransition($this, true);
         $this->completeExceptionTransition = new CompleteExceptionTransition($this, true);
         $this->transition = new DataOutputTransition($this, false);
-        $this->closedState = new State($this, ActivityInterface::TOKEN_STATE_COMPLETED);
         $this->loopTransition = new LoopCharacteristicsTransition($this, false);
-        $this->closedState->connectTo($this->loopTransition);
+        $this->completedState->connectTo($this->loopTransition);
         $this->loopTransition->connectTo($this->activeState);
         $this->skippedTransition = new SkipActivityTransition($this, false);
 
+        $this->interruptedState->connectTo($this->activityExceptionTransition);
+        $this->interruptedState->connectTo($this->boundaryCaughtTransition);
+        $this->interruptedState->connectTo($this->closeActiveTransition);
+
+        $this->boundaryCaughtTransition->connectTo($this->caughtInterruptionState);
+        $this->caughtInterruptionState->connectTo($this->boundaryCancelActivityTransition)->setAsMainConnection();
+        $this->waitInterruptState->connectTo($this->boundaryCancelActivityTransition);
+
+        $this->activeState->connectTo($this->activeInterrupted);
+        $this->completedState->connectTo($this->completedInterrupted);
+        $this->interruptingEventState->connectTo($this->activeInterrupted);
+        $this->interruptingEventState->connectTo($this->completedInterrupted);
+        $this->activeInterrupted->connectTo($this->interruptedState);
+        $this->completedInterrupted->connectTo($this->interruptedState);
+
         $this->activeState->connectTo($this->exceptionTransition);
-        $this->activeState->connectTo($this->activityTransition);
-        $this->activeState->connectTo($this->closeActiveTransition);
+        $this->activeState->connectTo($this->completedTransition);
+        $this->activeState->connectTo($this->cancelActiveTransition);
+        $this->activityExceptionTransition->connectTo($this->failingState);
         $this->failingState->connectTo($this->completeExceptionTransition);
         $this->failingState->connectTo($this->closeExceptionTransition);
-        $this->exceptionTransition->connectTo($this->failingState);
-        $this->activityTransition->connectTo($this->closedState);
-        $this->closedState->connectTo($this->transition);
-        $this->completeExceptionTransition->connectTo($this->closedState);
+        $this->failingState->connectTo($this->boundaryExceptionTransition);
+        // $this->boundaryExceptionTransition->connectTo($this->caughtInterruptionState);
+        $this->cancelActiveTransition->connectTo($this->interruptedState);
+        $this->exceptionTransition->connectTo($this->interruptedState);
+        $this->completedTransition->connectTo($this->completedState);
+        $this->completedState->connectTo($this->transition);
+        $this->completeExceptionTransition->connectTo($this->completedState);
 
         $this->activeState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
@@ -130,7 +181,7 @@ trait ActivityTrait
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_EXCEPTION, $this, $token, $error);
             }
         );
-        $this->closedState->attachEvent(
+        $this->completedState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
             function (TokenInterface $token) {
                 $loop = $this->getLoopCharacteristics();
@@ -154,6 +205,41 @@ trait ActivityTrait
                     $this->getRepository()
                         ->getTokenRepository()
                         ->persistActivityCompleted($this, $token);
+                }
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
+            }
+        );
+        $this->boundaryCancelActivityTransition->attachEvent(
+            TransitionInterface::EVENT_AFTER_CONSUME,
+            function ($transition, $tokens) {
+                $boundaryEvents = $this->getBoundaryEvents();
+                foreach ($tokens as $token) {
+                    foreach ($boundaryEvents as $boundaryEvent) {
+                        $caughtEventDefinition = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT);
+                        foreach ($boundaryEvent->getEventDefinitions() as $eventDefinition) {
+                            if ($caughtEventDefinition === $eventDefinition->getId()) {
+                                $boundaryEvent->notifyInternalEvent($token);
+                                break 3;
+                            }
+                        }
+                    }
+                }
+                $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
+            }
+        );
+        $this->boundaryExceptionTransition->attachEvent(
+            TransitionInterface::EVENT_AFTER_CONSUME,
+            function ($transition, $tokens) {
+                $boundaryEvents = $this->getBoundaryEvents();
+                foreach ($tokens as $token) {
+                    foreach ($boundaryEvents as $boundaryEvent) {
+                        foreach ($boundaryEvent->getEventDefinitions() as $eventDefinition) {
+                            if ($eventDefinition instanceof ErrorEventDefinitionInterface) {
+                                $boundaryEvent->notifyInternalEvent($token);
+                                break 3;
+                            }
+                        }
+                    }
                 }
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
             }
@@ -199,7 +285,11 @@ trait ActivityTrait
      */
     public function getInputPlace(FlowInterface $targetFlow = null)
     {
-        $ready = new State($this, 'INCOMING');
+        $ready = new State($this, ActivityInterface::TOKEN_STATE_READY);
+        $readyInterrupted = new ActivityInterruptedTransition($this, true);
+        $ready->connectTo($readyInterrupted);
+        $this->interruptingEventState->connectTo($readyInterrupted);
+        $readyInterrupted->connectTo($this->interruptedState);
         $transition = new DataInputTransition($this, false);
         $invalidDataInput = new InvalidDataInputTransition($this, false);
         $ready->connectTo($transition);
@@ -298,5 +388,20 @@ trait ActivityTrait
             }
         }
         return new Collection($boundaryElements);
+    }
+
+    /**
+     * Notify an event to the element.
+     *
+     * @param TokenInterface $token
+     */
+    public function notifyInterruptingEvent(TokenInterface $token)
+    {
+        $instance = $token->getInstance();
+        $properties = $token->getProperties();
+        unset($properties[TokenInterface::BPMN_PROPERTY_ID]);
+        $this->interruptingEventState->addNewToken($instance, $properties);
+        $this->waitInterruptState->addNewToken($instance, $properties);
+        return $this;
     }
 }

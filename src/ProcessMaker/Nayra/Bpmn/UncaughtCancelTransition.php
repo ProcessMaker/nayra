@@ -2,29 +2,19 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CancelInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition rule when a exception is catch.
+ * Uncaught Cancel Transition.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class ExceptionTransition implements TransitionInterface
+class UncaughtCancelTransition extends BoundaryCaughtTransition implements TransitionInterface
 {
     use TransitionTrait;
-
-    /**
-     * Initialize transition.
-     *
-     */
-    protected function initActivityTransition()
-    {
-        $this->setPreserveToken(true);
-    }
 
     /**
      * Condition required to transit the element.
@@ -36,11 +26,10 @@ class ExceptionTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
-        return $token->getStatus() === ActivityInterface::TOKEN_STATE_FAILING;
-    }
-
-    protected function onTokenTransit(TokenInterface $token)
-    {
-        $token->setProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE, ErrorInterface::class);
+        $activity = $this->getOwner();
+        $eventType = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE);
+        $eventDefinitionId = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT);
+        $matchType = $eventType === CancelInterface::class || is_a($eventType, CancelInterface::class);
+        return $matchType && !$this->existsBoundaryFor($activity, $eventType, $eventDefinitionId);
     }
 }

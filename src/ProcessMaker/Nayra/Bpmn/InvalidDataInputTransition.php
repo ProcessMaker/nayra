@@ -5,6 +5,7 @@ namespace ProcessMaker\Nayra\Bpmn;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -64,6 +65,9 @@ class InvalidDataInputTransition implements TransitionInterface
             $error->setId('INVALID_DATA_INPUT');
             $error->setName($errorMessage);
             $properties['error'] = $error;
+            $properties[TokenInterface::BPMN_PROPERTY_EVENT_ID] = null;
+            $properties[TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT] = null;
+            $properties[TokenInterface::BPMN_PROPERTY_EVENT_TYPE] = ErrorInterface::class;
             $flow->targetState()->addNewToken($instance, $properties, $source);
         }
     }

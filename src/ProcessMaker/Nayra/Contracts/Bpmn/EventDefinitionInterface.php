@@ -105,4 +105,11 @@ interface EventDefinitionInterface extends EntityInterface
      * @return bool
      */
     public function getDoNotTriggerStartEvents();
+
+    /**
+     * Returns the event of the event definition (message, signal, etc.)
+     *
+     * @return SignalInterface|MessageInterface|ErrorInterface|mixed
+     */
+    public function getPayload();
 }

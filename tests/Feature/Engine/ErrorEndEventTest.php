@@ -9,7 +9,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
-use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
  * Test an error end event.
@@ -119,10 +118,10 @@ class ErrorEndEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
             EndEventInterface::EVENT_THROW_TOKEN_ARRIVES,
             ErrorEventDefinitionInterface::EVENT_THROW_EVENT_DEFINITION,
-            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
             EndEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EndEventInterface::EVENT_EVENT_TRIGGERED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
+            ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
         ]);
     }
 }

@@ -3,17 +3,17 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CancelInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition rule when a exception is catch.
+ * Transition rule to cancel an activity.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class ExceptionTransition implements TransitionInterface
+class CancelActivityTransition implements TransitionInterface
 {
     use TransitionTrait;
 
@@ -36,11 +36,11 @@ class ExceptionTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
-        return $token->getStatus() === ActivityInterface::TOKEN_STATE_FAILING;
+        return $token->getStatus() === ActivityInterface::TOKEN_STATE_CLOSED;
     }
 
     protected function onTokenTransit(TokenInterface $token)
     {
-        $token->setProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE, ErrorInterface::class);
+        $token->setProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE, CancelInterface::class);
     }
 }

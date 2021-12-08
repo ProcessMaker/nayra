@@ -11,9 +11,9 @@ class ObservableTraitTest extends TestCase
     /**
      * Dummy function to test if a callback function is attached/detached
      */
-    public function dummyFunction ()
+    public function dummyFunction()
     {
-       return 'dummy';
+        return 'dummy';
     }
 
     /**
@@ -24,7 +24,7 @@ class ObservableTraitTest extends TestCase
         $dummyGateway = new InclusiveGateway();
 
         //The activity transition will be the object to observe
-        $transition = new ActivityTransition($dummyGateway);
+        $transition = new ActivityCompletedTransition($dummyGateway);
 
         //Assertion: once attached to an event the observer count should be incremented by one
         $transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, [$this,'dummyFunction']);

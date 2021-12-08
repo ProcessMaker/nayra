@@ -8,7 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition rule for an activity in FAILING state.
+ * Transition rule to close an activity in FAILING state.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */

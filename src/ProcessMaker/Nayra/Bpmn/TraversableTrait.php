@@ -20,9 +20,10 @@ trait TraversableTrait
      */
     private $incoming;
     private $outgoing;
+    private $mainConnection;
 
     /**
-     * Initialize incomig/outgoing flows
+     * Initialize incoming/outgoing flows
      *
      */
     protected function initFlowElementBehavior()
@@ -91,5 +92,27 @@ trait TraversableTrait
             }
         });
         return new Collection($paths);
+    }
+
+    /**
+     * Set main connection of the node.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface $connection
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface
+     */
+    public function setMainConnection(ConnectionInterface $connection)
+    {
+        $this->mainConnection = $connection;
+    }
+
+    /**
+     * Get main connection of the node.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface $connection
+     */
+    protected function getMainConnection()
+    {
+        return $this->mainConnection;
     }
 }

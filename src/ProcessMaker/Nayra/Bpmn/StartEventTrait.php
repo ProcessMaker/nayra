@@ -103,16 +103,16 @@ trait StartEventTrait
     /**
      * Method to be called when a message event arrives
      *
-     * @param EventDefinitionInterface $event
+     * @param EventDefinitionInterface $eventDef
      * @param ExecutionInstanceInterface|null $instance
      * @param TokenInterface|null $token
      *
      * @return $this
      */
-    public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
+    public function execute(EventDefinitionInterface $eventDef, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
-            if ($eventDefinition->assertsRule($event, $this, $instance, $token)) {
+            if ($eventDefinition->assertsRule($eventDef, $this, $instance, $token)) {
                 if ($instance === null) {
                     $process = $this->getOwnerProcess();
                     $data =  $eventDefinition->getPayloadData($token, $this);
@@ -121,7 +121,7 @@ trait StartEventTrait
                     $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
                 }
                 $this->triggerPlace[$index]->addNewToken($instance);
-                $eventDefinition->execute($event, $this, $instance, $token);
+                $eventDefinition->execute($eventDef, $this, $instance, $token);
             }
         }
         return $this;
