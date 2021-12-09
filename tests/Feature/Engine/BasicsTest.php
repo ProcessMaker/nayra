@@ -189,10 +189,38 @@ class BasicsTest extends EngineTestCase
         $instance->close();
         $this->engine->runToNextState();
 
-        //Assertion: Verify that the proces instance was completed
+        //Assertion: Verify that the process instance was completed
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
+    }
+
+    /**
+     * Test next state callback method.
+     */
+    public function testEngineNextStateCallback()
+    {
+        // Register a next state callback
+        $this->checked = false;
+        $this->engine->nextState(function() {
+            $this->checked = true;
+        });
+        // Load a process
+        $process = $this->createSimpleProcessInstance();
+        $dataStore = $this->repository->createDataStore();
+
+        // create an instance of the process
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        // Get References
+        $start = $process->getEvents()->item(0);
+
+        //start the process an instance of the process
+        $start->start($instance);
+        $this->engine->runToNextState();
+
+        // Assertion: Next state callback was executed
+        $this->assertTrue($this->checked);
     }
 }
