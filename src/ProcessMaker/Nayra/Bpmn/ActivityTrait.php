@@ -133,7 +133,7 @@ trait ActivityTrait
         $this->interruptedState->connectTo($this->closeActiveTransition);
 
         $this->boundaryCaughtTransition->connectTo($this->caughtInterruptionState);
-        $this->caughtInterruptionState->connectTo($this->boundaryCancelActivityTransition)->setAsMainConnection();
+        $this->caughtInterruptionState->connectTo($this->boundaryCancelActivityTransition);
         $this->waitInterruptState->connectTo($this->boundaryCancelActivityTransition);
 
         $this->activeState->connectTo($this->activeInterrupted);

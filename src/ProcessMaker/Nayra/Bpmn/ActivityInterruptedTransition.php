@@ -22,6 +22,7 @@ class ActivityInterruptedTransition implements TransitionInterface
     protected function initActivityTransition()
     {
         $this->setPreserveToken(true);
+        $this->setTokensConsumedPerIncoming(-1);
     }
 
     /**

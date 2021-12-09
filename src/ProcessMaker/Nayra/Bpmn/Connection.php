@@ -78,12 +78,4 @@ class Connection implements ConnectionInterface
     {
         return $this->target;
     }
-
-    /**
-     * Set connection as main.
-     */
-    public function setAsMainConnection()
-    {
-        $this->target->setMainConnection($this);
-    }
 }

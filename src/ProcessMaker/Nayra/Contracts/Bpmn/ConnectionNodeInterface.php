@@ -29,13 +29,4 @@ interface ConnectionNodeInterface extends EntityInterface
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface $target
      */
     public function connectTo(ConnectionNodeInterface $target);
-
-    /**
-     * Set main connection of the node.
-     *
-     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionInterface $connection
-     *
-     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface
-     */
-    public function setMainConnection(ConnectionInterface $connection);
 }

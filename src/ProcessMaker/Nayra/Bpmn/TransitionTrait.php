@@ -137,21 +137,6 @@ trait TransitionTrait
     }
 
     /**
-     * Merge tokens into one token.
-     *
-     * @param CollectionInterface|TokenInterface[] $tokens
-     *
-     * @return TokenInterface|null
-     */
-    protected function mergeTokens(CollectionInterface $consumeTokens)
-    {
-        if ($this->getMainConnection()) {
-            error_log($this->getMainConnection()->origin()->getName());
-        }
-        return null;
-    }
-
-    /**
      * Notify in the bus that a conditioned transition has been activated
      *
      * @param mixed $event
