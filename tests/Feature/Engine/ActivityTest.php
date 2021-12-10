@@ -1,6 +1,6 @@
 <?php
 
-namespace ProcessMaker\Nayra\Bpmn;
+namespace Tests\Feature\Engine;
 
 use ProcessMaker\Nayra\Bpmn\Models\Activity;
 use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;

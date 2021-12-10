@@ -45,6 +45,8 @@ interface EventInterface extends FlowNodeInterface
     /**
      * Get Process of the event.
      *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
+     *
      * @return ProcessInterface
      */
     public function setProcess(ProcessInterface $process);

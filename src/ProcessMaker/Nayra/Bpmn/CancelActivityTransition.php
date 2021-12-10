@@ -39,6 +39,11 @@ class CancelActivityTransition implements TransitionInterface
         return $token->getStatus() === ActivityInterface::TOKEN_STATE_CLOSED;
     }
 
+    /**
+     * Mark token as cancel event.
+     * 
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     */
     protected function onTokenTransit(TokenInterface $token)
     {
         $token->setProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE, CancelInterface::class);

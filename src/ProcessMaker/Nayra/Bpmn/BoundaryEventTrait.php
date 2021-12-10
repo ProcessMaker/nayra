@@ -202,6 +202,11 @@ trait BoundaryEventTrait
         return $this->getAttachedTo()->getActiveState();
     }
 
+    /**
+     * Notify to complete the boundary event.
+     * 
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     */
     public function notifyInternalEvent(TokenInterface $token)
     {
         $instance = $token->getInstance();

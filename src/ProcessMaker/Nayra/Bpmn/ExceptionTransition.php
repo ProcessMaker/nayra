@@ -39,6 +39,11 @@ class ExceptionTransition implements TransitionInterface
         return $token->getStatus() === ActivityInterface::TOKEN_STATE_FAILING;
     }
 
+    /**
+     * Mark token as error event.
+     * 
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     */
     protected function onTokenTransit(TokenInterface $token)
     {
         $token->setProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE, ErrorInterface::class);

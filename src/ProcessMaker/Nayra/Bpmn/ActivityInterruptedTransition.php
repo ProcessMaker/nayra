@@ -42,7 +42,7 @@ class ActivityInterruptedTransition implements TransitionInterface
     /**
      * Merge tokens into one token.
      *
-     * @param CollectionInterface|TokenInterface[] $tokens
+     * @param CollectionInterface|TokenInterface[] $consumeTokens
      *
      * @return TokenInterface|null
      */

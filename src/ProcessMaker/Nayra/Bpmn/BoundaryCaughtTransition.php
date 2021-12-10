@@ -37,6 +37,7 @@ class BoundaryCaughtTransition implements TransitionInterface
      * Check if activity has a boundary event for the given event definition.
      *
      * @param ActivityInterface $activity
+     * @param string $eventType
      * @param string $eventDefinitionId
      *
      * @return bool

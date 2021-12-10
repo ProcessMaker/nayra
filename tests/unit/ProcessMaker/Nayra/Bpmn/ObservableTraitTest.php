@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 
+/**
+ * Test attach/detach observers.
+ */
 class ObservableTraitTest extends TestCase
 {
     /**
