@@ -134,7 +134,7 @@ trait ActivityTrait
 
         $this->activityExceptionTransition = new ActivityExceptionTransition($this, true);
         $this->boundaryCaughtTransition = new BoundaryCaughtTransition($this, true);
-        $this->closeActiveTransition = new UncaughtCancelTransition($this, true);
+        $this->closeCanceledActivity = new UncaughtCancelTransition($this, true);
         $this->boundaryExceptionTransition = new BoundaryExceptionTransition($this, true);
         $this->boundaryCancelActivityTransition = new Transition($this, true);
 
@@ -151,7 +151,7 @@ trait ActivityTrait
 
         $this->interruptedState->connectTo($this->activityExceptionTransition);
         $this->interruptedState->connectTo($this->boundaryCaughtTransition);
-        $this->interruptedState->connectTo($this->closeActiveTransition);
+        $this->interruptedState->connectTo($this->closeCanceledActivity);
 
         $this->boundaryCaughtTransition->connectTo($this->caughtInterruptionState);
         $this->caughtInterruptionState->connectTo($this->boundaryCancelActivityTransition);
@@ -262,7 +262,7 @@ trait ActivityTrait
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
             }
         );
-        $this->closeActiveTransition->attachEvent(
+        $this->closeCanceledActivity->attachEvent(
             TransitionInterface::EVENT_AFTER_CONSUME,
             function ($transition, $tokens) {
                 $loop = $this->getLoopCharacteristics();
@@ -270,6 +270,7 @@ trait ActivityTrait
                     if ($loop && $loop->isExecutable()) {
                         $loop->onTokenTerminated($token);
                     }
+                    $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
                     $this->getRepository()
                         ->getTokenRepository()
                         ->persistActivityCompleted($this, $token);
