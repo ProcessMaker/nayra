@@ -2,6 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -49,8 +50,14 @@ class ActivityInterruptedTransition implements TransitionInterface
     {
         $properties = [];
         $chosenToken = null;
+        $cancelableStates = [
+            ActivityInterface::TOKEN_STATE_READY,
+            ActivityInterface::TOKEN_STATE_ACTIVE,
+            ActivityInterface::TOKEN_STATE_COMPLETED,
+        ];
         foreach ($consumeTokens as $token) {
-            if ($token->getOwnerElement() === $this->getOwner()) {
+            $ownerName =$token->getOwner()->getName();
+            if (in_array($ownerName, $cancelableStates)) {
                 $chosenToken = $token;
             }
             $properties = array_merge($properties, $token->getProperties());
@@ -59,5 +66,27 @@ class ActivityInterruptedTransition implements TransitionInterface
             $chosenToken->setProperties($properties);
         }
         return $chosenToken;
+    }
+
+    /**
+     * Evaluate true if an event requires to interrupt an activity (in ready, active or completed).
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return boolean
+     */
+    protected function hasAllRequiredTokens(ExecutionInstanceInterface $instance)
+    {
+        $hasInterruption = false;
+        $hasToken = false;
+        foreach ($this->incoming() as $flow) {
+            $origin = $flow->origin();
+            if ($origin->getName() === ActivityInterface::TOKEN_STATE_EVENT_INTERRUPTING_EVENT) {
+                $hasInterruption = $origin->getTokens($instance)->count() >= 1;
+            } else {
+                $hasToken = $hasToken || $origin->getTokens($instance)->count() >= 1;
+            }
+        }
+        return $hasInterruption && $hasToken;
     }
 }

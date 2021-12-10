@@ -6,14 +6,11 @@ use Exception;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\LoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
-use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
@@ -88,9 +85,20 @@ trait ActivityTrait
      */
     private $loopTransition;
 
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
     private $caughtInterruptionState;
 
+    /**
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
+     */
     private $waitInterruptState;
+
+    /**
+     * @var ActivityInterruptedTransition
+     */
+    private $activityInterruptedTransition;
 
     /**
      * Build the transitions that define the element.
@@ -108,8 +116,21 @@ trait ActivityTrait
         $this->interruptingEventState = new State($this, ActivityInterface::TOKEN_STATE_EVENT_INTERRUPTING_EVENT);
         $this->waitInterruptState = new State($this, ActivityInterface::TOKEN_STATE_WAIT_INTERRUPT);
 
-        $this->activeInterrupted = new ActivityInterruptedTransition($this, true);
-        $this->completedInterrupted = new ActivityInterruptedTransition($this, true);
+        $this->activityInterruptedTransition = new ActivityInterruptedTransition($this, true);
+        $this->activityInterruptedTransition->attachEvent(
+            TransitionInterface::EVENT_AFTER_TRANSIT,
+            function ($transition, $consumedTokens) {
+                foreach ($consumedTokens as $token) {
+                    $previousState = $token->getOwner()->getName();
+                    if ($previousState !== ActivityInterface::TOKEN_STATE_EVENT_INTERRUPTING_EVENT) {
+                        $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                        $this->getRepository()
+                            ->getTokenRepository()
+                            ->persistActivityClosed($this, $token);
+                    }
+                }
+            }
+        );
 
         $this->activityExceptionTransition = new ActivityExceptionTransition($this, true);
         $this->boundaryCaughtTransition = new BoundaryCaughtTransition($this, true);
@@ -136,12 +157,10 @@ trait ActivityTrait
         $this->caughtInterruptionState->connectTo($this->boundaryCancelActivityTransition);
         $this->waitInterruptState->connectTo($this->boundaryCancelActivityTransition);
 
-        $this->activeState->connectTo($this->activeInterrupted);
-        $this->completedState->connectTo($this->completedInterrupted);
-        $this->interruptingEventState->connectTo($this->activeInterrupted);
-        $this->interruptingEventState->connectTo($this->completedInterrupted);
-        $this->activeInterrupted->connectTo($this->interruptedState);
-        $this->completedInterrupted->connectTo($this->interruptedState);
+        $this->activeState->connectTo($this->activityInterruptedTransition);
+        $this->completedState->connectTo($this->activityInterruptedTransition);
+        $this->interruptingEventState->connectTo($this->activityInterruptedTransition);
+        $this->activityInterruptedTransition->connectTo($this->interruptedState);
 
         $this->activeState->connectTo($this->exceptionTransition);
         $this->activeState->connectTo($this->completedTransition);
@@ -150,7 +169,6 @@ trait ActivityTrait
         $this->failingState->connectTo($this->completeExceptionTransition);
         $this->failingState->connectTo($this->closeExceptionTransition);
         $this->failingState->connectTo($this->boundaryExceptionTransition);
-        // $this->boundaryExceptionTransition->connectTo($this->caughtInterruptionState);
         $this->cancelActiveTransition->connectTo($this->interruptedState);
         $this->exceptionTransition->connectTo($this->interruptedState);
         $this->completedTransition->connectTo($this->completedState);
@@ -286,10 +304,7 @@ trait ActivityTrait
     public function getInputPlace(FlowInterface $targetFlow = null)
     {
         $ready = new State($this, ActivityInterface::TOKEN_STATE_READY);
-        $readyInterrupted = new ActivityInterruptedTransition($this, true);
-        $ready->connectTo($readyInterrupted);
-        $this->interruptingEventState->connectTo($readyInterrupted);
-        $readyInterrupted->connectTo($this->interruptedState);
+        $ready->connectTo($this->activityInterruptedTransition);
         $transition = new DataInputTransition($this, false);
         $invalidDataInput = new InvalidDataInputTransition($this, false);
         $ready->connectTo($transition);
