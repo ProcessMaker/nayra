@@ -227,6 +227,17 @@ trait ActivityTrait
                 $this->notifyEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, $this, $transition, $tokens);
             }
         );
+        $this->boundaryExceptionTransition->attachEvent(
+            TransitionInterface::EVENT_AFTER_CONSUME,
+            function ($transition, $tokens) {
+                foreach ($tokens as $token) {
+                    $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
+                    $this->getRepository()
+                        ->getTokenRepository()
+                        ->persistActivityCompleted($this, $token);
+                }
+            }
+        );
         $this->boundaryCancelActivityTransition->attachEvent(
             TransitionInterface::EVENT_AFTER_CONSUME,
             function ($transition, $tokens) {
