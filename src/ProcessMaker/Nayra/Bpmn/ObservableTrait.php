@@ -64,4 +64,15 @@ trait ObservableTrait
             call_user_func_array($callback, $arguments);
         }
     }
+
+    /**
+     * Notify an external event to the observers.
+     *
+     * @param $event
+     * @param array ...$arguments
+     */
+    public function notifyExternalEvent($event, ...$arguments)
+    {
+        $this->notifyEvent($event, ...$arguments);
+    }
 }

@@ -141,8 +141,9 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
                 }
             } else {
                 $numberOfActiveInstances = $numberOfInstances;
+                $newTokens = [];
                 for ($loopCounter = 1; $loopCounter <= $numberOfInstances; $loopCounter++) {
-                    $this->createInstance(
+                    $newTokens[] = $this->createInstance(
                         $instance,
                         $properties,
                         $loopCounter,
@@ -150,8 +151,13 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
                         $nextState,
                         $source,
                         $numberOfActiveInstances,
-                        $numberOfInstances
+                        $numberOfInstances,
+                        true
                     );
+                }
+                // Throw token events
+                foreach($newTokens as $token) {
+                    $nextState->notifyExternalEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
                 }
             }
         }
@@ -166,7 +172,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
      * @param TransitionInterface $source
      * @param integer $numberOfActiveInstances
      * @param integer $numberOfInstances
-     * @return void
+     * @return TokenInterface
      */
     private function createInstance(
         ExecutionInstanceInterface $instance,
@@ -176,7 +182,8 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         StateInterface $nextState,
         TransitionInterface $source,
         $numberOfActiveInstances,
-        $numberOfInstances
+        $numberOfInstances,
+        $skipEvents = false
     ) {
         $item = $this->getInputDataItemValue($instance, $loopCounter);
         $properties['data'] = [];
@@ -190,7 +197,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $this->setLoopInstanceProperty($newToken, 'numberOfActiveInstances', $numberOfActiveInstances);
         $this->setLoopInstanceProperty($newToken, 'numberOfInstances', $numberOfInstances);
         $this->setLoopInstanceProperty($newToken, 'loopCounter', $loopCounter);
-        $nextState->addToken($instance, $newToken, false, $source);
+        return $nextState->addToken($instance, $newToken, $skipEvents, $source);
     }
 
     /**

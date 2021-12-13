@@ -45,6 +45,8 @@ trait ExecutionInstanceTrait
      */
     private $tokens;
 
+    public $uniqid;
+
     /**
      * ExecutionInstance constructor.
      *
@@ -54,6 +56,7 @@ trait ExecutionInstanceTrait
      */
     protected function initExecutionInstance()
     {
+        $this->uniqid = \uniqid('', true);
         $this->tokens = new Collection;
     }
 
