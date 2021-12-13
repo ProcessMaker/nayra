@@ -22,7 +22,7 @@ trait TraversableTrait
     private $outgoing;
 
     /**
-     * Initialize incomig/outgoing flows
+     * Initialize incoming/outgoing flows
      *
      */
     protected function initFlowElementBehavior()

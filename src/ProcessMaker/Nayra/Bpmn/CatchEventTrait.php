@@ -90,19 +90,25 @@ trait CatchEventTrait
     /**
      * To implement the MessageListener interface
      *
-     * @param EventDefinitionInterface $event
+     * @param EventDefinitionInterface $eventDef
      * @param ExecutionInstanceInterface|null $instance
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface|null $token
      *
      * @return $this
      */
-    public function execute(EventDefinitionInterface $event, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
+    public function execute(EventDefinitionInterface $eventDef, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
         if ($instance !== null && $this->getActiveState()->getTokens($instance)->count() > 0) {
             foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
-                if ($eventDefinition->assertsRule($event, $this, $instance, $token)) {
-                    $this->triggerPlace[$index]->addNewToken($instance);
-                    $eventDefinition->execute($event, $this, $instance, $token);
+                if ($eventDefinition->assertsRule($eventDef, $this, $instance, $token)) {
+                    $event = $eventDefinition->getPayload();
+                    $properties = [
+                        TokenInterface::BPMN_PROPERTY_EVENT_ID => $event ? $event->getId() : null,
+                        TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT => $eventDefinition->getId(),
+                        TokenInterface::BPMN_PROPERTY_EVENT_TYPE => get_class($eventDef),
+                    ];
+                    $this->triggerPlace[$index]->addNewToken($instance, $properties);
+                    $eventDefinition->execute($eventDef, $this, $instance, $token);
                 }
             }
         }

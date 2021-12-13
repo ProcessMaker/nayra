@@ -15,6 +15,9 @@ interface TokenInterface extends EntityInterface
     const BPMN_PROPERTY_MESSAGE = 'message';
     const BPMN_PROPERTY_STATUS = 'status';
     const BPMN_PROPERTY_INDEX = 'index';
+    const BPMN_PROPERTY_EVENT_ID = 'event_id';
+    const BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT = 'event_definition_caught';
+    const BPMN_PROPERTY_EVENT_TYPE = 'event_type';
 
     /**
      * Get the owner of the token.

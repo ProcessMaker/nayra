@@ -37,4 +37,12 @@ interface ObservableInterface
      * @param callable $callback
      */
     public function detachEvent($event, callable $callback);
+
+    /**
+     * Notify an external event to the observers.
+     *
+     * @param $event
+     * @param array ...$arguments
+     */
+    public function notifyExternalEvent($event, ...$arguments);
 }

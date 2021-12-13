@@ -10,6 +10,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
@@ -24,6 +25,17 @@ trait BoundaryEventTrait
     use CatchEventTrait;
 
     /**
+     * @var StateInterface
+     */
+    private $activeState;
+
+
+    /**
+     * @var TransitionInterface
+     */
+    private $outgoingTransition;
+
+    /**
      * Build the transitions that define the element.
      *
      * @param RepositoryInterface $factory
@@ -31,23 +43,31 @@ trait BoundaryEventTrait
     public function buildTransitions(RepositoryInterface $factory)
     {
         $this->setRepository($factory);
-        $this->transition = new Transition($this);
+        $this->transition = new Transition($this, true);
+        $this->outgoingTransition = new Transition($this);
+        $this->interruptActivityTransition = new BoundaryInterruptActivityTransition($this, true);
+        $this->noInterruptActivityTransition = new BoundaryNoInterruptActivityTransition($this, true);
+        $this->activeState = new State($this, BoundaryEventInterface::TOKEN_STATE_ACTIVE);
+        $this->completedState = new State($this, BoundaryEventInterface::TOKEN_STATE_COMPLETED);
+        $this->transition->connectTo($this->activeState);
+        $this->activeState->connectTo($this->interruptActivityTransition);
+        $this->activeState->connectTo($this->noInterruptActivityTransition);
+        $this->noInterruptActivityTransition->connectTo($this->completedState);
+        $this->completedState->connectTo($this->outgoingTransition);
 
         $this->buildEventDefinitionsTransitions(
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CATCH,
             BoundaryEventInterface::EVENT_BOUNDARY_EVENT_CONSUMED
         );
-
-        $this->transition->attachEvent(Transition::EVENT_AFTER_TRANSIT, function ($transition, Collection $tokens) {
+        $this->interruptActivityTransition->attachEvent(Transition::EVENT_AFTER_TRANSIT, function ($transition, Collection $tokens) {
+            $activity = $this->getAttachedTo();
             foreach ($tokens as $token) {
-                $this->getProcess()->getEngine()->nextState(function () use ($token) {
-                    // Cancel the attachedTo activity
-                    if ($this->getCancelActivity()) {
-                        foreach ($this->getAttachedTo()->getTokens($token->getInstance()) as $token) {
-                            $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
-                        }
-                    }
-                });
+                $eventType = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE);
+                $isError = $eventType === ErrorInterface::class || is_a($eventType, ErrorInterface::class);
+                if (!$isError && $this->getCancelActivity() && $activity instanceof ActivityInterface) {
+                    $activity->notifyInterruptingEvent($token);
+                    break;
+                }
             }
         });
     }
@@ -73,7 +93,7 @@ trait BoundaryEventTrait
      */
     protected function buildConnectionTo(FlowInterface $targetFlow)
     {
-        $this->transition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
+        $this->outgoingTransition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
         return $this;
     }
 
@@ -118,7 +138,12 @@ trait BoundaryEventTrait
         foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
             if ($eventDefinition instanceof ErrorEventDefinitionInterface
                 && $eventDefinition->shouldCatchEventDefinition($errorDef)) {
-                $this->triggerPlace[$index]->addNewToken($token->getInstance());
+                $properties = [
+                    TokenInterface::BPMN_PROPERTY_EVENT_ID => null,
+                    TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT => $eventDefinition->getId(),
+                    TokenInterface::BPMN_PROPERTY_EVENT_TYPE => ErrorInterface::class,
+                ];
+                $this->triggerPlace[$index]->addNewToken($token->getInstance(), $properties);
             }
         }
     }
@@ -175,5 +200,17 @@ trait BoundaryEventTrait
     public function getActiveState()
     {
         return $this->getAttachedTo()->getActiveState();
+    }
+
+    /**
+     * Notify to complete the boundary event.
+     * 
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
+     */
+    public function notifyInternalEvent(TokenInterface $token)
+    {
+        $instance = $token->getInstance();
+        $properties = $token->getProperties();
+        $this->completedState->addNewToken($instance, $properties);
     }
 }

@@ -8,33 +8,24 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
- * Transition rule to close an activity in FAILING state.
+ * Transition rule for an activity.
  *
  * @package ProcessMaker\Nayra\Bpmn
  */
-class CloseExceptionTransition implements TransitionInterface
+class ActivityCompletedTransition implements TransitionInterface
 {
     use TransitionTrait;
 
     /**
-     * Initialize transition.
-     *
-     */
-    protected function initActivityTransition()
-    {
-        $this->setPreserveToken(true);
-    }
-
-    /**
-     * Condition required to transit an activity in FAILING state.
+     * Condition required to transit the element.
      *
      * @param TokenInterface|null $token
-     * @param ExecutionInstanceInterface|null $executionInstance
+     * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface|null $executionInstance
      *
      * @return bool
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
-        return $token->getStatus() === ActivityInterface::TOKEN_STATE_CLOSED;
+        return $token->getStatus() === ActivityInterface::TOKEN_STATE_COMPLETED;
     }
 }

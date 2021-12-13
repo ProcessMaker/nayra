@@ -33,6 +33,7 @@ interface EventInterface extends FlowNodeInterface
      * Token states defined for Event
      */
     const TOKEN_STATE_ACTIVE = 'ACTIVE';
+    const TOKEN_STATE_COMPLETED = 'COMPLETED';
 
     /**
      * Get Process of the event.
@@ -43,6 +44,8 @@ interface EventInterface extends FlowNodeInterface
 
     /**
      * Get Process of the event.
+     *
+     * @param \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface $process
      *
      * @return ProcessInterface
      */

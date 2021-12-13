@@ -6,7 +6,6 @@ use ProcessMaker\Nayra\Bpmn\ObservableTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface;
@@ -50,9 +49,15 @@ class EventDefinitionBus implements EventDefinitionBusInterface
         $this->attachEvent(get_class($eventDefinition), function ($source, EventDefinitionInterface $sourceEventDefinition, TokenInterface $token = null) use ($catchEvent, $callable, $eventDefinition) {
             if (get_class($sourceEventDefinition) === get_class($eventDefinition)) {
                 $match = $eventDefinition->shouldCatchEventDefinition($sourceEventDefinition);
-                if ($match && $catchEvent instanceof StartEventInterface) {
+                if (!$match) {
+                    return;
+                }
+                if ($catchEvent instanceof StartEventInterface && $sourceEventDefinition->getDoNotTriggerStartEvents()) {
+                    return;
+                }
+                if ($catchEvent instanceof StartEventInterface) {
                     $callable($eventDefinition, null, $token);
-                } elseif ($match) {
+                } else {
                     $instances = $this->getInstancesFor($catchEvent);
                     foreach ($instances as $instance) {
                         $callable($eventDefinition, $instance, $token);

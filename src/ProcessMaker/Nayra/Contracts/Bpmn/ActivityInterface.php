@@ -29,10 +29,15 @@ interface ActivityInterface extends FlowNodeInterface
     /**
      * Token states defined for Activity
      */
+    const TOKEN_STATE_READY = 'READY';
     const TOKEN_STATE_ACTIVE = 'ACTIVE';
     const TOKEN_STATE_FAILING = 'FAILING';
     const TOKEN_STATE_COMPLETED = 'COMPLETED';
     const TOKEN_STATE_CLOSED = 'CLOSED';
+    const TOKEN_STATE_INTERRUPTED = 'INTERRUPTED';
+    const TOKEN_STATE_CAUGHT_INTERRUPTION = 'CAUGHT_INTERRUPTION';
+    const TOKEN_STATE_EVENT_INTERRUPTING_EVENT = 'INTERRUPTING_EVENT';
+    const TOKEN_STATE_WAIT_INTERRUPT = 'WAIT_INTERRUPT';
     const TOKEN_STATE_SKIPPED = 'SKIPPED';
 
     /**
@@ -82,4 +87,18 @@ interface ActivityInterface extends FlowNodeInterface
      * @return LoopCharacteristicsInterface
      */
     public function setLoopCharacteristics(LoopCharacteristicsInterface $loopCharacteristics);
+
+    /**
+     * Get the boundary events attached to the activity
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface[]|\ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface
+     */
+    public function getBoundaryEvents();
+
+    /**
+     * Notify an event to the element.
+     *
+     * @param TokenInterface $token
+     */
+    public function notifyInterruptingEvent(TokenInterface $token);
 }
