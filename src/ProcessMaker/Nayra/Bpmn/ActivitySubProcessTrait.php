@@ -60,8 +60,12 @@ trait ActivitySubProcessTrait
         $this->getCalledElement()->attachEvent(
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
             function ($self, ExecutionInstanceInterface $closedInstance) use ($token, $instance) {
+                $skipStates = [
+                    ActivityInterface::TOKEN_STATE_FAILING,
+                    ActivityInterface::TOKEN_STATE_INTERRUPTED,
+                ];
                 if ($closedInstance->getId() === $instance->getId()
-                && $token->getStatus() !== ActivityInterface::TOKEN_STATE_FAILING) {
+                && !in_array($token->getStatus(), $skipStates)) {
                     $this->completeSubprocess($token, $closedInstance, $instance);
                 }
             }
