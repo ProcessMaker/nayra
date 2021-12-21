@@ -72,11 +72,6 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
         return $this;
     }
 
-    public function getCondition()
-    {
-        return $this->condition;
-    }
-
     /**
      * If the condition is not met.
      *
