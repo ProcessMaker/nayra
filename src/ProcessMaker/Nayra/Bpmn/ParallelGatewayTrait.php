@@ -85,7 +85,7 @@ trait ParallelGatewayTrait
                         ->persistGatewayTokenPassed($this, $token);
                 }
 
-                $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this, $transition);
+                $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this,  $transition, $consumedTokens);
             }
         );
         $this->transition->connectTo($outgoingPlace);
