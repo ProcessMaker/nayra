@@ -78,6 +78,7 @@ class TerminateEventTest extends EngineTestCase
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
             ThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             EventInterface::EVENT_EVENT_TRIGGERED,
+            ActivityInterface::EVENT_ACTIVITY_CANCELLED,
             ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
         ]);
     }
