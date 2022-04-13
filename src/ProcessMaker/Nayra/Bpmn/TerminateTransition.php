@@ -2,8 +2,7 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-use ProcessMaker\Nayra\Bpmn\Collection;
-use ProcessMaker\Nayra\Bpmn\TransitionTrait;
+use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -17,7 +16,9 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 class TerminateTransition implements TransitionInterface
 {
 
-    use TransitionTrait;
+    use TransitionTrait {
+        doTransit as doTransitTrait;
+    }
 
     /**
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface $terminate
@@ -38,22 +39,22 @@ class TerminateTransition implements TransitionInterface
     }
 
     /**
-     * If a token reaches a Terminate End Event, the entire Process is terminated.
      *
+     * @param CollectionInterface $consumeTokens
      * @param ExecutionInstanceInterface $executionInstance
      *
-     * @return \ProcessMaker\Nayra\Bpmn\Collection
+     * @return boolean
      */
-    protected function evaluateConsumeTokens(ExecutionInstanceInterface $executionInstance)
+    protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
-        $tokens = [];
-        foreach($executionInstance->getTokens() as $token) {
+        // Terminate events must close all active tokens
+        foreach ($executionInstance->getTokens() as $token) {
             if ($this->assertCondition($token, $executionInstance)) {
                 $this->eventDefinition->execute($this->eventDefinition, $this->owner, $executionInstance, $token);
-                $tokens[]=$token;
+                $token->setStatus('CLOSED');
             }
         }
-        return new Collection($tokens);
+        return $this->doTransitTrait($consumeTokens, $executionInstance);
     }
 
     /**
