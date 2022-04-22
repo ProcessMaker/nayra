@@ -1,7 +1,7 @@
 {
 	"name": "processmaker/nayra",
 	"description": "BPMN compliant engine",
-	"version": "1.9.2",
+	"version": "1.9.3",
 	"license": "Apache-2.0",
 	"autoload": {
 		"psr-4": {
