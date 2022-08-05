@@ -4,12 +4,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Collection of artifacts.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ArtifactCollectionInterface extends CollectionInterface
 {
-
     /**
      * Add an element to the collection.
      *

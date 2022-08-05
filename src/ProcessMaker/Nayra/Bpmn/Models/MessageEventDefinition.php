@@ -13,7 +13,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * MessageEventDefinition class
- *
  */
 class MessageEventDefinition implements MessageEventDefinitionInterface
 {
@@ -70,7 +69,7 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
      * @param ExecutionInstanceInterface|null $instance
      * @param TokenInterface|null $token
      *
-     * @return boolean
+     * @return bool
      */
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
@@ -103,7 +102,8 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
     {
         $targetPayload = $this->getPayload();
         $sourcePayload = $eventDefinition->getPayload();
-        return (!$targetPayload && !$sourcePayload)
+
+        return (! $targetPayload && ! $sourcePayload)
             || ($targetPayload && $sourcePayload && $targetPayload->getId() === $sourcePayload->getId());
     }
 }

@@ -17,14 +17,12 @@ use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
 
 /**
  * Token Repository.
- *
- * @package ProcessMaker\Models
  */
 class TokenRepository implements TokenRepositoryInterface
 {
     public $persistCalls = 0;
 
-    static $failNextPersistanceCall = false;
+    public static $failNextPersistanceCall = false;
 
     /**
      * Sets to fail on next persistance call
@@ -44,6 +42,7 @@ class TokenRepository implements TokenRepositoryInterface
     public function createTokenInstance()
     {
         $token = new Token();
+
         return $token;
     }
 
@@ -142,7 +141,6 @@ class TokenRepository implements TokenRepositoryInterface
 
     /**
      * Reset persist calls
-     *
      */
     public function resetPersistCalls()
     {
@@ -293,7 +291,6 @@ class TokenRepository implements TokenRepositoryInterface
      *
      * @param StartEventInterface $startEvent
      * @param CollectionInterface $tokens
-     *
      */
     public function persistStartEventTriggered(StartEventInterface $startEvent, CollectionInterface $tokens)
     {

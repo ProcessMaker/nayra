@@ -4,25 +4,30 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * FlowInterface
- *
  */
 interface FlowInterface extends EntityInterface
 {
-
     /**
      * Type of element.
      */
     const TYPE = 'bpmnFlow';
 
     const BPMN_PROPERTY_CONDITION_EXPRESSION = 'conditionExpression';
+
     const BPMN_PROPERTY_IS_DEFAULT = 'isDefault';
+
     const BPMN_PROPERTY_SOURCE = 'source';
+
     const BPMN_PROPERTY_TARGET = 'target';
+
     const BPMN_PROPERTY_SOURCE_REF = 'sourceRef';
+
     const BPMN_PROPERTY_TARGET_REF = 'targetRef';
 
     const TYPE_DEFAULT = 'DEFAULT';
+
     const TYPE_SEQUENCE = 'SEQUENCE';
+
     const TYPE_MESSAGE = 'MESSAGE';
 
     /**
@@ -39,14 +44,14 @@ interface FlowInterface extends EntityInterface
         'FLO_ELEMENT_DEST' => '',
         'FLO_ELEMENT_DEST_TYPE' => '',
         'FLO_ELEMENT_DEST_PORT' => '0',
-        'FLO_IS_INMEDIATE' => NULL,
-        'FLO_CONDITION' => NULL,
+        'FLO_IS_INMEDIATE' => null,
+        'FLO_CONDITION' => null,
         'FLO_X1' => '0',
         'FLO_Y1' => '0',
         'FLO_X2' => '0',
         'FLO_Y2' => '0',
-        'FLO_STATE' => NULL,
-        'FLO_POSITION' => '0'
+        'FLO_STATE' => null,
+        'FLO_POSITION' => '0',
     ];
 
     /**
@@ -56,7 +61,6 @@ interface FlowInterface extends EntityInterface
 
     ];
 
-    
     /**
      * Get Process of the flow.
      *

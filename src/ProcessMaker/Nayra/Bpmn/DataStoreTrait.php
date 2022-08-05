@@ -7,24 +7,19 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Implementation of the behavior for a data store.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait DataStoreTrait
 {
     use FlowElementTrait;
 
-
     private $data = [];
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface
      */
     private $process;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface
      */
     private $itemSubject;
@@ -50,6 +45,7 @@ trait DataStoreTrait
     {
         $this->process = $process;
         $this->getId();
+
         return $this;
     }
 
@@ -76,6 +72,7 @@ trait DataStoreTrait
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -90,6 +87,7 @@ trait DataStoreTrait
     public function putData($name, $data)
     {
         $this->data[$name] = $data;
+
         return $this;
     }
 

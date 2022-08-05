@@ -6,14 +6,15 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Rule that defines if a flow node can be transit.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface TransitionInterface extends ConnectionNodeInterface, ObservableInterface
 {
     const EVENT_BEFORE_TRANSIT = 'BeforeTransit';
+
     const EVENT_AFTER_CONSUME = 'AfterConsume';
+
     const EVENT_AFTER_TRANSIT = 'AfterTransit';
+
     const EVENT_CONDITIONED_TRANSITION = 'ConditionedTransition';
 
     /**

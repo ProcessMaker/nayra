@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule to cancel an activity.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class CancelActivityTransition implements TransitionInterface
 {
@@ -19,7 +17,6 @@ class CancelActivityTransition implements TransitionInterface
 
     /**
      * Initialize transition.
-     *
      */
     protected function initActivityTransition()
     {
@@ -41,7 +38,7 @@ class CancelActivityTransition implements TransitionInterface
 
     /**
      * Mark token as cancel event.
-     * 
+     *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
      */
     protected function onTokenTransit(TokenInterface $token)

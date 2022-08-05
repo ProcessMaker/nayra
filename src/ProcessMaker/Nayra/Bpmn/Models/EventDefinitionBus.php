@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface;
 
 /**
  * Implements a events bus for the bpmn elements.
- *
  */
 class EventDefinitionBus implements EventDefinitionBusInterface
 {
@@ -32,6 +31,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
     public function dispatchEventDefinition($source, EventDefinitionInterface $eventDefinition, TokenInterface $token = null)
     {
         $this->notifyEvent(get_class($eventDefinition), $source, $eventDefinition, $token);
+
         return $this;
     }
 
@@ -49,7 +49,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
         $this->attachEvent(get_class($eventDefinition), function ($source, EventDefinitionInterface $sourceEventDefinition, TokenInterface $token = null) use ($catchEvent, $callable, $eventDefinition) {
             if (get_class($sourceEventDefinition) === get_class($eventDefinition)) {
                 $match = $eventDefinition->shouldCatchEventDefinition($sourceEventDefinition);
-                if (!$match) {
+                if (! $match) {
                     return;
                 }
                 if ($catchEvent instanceof StartEventInterface && $sourceEventDefinition->getDoNotTriggerStartEvents()) {
@@ -65,6 +65,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
                 }
             }
         });
+
         return $this;
     }
 
@@ -78,6 +79,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
     public function setCollaboration(CollaborationInterface $collaboration)
     {
         $this->collaboration = $collaboration;
+
         return $this;
     }
 

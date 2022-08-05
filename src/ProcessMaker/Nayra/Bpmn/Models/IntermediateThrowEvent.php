@@ -8,16 +8,13 @@ use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 
 /**
  * IntermediateThrowEvent implementation.
- *
- * @package ProcessMaker\Models
  */
 class IntermediateThrowEvent implements IntermediateThrowEventInterface
 {
-
     use IntermediateThrowEventTrait;
 
     /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\DataInputAssociationInterface[] $dataInputAssociations
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\DataInputAssociationInterface[]
      */
     private $dataInputAssociations;
 
@@ -38,12 +35,11 @@ class IntermediateThrowEvent implements IntermediateThrowEventInterface
 
     /**
      * Initialize intermediate throw event.
-     *
      */
     protected function initIntermediateThrowEvent()
     {
-        $this->dataInputAssociations= new Collection;
-        $this->dataInputs= new Collection;
+        $this->dataInputAssociations = new Collection;
+        $this->dataInputs = new Collection;
         $this->setProperty(static::BPMN_PROPERTY_EVENT_DEFINITIONS, new Collection);
     }
 

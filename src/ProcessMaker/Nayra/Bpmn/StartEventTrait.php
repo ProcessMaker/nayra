@@ -14,15 +14,12 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Implementation of the behavior of a start event.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait StartEventTrait
 {
     use CatchEventTrait;
 
     /**
-     *
      * @var StartTransition
      */
     private $transition;
@@ -84,6 +81,7 @@ trait StartEventTrait
     protected function buildConnectionTo(FlowInterface $targetFlow)
     {
         $this->transition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
+
         return $this;
     }
 
@@ -97,6 +95,7 @@ trait StartEventTrait
     public function start(ExecutionInstanceInterface $instance)
     {
         $this->triggerPlace[0]->addNewToken($instance);
+
         return $this;
     }
 
@@ -115,7 +114,7 @@ trait StartEventTrait
             if ($eventDefinition->assertsRule($eventDef, $this, $instance, $token)) {
                 if ($instance === null) {
                     $process = $this->getOwnerProcess();
-                    $data =  $eventDefinition->getPayloadData($token, $this);
+                    $data = $eventDefinition->getPayloadData($token, $this);
                     $dataStorage = $process->getRepository()->createDataStore();
                     $dataStorage->setData($data);
                     $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
@@ -124,6 +123,7 @@ trait StartEventTrait
                 $eventDefinition->execute($eventDef, $this, $instance, $token);
             }
         }
+
         return $this;
     }
 
@@ -138,6 +138,7 @@ trait StartEventTrait
     {
         $this->registerCatchEvents($engine);
         $this->activateCatchEvent(null);
+
         return $this;
     }
 }

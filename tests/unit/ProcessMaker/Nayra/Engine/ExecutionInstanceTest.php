@@ -11,11 +11,9 @@ use ProcessMaker\Test\Models\Repository;
 
 /**
  * Execution Instance tests
- *
  */
 class ExecutionInstanceTest extends TestCase
 {
-
     /**
      * Tests that a new ExecutionInstance is initialized correctly
      */

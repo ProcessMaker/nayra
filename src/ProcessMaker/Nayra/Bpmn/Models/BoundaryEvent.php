@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 
 /**
  * BoundaryEvent implementation.
- *
- * @package ProcessMaker\Nayra\Bpmn\Models
  */
 class BoundaryEvent implements BoundaryEventInterface, MessageListenerInterface
 {

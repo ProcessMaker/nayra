@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Bpmn\Models\ActivityCollection;
 
 /**
  * Tests the activity collection
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ActivityCollectionTest extends TestCase
 {

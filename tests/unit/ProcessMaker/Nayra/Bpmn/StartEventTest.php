@@ -7,7 +7,6 @@ use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 
 /**
  * StartEvent unit test.
- *
  */
 class StartEventTest extends TestCase
 {

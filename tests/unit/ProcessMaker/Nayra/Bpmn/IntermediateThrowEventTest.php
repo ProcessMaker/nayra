@@ -2,14 +2,11 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Models\IntermediateThrowEvent;
 
 /**
  * Tests for the IntermediateThrowEvent class
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class IntermediateThrowEventTest extends TestCase
 {

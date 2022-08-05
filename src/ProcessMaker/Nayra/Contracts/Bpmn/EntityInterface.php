@@ -8,28 +8,24 @@ use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
 
 /**
  * Entity could get and set properties for an bpmn element.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface EntityInterface
 {
     const BPMN_PROPERTY_ID = 'id';
+
     const BPMN_PROPERTY_NAME = 'name';
 
     /**
-     *
      * @param array $properties
      */
     public function setProperties(array $properties);
 
     /**
-     *
      * @return array
      */
     public function getProperties();
 
     /**
-     *
      * @param string $name
      * @param mixed $value
      *
@@ -38,7 +34,6 @@ interface EntityInterface
     public function setProperty($name, $value);
 
     /**
-     *
      * @param string $name
      * @param mixed $default
      *

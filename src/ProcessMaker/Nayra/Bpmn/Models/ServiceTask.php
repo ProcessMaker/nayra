@@ -13,16 +13,13 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * This activity will raise an exception when executed.
- *
  */
 class ServiceTask implements ServiceTaskInterface
 {
-
     use ActivityTrait;
 
     /**
      * Initialize the service task
-     *
      */
     protected function initServiceTask()
     {
@@ -58,6 +55,7 @@ class ServiceTask implements ServiceTaskInterface
     public function setImplementation($implementation)
     {
         $this->setProperty(ServiceTaskInterface::BPMN_PROPERTY_IMPLEMENTATION, $implementation);
+
         return $this;
     }
 
@@ -83,10 +81,10 @@ class ServiceTask implements ServiceTaskInterface
         //if the script runs correctly complete te activity, otherwise set the token to failed state
         if ($this->executeService($token, $this->getImplementation())) {
             $this->complete($token);
-        }
-        else {
+        } else {
             $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
         }
+
         return $this;
     }
 
@@ -105,11 +103,10 @@ class ServiceTask implements ServiceTaskInterface
             $callable = is_string($implementation) && strpos($implementation, '@')
                 ? explode('@', $implementation) : $implementation;
             call_user_func($callable);
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $result = false;
         }
+
         return $result;
     }
-
 }

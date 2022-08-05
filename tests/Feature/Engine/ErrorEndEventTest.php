@@ -12,14 +12,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test an error end event.
- *
  */
 class ErrorEndEventTest extends EngineTestCase
 {
-
     /**
      * Test a global Error End Event
-     *
      */
     public function testErrorEndEventTopLevel()
     {
@@ -27,7 +24,7 @@ class ErrorEndEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Error_EndEvent_TopLevel.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Error_EndEvent_TopLevel.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Error_EndEvent_TopLevel');
@@ -75,7 +72,6 @@ class ErrorEndEventTest extends EngineTestCase
 
     /**
      * Test a global Error End Event
-     *
      */
     public function testErrorEndEventCallActivity()
     {
@@ -83,7 +79,7 @@ class ErrorEndEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Error_EndEvent_CallActivity.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Error_EndEvent_CallActivity.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');

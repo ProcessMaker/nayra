@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Verify the condition to transit and if not accomplished the tokens are consumed.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class DefaultTransition implements TransitionInterface
 {
@@ -27,12 +25,13 @@ class DefaultTransition implements TransitionInterface
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $executeDefaultTransition = true;
-        foreach($this->owner->getConditionedTransitions() as $transition) {
+        foreach ($this->owner->getConditionedTransitions() as $transition) {
             if ($transition->assertCondition($token, $executionInstance)) {
-               $executeDefaultTransition = false;
-               break;
+                $executeDefaultTransition = false;
+                break;
             }
         }
+
         return $executeDefaultTransition;
     }
 
@@ -41,11 +40,12 @@ class DefaultTransition implements TransitionInterface
      *
      * @param ExecutionInstanceInterface $executionInstance
      *
-     * @return boolean
+     * @return bool
      */
     protected function conditionIsFalse(ExecutionInstanceInterface $executionInstance)
     {
         $this->collect($executionInstance);
+
         return true;
     }
 
@@ -60,7 +60,7 @@ class DefaultTransition implements TransitionInterface
     {
         return $this->incoming()->sum(function (Connection $flow) use ($executionInstance) {
             return $flow->origin()->getTokens($executionInstance)->sum(function (TokenInterface $token) {
-                return $token->getOwner()->consumeToken($token) ? 1 :0;
+                return $token->getOwner()->consumeToken($token) ? 1 : 0;
             });
         });
     }

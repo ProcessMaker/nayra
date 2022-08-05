@@ -2,18 +2,15 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-
 use ProcessMaker\Nayra\Bpmn\Collection;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 
 /**
  * Collection of flows.
- *
  */
 class FlowCollection extends Collection implements FlowCollectionInterface
 {
-
     /**
      * Add an element to the collection.
      *
@@ -24,6 +21,7 @@ class FlowCollection extends Collection implements FlowCollectionInterface
     public function add(FlowInterface $element)
     {
         $this->push($element);
+
         return $this;
     }
 }

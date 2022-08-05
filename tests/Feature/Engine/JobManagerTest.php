@@ -9,11 +9,9 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Start Timer Event tests
- *
  */
 class JobManagerTest extends EngineTestCase
 {
-
     use JobManagerTrait;
 
     /**
@@ -28,7 +26,7 @@ class JobManagerTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycle.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeCycle.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
@@ -69,12 +67,12 @@ class JobManagerTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycle.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeCycle.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
         $timerEventDefinition = $bpmnRepository->getTimerEventDefinition('_9_ED_1');
-        
+
         //Set a time cycle between two dates
         $expression = $this->repository->createFormalExpression();
         $expression->setRepository($this->repository);
@@ -115,12 +113,12 @@ class JobManagerTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDate.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeDate.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
         $timerEventDefinition = $bpmnRepository->getTimerEventDefinition('_9_ED_1');
-        
+
         //Set an specific date time
         $date = '2018-10-02T21:30:00Z';
         $expression = $this->repository->createFormalExpression();
@@ -148,12 +146,12 @@ class JobManagerTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDateInterval.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeDateInterval.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
         $timerEventDefinition = $bpmnRepository->getTimerEventDefinition('_9_ED_1');
-        
+
         //Set an date time interval
         $interval = 'PT1H';
         $expression = $this->repository->createFormalExpression();

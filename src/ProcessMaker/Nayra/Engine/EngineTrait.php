@@ -19,8 +19,6 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Engine base behavior.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait EngineTrait
 {
@@ -41,7 +39,7 @@ trait EngineTrait
     /**
      * Engine data store.
      *
-     * @var DataStoreInterface $dataStore
+     * @var DataStoreInterface
      */
     private $dataStore;
 
@@ -73,15 +71,17 @@ trait EngineTrait
         foreach ($this->executionInstances as $executionInstance) {
             $sum += $executionInstance->getTransitions()->sum(function (TransitionInterface $transition) use ($executionInstance) {
                 $result = $transition->execute($executionInstance) ? 1 : 0;
+
                 return $result;
             }) > 0;
         }
         //If there are no pending transitions, next state callbacks are executed
-        if (!$sum && $sum = count($this->onNextState)) {
+        if (! $sum && $sum = count($this->onNextState)) {
             while ($action = array_shift($this->onNextState)) {
                 $action();
             }
         }
+
         return $sum;
     }
 
@@ -97,7 +97,7 @@ trait EngineTrait
         $step = true;
         while ($step) {
             $step = $this->step();
-            if (!$step) {
+            if (! $step) {
                 $this->dispatchConditionalEvents();
                 $step = $this->step();
             }
@@ -106,6 +106,7 @@ trait EngineTrait
                 return false;
             }
         }
+
         return true;
     }
 
@@ -119,6 +120,7 @@ trait EngineTrait
     public function nextState(callable $callable)
     {
         $this->onNextState[] = $callable;
+
         return $this;
     }
 
@@ -146,6 +148,7 @@ trait EngineTrait
 
         $instanceRepo->persistInstanceCreated($executionInstance);
         $process->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED, $executionInstance, $event);
+
         return $executionInstance;
     }
 
@@ -168,7 +171,7 @@ trait EngineTrait
         // Create and load an instance by id
         $repository = $this->getRepository()->createExecutionInstanceRepository();
         $executionInstance = $repository->loadExecutionInstanceByUid($id, $storage);
-        if (!$executionInstance) {
+        if (! $executionInstance) {
             return;
         }
 
@@ -190,9 +193,10 @@ trait EngineTrait
         $this->executionInstances = array_filter(
             $this->executionInstances,
             function (ExecutionInstanceInterface $executionInstance) {
-                return !$executionInstance->close();
+                return ! $executionInstance->close();
             }
         );
+
         return count($this->executionInstances) === 0;
     }
 
@@ -216,6 +220,7 @@ trait EngineTrait
     public function setDataStore(DataStoreInterface $dataStore)
     {
         $this->dataStore = $dataStore;
+
         return $this;
     }
 
@@ -229,10 +234,11 @@ trait EngineTrait
     public function loadProcess(ProcessInterface $process)
     {
         $process->setEngine($this);
-        if (!in_array($process, $this->processes, true)) {
+        if (! in_array($process, $this->processes, true)) {
             $this->processes[] = $process;
             $this->registerCatchEvents($process);
         }
+
         return $this;
     }
 
@@ -253,6 +259,7 @@ trait EngineTrait
         foreach ($processes as $process) {
             $this->loadProcess($process->getBpmnElementInstance());
         }
+
         return $this;
     }
 
@@ -266,6 +273,7 @@ trait EngineTrait
     public function loadCollaboration(CollaborationInterface $collaboration)
     {
         $this->getEventDefinitionBus()->setCollaboration($collaboration);
+
         return $this;
     }
 
@@ -303,6 +311,7 @@ trait EngineTrait
     public function setJobManager(JobManagerInterface $jobManager = null)
     {
         $this->jobManager = $jobManager;
+
         return $this;
     }
 
@@ -316,6 +325,7 @@ trait EngineTrait
     public function setEventDefinitionBus(EventDefinitionBusInterface $eventDefinitionBus)
     {
         $this->eventDefinitionBus = $eventDefinitionBus;
+
         return $this;
     }
 
@@ -327,6 +337,7 @@ trait EngineTrait
     public function getEventDefinitionBus()
     {
         $this->eventDefinitionBus = $this->eventDefinitionBus ?: new EventDefinitionBus;
+
         return $this->eventDefinitionBus;
     }
 

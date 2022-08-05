@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Base implementation for a parallel gateway.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait ParallelGatewayTrait
 {
@@ -62,6 +60,7 @@ trait ParallelGatewayTrait
 
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED, $this, $token);
         });
+
         return $incomingPlace;
     }
 
@@ -85,12 +84,13 @@ trait ParallelGatewayTrait
                         ->persistGatewayTokenPassed($this, $token);
                 }
 
-                $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this,  $transition, $consumedTokens);
+                $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this, $transition, $consumedTokens);
             }
         );
         $this->transition->connectTo($outgoingPlace);
         $outgoingPlace->connectTo($outgoingTransition);
         $outgoingTransition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
+
         return $this;
     }
 }

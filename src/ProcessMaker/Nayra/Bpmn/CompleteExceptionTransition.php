@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule for an activity in FAILING state.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class CompleteExceptionTransition implements TransitionInterface
 {
@@ -18,7 +16,6 @@ class CompleteExceptionTransition implements TransitionInterface
 
     /**
      * Initialize transition.
-     *
      */
     protected function initActivityTransition()
     {

@@ -12,15 +12,12 @@ use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
  * Test pools lane sets and lanes.
- *
  */
 class LanesTest extends EngineTestCase
 {
-
     /**
      * Test loading a collaboration with a single participant with two lanes
      * and a child lane set with two lanes.
-     *
      */
     public function testLoadingLanes()
     {
@@ -29,7 +26,7 @@ class LanesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
 
-        $bpmnRepository->load(__DIR__ . '/files/Lanes.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Lanes.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -66,12 +63,10 @@ class LanesTest extends EngineTestCase
         $this->assertEquals('Lane 1', $firstLane->getName());
         $this->assertEquals('Lane 2', $secondLane->getName());
         $this->assertEquals('Lane 3', $thirdLane->getName());
-
     }
 
     /**
      * Lanes have no effect on the execution and should be ignored.
-     *
      */
     public function testExecutionWithLanes()
     {
@@ -79,7 +74,7 @@ class LanesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Lanes.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Lanes.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');

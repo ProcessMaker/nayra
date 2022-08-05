@@ -8,12 +8,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
 
 /**
  * IntermediateThrowEvent implementation.
- *
- * @package ProcessMaker\Models
  */
 class IntermediateCatchEvent implements IntermediateCatchEventInterface, MessageListenerInterface
 {
-
     use IntermediateCatchEventTrait;
 
     /**
@@ -21,7 +18,7 @@ class IntermediateCatchEvent implements IntermediateCatchEventInterface, Message
      *
      * @return array
      */
-   protected function getBpmnEventClasses()
+    protected function getBpmnEventClasses()
     {
         return [];
     }

@@ -8,20 +8,18 @@ use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 
 /**
  * Implementation of signal class.
- *
- * @package \ProcessMaker\Nayra\Bpmn\Models
  */
 class Signal implements SignalInterface
 {
     use BaseTrait;
 
     /**
-     * @var string $id
+     * @var string
      */
     private $id;
 
     /**
-     * @var string $id
+     * @var string
      */
     private $name;
 

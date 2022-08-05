@@ -4,8 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Activity interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ActivityInterface extends FlowNodeInterface
 {
@@ -13,31 +11,47 @@ interface ActivityInterface extends FlowNodeInterface
      * Events defined for Activity
      */
     const EVENT_ACTIVITY_ACTIVATED = 'ActivityActivated';
+
     const EVENT_ACTIVITY_COMPLETED = 'ActivityCompleted';
+
     const EVENT_ACTIVITY_EXCEPTION = 'ActivityException';
+
     const EVENT_ACTIVITY_CANCELLED = 'ActivityCancelled';
+
     const EVENT_ACTIVITY_CLOSED = 'ActivityClosed';
+
     const EVENT_ACTIVITY_SKIPPED = 'ActivitySkipped';
 
     /**
      * Properties and composed elements
      */
     const BPMN_PROPERTY_LOOP_CHARACTERISTICS = 'loopCharacteristics';
+
     const BPMN_PROPERTY_IO_SPECIFICATION = 'ioSpecification';
+
     const BPMN_PROPERTY_ERROR = 'error';
 
     /**
      * Token states defined for Activity
      */
     const TOKEN_STATE_READY = 'READY';
+
     const TOKEN_STATE_ACTIVE = 'ACTIVE';
+
     const TOKEN_STATE_FAILING = 'FAILING';
+
     const TOKEN_STATE_COMPLETED = 'COMPLETED';
+
     const TOKEN_STATE_CLOSED = 'CLOSED';
+
     const TOKEN_STATE_INTERRUPTED = 'INTERRUPTED';
+
     const TOKEN_STATE_CAUGHT_INTERRUPTION = 'CAUGHT_INTERRUPTION';
+
     const TOKEN_STATE_EVENT_INTERRUPTING_EVENT = 'INTERRUPTING_EVENT';
+
     const TOKEN_STATE_WAIT_INTERRUPT = 'WAIT_INTERRUPT';
+
     const TOKEN_STATE_SKIPPED = 'SKIPPED';
 
     /**

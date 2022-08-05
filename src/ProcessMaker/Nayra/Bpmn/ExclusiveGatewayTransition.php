@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule for a inclusive gateway.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ExclusiveGatewayTransition implements TransitionInterface
 {
@@ -18,7 +16,6 @@ class ExclusiveGatewayTransition implements TransitionInterface
     /**
      * Initialize the tokens consumed property, the Exclusive Gateway consumes
      * exactly one token from each transition.
-     *
      */
     protected function initExclusiveGatewayTransition()
     {
@@ -50,9 +47,10 @@ class ExclusiveGatewayTransition implements TransitionInterface
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
         $withToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
-            return $flow->originState()->getTokens($executionInstance)->count()>0;
+            return $flow->originState()->getTokens($executionInstance)->count() > 0;
         });
-        $rule = $withToken->count()>0;
+        $rule = $withToken->count() > 0;
+
         return $rule;
     }
 }

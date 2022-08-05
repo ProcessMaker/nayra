@@ -10,18 +10,15 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule to consume tokens in an Terminate Event.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class TerminateTransition implements TransitionInterface
 {
-
     use TransitionTrait {
         doTransit as doTransitTrait;
     }
 
     /**
-     * @var \ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface $terminate
+     * @var \ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface
      */
     private $eventDefinition;
 
@@ -39,11 +36,10 @@ class TerminateTransition implements TransitionInterface
     }
 
     /**
-     *
      * @param CollectionInterface $consumeTokens
      * @param ExecutionInstanceInterface $executionInstance
      *
-     * @return boolean
+     * @return bool
      */
     protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
@@ -54,6 +50,7 @@ class TerminateTransition implements TransitionInterface
                 $token->setStatus('CLOSED');
             }
         }
+
         return $this->doTransitTrait($consumeTokens, $executionInstance);
     }
 

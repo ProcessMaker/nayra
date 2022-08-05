@@ -4,13 +4,13 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Participant of a Collaboration.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ParticipantInterface extends EntityInterface
 {
     const BPMN_PROPERTY_PROCESS = 'process';
+
     const BPMN_PROPERTY_PROCESS_REF = 'processRef';
+
     const BPMN_PROPERTY_PARTICIPANT_MULTIPICITY = 'participantMultiplicity';
 
     /**

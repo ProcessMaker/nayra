@@ -16,8 +16,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Multiinstance implementation.
- *
- * @package ProcessMaker\Models
  */
 class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristicsInterface
 {
@@ -28,7 +26,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
      *
      * @param ExecutionInstanceInterface $instance
      *
-     * @return integer
+     * @return int
      */
     private function calcNumberOfInstances(ExecutionInstanceInterface $instance)
     {
@@ -45,12 +43,13 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
     /**
      * Check if the loop can be formally executed
      *
-     * @return boolean
+     * @return bool
      */
     public function isExecutable()
     {
         $loopCardinality = $this->getLoopCardinality();
         $loopDataInput = $this->getLoopDataInput();
+
         return $loopCardinality || $loopDataInput;
     }
 
@@ -71,7 +70,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
      * Get item of the input data collection by index
      *
      * @param ExecutionInstanceInterface $instance
-     * @param integer $index
+     * @param int $index
      *
      * @return mixed
      */
@@ -79,9 +78,10 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
     {
         $dataStore = $instance->getDataStore();
         $dataInput = $this->getLoopDataInput();
-        if (!$dataInput) {
+        if (! $dataInput) {
             return null;
         }
+
         return $this->getInputDataValue($dataInput, $dataStore)[$index - 1];
     }
 
@@ -99,6 +99,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         if ($name) {
             return $data[$name] ?? null;
         }
+
         return $data;
     }
 
@@ -156,7 +157,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
                     );
                 }
                 // Throw token events
-                foreach($newTokens as $token) {
+                foreach ($newTokens as $token) {
                     $nextState->notifyExternalEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
                 }
             }
@@ -166,12 +167,12 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
     /**
      * @param ExecutionInstanceInterface $instance
      * @param array $properties
-     * @param integer $loopCounter
+     * @param int $loopCounter
      * @param string $inputDataItem
      * @param StateInterface $nextState
      * @param TransitionInterface $source
-     * @param integer $numberOfActiveInstances
-     * @param integer $numberOfInstances
+     * @param int $numberOfActiveInstances
+     * @param int $numberOfInstances
      * @return TokenInterface
      */
     private function createInstance(
@@ -197,6 +198,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $this->setLoopInstanceProperty($newToken, 'numberOfActiveInstances', $numberOfActiveInstances);
         $this->setLoopInstanceProperty($newToken, 'numberOfInstances', $numberOfInstances);
         $this->setLoopInstanceProperty($newToken, 'loopCounter', $loopCounter);
+
         return $nextState->addToken($instance, $newToken, $skipEvents, $source);
     }
 
@@ -213,6 +215,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $completed = $this->getLoopInstanceProperty($token, 'numberOfCompletedInstances', 0);
         $terminated = $this->getLoopInstanceProperty($token, 'numberOfTerminatedInstances', 0);
         $total = $active + $completed + $terminated;
+
         return $total < $numberOfInstances;
     }
 
@@ -240,6 +243,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
                 $completionCondition = false;
             }
         }
+
         return $completionCondition || $completed >= $numberOfInstances;
     }
 
@@ -308,18 +312,20 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $loopDataInput = $this->getLoopDataInput();
         if ($loopCardinality) {
             $cardinality = $loopCardinality($dataStore->getData());
+
             return \is_numeric($cardinality) && $cardinality > 0;
         } else {
             $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
             $isCountable = is_array($dataInput) || $dataInput instanceof Countable;
-            if (!$isCountable) {
+            if (! $isCountable) {
                 return false;
             }
             $count = \count($dataInput);
             $isSequentialArray = array_keys($dataInput) === \range(0, $count - 1);
-            if (!$isSequentialArray || $count === 0) {
+            if (! $isSequentialArray || $count === 0) {
                 return false;
             }
+
             return true;
         }
     }
@@ -339,22 +345,23 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $loopDataInput = $this->getLoopDataInput();
         if ($loopCardinality) {
             $cardinality = $loopCardinality($dataStore->getData());
-            if (!\is_numeric($cardinality) && $cardinality >=0) {
-                return  "Invalid data input, expected a number";
+            if (! \is_numeric($cardinality) && $cardinality >= 0) {
+                return  'Invalid data input, expected a number';
             }
         } else {
             $loopDataInputName = $loopDataInput->getName();
             $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
             $isCountable = is_array($dataInput) || $dataInput instanceof Countable;
-            if (!$isCountable) {
+            if (! $isCountable) {
                 return "Invalid data input ({$loopDataInputName}), it must be a sequential array";
             }
             $count = \count($dataInput);
-            $isSequentialArray = $count ===0 || array_keys($dataInput) === \range(0, $count - 1);
-            if (!$isSequentialArray) {
+            $isSequentialArray = $count === 0 || array_keys($dataInput) === \range(0, $count - 1);
+            if (! $isSequentialArray) {
                 return "The data input ({$loopDataInputName}) is an object or an associative array, it must be a sequential array";
             }
         }
+
         return '';
     }
 }

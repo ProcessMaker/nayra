@@ -13,8 +13,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * End event behavior's implementation.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait IntermediateCatchEventTrait
 {
@@ -115,6 +113,7 @@ trait IntermediateCatchEventTrait
     protected function buildConnectionTo(FlowInterface $targetFlow)
     {
         $this->transition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
+
         return $this;
     }
 

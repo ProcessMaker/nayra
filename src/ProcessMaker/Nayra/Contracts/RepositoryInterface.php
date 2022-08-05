@@ -6,7 +6,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 
 /**
  * Repository interface to create BPMN objects.
- *
  */
 interface RepositoryInterface
 {

@@ -6,7 +6,6 @@ use OutOfBoundsException;
 
 /**
  * Thrown when try to get an element that is not found in the BPMN definitions.
- *
  */
 class ElementNotFoundException extends OutOfBoundsException
 {
@@ -20,6 +19,6 @@ class ElementNotFoundException extends OutOfBoundsException
     public function __construct($id)
     {
         $this->elementId = $id;
-        parent::__construct('Element "' . $id . '" was not found');
+        parent::__construct('Element "'.$id.'" was not found');
     }
 }

@@ -15,11 +15,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test transitions
- *
  */
 class InclusiveGatewayTest extends EngineTestCase
 {
-
     /**
      * Inclusive Gateway
      *           ┌─────────┐
@@ -57,14 +55,15 @@ class InclusiveGatewayTest extends EngineTestCase
         $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
-                return $data['A']=='1';
+                return $data['A'] == '1';
             }, false, $this->repository)
             ->createConditionedFlowTo($activityB, function ($data) {
-                return $data['B']=='1';
+                return $data['B'] == '1';
             }, false, $this->repository);
         $activityA->createFlowTo($gatewayB, $this->repository);
         $activityB->createFlowTo($gatewayB, $this->repository);
         $gatewayB->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
@@ -81,8 +80,8 @@ class InclusiveGatewayTest extends EngineTestCase
         $start = $this->repository->createStartEvent();
         $gatewayA = $this->repository->createInclusiveGateway();
         $gatewayB = $this->repository->createInclusiveGateway();
-        $gatewayA->name= "A";
-        $gatewayB->name= "B";
+        $gatewayA->name = 'A';
+        $gatewayB->name = 'B';
         $activityA = $this->repository->createActivity();
         $activityB = $this->repository->createActivity();
         $end = $this->repository->createEndEvent();
@@ -101,7 +100,7 @@ class InclusiveGatewayTest extends EngineTestCase
         $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
-                return $data['A']=='1';
+                return $data['A'] == '1';
             }, false, $this->repository)
             ->createConditionedFlowTo($activityB, function ($data) {
                 return true;
@@ -109,6 +108,7 @@ class InclusiveGatewayTest extends EngineTestCase
         $activityA->createFlowTo($gatewayB, $this->repository);
         $activityB->createFlowTo($gatewayB, $this->repository);
         $gatewayB->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
@@ -149,7 +149,7 @@ class InclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         //Completes the Activity A
@@ -271,7 +271,7 @@ class InclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             DefaultTransition::EVENT_CONDITIONED_TRANSITION,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         $dataStore->putData('A', '1');
@@ -292,7 +292,7 @@ class InclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_ACTIVATED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
     }
 }

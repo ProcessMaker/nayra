@@ -11,14 +11,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test call activity element.
- *
  */
 class CallActivityTest extends EngineTestCase
 {
-
     /**
      * Test a call activity collaboration.
-     *
      */
     public function testCallActivity()
     {
@@ -26,7 +23,7 @@ class CallActivityTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/CallActivity_Process.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/CallActivity_Process.bpmn');
 
         //Load a process from a bpmn repository by Id
         $bpmnRepository->getCollaboration('collaboration');
@@ -47,7 +44,7 @@ class CallActivityTest extends EngineTestCase
         //Assertion: Verify default participant multiplicity ['maximum' => 1, 'minimum' => 0]
         $this->assertEquals(['maximum' => 1, 'minimum' => 0], $callParticipant->getParticipantMultiplicity());
         $this->assertEquals(['maximum' => 1, 'minimum' => 0], $calledParticipant->getParticipantMultiplicity());
-        
+
         //Call a process
         $instance = $process->call();
         $this->engine->runToNextState();

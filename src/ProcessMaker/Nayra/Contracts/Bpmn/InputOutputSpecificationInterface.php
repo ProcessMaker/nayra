@@ -4,14 +4,15 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * An ItemDefinition is used to define the payload of the Message.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 interface InputOutputSpecificationInterface extends EntityInterface
 {
     const BPMN_PROPERTY_DATA_INPUT = 'dataInput';
+
     const BPMN_PROPERTY_DATA_OUTPUT = 'dataOutput';
+
     const BPMN_PROPERTY_DATA_INPUT_SET = 'inputSet';
+
     const BPMN_PROPERTY_DATA_OUTPUT_SET = 'outputSet';
 
     /**

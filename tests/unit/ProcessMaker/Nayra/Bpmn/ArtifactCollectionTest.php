@@ -3,13 +3,11 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use PHPUnit\Framework\TestCase;
-use ProcessMaker\Nayra\Bpmn\Models\ArtifactCollection;
 use ProcessMaker\Nayra\Bpmn\Models\Artifact;
+use ProcessMaker\Nayra\Bpmn\Models\ArtifactCollection;
 
 /**
  * Tests for the artifact collection
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ArtifactCollectionTest extends TestCase
 {

@@ -5,8 +5,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 /**
  * Flow Element is an abstract class for all the elements that can appear in
  * a Process.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface FlowElementInterface extends EntityInterface
 {

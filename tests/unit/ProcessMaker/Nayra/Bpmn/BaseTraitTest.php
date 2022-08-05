@@ -8,14 +8,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 
 /**
  * Test the base trait behavior.
- *
  */
 class BaseTraitTest extends TestCase
 {
-
     /**
      * Test ID property getter and setter
-     *
      */
     public function testSetGetId()
     {

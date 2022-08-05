@@ -14,11 +14,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Test an activity with exception.
- *
  */
 class ActivityExceptionTest extends EngineTestCase
 {
-
     /**
      * Create a simple process
      *
@@ -42,12 +40,12 @@ class ActivityExceptionTest extends EngineTestCase
         //flows
         $start->createFlowTo($activity, $this->repository);
         $activity->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
     /**
      * Test activity exception.
-     *
      */
     public function testSimpleTransitions()
     {
@@ -106,7 +104,6 @@ class ActivityWithException implements ActivityInterface
 
     /**
      * Configure the activity to go to a FAILING status when activated.
-     *
      */
     protected function initActivity()
     {

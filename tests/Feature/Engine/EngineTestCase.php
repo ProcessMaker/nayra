@@ -24,38 +24,39 @@ use ProcessMaker\Test\Models\Repository;
 
 /**
  * Test transitions
- *
  */
 class EngineTestCase extends TestCase
 {
     /**
-     *
      * @var EngineInterface
      */
     protected $engine;
+
     /**
      * Fired events during the test.
      *
      * @var array
      */
     protected $firedEvents = [];
+
     /**
      * Event listeners
      *
      * @var array
      */
     protected $listeners = [];
+
     /**
      * Scheduled jobs.
      *
-     * @var array $jobs
+     * @var array
      */
     protected $jobs = [];
 
     /**
      * Repository.
      *
-     * @var \ProcessMaker\Nayra\Contracts\RepositoryInterface $repository
+     * @var \ProcessMaker\Nayra\Contracts\RepositoryInterface
      */
     protected $repository;
 
@@ -89,7 +90,6 @@ class EngineTestCase extends TestCase
 
     /**
      * Initialize the engine and the factories.
-     *
      */
     protected function setUp()
     {
@@ -159,7 +159,6 @@ class EngineTestCase extends TestCase
 
     /**
      * Tear down the test case.
-     *
      */
     protected function tearDown()
     {
@@ -214,13 +213,13 @@ class EngineTestCase extends TestCase
         $scheduled = [];
         $logScheduled = '';
         foreach ($this->jobs as $job) {
-            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
+            $logScheduled .= "\n".$this->representJob($job['timer'], $job['element'], $job['token']);
             $scheduled[] = $job['timer'];
             if (isset($job['timer']) && $job['timer'] == $date && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, "Failed asserting that a date timer:\n" . $this->representJob($date, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
+        $this->assertTrue($found, "Failed asserting that a date timer:\n".$this->representJob($date, $element, $token)."\n\nWas scheduled: ".$logScheduled);
     }
 
     /**
@@ -236,13 +235,13 @@ class EngineTestCase extends TestCase
         $scheduled = [];
         $logScheduled = '';
         foreach ($this->jobs as $job) {
-            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
+            $logScheduled .= "\n".$this->representJob($job['timer'], $job['element'], $job['token']);
             $scheduled[] = $job['timer'];
             if (isset($job['timer']) && json_encode($job['timer']) == json_encode($cycle) && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, "Failed asserting that a cycle timer:\n" . $this->representJob($cycle, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
+        $this->assertTrue($found, "Failed asserting that a cycle timer:\n".$this->representJob($cycle, $element, $token)."\n\nWas scheduled: ".$logScheduled);
     }
 
     /**
@@ -257,12 +256,12 @@ class EngineTestCase extends TestCase
         $found = false;
         $logScheduled = '';
         foreach ($this->jobs as $job) {
-            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
+            $logScheduled .= "\n".$this->representJob($job['timer'], $job['element'], $job['token']);
             if (isset($job['timer']) && $job['timer'] === $duration && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, "Failed asserting that a duration timer was scheduled:\n" . $this->representJob($duration, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
+        $this->assertTrue($found, "Failed asserting that a duration timer was scheduled:\n".$this->representJob($duration, $element, $token)."\n\nWas scheduled: ".$logScheduled);
     }
 
     /**
@@ -276,16 +275,15 @@ class EngineTestCase extends TestCase
     private function representJob($timer, FlowElementInterface $element, TokenInterface $token = null)
     {
         return sprintf(
-                '(%s) at "%s" token "%s"',
-                (is_object($timer) ? get_class($timer) : gettype($timer)),
-                $element->getId(),
-                $token ? $token->getId() : 'null'
+            '(%s) at "%s" token "%s"',
+            (is_object($timer) ? get_class($timer) : gettype($timer)),
+            $element->getId(),
+            $token ? $token->getId() : 'null'
         );
     }
 
     /**
      * Helper to dispatch a job from the JobManager mock
-     *
      */
     protected function dispatchJob()
     {
@@ -294,6 +292,7 @@ class EngineTestCase extends TestCase
             $this->jobs[] = $job;
         }
         $instance = $job['token'] ? $job['token']->getInstance() : null;
+
         return $job ? $job['element']->execute($job['eventDefinition'], $instance) : null;
     }
 

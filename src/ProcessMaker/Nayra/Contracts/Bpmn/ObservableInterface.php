@@ -4,12 +4,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Observable interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ObservableInterface
 {
-
     /**
      *  Returns the list of observers of the object
      *

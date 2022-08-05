@@ -9,15 +9,13 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Verify the condition to transit and if not accomplished the tokens are consumed.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ConditionedTransition implements TransitionInterface, ConditionedTransitionInterface
 {
     use TransitionTrait;
 
     /**
-     * @var callable $condition
+     * @var callable
      */
     private $condition;
 
@@ -34,6 +32,7 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
         $condition = $this->condition;
         $dataStore = $executionInstance ? $executionInstance->getDataStore()
             : $this->getOwnerProcess()->getEngine()->getDataStore();
+
         return $condition($dataStore->getData());
     }
 
@@ -47,6 +46,7 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
     public function setCondition(callable $condition)
     {
         $this->condition = $condition;
+
         return $this;
     }
 
@@ -55,11 +55,12 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
      *
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
      *
-     * @return boolean
+     * @return bool
      */
     protected function conditionIsFalse(ExecutionInstanceInterface $executionInstance)
     {
         $this->collect($executionInstance);
+
         return true;
     }
 
@@ -72,7 +73,7 @@ class ConditionedTransition implements TransitionInterface, ConditionedTransitio
     {
         return $this->incoming()->sum(function (Connection $flow) use ($executionInstance) {
             return $flow->origin()->getTokens($executionInstance)->sum(function (TokenInterface $token) {
-                return $token->getOwner()->consumeToken($token) ? 1 :0;
+                return $token->getOwner()->consumeToken($token) ? 1 : 0;
             });
         });
     }

@@ -4,13 +4,11 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Defines the interface to be used by the ScriptTasks
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ServiceTaskInterface extends ActivityInterface
 {
-
     const BPMN_PROPERTY_IMPLEMENTATION = 'implementation';
+
     const EVENT_SERVICE_TASK_ACTIVATED = 'ServiceTaskActivated';
 
     /**

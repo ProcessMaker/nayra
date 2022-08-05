@@ -1,20 +1,17 @@
 <?php
 
 namespace Tests\Feature\Engine;
+
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
-
 /**
  * Test a condition start event.
- *
  */
 class ConditionalStartEventTest extends EngineTestCase
 {
-
     /**
      * Test conditional start event
-     *
      */
     public function testConditionalStartEvent()
     {
@@ -23,7 +20,7 @@ class ConditionalStartEventTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
 
-        $bpmnRepository->load(__DIR__ . '/files/Conditional_StartEvent.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Conditional_StartEvent.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Conditional_StartEvent');

@@ -15,7 +15,6 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test the event based gateway element.
- *
  */
 class EventBasedGatewayTest extends EngineTestCase
 {
@@ -28,7 +27,6 @@ class EventBasedGatewayTest extends EngineTestCase
 
     /**
      * Test the WCP16 Deferred Choice pattern
-     *
      */
     public function testDeferredChoiceChoiceOne()
     {
@@ -36,7 +34,7 @@ class EventBasedGatewayTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/WCP16_DeferredChoiceEBG.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/WCP16_DeferredChoiceEBG.bpmn');
         $this->engine->loadBpmnDocument($bpmnRepository);
 
         // Load the collaboration
@@ -132,7 +130,6 @@ class EventBasedGatewayTest extends EngineTestCase
 
     /**
      * Test the WCP16 Deferred Choice pattern
-     *
      */
     public function testDeferredChoiceChoiceTwo()
     {
@@ -140,7 +137,7 @@ class EventBasedGatewayTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/WCP16_DeferredChoiceEBG.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/WCP16_DeferredChoiceEBG.bpmn');
         $this->engine->loadBpmnDocument($bpmnRepository);
 
         // Load the collaboration
@@ -233,7 +230,6 @@ class EventBasedGatewayTest extends EngineTestCase
 
     /**
      * Test parallel gateway can not have conditioned outgoing flows.
-     *
      */
     public function testEventBasedGatewayCanNotHaveConditionedOutgoingFlow()
     {
@@ -243,7 +239,8 @@ class EventBasedGatewayTest extends EngineTestCase
 
         //Assertion: Throw exception when creating a conditioned flow from parallel.
         $this->expectException('ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException');
-        $gatewayA->createConditionedFlowTo($eventA, function () {}, false, $this->repository);
+        $gatewayA->createConditionedFlowTo($eventA, function () {
+        }, false, $this->repository);
         $process = $this->repository->createProcess();
         $process
             ->addEvent($eventA)

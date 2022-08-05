@@ -9,14 +9,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Start Timer Event tests
- *
  */
 class StartTimerEventTest extends EngineTestCase
 {
-
     /**
      * Test the start timer event with a date time specified in ISO8601 format.
-     *
      */
     public function testStartTimerEventWithTimeDate()
     {
@@ -24,7 +21,7 @@ class StartTimerEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDate.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeDate.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
@@ -41,7 +38,6 @@ class StartTimerEventTest extends EngineTestCase
 
     /**
      * Test the start timer event with a time cycle specified in ISO8601 format.
-     *
      */
     public function testStartTimerEventWithTimeCycle()
     {
@@ -49,7 +45,7 @@ class StartTimerEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycle.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeCycle.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
@@ -70,7 +66,6 @@ class StartTimerEventTest extends EngineTestCase
 
     /**
      * Test the start timer event with a date time specified by an expression.
-     *
      */
     public function testStartTimerEventWithTimeDateExpression()
     {
@@ -88,7 +83,7 @@ class StartTimerEventTest extends EngineTestCase
         $environmentData->putData('calculatedDate', $calculatedDate);
 
         //Load a process from a bpmn repository by Id
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDateExpression.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeDateExpression.bpmn');
         $process = $bpmnRepository->getProcess('Process');
         $startEvent = $bpmnRepository->getStartEvent('_9');
         $this->engine->loadProcess($process);
@@ -107,7 +102,6 @@ class StartTimerEventTest extends EngineTestCase
 
     /**
      * Test the start timer event with a time cycle specified by an expression.
-     *
      */
     public function testStartTimerEventWithTimeCycleExpression()
     {
@@ -122,11 +116,11 @@ class StartTimerEventTest extends EngineTestCase
         //Calculate a iso8601 string for a cyclic timer of 1 minute from 2018-05-01 at 00:00 UTC
         $everyMinute = '1M';
         $fromDate = '2018-05-01T00:00:00Z';
-        $calculatedCycle = 'R4/' . $fromDate . '/PT' . $everyMinute;
+        $calculatedCycle = 'R4/'.$fromDate.'/PT'.$everyMinute;
         $environmentData->putData('calculatedCycle', $calculatedCycle);
 
         //Load a process from a bpmn repository by Id
-        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycleExpression.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeCycleExpression.bpmn');
         $process = $bpmnRepository->getProcess('Process');
         $startEvent = $bpmnRepository->getStartEvent('_9');
         $this->engine->loadProcess($process);
@@ -154,8 +148,7 @@ class StartTimerEventTest extends EngineTestCase
      */
     private function assertValidDate($date)
     {
-        $this->assertTrue($date instanceof DateTime, "Failed asserting that ".json_encode($date)." is a valid date timer");
-
+        $this->assertTrue($date instanceof DateTime, 'Failed asserting that '.json_encode($date).' is a valid date timer');
     }
 
     /**
@@ -165,7 +158,7 @@ class StartTimerEventTest extends EngineTestCase
      */
     private function assertValidCycle($cycle)
     {
-        $this->assertTrue($cycle instanceof DatePeriod, "Failed asserting that ".json_encode($cycle)." is a valid cyclic timer");
+        $this->assertTrue($cycle instanceof DatePeriod, 'Failed asserting that '.json_encode($cycle).' is a valid cyclic timer');
     }
 
     /**
@@ -175,6 +168,6 @@ class StartTimerEventTest extends EngineTestCase
      */
     private function assertValidDuration($duration)
     {
-        $this->assertTrue($duration instanceof DateInterval, "Failed asserting that ".json_encode($duration)." is a valid duration timer");
+        $this->assertTrue($duration instanceof DateInterval, 'Failed asserting that '.json_encode($duration).' is a valid duration timer');
     }
 }

@@ -13,11 +13,10 @@ use Tests\Feature\Engine\EngineTestCase;
 
 /**
  * Tests for the ServiceTask element
- *
  */
 class PatternsTest extends EngineTestCase
 {
-    private $basePath = __DIR__ . '/files/';
+    private $basePath = __DIR__.'/files/';
 
     /**
      * List the bpmn files
@@ -27,9 +26,10 @@ class PatternsTest extends EngineTestCase
     public function caseProvider()
     {
         $data = [];
-        foreach (glob($this->basePath . '*.bpmn') as $bpmnFile) {
+        foreach (glob($this->basePath.'*.bpmn') as $bpmnFile) {
             $data[] = [basename($bpmnFile)];
         }
+
         return $data;
     }
 
@@ -42,8 +42,8 @@ class PatternsTest extends EngineTestCase
      */
     public function testProcessPatterns($bpmnFile)
     {
-        $file = $this->basePath . $bpmnFile;
-        $jsonFile = substr($file, 0, -4) . 'json';
+        $file = $this->basePath.$bpmnFile;
+        $jsonFile = substr($file, 0, -4).'json';
         if (file_exists($jsonFile)) {
             $this->runProcessWithJson($jsonFile, $file);
         } else {
@@ -120,18 +120,19 @@ class PatternsTest extends EngineTestCase
         // create instance with initial data
         if ($start->getEventDefinitions()->count() > 0) {
             $start->execute($start->getEventDefinitions()->item(0));
-            $instance = $process->getInstances()->count() ?  $process->getInstances()->item(0) : null;
+            $instance = $process->getInstances()->count() ? $process->getInstances()->item(0) : null;
         } else {
             $instance = $this->engine->createExecutionInstance($process, $dataStore);
             $start->start($instance);
         }
         $this->engine->runToNextState();
         $tasks = [];
-        if (!$instance) {
+        if (! $instance) {
             $this->assertEquals($result, $tasks);
             if ($output) {
                 $this->assertEquals($output, $dataStore->getData());
             }
+
             return;
         }
         $tokens = $instance->getTokens();
@@ -141,8 +142,8 @@ class PatternsTest extends EngineTestCase
             $error = $payload[1]->getProperty('error');
             if ($error) {
                 $runtimeErrors[] = [
-                    "element" => $payload[0]->getId(),
-                    "error" => $error instanceof ErrorInterface ? $error->getId() : $error,
+                    'element' => $payload[0]->getId(),
+                    'error' => $error instanceof ErrorInterface ? $error->getId() : $error,
                 ];
             }
         });
@@ -154,7 +155,7 @@ class PatternsTest extends EngineTestCase
                         $element = $token->getOwnerElement();
                         $status = $token->getStatus();
                         if (
-                            $element instanceof ActivityInterface && !($element instanceof CallActivityInterface)
+                            $element instanceof ActivityInterface && ! ($element instanceof CallActivityInterface)
                             && $status === ActivityInterface::TOKEN_STATE_ACTIVE
                         ) {
                             $tasks[] = $element->getId();
@@ -180,19 +181,19 @@ class PatternsTest extends EngineTestCase
                 }
             }
             $tokens = $instance->getTokens();
-            if (!$submited && $tokens->count()) {
+            if (! $submited && $tokens->count()) {
                 $elements = '';
                 foreach ($processes as $process) {
                     foreach ($process->getBpmnElementInstance()->getInstances() as $ins) {
                         foreach ($ins->getTokens() as $token) {
                             $status = $token->getStatus();
-                            $elements .= ' ' . $token->getOwnerElement()->getId() . ':' . $status;
+                            $elements .= ' '.$token->getOwnerElement()->getId().':'.$status;
                             if ($status == ActivityInterface::TOKEN_STATE_FAILING) {
                                 $error = $token->getProperty('error');
                                 $error = $error instanceof ErrorInterface ? $error->getId() : $error;
                                 $runtimeErrors[] = [
-                                    "element" => $token->getOwnerElement()->getId(),
-                                    "error" => $error,
+                                    'element' => $token->getOwnerElement()->getId(),
+                                    'error' => $error,
                                 ];
                             }
                         }
@@ -224,11 +225,11 @@ class PatternsTest extends EngineTestCase
      */
     private function assertData($subset, $data, $message = 'data', $skip = false)
     {
-        if (!is_array($subset) || !is_array($data)) {
+        if (! is_array($subset) || ! is_array($data)) {
             if ($skip) {
                 return $subset == $data;
             } else {
-                return $this->assertEquals($subset, $data, "{$message} does not match " . \json_encode($subset));
+                return $this->assertEquals($subset, $data, "{$message} does not match ".\json_encode($subset));
             }
         }
         foreach ($subset as $key => $value) {

@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 /**
  * Flow Element is an abstract class for all the elements that can appear in
  * a Process.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait FlowElementTrait
 {
@@ -41,6 +39,7 @@ trait FlowElementTrait
     public function setOwnerProcess(ProcessInterface $ownerProcess)
     {
         $this->ownerProcess = $ownerProcess;
+
         return $this;
     }
 }

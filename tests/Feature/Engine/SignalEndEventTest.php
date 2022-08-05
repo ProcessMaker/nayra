@@ -30,7 +30,7 @@ class SignalEndEventTest extends EngineTestCase
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
-            'structure' => 'String'
+            'structure' => 'String',
         ]);
 
         $signal = $this->repository->createMessage();
@@ -45,7 +45,7 @@ class SignalEndEventTest extends EngineTestCase
         $activityA1 = $this->repository->createActivity();
         $eventA = $this->repository->createIntermediateCatchEvent();
         $signalEventDefA = $this->repository->createSignalEventDefinition();
-        $signalEventDefA->setId("signalEvent1");
+        $signalEventDefA->setId('signalEvent1');
         $signalEventDefA->setPayload($signal);
         $eventA->getEventDefinitions()->push($signalEventDefA);
         $activityA2 = $this->repository->createActivity();
@@ -84,7 +84,6 @@ class SignalEndEventTest extends EngineTestCase
         return [$processA, $processB];
     }
 
-
     /**
      * Tests the signal end event of a process
      */
@@ -120,7 +119,7 @@ class SignalEndEventTest extends EngineTestCase
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
 
-        $dataStoreA =$this->repository->createDataStore();
+        $dataStoreA = $this->repository->createDataStore();
         $dataStoreA->putData('A', '1');
 
         $dataStoreB = $this->repository->createDataStore();
@@ -167,8 +166,8 @@ class SignalEndEventTest extends EngineTestCase
         $this->assertEvents([
             ActivityInterface::EVENT_ACTIVITY_COMPLETED,
             ActivityInterface::EVENT_ACTIVITY_CLOSED,
-            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES
-            ]);
+            IntermediateCatchEventInterface::EVENT_CATCH_TOKEN_ARRIVES,
+        ]);
 
         //Start the process B
         $startB->start($instanceB);

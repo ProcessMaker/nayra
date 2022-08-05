@@ -7,11 +7,9 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Repository for ExecutionInstanceInterface
- *
  */
 interface ExecutionInstanceRepositoryInterface
 {
-
     /**
      * Load an execution instance from a persistent storage.
      *

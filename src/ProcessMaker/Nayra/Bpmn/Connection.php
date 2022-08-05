@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 
 /**
  * Class that connect States and Transitions.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class Connection implements ConnectionInterface
 {

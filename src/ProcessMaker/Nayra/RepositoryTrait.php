@@ -47,8 +47,6 @@ use ProcessMaker\Test\Models\TokenRepository;
 
 /**
  * Class that create instances of classes based on the mappings interface-concrete class passed to it.
- *
- * @package ProcessMaker\Nayra\Contracts
  */
 trait RepositoryTrait
 {
@@ -66,10 +64,11 @@ trait RepositoryTrait
     {
         $interfaceParts = explode('\\', $interfaceName);
         $name = array_pop($interfaceParts);
-        $method = 'create' . substr($name, 0, -9);
-        if (!method_exists($this, $method)) {
+        $method = 'create'.substr($name, 0, -9);
+        if (! method_exists($this, $method)) {
             throw new InvalidArgumentException("Can't find $method to instantiate '$interfaceName'");
         }
+
         return $this->$method(...$constructorArguments);
     }
 
@@ -342,6 +341,7 @@ trait RepositoryTrait
     {
         $process = new Process();
         $process->setRepository($this);
+
         return $process;
     }
 
@@ -468,6 +468,7 @@ trait RepositoryTrait
         if ($this->tokenRepo === null) {
             $this->tokenRepo = new TokenRepository();
         }
+
         return $this->tokenRepo;
     }
 

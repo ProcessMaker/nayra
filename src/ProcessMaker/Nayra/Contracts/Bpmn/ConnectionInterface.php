@@ -6,12 +6,9 @@ use ProcessMaker\Nayra\Bpmn\State;
 
 /**
  * Interface to connect States and Transitions nodes.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ConnectionInterface
 {
-
     /**
      * Get the origin node (state or transition) of the connection.
      *

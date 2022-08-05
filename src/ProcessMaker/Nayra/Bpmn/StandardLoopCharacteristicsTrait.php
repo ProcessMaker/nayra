@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
  * Base implementation for LoopCharacteristicsInterface
  *
  * @implements ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait StandardLoopCharacteristicsTrait
 {

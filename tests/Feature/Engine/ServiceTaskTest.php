@@ -12,11 +12,9 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Tests for the ServiceTask element
- *
  */
 class ServiceTaskTest extends EngineTestCase
 {
-
     // Property that is increased when the service task is executed.
     private static $serviceCalls = 0;
 
@@ -29,7 +27,7 @@ class ServiceTaskTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/ServiceTaskProcess.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/ServiceTaskProcess.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('ServiceTaskProcess');
@@ -78,7 +76,6 @@ class ServiceTaskTest extends EngineTestCase
     /**
      * Tests a process with the sequence start->serviceTask->End when fails
      * the task goes to a failure state.
-     *
      */
     public function testProcessWithServiceTaskFailure()
     {
@@ -86,7 +83,7 @@ class ServiceTaskTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/ServiceTaskProcess.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/ServiceTaskProcess.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('ServiceTaskProcess');
@@ -98,7 +95,7 @@ class ServiceTaskTest extends EngineTestCase
         //Get References
         $start = $process->getEvents()->item(0);
         $serviceTask = $bpmnRepository->getServiceTask('_2');
-        
+
         //Set to the limit of the service calls
         static::$serviceCalls = 10;
         $serviceCalls = static::$serviceCalls;
@@ -128,7 +125,6 @@ class ServiceTaskTest extends EngineTestCase
 
     /**
      * A public function that is called by the Service Task.
-     *
      */
     public static function convertToDoc()
     {

@@ -11,7 +11,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
 
 /**
  * This activity will raise an exception when executed.
- *
  */
 class CallActivity implements CallActivityInterface
 {
@@ -51,6 +50,7 @@ class CallActivity implements CallActivityInterface
     public function setCalledElement($callableElement)
     {
         $this->setProperty(CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT, $callableElement);
+
         return $this;
     }
 }

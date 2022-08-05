@@ -4,12 +4,11 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * InputSet interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface InputSetInterface extends EntityInterface
 {
     const BPMN_PROPERTY_DATA_INPUTS = 'dataInputs';
+
     const BPMN_PROPERTY_DATA_INPUT_REFS = 'dataInputRefs';
 
     /**

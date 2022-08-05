@@ -4,8 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * ConditionalEventDefinition interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ConditionalEventDefinitionInterface extends EventDefinitionInterface
 {

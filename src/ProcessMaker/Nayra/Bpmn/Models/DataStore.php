@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 
 /**
  * Application
- *
- * @package ProcessMaker\Models
  */
 class DataStore implements DataStoreInterface
 {

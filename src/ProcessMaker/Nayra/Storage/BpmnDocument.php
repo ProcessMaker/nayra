@@ -60,8 +60,6 @@ use ProcessMaker\Nayra\Exceptions\ElementNotFoundException;
 
 /**
  * BPMN file
- *
- * @package \ProcessMaker\Nayra\Storage
  */
 class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
 {
@@ -78,19 +76,19 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     private $engine;
 
     /**
-     * @var \ProcessMaker\Nayra\Contracts\FactoryInterface $factory
+     * @var \ProcessMaker\Nayra\Contracts\FactoryInterface
      */
     private $factory;
 
     /**
-     * @var bool $skipElementsNotImplemented
+     * @var bool
      */
     private $skipElementsNotImplemented = false;
 
     /**
      * BPMNValidator errors.
      *
-     * @var array $validationErrors
+     * @var array
      */
     private $validationErrors = [];
 
@@ -102,245 +100,245 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     'activities' => ['n', ActivityInterface::class],
                     'gateways' => ['n', GatewayInterface::class],
                     'events' => ['n', EventInterface::class],
-                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [BpmnDocument::BPMN_MODEL, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
-                ]
+                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [self::BPMN_MODEL, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
+                ],
             ],
             'startEvent' => [
                 StartEventInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
-                ]
+                ],
             ],
             'endEvent' => [
                 EndEventInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     EndEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
-                ]
+                ],
             ],
             'task' => [
                 ActivityInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
-                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
-                ]
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
+                ],
             ],
             'userTask' => [
                 ActivityInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
-                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
-                ]
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
+                ],
             ],
             'scriptTask' => [
                 ScriptTaskInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    ScriptTaskInterface::BPMN_PROPERTY_SCRIPT => ['1', [BpmnDocument::BPMN_MODEL, ScriptTaskInterface::BPMN_PROPERTY_SCRIPT]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    ScriptTaskInterface::BPMN_PROPERTY_SCRIPT => ['1', [self::BPMN_MODEL, ScriptTaskInterface::BPMN_PROPERTY_SCRIPT]],
                     ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
-                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
-                ]
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
+                ],
             ],
             'serviceTask' => [
                 ServiceTaskInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
-                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
-                ]
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
+                ],
             ],
             FlowNodeInterface::BPMN_PROPERTY_OUTGOING => [self::IS_REFERENCE, []],
             FlowNodeInterface::BPMN_PROPERTY_INCOMING => [self::IS_REFERENCE, []],
             'sequenceFlow' => [
                 FlowInterface::class,
                 [
-                    FlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnDocument::BPMN_MODEL, FlowInterface::BPMN_PROPERTY_SOURCE_REF]],
-                    FlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnDocument::BPMN_MODEL, FlowInterface::BPMN_PROPERTY_TARGET_REF]],
-                    FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => ['1', [BpmnDocument::BPMN_MODEL, 'conditionExpression']],
-                ]
+                    FlowInterface::BPMN_PROPERTY_SOURCE => ['1', [self::BPMN_MODEL, FlowInterface::BPMN_PROPERTY_SOURCE_REF]],
+                    FlowInterface::BPMN_PROPERTY_TARGET => ['1', [self::BPMN_MODEL, FlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                    FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => ['1', [self::BPMN_MODEL, 'conditionExpression']],
+                ],
             ],
             'callActivity' => [
                 CallActivityInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT => ['1', [BpmnDocument::BPMN_MODEL, CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT => ['1', [self::BPMN_MODEL, CallActivityInterface::BPMN_PROPERTY_CALLED_ELEMENT]],
                     ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
-                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [BpmnDocument::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
-                ]
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
+                ],
             ],
             'parallelGateway' => [
                 ParallelGatewayInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                ]
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ],
             ],
             'inclusiveGateway' => [
                 InclusiveGatewayInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnDocument::BPMN_MODEL, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
-                ]
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [self::BPMN_MODEL, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
+                ],
             ],
             'exclusiveGateway' => [
                 ExclusiveGatewayInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [BpmnDocument::BPMN_MODEL, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
-                ]
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    GatewayInterface::BPMN_PROPERTY_DEFAULT => ['1', [self::BPMN_MODEL, GatewayInterface::BPMN_PROPERTY_DEFAULT]],
+                ],
             ],
             'eventBasedGateway' => [
                 EventBasedGatewayInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                ]
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ],
             ],
             'conditionExpression' => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
-                ]
+                ],
             ],
             'script' => [self::TEXT_PROPERTY, []],
             'collaboration' => [
                 CollaborationInterface::class,
                 [
-                    CollaborationInterface::BPMN_PROPERTY_PARTICIPANT => ['n', [BpmnDocument::BPMN_MODEL, CollaborationInterface::BPMN_PROPERTY_PARTICIPANT]],
-                    CollaborationInterface::BPMN_PROPERTY_MESSAGE_FLOWS => ['n', [BpmnDocument::BPMN_MODEL, CollaborationInterface::BPMN_PROPERTY_MESSAGE_FLOW]],
-                ]
+                    CollaborationInterface::BPMN_PROPERTY_PARTICIPANT => ['n', [self::BPMN_MODEL, CollaborationInterface::BPMN_PROPERTY_PARTICIPANT]],
+                    CollaborationInterface::BPMN_PROPERTY_MESSAGE_FLOWS => ['n', [self::BPMN_MODEL, CollaborationInterface::BPMN_PROPERTY_MESSAGE_FLOW]],
+                ],
             ],
             'participant' => [
                 ParticipantInterface::class,
                 [
-                    ParticipantInterface::BPMN_PROPERTY_PROCESS => ['1', [BpmnDocument::BPMN_MODEL, ParticipantInterface::BPMN_PROPERTY_PROCESS_REF]],
-                    ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY => ['1', [BpmnDocument::BPMN_MODEL, ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY]],
-                ]
+                    ParticipantInterface::BPMN_PROPERTY_PROCESS => ['1', [self::BPMN_MODEL, ParticipantInterface::BPMN_PROPERTY_PROCESS_REF]],
+                    ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY => ['1', [self::BPMN_MODEL, ParticipantInterface::BPMN_PROPERTY_PARTICIPANT_MULTIPICITY]],
+                ],
             ],
             'participantMultiplicity' => [self::IS_ARRAY, []],
             'conditionalEventDefinition' => [
                 ConditionalEventDefinitionInterface::class,
                 [
-                    ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION => ['1', [BpmnDocument::BPMN_MODEL, ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION]],
-                ]
+                    ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION => ['1', [self::BPMN_MODEL, ConditionalEventDefinitionInterface::BPMN_PROPERTY_CONDITION]],
+                ],
             ],
             'condition' => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
-                ]
+                ],
             ],
             'extensionElements' => self::SKIP_ELEMENT,
             'documentation' => self::SKIP_ELEMENT,
             'inputSet' => [
                 InputSetInterface::class,
                 [
-                    InputSetInterface::BPMN_PROPERTY_DATA_INPUTS => ['n', [BpmnDocument::BPMN_MODEL, InputSetInterface::BPMN_PROPERTY_DATA_INPUT_REFS]],
-                ]
+                    InputSetInterface::BPMN_PROPERTY_DATA_INPUTS => ['n', [self::BPMN_MODEL, InputSetInterface::BPMN_PROPERTY_DATA_INPUT_REFS]],
+                ],
             ],
             InputSetInterface::BPMN_PROPERTY_DATA_INPUT_REFS => [self::IS_REFERENCE, []],
             'outputSet' => [
                 OutputSetInterface::class,
                 [
-                    OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUTS => ['n', [BpmnDocument::BPMN_MODEL, OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUT_REFS]],
-                ]
+                    OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUTS => ['n', [self::BPMN_MODEL, OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUT_REFS]],
+                ],
             ],
             OutputSetInterface::BPMN_PROPERTY_DATA_OUTPUT_REFS => [self::IS_REFERENCE, []],
             'terminateEventDefinition' => [
                 TerminateEventDefinitionInterface::class,
                 [
-                ]
+                ],
             ],
             'errorEventDefinition' => [
                 ErrorEventDefinitionInterface::class,
                 [
-                    ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR => ['1', [BpmnDocument::BPMN_MODEL, ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF]],
-                ]
+                    ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR => ['1', [self::BPMN_MODEL, ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF]],
+                ],
             ],
             'error' => [
                 ErrorInterface::class,
                 [
-                ]
+                ],
             ],
             'messageFlow' => [
                 MessageFlowInterface::class,
                 [
-                    MessageFlowInterface::BPMN_PROPERTY_SOURCE => ['1', [BpmnDocument::BPMN_MODEL, MessageFlowInterface::BPMN_PROPERTY_SOURCE_REF]],
-                    MessageFlowInterface::BPMN_PROPERTY_TARGET => ['1', [BpmnDocument::BPMN_MODEL, MessageFlowInterface::BPMN_PROPERTY_TARGET_REF]],
+                    MessageFlowInterface::BPMN_PROPERTY_SOURCE => ['1', [self::BPMN_MODEL, MessageFlowInterface::BPMN_PROPERTY_SOURCE_REF]],
+                    MessageFlowInterface::BPMN_PROPERTY_TARGET => ['1', [self::BPMN_MODEL, MessageFlowInterface::BPMN_PROPERTY_TARGET_REF]],
                     MessageFlowInterface::BPMN_PROPERTY_COLLABORATION => self::PARENT_NODE,
-                ]
+                ],
             ],
             'timerEventDefinition' => [
                 TimerEventDefinitionInterface::class,
                 [
-                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => ['1', [BpmnDocument::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE]],
-                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => ['1', [BpmnDocument::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE]],
-                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => ['1', [BpmnDocument::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION]],
-                ]
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => ['1', [self::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => ['1', [self::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE]],
+                    TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => ['1', [self::BPMN_MODEL, TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION]],
+                ],
             ],
             TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DATE => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
-                ]
+                ],
             ],
             TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_CYCLE => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
-                ]
+                ],
             ],
             TimerEventDefinitionInterface::BPMN_PROPERTY_TIME_DURATION => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
-                ]
+                ],
             ],
             'laneSet' => [
                 LaneSetInterface::class,
                 [
-                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnDocument::BPMN_MODEL, LaneSetInterface::BPMN_PROPERTY_LANE]],
-                ]
+                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [self::BPMN_MODEL, LaneSetInterface::BPMN_PROPERTY_LANE]],
+                ],
             ],
             'lane' => [
                 LaneInterface::class,
                 [
-                    LaneInterface::BPMN_PROPERTY_FLOW_NODE => ['n', [BpmnDocument::BPMN_MODEL, LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF]],
-                    LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => ['n', [BpmnDocument::BPMN_MODEL, LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET]],
-                ]
+                    LaneInterface::BPMN_PROPERTY_FLOW_NODE => ['n', [self::BPMN_MODEL, LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF]],
+                    LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => ['n', [self::BPMN_MODEL, LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET]],
+                ],
             ],
             LaneInterface::BPMN_PROPERTY_FLOW_NODE_REF => [self::IS_REFERENCE, []],
             LaneInterface::BPMN_PROPERTY_CHILD_LANE_SET => [
                 LaneSetInterface::class,
                 [
-                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [BpmnDocument::BPMN_MODEL, LaneSetInterface::BPMN_PROPERTY_LANE]],
-                ]
+                    LaneSetInterface::BPMN_PROPERTY_LANE => ['n', [self::BPMN_MODEL, LaneSetInterface::BPMN_PROPERTY_LANE]],
+                ],
             ],
             'interface' => [
                 ServiceInterface::class,
                 [
-                    ServiceInterface::BPMN_PROPERTY_OPERATIONS => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_TAG]],
-                ]
+                    ServiceInterface::BPMN_PROPERTY_OPERATIONS => ['n', [self::BPMN_MODEL, OperationInterface::BPMN_TAG]],
+                ],
             ],
             OperationInterface::BPMN_TAG => [
                 OperationInterface::class,
                 [
-                    OperationInterface::BPMN_PROPERTY_IN_MESSAGE => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_IN_MESSAGE_REF]],
-                    OperationInterface::BPMN_PROPERTY_OUT_MESSAGE => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_OUT_MESSAGE_REF]],
-                    OperationInterface::BPMN_PROPERTY_ERRORS => ['n', [BpmnDocument::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_ERROR_REF]],
-                ]
+                    OperationInterface::BPMN_PROPERTY_IN_MESSAGE => ['n', [self::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_IN_MESSAGE_REF]],
+                    OperationInterface::BPMN_PROPERTY_OUT_MESSAGE => ['n', [self::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_OUT_MESSAGE_REF]],
+                    OperationInterface::BPMN_PROPERTY_ERRORS => ['n', [self::BPMN_MODEL, OperationInterface::BPMN_PROPERTY_ERROR_REF]],
+                ],
             ],
             OperationInterface::BPMN_PROPERTY_IN_MESSAGE_REF => [self::IS_REFERENCE, []],
             OperationInterface::BPMN_PROPERTY_OUT_MESSAGE_REF => [self::IS_REFERENCE, []],
@@ -348,148 +346,154 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
             'messageEventDefinition' => [
                 MessageEventDefinitionInterface::class,
                 [
-                    MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION => ['1', [BpmnDocument::BPMN_MODEL, MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION_REF]],
-                    MessageEventDefinitionInterface::BPMN_PROPERTY_MESSAGE => ['1', [BpmnDocument::BPMN_MODEL, MessageEventDefinitionInterface::BPMN_PROPERTY_MESSAGE_REF]],
-                ]
+                    MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION => ['1', [self::BPMN_MODEL, MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION_REF]],
+                    MessageEventDefinitionInterface::BPMN_PROPERTY_MESSAGE => ['1', [self::BPMN_MODEL, MessageEventDefinitionInterface::BPMN_PROPERTY_MESSAGE_REF]],
+                ],
             ],
             MessageEventDefinitionInterface::BPMN_PROPERTY_OPERATION_REF => [self::IS_REFERENCE, []],
             'message' => [
                 MessageInterface::class,
                 [
-                    MessageInterface::BPMN_PROPERTY_ITEM => ['1', [BpmnDocument::BPMN_MODEL, MessageInterface::BPMN_PROPERTY_ITEM_REF]],
-                ]
+                    MessageInterface::BPMN_PROPERTY_ITEM => ['1', [self::BPMN_MODEL, MessageInterface::BPMN_PROPERTY_ITEM_REF]],
+                ],
             ],
             'intermediateCatchEvent' => [
                 IntermediateCatchEventInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     IntermediateCatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
-                ]
+                ],
             ],
             'intermediateThrowEvent' => [
                 IntermediateThrowEventInterface::class,
                 [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
                     IntermediateThrowEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
-                ]
+                ],
             ],
             'signalEventDefinition' => [
                 SignalEventDefinitionInterface::class,
                 [
-                    SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL => ['1', [BpmnDocument::BPMN_MODEL, SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF]],
-                ]
+                    SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL => ['1', [self::BPMN_MODEL, SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF]],
+                ],
             ],
             'itemDefinition' => [
                 ItemDefinitionInterface::class,
                 [
-                ]
+                ],
             ],
             'signal' => [
                 SignalInterface::class,
                 [
-                ]
+                ],
             ],
             'dataInput' => [
                 DataInputInterface::class,
                 [
-                    DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
+                    DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [self::BPMN_MODEL, DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
                     DataInputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
-                ]
+                ],
             ],
             'dataOutput' => [
                 DataOutputInterface::class,
                 [
-                    DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
+                    DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [self::BPMN_MODEL, DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
                     DataOutputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
-                ]
+                ],
             ],
             'dataStore' => [
                 DataStoreInterface::class,
-                []
+                [],
             ],
             'boundaryEvent' => [
                 BoundaryEventInterface::class,
                 [
                     BoundaryEventInterface::BPMN_PROPERTY_CANCEL_ACTIVITY => self::IS_BOOLEAN,
-                    BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO => ['1', [BpmnDocument::BPMN_MODEL, BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO_REF]],
+                    BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO => ['1', [self::BPMN_MODEL, BoundaryEventInterface::BPMN_PROPERTY_ATTACHED_TO_REF]],
                     CatchEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS => ['n', EventDefinitionInterface::class],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                ]
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                ],
             ],
             'multiInstanceLoopCharacteristics' => [
                 MultiInstanceLoopCharacteristicsInterface::class,
                 [
                     MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_IS_SEQUENTIAL => self::IS_BOOLEAN,
-                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CARDINALITY => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CARDINALITY]],
-                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_COMPLETION_CONDITION => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_COMPLETION_CONDITION]],
-                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT_REF]],
-                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT_REF]],
-                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_INPUT_DATA_ITEM => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_INPUT_DATA_ITEM]],
-                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_OUTPUT_DATA_ITEM => ['1', [BpmnDocument::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_OUTPUT_DATA_ITEM]],
-                ]
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CARDINALITY => ['1', [self::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CARDINALITY]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_COMPLETION_CONDITION => ['1', [self::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_COMPLETION_CONDITION]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT => ['1', [self::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_INPUT_REF]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT => ['1', [self::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_DATA_OUTPUT_REF]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_INPUT_DATA_ITEM => ['1', [self::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_INPUT_DATA_ITEM]],
+                    MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_OUTPUT_DATA_ITEM => ['1', [self::BPMN_MODEL, MultiInstanceLoopCharacteristicsInterface::BPMN_PROPERTY_OUTPUT_DATA_ITEM]],
+                ],
             ],
             'loopCardinality' => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
-                ]
+                ],
             ],
             'completionCondition' => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
-                ]
+                ],
             ],
             'ioSpecification' => [
                 InputOutputSpecificationInterface::class,
                 [
-                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT => ['n', [BpmnDocument::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT]],
-                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT => ['n', [BpmnDocument::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT]],
-                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT_SET => ['1', [BpmnDocument::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT_SET]],
-                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT_SET => ['1', [BpmnDocument::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT_SET]],
-                ]
+                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT => ['n', [self::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT]],
+                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT => ['n', [self::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT]],
+                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT_SET => ['1', [self::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_INPUT_SET]],
+                    InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT_SET => ['1', [self::BPMN_MODEL, InputOutputSpecificationInterface::BPMN_PROPERTY_DATA_OUTPUT_SET]],
+                ],
             ],
             'loopDataInputRef' => [self::IS_REFERENCE, []],
             'loopDataOutputRef' => [self::IS_REFERENCE, []],
             'inputDataItem' => [
                 DataInputInterface::class,
                 [
-                    DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
+                    DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [self::BPMN_MODEL, DataInputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
                     DataInputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
-                ]
+                ],
             ],
             'outputDataItem' => [
                 DataOutputInterface::class,
                 [
-                    DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [BpmnDocument::BPMN_MODEL, DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
+                    DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT => ['1', [self::BPMN_MODEL, DataOutputInterface::BPMN_PROPERTY_ITEM_SUBJECT_REF]],
                     DataOutputInterface::BPMN_PROPERTY_IS_COLLECTION => self::IS_BOOLEAN,
-                ]
+                ],
             ],
             'standardLoopCharacteristics' => [
                 StandardLoopCharacteristicsInterface::class,
                 [
                     StandardLoopCharacteristicsInterface::BPMN_PROPERTY_TEST_BEFORE => self::IS_BOOLEAN,
                     //StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM => ['1', [BpmnDocument::BPMN_MODEL, StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_MAXIMUM]],
-                    StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION => ['1', [BpmnDocument::BPMN_MODEL, StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION]],
-                ]
+                    StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION => ['1', [self::BPMN_MODEL, StandardLoopCharacteristicsInterface::BPMN_PROPERTY_LOOP_CONDITION]],
+                ],
             ],
             'loopCondition' => [
                 FormalExpressionInterface::class,
                 [
                     FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
-                ]
+                ],
             ],
-        ]
+        ],
     ];
 
     const DOM_ELEMENT_BODY = [null, '#text'];
+
     const SKIP_ELEMENT = null;
+
     const IS_REFERENCE = 'isReference';
+
     const TEXT_PROPERTY = 'textProperty';
+
     const IS_ARRAY = 'isArray';
+
     const PARENT_NODE = [1, '#parent'];
+
     const IS_BOOLEAN = [1, '#boolean'];
 
     /**
@@ -546,6 +550,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     public function setBpmnElementMapping($namespace, $tagName, $mapping)
     {
         $this->mapping[$namespace][$tagName] = $mapping;
+
         return $this;
     }
 
@@ -560,6 +565,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     {
         $xpath = new DOMXPath($this);
         $nodes = $xpath->query("//*[@id='$id']");
+
         return $nodes ? $nodes->item(0) : null;
     }
 
@@ -579,7 +585,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      *
      * @param string $id
      *
-     * @return boolean
+     * @return bool
      */
     public function hasBpmnInstance($id)
     {
@@ -605,6 +611,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
         if ($this->bpmnElements[$id] === null) {
             throw new ElementNotFoundException($id);
         }
+
         return $this->bpmnElements[$id];
     }
 
@@ -618,7 +625,8 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     public function hasElementInstance($id)
     {
         $element = $this->findElementById($id);
-        return !empty($element) && !empty($element->getBpmnElementInstance());
+
+        return ! empty($element) && ! empty($element->getBpmnElementInstance());
     }
 
     /**
@@ -647,6 +655,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     public function setSkipElementsNotImplemented($skipElementsNotImplemented)
     {
         $this->skipElementsNotImplemented = $skipElementsNotImplemented;
+
         return $this;
     }
 
@@ -1172,6 +1181,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     public function setEngine(EngineInterface $engine = null)
     {
         $this->engine = $engine;
+
         return $this;
     }
 
@@ -1185,6 +1195,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
         $validator = new BPMNValidator($this);
         $validation = $validator->validate($schema);
         $this->validationErrors = $validator->getErrors();
+
         return $validation;
     }
 

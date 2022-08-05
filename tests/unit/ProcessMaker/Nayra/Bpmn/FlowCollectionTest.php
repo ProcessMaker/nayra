@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Bpmn\Models\FlowCollection;
 
 /**
  * Tests for the flow collection
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class FlowCollectionTest extends TestCase
 {

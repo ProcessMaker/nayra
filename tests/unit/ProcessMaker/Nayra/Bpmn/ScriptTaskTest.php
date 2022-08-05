@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Bpmn\Models\ScriptTask;
 
 /**
  * Tests for the Operation class
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ScriptTaskTest extends TestCase
 {

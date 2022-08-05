@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * EventDefinition interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface EventDefinitionInterface extends EntityInterface
 {
@@ -34,9 +32,9 @@ interface EventDefinitionInterface extends EntityInterface
      * @param ExecutionInstanceInterface|null $instance
      * @param TokenInterface|null $token
      *
-     * @return boolean
+     * @return bool
      */
-    public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null);
+    public function assertsRule(self $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null);
 
     /**
      * Implement the event definition behavior when an event is triggered.
@@ -48,7 +46,7 @@ interface EventDefinitionInterface extends EntityInterface
      *
      * @return $this
      */
-    public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null);
+    public function execute(self $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null);
 
     /**
      * Register event with a catch event
@@ -78,7 +76,7 @@ interface EventDefinitionInterface extends EntityInterface
      *
      * @return bool
      */
-    public function shouldCatchEventDefinition(EventDefinitionInterface $sourceEvent);
+    public function shouldCatchEventDefinition(self $sourceEvent);
 
     /**
      * Get data contained in the event payload

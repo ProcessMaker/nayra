@@ -12,8 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Boundary Caught Transition.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class BoundaryExceptionTransition implements TransitionInterface
 {
@@ -31,6 +29,7 @@ class BoundaryExceptionTransition implements TransitionInterface
     {
         $activity = $this->getOwner();
         $eventType = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE);
+
         return $this->existsBoundaryErrorFor($activity, $eventType, null);
     }
 
@@ -48,10 +47,12 @@ class BoundaryExceptionTransition implements TransitionInterface
             foreach ($catch->getEventDefinitions() as $eventDefinition) {
                 if ($eventDefinition instanceof ErrorEventDefinition) {
                     $matchType = $eventType === ErrorInterface::class || is_a($eventType, ErrorInterface::class);
+
                     return $matchType && $catch->getCancelActivity();
                 }
             }
         });
-        return !empty($catchException);
+
+        return ! empty($catchException);
     }
 }

@@ -7,11 +7,9 @@ use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
 
 /**
  * JobManagerTrait
- *
  */
 trait JobManagerTrait
 {
-
     /**
      * Get the next datetime event of a cycle.
      *
@@ -29,6 +27,7 @@ trait JobManagerTrait
                 break;
             }
         }
+
         return $nextDateTime;
     }
 }

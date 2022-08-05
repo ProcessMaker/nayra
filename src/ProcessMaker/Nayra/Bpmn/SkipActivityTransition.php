@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule that always pass the token.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class SkipActivityTransition implements TransitionInterface
 {
@@ -45,6 +43,7 @@ class SkipActivityTransition implements TransitionInterface
             // If loop is completed, then Skip Activity Transition is triggered
             return $testBefore && $completed;
         }
+
         return false;
     }
 

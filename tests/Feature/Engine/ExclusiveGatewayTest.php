@@ -14,11 +14,9 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test transitions
- *
  */
 class ExclusiveGatewayTest extends EngineTestCase
 {
-
     /**
      * Creates a process where the exclusive gateway has conditioned and simple transitions
      *
@@ -52,15 +50,16 @@ class ExclusiveGatewayTest extends EngineTestCase
         $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
-                return $data['A']=='1';
+                return $data['A'] == '1';
             }, false, $this->repository)
             ->createConditionedFlowTo($activityB, function ($data) {
-                return $data['B']=='1';
+                return $data['B'] == '1';
             }, false, $this->repository)
             ->createFlowTo($activityC, $this->repository);
         $activityA->createFlowTo($end, $this->repository);
         $activityB->createFlowTo($end, $this->repository);
         $activityC->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
@@ -97,10 +96,10 @@ class ExclusiveGatewayTest extends EngineTestCase
         $start->createFlowTo($gatewayA, $this->repository);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
-                return $data['A']=='1';
+                return $data['A'] == '1';
             }, false, $this->repository)
             ->createConditionedFlowTo($activityB, function ($data) {
-                return $data['B']=='1';
+                return $data['B'] == '1';
             }, false, $this->repository)
             ->createConditionedFlowTo($activityC, function ($data) {
                 return true;
@@ -108,6 +107,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         $activityA->createFlowTo($end, $this->repository);
         $activityB->createFlowTo($end, $this->repository);
         $activityC->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
@@ -155,6 +155,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         $activityB->createFlowTo($gatewayB, $this->repository);
         $gatewayB->createFlowTo($activityC, $this->repository);
         $activityC->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
@@ -331,7 +332,7 @@ class ExclusiveGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         //Completes the Activity A
@@ -406,7 +407,6 @@ class ExclusiveGatewayTest extends EngineTestCase
 
     /**
      * Test exclusive gateway with custom data
-     *
      */
     public function testConditionalExclusiveParameters()
     {
@@ -415,7 +415,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
 
-        $bpmnRepository->load(__DIR__ . '/files/ExclusiveGateway.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/ExclusiveGateway.bpmn');
 
         //Create a data store with data.
         $dataStore = $this->repository->createDataStore();
@@ -428,7 +428,6 @@ class ExclusiveGatewayTest extends EngineTestCase
         //Get start event and event definition references
         $start = $bpmnRepository->getStartEvent('StartEvent');
         $activity1 = $bpmnRepository->getStartEvent('Exclusive1');
-
 
         //Start the process
         $start->start($instance);

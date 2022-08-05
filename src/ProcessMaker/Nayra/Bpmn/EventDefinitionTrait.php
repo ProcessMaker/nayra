@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Base implementation for a exclusive gateway.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait EventDefinitionTrait
 {
@@ -86,6 +84,7 @@ trait EventDefinitionTrait
     public function setDoNotTriggerStartEvents($value)
     {
         $this->setProperty('doNotTriggerStartEvents', $value);
+
         return $this;
     }
 

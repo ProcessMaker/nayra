@@ -12,14 +12,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test a terminate event.
- *
  */
 class MultiInstanceTest extends EngineTestCase
 {
-
     /**
      * Test a parallel multiinstance
-     *
      */
     public function testMultiInstanceParallelLoopCardinality()
     {
@@ -27,7 +24,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_Parallel.bpmn');
+        $bpmnRepository->load(__DIR__.'/../Patterns/files/MultiInstance_Parallel.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_Parallel');
@@ -122,7 +119,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test MI script task with exception
-     *
      */
     public function testMultiInstanceParallelLoopCardinalityScriptException()
     {
@@ -130,7 +126,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_Parallel.bpmn');
+        $bpmnRepository->load(__DIR__.'/../Patterns/files/MultiInstance_Parallel.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_Parallel');
@@ -231,7 +227,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test MI task cancel instance
-     *
      */
     public function testMultiInstanceParallelLoopCardinalityCancellInstance()
     {
@@ -239,7 +234,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_Parallel.bpmn');
+        $bpmnRepository->load(__DIR__.'/../Patterns/files/MultiInstance_Parallel.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_Parallel');
@@ -328,7 +323,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test a sequential multiinstance
-     *
      */
     public function testMultiInstanceSequentialLoopCardinality()
     {
@@ -336,7 +330,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_AllBehavior.bpmn');
+        $bpmnRepository->load(__DIR__.'/../Patterns/files/MultiInstance_AllBehavior.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_AllBehavior');
@@ -429,7 +423,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test MI script task with exception
-     *
      */
     public function testMultiInstanceSequentialLoopCardinalityScriptException()
     {
@@ -437,7 +430,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_AllBehavior.bpmn');
+        $bpmnRepository->load(__DIR__.'/../Patterns/files/MultiInstance_AllBehavior.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_AllBehavior');
@@ -536,7 +529,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test MI task cancel instance
-     *
      */
     public function testMultiInstanceSequentialLoopCardinalityCancelInstance()
     {
@@ -544,7 +536,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_AllBehavior.bpmn');
+        $bpmnRepository->load(__DIR__.'/../Patterns/files/MultiInstance_AllBehavior.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_AllBehavior');
@@ -643,7 +635,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/MultiInstance_DocumentOnly.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/MultiInstance_DocumentOnly.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_DocumentOnly');
@@ -731,7 +723,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/MultiInstance_InputOutput.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/MultiInstance_InputOutput.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_Process');
@@ -848,7 +840,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/MultiInstance_InputOutput_WithoutIODataItem.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/MultiInstance_InputOutput_WithoutIODataItem.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('MultiInstance_Process');
@@ -961,7 +953,7 @@ class MultiInstanceTest extends EngineTestCase
      */
     private function verifyStoredInstanceData(ExecutionInstanceInterface $instance)
     {
-        $instanceId=$instance->getId();
+        $instanceId = $instance->getId();
         $instanceData = $instance->getDataStore()->getData();
 
         $instanceRepository = $this->repository->createExecutionInstanceRepository();
@@ -981,7 +973,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_EmptyInputItems.bpmn');
+        $bpmnRepository->load(__DIR__.'/../Patterns/files/MultiInstance_EmptyInputItems.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('ProcessId');
@@ -1037,7 +1029,7 @@ class MultiInstanceTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/../Patterns/files/MultiInstance_CardinalityZero.bpmn');
+        $bpmnRepository->load(__DIR__.'/../Patterns/files/MultiInstance_CardinalityZero.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('ProcessId');

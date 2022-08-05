@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Base implementation for LoopCharacteristicsInterface
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait LoopCharacteristicsTrait
 {
@@ -38,6 +36,7 @@ trait LoopCharacteristicsTrait
             LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY,
             $properties[LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY]
         );
+
         return $properties;
     }
 
@@ -59,6 +58,7 @@ trait LoopCharacteristicsTrait
         $data[$outerInstance] = $data[$outerInstance] ?? [];
         $data[$outerInstance][$key] = $value;
         $ds->putData(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, $data);
+
         return $this;
     }
 
@@ -74,13 +74,14 @@ trait LoopCharacteristicsTrait
     public function getLoopInstanceProperty(TokenInterface $token, $key, $defaultValue = null)
     {
         $loopCharacteristics = $token->getProperty(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, []);
-        if (!isset($loopCharacteristics['sourceToken'])) {
+        if (! isset($loopCharacteristics['sourceToken'])) {
             return $defaultValue;
         }
         $outerInstance = $loopCharacteristics['sourceToken'];
         $ds = $token->getInstance()->getDataStore();
         $data = $ds->getData(LoopCharacteristicsInterface::BPMN_LOOP_INSTANCE_PROPERTY, []);
         $data[$outerInstance] = $data[$outerInstance] ?? [];
+
         return $data[$outerInstance][$key] ?? $defaultValue;
     }
 

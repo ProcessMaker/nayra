@@ -13,12 +13,9 @@ use ProcessMaker\Test\Models\TestTwoClassWithArgumentsConstructor;
 
 /**
  * Repository
- *
- * @package ProcessMaker\Test\Models
  */
 class Repository implements RepositoryInterface
 {
-
     use RepositoryTrait;
 
     /**

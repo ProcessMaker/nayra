@@ -12,14 +12,13 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * SignalEventDefinition class
- *
  */
 class SignalEventDefinition implements SignalEventDefinitionInterface
 {
     use EventDefinitionTrait;
 
     /**
-     * @var string $id
+     * @var string
      */
     private $id;
 
@@ -43,6 +42,7 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
     public function setId($value)
     {
         $this->id = $value;
+
         return $this;
     }
 
@@ -73,7 +73,7 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
      * @param ExecutionInstanceInterface|null $instance
      * @param TokenInterface|null $token
      *
-     * @return boolean
+     * @return bool
      */
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
@@ -106,6 +106,7 @@ class SignalEventDefinition implements SignalEventDefinitionInterface
     {
         $targetPayloadId = $this->getPayload() ? $this->getPayload()->getId() : $this->getProperty(SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF);
         $sourcePayloadId = $eventDefinition->getPayload() ? $eventDefinition->getPayload()->getId() : $eventDefinition->getProperty(SignalEventDefinitionInterface::BPMN_PROPERTY_SIGNAL_REF);
+
         return $targetPayloadId && $sourcePayloadId && $targetPayloadId === $sourcePayloadId;
     }
 }

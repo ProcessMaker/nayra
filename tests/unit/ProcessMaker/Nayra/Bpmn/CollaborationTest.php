@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 
 /**
  * Tests for the Collaboration class
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class CollaborationTest extends TestCase
 {

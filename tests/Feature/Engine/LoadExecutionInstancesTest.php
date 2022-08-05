@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test to load execution instances
- *
  */
 class LoadExecutionInstancesTest extends EngineTestCase
 {
@@ -32,9 +31,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
                     [
                         'elementId' => 'second',
                         'status' => ActivityInterface::TOKEN_STATE_ACTIVE,
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -60,7 +59,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
                         'status' => ActivityInterface::TOKEN_STATE_ACTIVE,
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -86,7 +85,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
                         'status' => ActivityInterface::TOKEN_STATE_ACTIVE,
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -112,13 +111,12 @@ class LoadExecutionInstancesTest extends EngineTestCase
                         'status' => ActivityInterface::TOKEN_STATE_FAILING,
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 
     /**
      * Test load an execution instance from repository with one token
-     *
      */
     public function testLoadExecutionInstanceWithOneToken()
     {
@@ -127,7 +125,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $this->engine->setRepository($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareSequentialProcess($bpmnRepository);
@@ -156,7 +154,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
 
     /**
      * Test load an execution instance from repository with multiple tokens
-     *
      */
     public function testLoadExecutionInstanceWithMultipleTokens()
     {
@@ -165,7 +162,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $this->engine->setRepository($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareParallelProcess($bpmnRepository);
@@ -209,7 +206,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Test load an execution instance from repository with multiple tokens
      * in different states
-     *
      */
     public function testLoadExecutionInstanceWithMultipleTokensStates()
     {
@@ -218,7 +214,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $this->engine->setRepository($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareParallelProcessWithActivityCompleted($bpmnRepository);
@@ -256,7 +252,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Test load an execution instance from repository with multiple tokens
      * and one token in falling state
-     *
      */
     public function testLoadExecutionInstanceWithMultipleTokensFallingState()
     {
@@ -264,7 +259,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareParallelProcessWithException($bpmnRepository);
@@ -282,7 +277,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
 
     /**
      * Test load a non existing execution instance from repository
-     *
      */
     public function testLoadNonExistingInstance()
     {
@@ -290,7 +284,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
 
         //Load the execution instance
         $instance = $this->engine->loadExecutionInstance('nonExistingInstance', $bpmnRepository);
@@ -301,7 +295,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
 
     /**
      * Test load the same execution instance twice
-     *
      */
     public function testLoadTheSameExistingInstanceTwice()
     {
@@ -310,7 +303,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $this->engine->setRepository($this->repository);
-        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
 
         //Set test data to load the sequential process
         $this->prepareSequentialProcess($bpmnRepository);

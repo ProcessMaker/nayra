@@ -7,7 +7,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
 interface FormalExpressionInterface extends EntityInterface
 {
     const BPMN_PROPERTY_LANGUAGE = 'language';
+
     const BPMN_PROPERTY_EVALUATES_TO_TYPE_REF = 'evaluatesToTypeRef';
+
     const BPMN_PROPERTY_BODY = 'body';
 
     /**

@@ -8,8 +8,6 @@ use Iterator;
 
 /**
  * DatePeriod represents an ISO8601 Repeating intervals
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface DatePeriodInterface extends Iterator
 {

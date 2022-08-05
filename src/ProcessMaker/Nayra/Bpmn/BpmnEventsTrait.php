@@ -6,8 +6,6 @@ use ReflectionClass;
 
 /**
  * Trait to implements bpmn events handling.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait BpmnEventsTrait
 {

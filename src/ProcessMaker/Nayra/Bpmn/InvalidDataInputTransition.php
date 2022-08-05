@@ -12,8 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition to check if the activity is a loop with an invalid data input
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class InvalidDataInputTransition implements TransitionInterface
 {
@@ -30,7 +28,8 @@ class InvalidDataInputTransition implements TransitionInterface
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
-        return $loop && $loop->isExecutable() && !$loop->isDataInputValid($executionInstance, $token);
+
+        return $loop && $loop->isExecutable() && ! $loop->isDataInputValid($executionInstance, $token);
     }
 
     /**

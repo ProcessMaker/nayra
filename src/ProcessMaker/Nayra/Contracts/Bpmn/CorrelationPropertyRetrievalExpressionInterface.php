@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 interface CorrelationPropertyRetrievalExpressionInterface
 {
-
     /**
      * Get the specific Message the FormalExpression extracts the
      * CorrelationProperty from.

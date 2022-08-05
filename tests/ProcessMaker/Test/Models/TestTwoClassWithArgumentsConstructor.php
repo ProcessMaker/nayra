@@ -6,12 +6,11 @@ use ProcessMaker\Test\Contracts\TestTwoInterface;
 
 /**
  * TestOneClassWithEmptyConstructor
- *
- * @package ProcessMaker\Test\Models
  */
 class TestTwoClassWithArgumentsConstructor implements TestTwoInterface
 {
     public $aField;
+
     public $anotherField;
 
     /**
@@ -33,6 +32,6 @@ class TestTwoClassWithArgumentsConstructor implements TestTwoInterface
      */
     public function dummyFunction()
     {
-        return "test";
+        return 'test';
     }
 }
