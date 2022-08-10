@@ -26,7 +26,7 @@ class LanesTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
 
-        $bpmnRepository->load(__DIR__.'/files/Lanes.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Lanes.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -74,7 +74,7 @@ class LanesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Lanes.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Lanes.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');

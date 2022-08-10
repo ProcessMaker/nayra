@@ -135,10 +135,10 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     public function isLoopCompleted(ExecutionInstanceInterface $instance, TokenInterface $token)
     {
         if ($this->getTestBefore()) {
-            return ! $this->checkBeforeLoop($instance, $token);
+            return !$this->checkBeforeLoop($instance, $token);
         }
 
-        return ! $this->checkAfterLoop($instance, $token);
+        return !$this->checkAfterLoop($instance, $token);
     }
 
     /**
@@ -181,16 +181,16 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
         $loopMaximum = $this->getLoopMaximumFormalExpression($data);
         $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
         $loopCondition = $loopMaximum === null || $loopCounter < $loopMaximum;
-        if (! $testBefore && $loopCounter === 0) {
+        if (!$testBefore && $loopCounter === 0) {
             return true;
         }
         if ($condition) {
             $exitCondition = $condition($data);
-            if (! $testBefore && ! $exitCondition && $loopCondition) {
+            if (!$testBefore && !$exitCondition && $loopCondition) {
                 return true;
             }
         } else {
-            if (! $testBefore && $loopCondition) {
+            if (!$testBefore && $loopCondition) {
                 return true;
             }
         }

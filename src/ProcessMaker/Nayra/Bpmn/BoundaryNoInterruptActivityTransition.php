@@ -27,7 +27,7 @@ class BoundaryNoInterruptActivityTransition implements TransitionInterface
         $boundary = $this->getOwner();
         $nonInterrupt = false;
         if ($boundary instanceof BoundaryEventInterface) {
-            $nonInterrupt = ! $boundary->getCancelActivity();
+            $nonInterrupt = !$boundary->getCancelActivity();
         }
 
         return $nonInterrupt;

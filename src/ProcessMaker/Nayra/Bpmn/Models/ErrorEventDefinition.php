@@ -93,6 +93,6 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
         $targetPayloadId = $this->getPayload() ? $this->getPayload()->getId() : $this->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF);
         $sourcePayloadId = $eventDefinition->getPayload() ? $eventDefinition->getPayload()->getId() : $eventDefinition->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF);
 
-        return ! $targetPayloadId || ($targetPayloadId && $sourcePayloadId && $targetPayloadId === $sourcePayloadId);
+        return !$targetPayloadId || ($targetPayloadId && $sourcePayloadId && $targetPayloadId === $sourcePayloadId);
     }
 }

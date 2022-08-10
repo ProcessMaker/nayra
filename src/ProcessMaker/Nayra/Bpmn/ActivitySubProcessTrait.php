@@ -63,7 +63,7 @@ trait ActivitySubProcessTrait
                     ActivityInterface::TOKEN_STATE_INTERRUPTED,
                 ];
                 if ($closedInstance->getId() === $instance->getId()
-                && ! in_array($token->getStatus(), $skipStates)) {
+                && !in_array($token->getStatus(), $skipStates)) {
                     $this->completeSubprocess($token, $closedInstance, $instance);
                 }
             }

@@ -196,7 +196,7 @@ trait TransitionTrait
                 }
             });
         });
-        if ($consumeTokens || (! $hasInputTokens && $this->assertCondition(null, $executionInstance))) {
+        if ($consumeTokens || (!$hasInputTokens && $this->assertCondition(null, $executionInstance))) {
             return new Collection($consumeTokens);
         } else {
             return false;

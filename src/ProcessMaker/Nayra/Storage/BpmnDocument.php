@@ -626,7 +626,7 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     {
         $element = $this->findElementById($id);
 
-        return ! empty($element) && ! empty($element->getBpmnElementInstance());
+        return !empty($element) && !empty($element->getBpmnElementInstance());
     }
 
     /**

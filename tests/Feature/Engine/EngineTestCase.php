@@ -213,13 +213,13 @@ class EngineTestCase extends TestCase
         $scheduled = [];
         $logScheduled = '';
         foreach ($this->jobs as $job) {
-            $logScheduled .= "\n".$this->representJob($job['timer'], $job['element'], $job['token']);
+            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
             $scheduled[] = $job['timer'];
             if (isset($job['timer']) && $job['timer'] == $date && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, "Failed asserting that a date timer:\n".$this->representJob($date, $element, $token)."\n\nWas scheduled: ".$logScheduled);
+        $this->assertTrue($found, "Failed asserting that a date timer:\n" . $this->representJob($date, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
     }
 
     /**
@@ -235,13 +235,13 @@ class EngineTestCase extends TestCase
         $scheduled = [];
         $logScheduled = '';
         foreach ($this->jobs as $job) {
-            $logScheduled .= "\n".$this->representJob($job['timer'], $job['element'], $job['token']);
+            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
             $scheduled[] = $job['timer'];
             if (isset($job['timer']) && json_encode($job['timer']) == json_encode($cycle) && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, "Failed asserting that a cycle timer:\n".$this->representJob($cycle, $element, $token)."\n\nWas scheduled: ".$logScheduled);
+        $this->assertTrue($found, "Failed asserting that a cycle timer:\n" . $this->representJob($cycle, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
     }
 
     /**
@@ -256,12 +256,12 @@ class EngineTestCase extends TestCase
         $found = false;
         $logScheduled = '';
         foreach ($this->jobs as $job) {
-            $logScheduled .= "\n".$this->representJob($job['timer'], $job['element'], $job['token']);
+            $logScheduled .= "\n" . $this->representJob($job['timer'], $job['element'], $job['token']);
             if (isset($job['timer']) && $job['timer'] === $duration && $job['element'] === $element && $job['token'] === $token) {
                 $found = true;
             }
         }
-        $this->assertTrue($found, "Failed asserting that a duration timer was scheduled:\n".$this->representJob($duration, $element, $token)."\n\nWas scheduled: ".$logScheduled);
+        $this->assertTrue($found, "Failed asserting that a duration timer was scheduled:\n" . $this->representJob($duration, $element, $token) . "\n\nWas scheduled: " . $logScheduled);
     }
 
     /**

@@ -76,7 +76,7 @@ trait EngineTrait
             }) > 0;
         }
         //If there are no pending transitions, next state callbacks are executed
-        if (! $sum && $sum = count($this->onNextState)) {
+        if (!$sum && $sum = count($this->onNextState)) {
             while ($action = array_shift($this->onNextState)) {
                 $action();
             }
@@ -97,7 +97,7 @@ trait EngineTrait
         $step = true;
         while ($step) {
             $step = $this->step();
-            if (! $step) {
+            if (!$step) {
                 $this->dispatchConditionalEvents();
                 $step = $this->step();
             }
@@ -171,7 +171,7 @@ trait EngineTrait
         // Create and load an instance by id
         $repository = $this->getRepository()->createExecutionInstanceRepository();
         $executionInstance = $repository->loadExecutionInstanceByUid($id, $storage);
-        if (! $executionInstance) {
+        if (!$executionInstance) {
             return;
         }
 
@@ -193,7 +193,7 @@ trait EngineTrait
         $this->executionInstances = array_filter(
             $this->executionInstances,
             function (ExecutionInstanceInterface $executionInstance) {
-                return ! $executionInstance->close();
+                return !$executionInstance->close();
             }
         );
 
@@ -234,7 +234,7 @@ trait EngineTrait
     public function loadProcess(ProcessInterface $process)
     {
         $process->setEngine($this);
-        if (! in_array($process, $this->processes, true)) {
+        if (!in_array($process, $this->processes, true)) {
             $this->processes[] = $process;
             $this->registerCatchEvents($process);
         }

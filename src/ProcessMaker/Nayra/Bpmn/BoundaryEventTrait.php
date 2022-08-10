@@ -62,7 +62,7 @@ trait BoundaryEventTrait
             foreach ($tokens as $token) {
                 $eventType = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE);
                 $isError = $eventType === ErrorInterface::class || is_a($eventType, ErrorInterface::class);
-                if (! $isError && $this->getCancelActivity() && $activity instanceof ActivityInterface) {
+                if (!$isError && $this->getCancelActivity() && $activity instanceof ActivityInterface) {
                     $activity->notifyInterruptingEvent($token);
                     break;
                 }

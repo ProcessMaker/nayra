@@ -26,7 +26,7 @@ class TerminateEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Terminate_Event.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Terminate_Event.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Terminate_Event');

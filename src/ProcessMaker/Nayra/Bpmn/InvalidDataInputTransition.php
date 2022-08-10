@@ -29,7 +29,7 @@ class InvalidDataInputTransition implements TransitionInterface
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
 
-        return $loop && $loop->isExecutable() && ! $loop->isDataInputValid($executionInstance, $token);
+        return $loop && $loop->isExecutable() && !$loop->isDataInputValid($executionInstance, $token);
     }
 
     /**

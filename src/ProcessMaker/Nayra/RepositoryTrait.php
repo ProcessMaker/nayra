@@ -64,8 +64,8 @@ trait RepositoryTrait
     {
         $interfaceParts = explode('\\', $interfaceName);
         $name = array_pop($interfaceParts);
-        $method = 'create'.substr($name, 0, -9);
-        if (! method_exists($this, $method)) {
+        $method = 'create' . substr($name, 0, -9);
+        if (!method_exists($this, $method)) {
             throw new InvalidArgumentException("Can't find $method to instantiate '$interfaceName'");
         }
 

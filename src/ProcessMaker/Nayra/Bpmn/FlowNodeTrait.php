@@ -215,7 +215,7 @@ trait FlowNodeTrait
         $flow->setProperties($properties);
         $this->addProperty(FlowNodeInterface::BPMN_PROPERTY_OUTGOING, $flow);
         $target->addProperty(FlowNodeInterface::BPMN_PROPERTY_INCOMING, $flow);
-        if (! empty($properties[FlowInterface::BPMN_PROPERTY_IS_DEFAULT])) {
+        if (!empty($properties[FlowInterface::BPMN_PROPERTY_IS_DEFAULT])) {
             $this->setProperty(GatewayInterface::BPMN_PROPERTY_DEFAULT, $flow);
         }
 

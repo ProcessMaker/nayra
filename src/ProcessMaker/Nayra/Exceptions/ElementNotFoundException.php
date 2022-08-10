@@ -19,6 +19,6 @@ class ElementNotFoundException extends OutOfBoundsException
     public function __construct($id)
     {
         $this->elementId = $id;
-        parent::__construct('Element "'.$id.'" was not found');
+        parent::__construct('Element "' . $id . '" was not found');
     }
 }

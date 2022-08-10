@@ -29,6 +29,6 @@ class UncaughtCancelTransition extends BoundaryCaughtTransition implements Trans
         $eventDefinitionId = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT);
         $matchType = $eventType === CancelInterface::class || is_a($eventType, CancelInterface::class);
 
-        return $matchType && ! $this->existsBoundaryFor($activity, $eventType, $eventDefinitionId);
+        return $matchType && !$this->existsBoundaryFor($activity, $eventType, $eventDefinitionId);
     }
 }

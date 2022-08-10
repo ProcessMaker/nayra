@@ -26,7 +26,7 @@ class JobManagerTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeCycle.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycle.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
@@ -67,7 +67,7 @@ class JobManagerTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeCycle.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeCycle.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
@@ -113,7 +113,7 @@ class JobManagerTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeDate.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDate.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
@@ -146,7 +146,7 @@ class JobManagerTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Timer_StartEvent_TimeDateInterval.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Timer_StartEvent_TimeDateInterval.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');

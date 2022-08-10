@@ -97,7 +97,7 @@ trait StateTrait
         $token->setInstance($instance);
         $this->getName() ? $token->setStatus($this->getName()) : '';
         $token->setIndex($this->getIndex());
-        ! $instance ?: $instance->addToken($token);
+        !$instance ?: $instance->addToken($token);
         $this->tokens->push($token);
         $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
 

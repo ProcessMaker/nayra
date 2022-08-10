@@ -28,7 +28,7 @@ class DataInputTransition implements TransitionInterface
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
         if ($loop && $loop->isExecutable()) {
-            return $loop->isDataInputValid($executionInstance, $token) && ! $loop->isLoopCompleted($executionInstance, $token);
+            return $loop->isDataInputValid($executionInstance, $token) && !$loop->isLoopCompleted($executionInstance, $token);
         }
 
         return true;

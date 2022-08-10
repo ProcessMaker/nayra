@@ -197,7 +197,7 @@ class ScriptTaskTest extends EngineTestCase
         $activityA = $this->repository->createActivity();
         $scriptTask = $this->repository->createScriptTask();
         $scriptTask->setScriptFormat('text/php');
-        $scriptTask->setScript('$this->setProperty("'.self::TEST_PROPERTY.'", 1);');
+        $scriptTask->setScript('$this->setProperty("' . self::TEST_PROPERTY . '", 1);');
         $end = $this->repository->createEndEvent();
 
         $process

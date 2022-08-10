@@ -33,7 +33,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Signal_BoundaryEvent.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Signal_BoundaryEvent.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -99,7 +99,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Signal_BoundaryEvent_MultiInstance.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Signal_BoundaryEvent_MultiInstance.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('ProcessId');
@@ -171,7 +171,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Timer_BoundaryEvent_Cycle.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Timer_BoundaryEvent_Cycle.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -240,7 +240,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Error_BoundaryEvent_ScriptTask.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Error_BoundaryEvent_ScriptTask.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -304,7 +304,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Error_BoundaryEvent_CallActivity.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Error_BoundaryEvent_CallActivity.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -367,7 +367,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Timer_BoundaryEvent_CallActivity.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Timer_BoundaryEvent_CallActivity.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -441,7 +441,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Signal_BoundaryEvent_CallActivity.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Signal_BoundaryEvent_CallActivity.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -502,7 +502,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Signal_BoundaryEvent_NonInterrupting.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Signal_BoundaryEvent_NonInterrupting.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -586,7 +586,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Timer_BoundaryEvent_Cycle_NonInterrupting.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Timer_BoundaryEvent_Cycle_NonInterrupting.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -691,7 +691,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Error_BoundaryEvent_ScriptTask_NonInterrupting.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Error_BoundaryEvent_ScriptTask_NonInterrupting.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -747,7 +747,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Error_BoundaryEvent_CallActivity_NonInterrupting.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Error_BoundaryEvent_CallActivity_NonInterrupting.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -801,7 +801,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Timer_BoundaryEvent_CallActivity_NonInterrupting.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Timer_BoundaryEvent_CallActivity_NonInterrupting.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -867,7 +867,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Signal_BoundaryEvent_CallActivity_NonInterrupting.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Signal_BoundaryEvent_CallActivity_NonInterrupting.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -920,7 +920,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Concurrent_BoundaryEvent_CallActivity.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Concurrent_BoundaryEvent_CallActivity.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');
@@ -1033,7 +1033,7 @@ class BoundaryEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Concurrent_BoundaryEvent_CallActivity_NonInterrupting.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Concurrent_BoundaryEvent_CallActivity_NonInterrupting.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('PROCESS_1');

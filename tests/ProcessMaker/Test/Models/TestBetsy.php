@@ -22,12 +22,12 @@ class TestBetsy
     public function __construct($data, $expression)
     {
         $this->data = $data;
-        $tokens = token_get_all('<?php '.$expression);
+        $tokens = token_get_all('<?php ' . $expression);
         $tokens[0] = '';
         $code = '';
         foreach ($tokens as $token) {
             if (is_array($token) && $token[1] === 'test') {
-                $code .= '$'.$token[1];
+                $code .= '$' . $token[1];
             } elseif ($token === '.') {
                 $code .= '->';
             } else {
@@ -59,7 +59,7 @@ class TestBetsy
         $test = $this;
         $data = $this->data;
 
-        return eval('return '.$this->code.';');
+        return eval('return ' . $this->code . ';');
     }
 
     private function throwException($message)

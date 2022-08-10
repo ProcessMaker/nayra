@@ -86,7 +86,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Call the process
         $process = $bpmnRepository->getProcess('SequentialTask');
@@ -127,7 +127,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Call the process
         $process = $bpmnRepository->getProcess('ParallelProcess');
@@ -201,7 +201,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/LoadTokens.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/LoadTokens.bpmn');
 
         //Call the process
         $process = $bpmnRepository->getProcess('ParallelProcess');

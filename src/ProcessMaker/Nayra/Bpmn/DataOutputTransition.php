@@ -39,7 +39,7 @@ class DataOutputTransition implements TransitionInterface
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
 
-        return ! $loop || ! $loop->isExecutable() || $loop->isLoopCompleted($executionInstance, $token);
+        return !$loop || !$loop->isExecutable() || $loop->isLoopCompleted($executionInstance, $token);
     }
 
     /**

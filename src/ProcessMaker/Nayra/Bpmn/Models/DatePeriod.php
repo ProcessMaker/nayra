@@ -97,16 +97,16 @@ class DatePeriod implements DatePeriodInterface
             throw new Exception('Invalid DatePeriod definition');
         }
         // Validate properties
-        if (isset($this->start) && ! ($this->start instanceof DateTimeInterface)) {
+        if (isset($this->start) && !($this->start instanceof DateTimeInterface)) {
             throw new Exception('Invalid DatePeriod::start definition');
         }
-        if (! ($this->interval instanceof DateInterval)) {
+        if (!($this->interval instanceof DateInterval)) {
             throw new Exception('Invalid DatePeriod::interval definition');
         }
-        if (isset($this->end) && ! ($this->end instanceof DateTimeInterface)) {
+        if (isset($this->end) && !($this->end instanceof DateTimeInterface)) {
             throw new Exception('Invalid DatePeriod::end definition');
         }
-        if (! ($this->recurrences >= 0)) {
+        if (!($this->recurrences >= 0)) {
             throw new Exception('Invalid DatePeriod::recurrences definition');
         }
     }

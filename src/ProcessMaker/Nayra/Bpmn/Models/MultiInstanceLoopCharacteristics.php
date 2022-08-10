@@ -78,7 +78,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
     {
         $dataStore = $instance->getDataStore();
         $dataInput = $this->getLoopDataInput();
-        if (! $dataInput) {
+        if (!$dataInput) {
             return null;
         }
 
@@ -317,12 +317,12 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         } else {
             $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
             $isCountable = is_array($dataInput) || $dataInput instanceof Countable;
-            if (! $isCountable) {
+            if (!$isCountable) {
                 return false;
             }
             $count = \count($dataInput);
             $isSequentialArray = array_keys($dataInput) === \range(0, $count - 1);
-            if (! $isSequentialArray || $count === 0) {
+            if (!$isSequentialArray || $count === 0) {
                 return false;
             }
 
@@ -345,19 +345,19 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
         $loopDataInput = $this->getLoopDataInput();
         if ($loopCardinality) {
             $cardinality = $loopCardinality($dataStore->getData());
-            if (! \is_numeric($cardinality) && $cardinality >= 0) {
+            if (!\is_numeric($cardinality) && $cardinality >= 0) {
                 return  'Invalid data input, expected a number';
             }
         } else {
             $loopDataInputName = $loopDataInput->getName();
             $dataInput = $this->getInputDataValue($loopDataInput, $dataStore);
             $isCountable = is_array($dataInput) || $dataInput instanceof Countable;
-            if (! $isCountable) {
+            if (!$isCountable) {
                 return "Invalid data input ({$loopDataInputName}), it must be a sequential array";
             }
             $count = \count($dataInput);
             $isSequentialArray = $count === 0 || array_keys($dataInput) === \range(0, $count - 1);
-            if (! $isSequentialArray) {
+            if (!$isSequentialArray) {
                 return "The data input ({$loopDataInputName}) is an object or an associative array, it must be a sequential array";
             }
         }

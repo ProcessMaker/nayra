@@ -282,7 +282,7 @@ trait ActivityTrait
         $this->loopTransition->attachEvent(
             TransitionInterface::EVENT_AFTER_CONSUME,
             function (TransitionInterface $transition, Collection $consumedTokens) {
-                if (! $this->loopTransition->shouldCloseTokens()) {
+                if (!$this->loopTransition->shouldCloseTokens()) {
                     return;
                 }
                 foreach ($consumedTokens as $token) {

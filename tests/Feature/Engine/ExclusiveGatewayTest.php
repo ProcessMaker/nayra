@@ -415,7 +415,7 @@ class ExclusiveGatewayTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
 
-        $bpmnRepository->load(__DIR__.'/files/ExclusiveGateway.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/ExclusiveGateway.bpmn');
 
         //Create a data store with data.
         $dataStore = $this->repository->createDataStore();

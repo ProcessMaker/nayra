@@ -72,12 +72,12 @@ class BPMNValidator
         $this->errors = $this->getLibxmlErrors();
         $hasErrors = false;
         $validation = $this->document->schemaValidate($schema);
-        if (! $validation) {
+        if (!$validation) {
             $this->errors = array_merge($this->errors, $this->getLibxmlErrors());
             $hasErrors = true;
         }
 
-        return ! $hasErrors;
+        return !$hasErrors;
     }
 
     /**

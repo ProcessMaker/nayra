@@ -20,7 +20,7 @@ class ConditionalStartEventTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
 
-        $bpmnRepository->load(__DIR__.'/files/Conditional_StartEvent.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Conditional_StartEvent.bpmn');
 
         // Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Conditional_StartEvent');

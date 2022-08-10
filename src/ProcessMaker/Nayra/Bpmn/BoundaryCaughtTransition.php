@@ -51,6 +51,6 @@ class BoundaryCaughtTransition implements TransitionInterface
             }
         });
 
-        return ! empty($catchException);
+        return !empty($catchException);
     }
 }

@@ -19,8 +19,8 @@ class SchemaValidationTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         libxml_use_internal_errors(true);
-        $bpmnRepository->load(__DIR__.'/files/Lanes.bpmn');
-        $validation = $bpmnRepository->validateBPMNSchema(__DIR__.'/xsd/BPMN20.xsd');
+        $bpmnRepository->load(__DIR__ . '/files/Lanes.bpmn');
+        $validation = $bpmnRepository->validateBPMNSchema(__DIR__ . '/xsd/BPMN20.xsd');
         $this->assertTrue($validation);
         $this->assertEmpty($bpmnRepository->getValidationErrors());
     }
@@ -36,7 +36,7 @@ class SchemaValidationTest extends EngineTestCase
         $bpmnRepository->setFactory($this->repository);
         libxml_use_internal_errors(true);
         $bpmnRepository->loadXML('Invalid BPMN');
-        $validation = $bpmnRepository->validateBPMNSchema(__DIR__.'/xsd/BPMN20.xsd');
+        $validation = $bpmnRepository->validateBPMNSchema(__DIR__ . '/xsd/BPMN20.xsd');
         $this->assertFalse($validation);
         $this->assertNotEmpty($bpmnRepository->getValidationErrors());
     }

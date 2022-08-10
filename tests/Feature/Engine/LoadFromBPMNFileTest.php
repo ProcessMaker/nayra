@@ -57,7 +57,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/ParallelGateway.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/ParallelGateway.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('ParallelGateway');
@@ -179,7 +179,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/InclusiveGateway_Default.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/InclusiveGateway_Default.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('InclusiveGateway_Default');
@@ -285,7 +285,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/LoadBPMNElements.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/LoadBPMNElements.bpmn');
 
         //Get a Collaboration
         $collaboration = $bpmnRepository->getCollaboration('COLLABORATION_1');
@@ -505,7 +505,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
                 StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
             ],
         ]);
-        $bpmnRepository->load(__DIR__.'/files/CustomElements.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
         $task = $bpmnRepository->getActivity('_2');
         $this->assertEquals('Web Entry', $task->getName());
     }
@@ -520,7 +520,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/CustomElements.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
         $bpmnRepository->getActivity('_2');
     }
 
@@ -542,7 +542,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
                 FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
             ],
         ]);
-        $bpmnRepository->load(__DIR__.'/files/CustomElements.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
 
         //Try to get custom element
         $bpmnRepository->getActivity('_2');
@@ -565,7 +565,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
                 FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
             ],
         ]);
-        $bpmnRepository->load(__DIR__.'/files/CustomElements.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
 
         //Try to get custom element
         $process = $bpmnRepository->getActivity('PROCESS_1');
@@ -584,7 +584,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/LoadBPMNElements.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/LoadBPMNElements.bpmn');
 
         //Try to get an non existing element
         //Assertion: An ElementNotImplementedException expected
@@ -601,7 +601,7 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/LoadBPMNElements.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/LoadBPMNElements.bpmn');
 
         //Test an existing element
         $exists = $bpmnRepository->hasElementInstance('PROCESS_1');

@@ -27,7 +27,7 @@ class ServiceTaskTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/ServiceTaskProcess.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/ServiceTaskProcess.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('ServiceTaskProcess');
@@ -83,7 +83,7 @@ class ServiceTaskTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/ServiceTaskProcess.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/ServiceTaskProcess.bpmn');
 
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('ServiceTaskProcess');

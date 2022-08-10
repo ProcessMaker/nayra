@@ -184,7 +184,7 @@ class SignalStartEventTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Signal_Start_Event.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Signal_Start_Event.bpmn');
 
         // Get the process by Id
         $process = $bpmnRepository->getProcess('ProcessId');

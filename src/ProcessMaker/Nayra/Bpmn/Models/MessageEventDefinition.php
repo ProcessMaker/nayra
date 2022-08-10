@@ -103,7 +103,7 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
         $targetPayload = $this->getPayload();
         $sourcePayload = $eventDefinition->getPayload();
 
-        return (! $targetPayload && ! $sourcePayload)
+        return (!$targetPayload && !$sourcePayload)
             || ($targetPayload && $sourcePayload && $targetPayload->getId() === $sourcePayload->getId());
     }
 }

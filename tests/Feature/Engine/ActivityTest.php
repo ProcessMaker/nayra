@@ -29,7 +29,7 @@ class ActivityTest extends EngineTestCase
         $bpmnRepository = new BpmnDocument();
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
-        $bpmnRepository->load(__DIR__.'/files/Error_BoundaryEvent_CallActivity.bpmn');
+        $bpmnRepository->load(__DIR__ . '/files/Error_BoundaryEvent_CallActivity.bpmn');
 
         // Get boundary events of call activity _7
         $element = $bpmnRepository->getCallActivity('_7');

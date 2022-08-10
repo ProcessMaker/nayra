@@ -57,7 +57,7 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
             $process->setProperty('conditionals', $conditionals);
         }
 
-        return ! $previous && $current;
+        return !$previous && $current;
     }
 
     /**
