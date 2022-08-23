@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Base implementation for a event based gateway.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait EventBasedGatewayTrait
 {
@@ -62,6 +60,7 @@ trait EventBasedGatewayTrait
 
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED, $this, $token);
         });
+
         return $incomingPlace;
     }
 
@@ -80,6 +79,7 @@ trait EventBasedGatewayTrait
         $this->transition->connectTo($outgoingPlace);
         $outgoingPlace->connectTo($outgoingTransition);
         $outgoingTransition->connectTo($target->getInputPlace($targetFlow));
+
         return $this;
     }
 
@@ -94,6 +94,7 @@ trait EventBasedGatewayTrait
         foreach ($this->getOutgoingFlows() as $outgoing) {
             $nextElements[] = $outgoing->getTarget();
         }
+
         return new Collection($nextElements);
     }
 }

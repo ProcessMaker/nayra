@@ -11,40 +11,44 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 
 /**
  * Implementation of Collaboration element.
- *
  */
 class Collaboration implements CollaborationInterface
 {
     use BaseTrait;
 
     /**
-     * @var boolean $isClosed
+     * @var bool
      */
     private $isClosed;
 
     /**
-     * @var CorrelationKeyInterface[] $correlationKeys
+     * @var CorrelationKeyInterface[]
      */
     private $correlationKeys;
 
     /** @var Collection */
     private $artifacts;
+
     /** @var Collection */
     private $choreographies;
+
     /** @var Collection */
     private $conversationAssociations;
+
     /** @var Collection */
     private $conversationLinks;
+
     /** @var Collection */
     private $conversationNodes;
+
     /** @var Collection */
     private $messageFlowAssociations;
+
     /** @var Collection */
     private $participantAssociations;
 
     /**
      * Initialize the collaboration element.
-     *
      */
     protected function initCollaboration()
     {
@@ -116,13 +120,14 @@ class Collaboration implements CollaborationInterface
     /**
      * Set if the collaboration is closed.
      *
-     * @param boolean $isClosed
+     * @param bool $isClosed
      *
      * @return $this
      */
     public function setClosed($isClosed)
     {
         $this->isClosed = $isClosed;
+
         return $this;
     }
 

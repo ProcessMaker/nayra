@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DatePeriodInterface;
 
 /**
  * DatePeriod represents an ISO8601 Repeating intervals
- *
- * @package ProcessMaker\Nayra\Bpmn\Models
  */
 class DatePeriod implements DatePeriodInterface
 {
@@ -49,9 +47,11 @@ class DatePeriod implements DatePeriodInterface
     public $include_start_date = true;
 
     private $position = 0;
+
     private $last;
 
     const INF_RECURRENCES = 0;
+
     const EXCLUDE_START_DATE = 1;
 
     /**
@@ -60,7 +60,6 @@ class DatePeriod implements DatePeriodInterface
      * Parameters could be:
      * - ISO8601 Repeating intervals  R[n]/start/interval/end
      * - start, interval, [end|array(end,recurences-1)]
-     * 
      */
     public function __construct(...$args)
     {
@@ -154,7 +153,6 @@ class DatePeriod implements DatePeriodInterface
 
     /**
      * Iterate to the next datetime
-     *
      */
     public function next()
     {
@@ -164,7 +162,6 @@ class DatePeriod implements DatePeriodInterface
 
     /**
      * Rewind iteration to the first datetime
-     *
      */
     public function rewind()
     {
@@ -199,6 +196,7 @@ class DatePeriod implements DatePeriodInterface
             $count >= 0 ?: $date->sub($this->interval);
             $count > 0 ? $count-- : $count++;
         }
+
         return $date;
     }
 }

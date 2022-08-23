@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition to check if the activity is a loop not yet completed or a single instance
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class DataInputTransition implements TransitionInterface
 {
@@ -32,6 +30,7 @@ class DataInputTransition implements TransitionInterface
         if ($loop && $loop->isExecutable()) {
             return $loop->isDataInputValid($executionInstance, $token) && !$loop->isLoopCompleted($executionInstance, $token);
         }
+
         return true;
     }
 

@@ -29,7 +29,7 @@ class MessageEndEventTest extends EngineTestCase
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
-            'structure' => 'String'
+            'structure' => 'String',
         ]);
 
         $message = $this->repository->createMessage();
@@ -43,7 +43,7 @@ class MessageEndEventTest extends EngineTestCase
         $activityA1 = $this->repository->createActivity();
         $eventA = $this->repository->createIntermediateCatchEvent();
         $messageEventDefA = $this->repository->createMessageEventDefinition();
-        $messageEventDefA->setId("MessageEvent1");
+        $messageEventDefA->setId('MessageEvent1');
         $messageEventDefA->setPayload($message);
         $eventA->getEventDefinitions()->push($messageEventDefA);
         $activityA2 = $this->repository->createActivity();
@@ -66,7 +66,7 @@ class MessageEndEventTest extends EngineTestCase
 
         $startB = $this->repository->createStartEvent();
         $activityB1 = $this->repository->createActivity();
-        $messageEventDefB= $this->repository->createMessageEventDefinition();
+        $messageEventDefB = $this->repository->createMessageEventDefinition();
         $messageEventDefB->setPayload($message);
 
         $messageEndEventB = $this->repository->createEndEvent();
@@ -81,7 +81,6 @@ class MessageEndEventTest extends EngineTestCase
 
         return [$processA, $processB];
     }
-
 
     /**
      * Tests the message end event of a process

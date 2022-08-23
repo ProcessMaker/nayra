@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule to consume tokens in an End Event.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class IntermediateCatchEventTransition implements TransitionInterface
 {

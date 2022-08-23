@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Check if Boundary does not cancel the Activity.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class BoundaryNoInterruptActivityTransition implements TransitionInterface
 {
@@ -31,6 +29,7 @@ class BoundaryNoInterruptActivityTransition implements TransitionInterface
         if ($boundary instanceof BoundaryEventInterface) {
             $nonInterrupt = !$boundary->getCancelActivity();
         }
+
         return $nonInterrupt;
     }
 }

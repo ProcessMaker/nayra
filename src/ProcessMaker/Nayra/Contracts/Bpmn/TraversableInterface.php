@@ -6,12 +6,9 @@ use ProcessMaker\Nayra\Bpmn\Collection;
 
 /**
  * Interface to search paths through elements.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface TraversableInterface
 {
-
     /**
      * Find all the paths that complies with the $condition and $while.
      *
@@ -23,5 +20,5 @@ interface TraversableInterface
      *
      * @return Collection
      */
-    public function paths(callable  $condition, callable $while, $path = [], &$passedthru = [], &$paths = []);
+    public function paths(callable $condition, callable $while, $path = [], &$passedthru = [], &$paths = []);
 }

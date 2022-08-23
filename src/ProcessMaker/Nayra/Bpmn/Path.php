@@ -4,8 +4,6 @@ namespace ProcessMaker\Nayra\Bpmn;
 
 /**
  * Path of flows and elements.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class Path
 {

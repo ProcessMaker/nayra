@@ -14,7 +14,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * This activity will raise an exception when executed.
- *
  */
 class ScriptTask implements ScriptTaskInterface
 {
@@ -22,7 +21,6 @@ class ScriptTask implements ScriptTaskInterface
 
     /**
      * Configure the activity to evaluate script tasks
-     *
      */
     protected function initActivity()
     {
@@ -133,6 +131,7 @@ class ScriptTask implements ScriptTaskInterface
         } catch (Exception $e) {
             $result = false;
         }
+
         return $result;
     }
 }

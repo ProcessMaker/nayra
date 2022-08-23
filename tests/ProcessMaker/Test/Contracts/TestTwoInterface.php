@@ -9,7 +9,6 @@ namespace ProcessMaker\Test\Contracts;
  */
 interface TestTwoInterface
 {
-
     /**
      * Test method
      */

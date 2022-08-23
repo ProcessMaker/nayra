@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule for an activity.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ActivityCompletedTransition implements TransitionInterface
 {

@@ -7,27 +7,29 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Gateway used to control how the Process flows.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface GatewayInterface extends FlowNodeInterface
 {
-
     const BPMN_PROPERTY_DEFAULT = 'default';
 
     /**
      * Events defined for Gateway
      */
     const EVENT_GATEWAY_TOKEN_ARRIVES = 'GatewayTokenArrives';
+
     const EVENT_GATEWAY_ACTIVATED = 'GatewayActivated';
+
     const EVENT_GATEWAY_EXCEPTION = 'GatewayException';
+
     const EVENT_GATEWAY_TOKEN_PASSED = 'GatewayTokenPassed';
+
     const EVENT_GATEWAY_TOKEN_CONSUMED = 'GatewayTokenConsumed';
 
     /**
      * Token states defined for Gateway
      */
     const TOKEN_STATE_INCOMING = 'INCOMING';
+
     const TOKEN_STATE_OUTGOING = 'OUTGOING';
 
     /**
@@ -57,8 +59,6 @@ interface GatewayInterface extends FlowNodeInterface
      * @return $this
      *
      * @internal param FlowRepositoryInterface $flowRepository
-     *
      */
     public function createConditionedFlowTo(FlowNodeInterface $target, callable $condition, $isDefault, RepositoryInterface $factory);
-
 }

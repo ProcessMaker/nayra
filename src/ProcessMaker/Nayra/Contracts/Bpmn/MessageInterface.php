@@ -6,12 +6,11 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Behavior that must implement all event messages
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface MessageInterface extends EntityInterface
 {
     const BPMN_PROPERTY_ITEM = 'item';
+
     const BPMN_PROPERTY_ITEM_REF = 'itemRef';
 
     /**

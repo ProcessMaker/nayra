@@ -22,7 +22,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test an activity with exception.
- *
  */
 class IntermediateMessageEventTest extends EngineTestCase
 {
@@ -37,7 +36,7 @@ class IntermediateMessageEventTest extends EngineTestCase
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
-            'structure' => 'String'
+            'structure' => 'String',
         ];
 
         $item = $this->repository->createItemDefinition($properties);
@@ -55,7 +54,7 @@ class IntermediateMessageEventTest extends EngineTestCase
         $activityA = $this->repository->createActivity();
         $eventA = $this->repository->createIntermediateThrowEvent();
         $messageEventDefA = $this->repository->createMessageEventDefinition();
-        $messageEventDefA->setId("MessageEvent1");
+        $messageEventDefA->setId('MessageEvent1');
         $messageEventDefA->setPayload($message);
         $eventA->getEventDefinitions()->push($messageEventDefA);
         $activityB = $this->repository->createActivity();
@@ -117,8 +116,6 @@ class IntermediateMessageEventTest extends EngineTestCase
         $eventA->getEventDefinitions()->push($signalEventDefA);
         $activityB = $this->repository->createActivity();
         $endA = $this->repository->createEndEvent();
-
-
 
         $startA->createFlowTo($activityA, $this->repository);
         $activityA->createFlowTo($eventA, $this->repository);
@@ -315,7 +312,7 @@ class IntermediateMessageEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
     }
 
@@ -417,7 +414,7 @@ class IntermediateMessageEventTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_CONSUMED,
             IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
     }
 }

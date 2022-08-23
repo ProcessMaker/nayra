@@ -7,26 +7,23 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Participant class
- *
  */
 trait ParticipantTrait
 {
-
     use BaseTrait;
 
     /**
-     * @var mixed[] $interfaces
+     * @var mixed[]
      */
     private $interfaces;
 
     /**
-     * @var mixed[] $endPoints
+     * @var mixed[]
      */
     private $endPoints;
 
     /**
      * Initialize the default values for the participant element.
-     *
      */
     protected function initParticipant()
     {
@@ -55,6 +52,7 @@ trait ParticipantTrait
     {
         $this->setProperty(ParticipantInterface::BPMN_PROPERTY_PROCESS, $process);
         $process->addProperty(ProcessInterface::BPMN_PROPERTY_PARTICIPANT, $this);
+
         return $this;
     }
 

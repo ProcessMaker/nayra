@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MultiInstanceLoopCharacteristicsInterface;
  * Base implementation for LoopCharacteristicsInterface
  *
  * @implements ProcessMaker\Nayra\Contracts\Bpmn\MultiInstanceLoopCharacteristicsInterface
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait MultiInstanceLoopCharacteristicsTrait
 {

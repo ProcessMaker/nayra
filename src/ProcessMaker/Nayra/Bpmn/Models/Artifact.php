@@ -2,15 +2,12 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-
 use ProcessMaker\Nayra\Bpmn\BaseTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Class that implements the ArtifactInterface
- *
- * @package ProcessMaker\Nayra\Bpmn\Models
  */
 class Artifact implements ArtifactInterface
 {
@@ -37,6 +34,7 @@ class Artifact implements ArtifactInterface
     public function setProcess(ProcessInterface $process)
     {
         $this->process = $process;
+
         return $this;
     }
 }

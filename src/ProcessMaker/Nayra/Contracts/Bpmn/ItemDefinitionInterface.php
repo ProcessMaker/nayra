@@ -4,17 +4,19 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * An ItemDefinition is used to define the payload of the Message.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 interface ItemDefinitionInterface extends EntityInterface
 {
     const BPMN_PROPERTY_ITEM_KIND = 'itemKind';
+
     const BPMN_PROPERTY_STRUCTURE = 'structure';
+
     const BPMN_PROPERTY_STRUCTURE_REF = 'structureRef';
+
     const BPMN_PROPERTY_IS_COLLECTION = 'isCollection';
 
     const ITEM_KIND_PHYSICAL = 'physical';
+
     const ITEM_KIND_INFORMATION = 'information';
 
     /**
@@ -35,7 +37,7 @@ interface ItemDefinitionInterface extends EntityInterface
     /**
      * Get true if the data structure represents a collection.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCollection();
 }

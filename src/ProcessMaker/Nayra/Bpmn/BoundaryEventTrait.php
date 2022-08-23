@@ -18,7 +18,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  * Boundary event implementation.
  *
  * @see \ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait BoundaryEventTrait
 {
@@ -28,7 +27,6 @@ trait BoundaryEventTrait
      * @var StateInterface
      */
     private $activeState;
-
 
     /**
      * @var TransitionInterface
@@ -94,6 +92,7 @@ trait BoundaryEventTrait
     protected function buildConnectionTo(FlowInterface $targetFlow)
     {
         $this->outgoingTransition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
+
         return $this;
     }
 
@@ -122,6 +121,7 @@ trait BoundaryEventTrait
             $error = $token->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR);
             $this->catchErrorEvent($token, $error);
         });
+
         return $this;
     }
 
@@ -204,7 +204,7 @@ trait BoundaryEventTrait
 
     /**
      * Notify to complete the boundary event.
-     * 
+     *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
      */
     public function notifyInternalEvent(TokenInterface $token)

@@ -6,12 +6,11 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * State of a node in which tokens can be received.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface StateInterface extends TraversableInterface, ObservableInterface, ConnectionNodeInterface
 {
     const EVENT_TOKEN_ARRIVED = 'TokenArrived';
+
     const EVENT_TOKEN_CONSUMED = 'TokenConsumed';
 
     /**

@@ -2,7 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
-
 use ProcessMaker\Nayra\Bpmn\EndEventTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Model\DataInputAssociationInterface;
@@ -14,7 +13,6 @@ use ProcessMaker\Nayra\Model\TokenInterface;
 /**
  * Class EndEvent
  *
- * @package ProcessMaker\Nayra\Model
  * @codeCoverageIgnore
  */
 class EndEvent implements EndEventInterface
@@ -22,8 +20,11 @@ class EndEvent implements EndEventInterface
     use EndEventTrait;
 
     private $dataInputs;
+
     private $dataInputAssociations;
+
     private $inputSet;
+
     /**
      * Array map of custom event classes for the bpmn element.
      *

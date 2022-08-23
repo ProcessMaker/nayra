@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Event Based Gateway Interface
- *
  */
 interface EventBasedGatewayInterface extends GatewayInterface
 {

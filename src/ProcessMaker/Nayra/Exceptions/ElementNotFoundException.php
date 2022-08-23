@@ -6,7 +6,6 @@ use OutOfBoundsException;
 
 /**
  * Thrown when try to get an element that is not found in the BPMN definitions.
- *
  */
 class ElementNotFoundException extends OutOfBoundsException
 {

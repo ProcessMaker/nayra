@@ -4,13 +4,13 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * A collaboration is a collection of participants and the messages they exchange.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface CollaborationInterface extends EntityInterface
 {
     const BPMN_PROPERTY_PARTICIPANT = 'participant';
+
     const BPMN_PROPERTY_MESSAGE_FLOW = 'messageFlow';
+
     const BPMN_PROPERTY_MESSAGE_FLOWS = 'messageFlows';
 
     /**
@@ -25,7 +25,7 @@ interface CollaborationInterface extends EntityInterface
      * Set a boolean value specifying whether Message Flows not modeled in the
      * Collaboration can occur when the Collaboration is carried out.
      *
-     * @param boolean $isClosed
+     * @param bool $isClosed
      *
      * @return $this
      */

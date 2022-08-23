@@ -4,17 +4,13 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Shape related to an element of the process.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ShapeInterface extends EntityInterface
 {
-
     /**
      * Type of element.
      */
     const TYPE = 'bpmnShape';
-
 
     /**
      * Properties.
@@ -32,7 +28,7 @@ interface ShapeInterface extends EntityInterface
         'BOU_HEIGHT' => '0',
         'BOU_REL_POSITION' => '0',
         'BOU_SIZE_IDENTICAL' => '0',
-        'BOU_CONTAINER' => ''
+        'BOU_CONTAINER' => '',
     ];
 
     /**
@@ -42,7 +38,6 @@ interface ShapeInterface extends EntityInterface
 
     ];
 
-    
     /**
      * Get Process of the shape.
      *
@@ -56,7 +51,7 @@ interface ShapeInterface extends EntityInterface
      * @return ProcessInterface
      */
     public function setProcess(ProcessInterface $process);
-    
+
     /**
      * Get Diagram of the shape.
      *
@@ -70,6 +65,4 @@ interface ShapeInterface extends EntityInterface
      * @return DiagramInterface
      */
     public function setDiagram(DiagramInterface $diagram);
-    
-
 }

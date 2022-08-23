@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Bpmn\Models\OutputSet;
 
 /**
  * Tests InputOutputSpecification class implementation
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class InputOutputSpecificationTest extends TestCase
 {

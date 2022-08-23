@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  * The presence of LoopCharacteristics signifies that the Activity has looping
  * behavior. LoopCharacteristics is an abstract class. Concrete subclasses
  * define specific kinds of looping behavior.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface LoopCharacteristicsInterface extends EntityInterface
 {
@@ -36,7 +34,7 @@ interface LoopCharacteristicsInterface extends EntityInterface
      * @param ExecutionInstanceInterface $instance
      * @param TokenInterface $token
      *
-     * @return boolean
+     * @return bool
      */
     public function isLoopCompleted(ExecutionInstanceInterface $instance, TokenInterface $token);
 
@@ -53,7 +51,7 @@ interface LoopCharacteristicsInterface extends EntityInterface
     /**
      * Check if the loop can be formally executed
      *
-     * @return boolean
+     * @return bool
      */
     public function isExecutable();
 
@@ -74,7 +72,7 @@ interface LoopCharacteristicsInterface extends EntityInterface
      * @param ExecutionInstanceInterface $instance
      * @param TokenInterface $token
      *
-     * @return boolean
+     * @return bool
      */
     public function isDataInputValid(ExecutionInstanceInterface $instance, TokenInterface $token);
 

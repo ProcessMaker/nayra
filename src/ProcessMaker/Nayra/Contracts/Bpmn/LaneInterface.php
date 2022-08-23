@@ -4,13 +4,13 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Lane interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface LaneInterface extends EntityInterface
 {
     const BPMN_PROPERTY_FLOW_NODE = 'flowNode';
+
     const BPMN_PROPERTY_FLOW_NODE_REF = 'flowNodeRef';
+
     const BPMN_PROPERTY_CHILD_LANE_SET = 'childLaneSet';
 
     /**

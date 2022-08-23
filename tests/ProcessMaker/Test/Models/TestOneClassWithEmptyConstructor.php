@@ -6,8 +6,6 @@ use ProcessMaker\Test\Contracts\TestOneInterface;
 
 /**
  * TestOneClassWithEmptyConstructor
- *
- * @package ProcessMaker\Test\Models
  */
 class TestOneClassWithEmptyConstructor implements TestOneInterface
 {
@@ -28,6 +26,6 @@ class TestOneClassWithEmptyConstructor implements TestOneInterface
      */
     public function dummyFunction()
     {
-        return "test";
+        return 'test';
     }
 }

@@ -4,8 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Interface for a conditioned transition.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ConditionedTransitionInterface
 {
@@ -17,5 +15,4 @@ interface ConditionedTransitionInterface
      * @return $this
      */
     public function setCondition(callable $condition);
-
 }

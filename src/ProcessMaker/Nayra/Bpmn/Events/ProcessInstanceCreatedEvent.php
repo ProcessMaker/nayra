@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Event raised when process instance is created.
- *
- * @package ProcessMaker\Nayra\Bpmn\Events
  */
 class ProcessInstanceCreatedEvent
 {

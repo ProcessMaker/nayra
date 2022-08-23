@@ -8,12 +8,11 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 /**
  * Flow node define the behavior of a element that can be used as
  * a source or target element in a flow.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface FlowNodeInterface extends FlowElementInterface
 {
     const BPMN_PROPERTY_INCOMING = 'incoming';
+
     const BPMN_PROPERTY_OUTGOING = 'outgoing';
 
     /**
@@ -27,7 +26,7 @@ interface FlowNodeInterface extends FlowElementInterface
      *
      * @internal param FlowRepositoryInterface $flowRepository
      */
-    public function createFlowTo(FlowNodeInterface $target, RepositoryInterface $factory, $properties = []);
+    public function createFlowTo(self $target, RepositoryInterface $factory, $properties = []);
 
     /**
      * Get the outgoing flows.

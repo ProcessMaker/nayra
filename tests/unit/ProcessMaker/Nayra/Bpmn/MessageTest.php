@@ -2,14 +2,11 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
 
 /**
  * Tests for the Message class
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class MessageTest extends TestCase
 {

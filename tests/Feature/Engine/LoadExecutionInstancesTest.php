@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test to load execution instances
- *
  */
 class LoadExecutionInstancesTest extends EngineTestCase
 {
@@ -32,9 +31,9 @@ class LoadExecutionInstancesTest extends EngineTestCase
                     [
                         'elementId' => 'second',
                         'status' => ActivityInterface::TOKEN_STATE_ACTIVE,
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -60,7 +59,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
                         'status' => ActivityInterface::TOKEN_STATE_ACTIVE,
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -86,7 +85,7 @@ class LoadExecutionInstancesTest extends EngineTestCase
                         'status' => ActivityInterface::TOKEN_STATE_ACTIVE,
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -112,13 +111,12 @@ class LoadExecutionInstancesTest extends EngineTestCase
                         'status' => ActivityInterface::TOKEN_STATE_FAILING,
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 
     /**
      * Test load an execution instance from repository with one token
-     *
      */
     public function testLoadExecutionInstanceWithOneToken()
     {
@@ -156,7 +154,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
 
     /**
      * Test load an execution instance from repository with multiple tokens
-     *
      */
     public function testLoadExecutionInstanceWithMultipleTokens()
     {
@@ -209,7 +206,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Test load an execution instance from repository with multiple tokens
      * in different states
-     *
      */
     public function testLoadExecutionInstanceWithMultipleTokensStates()
     {
@@ -256,7 +252,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
     /**
      * Test load an execution instance from repository with multiple tokens
      * and one token in falling state
-     *
      */
     public function testLoadExecutionInstanceWithMultipleTokensFallingState()
     {
@@ -282,7 +277,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
 
     /**
      * Test load a non existing execution instance from repository
-     *
      */
     public function testLoadNonExistingInstance()
     {
@@ -301,7 +295,6 @@ class LoadExecutionInstancesTest extends EngineTestCase
 
     /**
      * Test load the same execution instance twice
-     *
      */
     public function testLoadTheSameExistingInstanceTwice()
     {

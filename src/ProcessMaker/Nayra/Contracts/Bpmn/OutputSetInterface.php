@@ -4,12 +4,11 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * OutputSet interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface OutputSetInterface extends EntityInterface
 {
     const BPMN_PROPERTY_DATA_OUTPUTS = 'dataOutputs';
+
     const BPMN_PROPERTY_DATA_OUTPUT_REFS = 'dataOutputRefs';
 
     /**

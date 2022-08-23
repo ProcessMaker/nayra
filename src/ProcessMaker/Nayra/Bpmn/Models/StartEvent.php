@@ -3,16 +3,14 @@
 namespace ProcessMaker\Nayra\Bpmn\Models;
 
 use ProcessMaker\Nayra\Bpmn\StartEventTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageListenerInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Class StartEvent
- * @package ProcessMaker\Nayra\Model
  */
 class StartEvent implements StartEventInterface, MessageListenerInterface
 {
-
     use StartEventTrait;
 
     /**

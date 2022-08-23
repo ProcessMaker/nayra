@@ -9,8 +9,6 @@ use Tests\Feature\Engine\EngineTestCase;
 
 /**
  * Tests the activity collection
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ActivityTest extends EngineTestCase
 {

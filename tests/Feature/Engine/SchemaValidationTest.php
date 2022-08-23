@@ -6,14 +6,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test a terminate event.
- *
  */
 class SchemaValidationTest extends EngineTestCase
 {
-
     /**
      * Test terminate end event
-     *
      */
     public function testValidDefinitions()
     {
@@ -30,7 +27,6 @@ class SchemaValidationTest extends EngineTestCase
 
     /**
      * Test terminate end event
-     *
      */
     public function testInvalidDefinitions()
     {

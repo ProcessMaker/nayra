@@ -27,7 +27,7 @@ class MessageStartEventTest extends EngineTestCase
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
-            'structure' => 'String'
+            'structure' => 'String',
         ]);
 
         $message = $this->repository->createMessage();
@@ -42,7 +42,7 @@ class MessageStartEventTest extends EngineTestCase
         $activityA1 = $this->repository->createActivity();
         $eventA = $this->repository->createIntermediateThrowEvent();
         $messageEventDefA = $this->repository->createMessageEventDefinition();
-        $messageEventDefA->setId("MessageEvent1");
+        $messageEventDefA->setId('MessageEvent1');
         $messageEventDefA->setPayload($message);
         $eventA->getEventDefinitions()->push($messageEventDefA);
         $activityA2 = $this->repository->createActivity();

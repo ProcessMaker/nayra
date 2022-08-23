@@ -1,20 +1,17 @@
 <?php
 
 namespace Tests\Feature\Engine;
+
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
-
 /**
  * Test a condition start event.
- *
  */
 class ConditionalStartEventTest extends EngineTestCase
 {
-
     /**
      * Test conditional start event
-     *
      */
     public function testConditionalStartEvent()
     {

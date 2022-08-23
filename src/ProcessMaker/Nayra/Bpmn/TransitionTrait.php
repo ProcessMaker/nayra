@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Control the transition of tokens through states.
- *
  */
 trait TransitionTrait
 {
@@ -23,7 +22,7 @@ trait TransitionTrait
     /**
      * Flow node owner of the transition.
      *
-     * @var FlowNodeInterface $owner
+     * @var FlowNodeInterface
      */
     protected $owner;
 
@@ -31,7 +30,7 @@ trait TransitionTrait
      * How many tokens are consumed per transition.
      * (0 or -1 = Means no limit)
      *
-     * @var int $tokensConsumedPerTransition
+     * @var int
      */
     private $tokensConsumedPerTransition = -1;
 
@@ -39,12 +38,12 @@ trait TransitionTrait
      * How many tokens are consumed per incoming.
      * (0 or -1 = Means no limit)
      *
-     * @var int $tokensConsumedPerIncoming
+     * @var int
      */
     private $tokensConsumedPerIncoming = 1;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $preserveToken = false;
 
@@ -66,7 +65,7 @@ trait TransitionTrait
      *
      * @param ExecutionInstanceInterface $instance
      *
-     * @return boolean
+     * @return bool
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $instance)
     {
@@ -80,7 +79,7 @@ trait TransitionTrait
      *
      * By default a transition does not do any action if the condition is false.
      *
-     * @return boolean
+     * @return bool
      */
     protected function conditionIsFalse()
     {
@@ -93,7 +92,7 @@ trait TransitionTrait
      * @param CollectionInterface $consumeTokens
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $executionInstance
      *
-     * @return boolean
+     * @return bool
      */
     protected function doTransit(CollectionInterface $consumeTokens, ExecutionInstanceInterface $executionInstance)
     {
@@ -153,7 +152,7 @@ trait TransitionTrait
      *
      * @param ExecutionInstanceInterface $executionInstance
      *
-     * @return boolean
+     * @return bool
      */
     public function execute(ExecutionInstanceInterface $executionInstance)
     {
@@ -166,6 +165,7 @@ trait TransitionTrait
                 return $this->doTransit($consumeTokens, $executionInstance);
             }
         }
+
         return false;
     }
 
@@ -176,7 +176,7 @@ trait TransitionTrait
      *
      * @param ExecutionInstanceInterface $executionInstance
      *
-     * @return boolean|\ProcessMaker\Nayra\Bpmn\Collection
+     * @return bool|\ProcessMaker\Nayra\Bpmn\Collection
      */
     protected function evaluateConsumeTokens(ExecutionInstanceInterface $executionInstance)
     {
@@ -213,6 +213,7 @@ trait TransitionTrait
     protected function setTokensConsumedPerTransition($tokensConsumedPerTransition)
     {
         $this->tokensConsumedPerTransition = $tokensConsumedPerTransition;
+
         return $this;
     }
 
@@ -236,6 +237,7 @@ trait TransitionTrait
     protected function setTokensConsumedPerIncoming($tokensConsumedPerIncoming)
     {
         $this->tokensConsumedPerIncoming = $tokensConsumedPerIncoming;
+
         return $this;
     }
 
@@ -250,7 +252,7 @@ trait TransitionTrait
     }
 
     /**
-     * @param boolean $preserveToken
+     * @param bool $preserveToken
      */
     protected function setPreserveToken($preserveToken)
     {

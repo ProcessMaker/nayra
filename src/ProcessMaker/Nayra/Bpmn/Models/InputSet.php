@@ -13,12 +13,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\InputSetInterface;
  */
 class InputSet implements InputSetInterface
 {
-
     use BaseTrait;
 
     /**
      * Initialize input set.
-     *
      */
     protected function initInputSet()
     {

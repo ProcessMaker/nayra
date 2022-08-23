@@ -9,11 +9,9 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Start Timer Event tests
- *
  */
 class JobManagerTest extends EngineTestCase
 {
-
     use JobManagerTrait;
 
     /**
@@ -74,7 +72,7 @@ class JobManagerTest extends EngineTestCase
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
         $timerEventDefinition = $bpmnRepository->getTimerEventDefinition('_9_ED_1');
-        
+
         //Set a time cycle between two dates
         $expression = $this->repository->createFormalExpression();
         $expression->setRepository($this->repository);
@@ -120,7 +118,7 @@ class JobManagerTest extends EngineTestCase
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
         $timerEventDefinition = $bpmnRepository->getTimerEventDefinition('_9_ED_1');
-        
+
         //Set an specific date time
         $date = '2018-10-02T21:30:00Z';
         $expression = $this->repository->createFormalExpression();
@@ -153,7 +151,7 @@ class JobManagerTest extends EngineTestCase
         //Load a process from a bpmn repository by Id
         $process = $bpmnRepository->getProcess('Process');
         $timerEventDefinition = $bpmnRepository->getTimerEventDefinition('_9_ED_1');
-        
+
         //Set an date time interval
         $interval = 'PT1H';
         $expression = $this->repository->createFormalExpression();

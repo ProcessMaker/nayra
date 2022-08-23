@@ -7,12 +7,9 @@ use ProcessMaker\Nayra\Bpmn\Collection;
 /**
  * Connection node (States and transitions) that define the behavior of
  * a bpmn flow node.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ConnectionNodeInterface extends EntityInterface
 {
-
     /**
      * @return Collection Outgoing flows.
      */
@@ -28,5 +25,5 @@ interface ConnectionNodeInterface extends EntityInterface
      *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface $target
      */
-    public function connectTo(ConnectionNodeInterface $target);
+    public function connectTo(self $target);
 }

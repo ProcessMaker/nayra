@@ -6,8 +6,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * End event interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface StartEventInterface extends CatchEventInterface
 {

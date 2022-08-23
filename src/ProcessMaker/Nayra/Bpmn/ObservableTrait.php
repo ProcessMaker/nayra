@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 
 /**
  * Observable behavior.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait ObservableTrait
 {

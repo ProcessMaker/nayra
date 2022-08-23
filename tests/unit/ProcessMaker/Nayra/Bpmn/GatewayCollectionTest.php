@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
 
 /**
  * Tests for the gateway collection
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class GatewayCollectionTest extends TestCase
 {

@@ -26,7 +26,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Process base implementation.
- *
  */
 trait ProcessTrait
 {
@@ -51,13 +50,12 @@ trait ProcessTrait
     private $engine;
 
     /**
-     * @var \ProcessMaker\Nayra\Contracts\Engine\TransitionInterface[] $transitions
+     * @var \ProcessMaker\Nayra\Contracts\Engine\TransitionInterface[]
      */
     private $transitions = null;
 
     /**
      * Initialize the process element.
-     *
      */
     protected function initProcessTrait()
     {
@@ -66,7 +64,6 @@ trait ProcessTrait
     }
 
     /**
-     *
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\ActivityCollectionInterface
      */
     public function getActivities()
@@ -144,6 +141,7 @@ trait ProcessTrait
     public function setActivities(ActivityCollectionInterface $activities)
     {
         $this->setProperty('activities', $activities);
+
         return $this;
     }
 
@@ -157,6 +155,7 @@ trait ProcessTrait
     public function setDataStores(DataStoreCollectionInterface $dataStores)
     {
         $this->setProperty('dataStores', $dataStores);
+
         return $this;
     }
 
@@ -170,6 +169,7 @@ trait ProcessTrait
     public function setArtifacts(ArtifactCollectionInterface $artifacts)
     {
         $this->setProperty('artifacts', $artifacts);
+
         return $this;
     }
 
@@ -183,6 +183,7 @@ trait ProcessTrait
     public function setDiagram(DiagramInterface $diagram)
     {
         $this->setProperty('diagram', $diagram);
+
         return $this;
     }
 
@@ -196,6 +197,7 @@ trait ProcessTrait
     public function setEvents(EventCollectionInterface $events)
     {
         $this->setProperty('events', $events);
+
         return $this;
     }
 
@@ -209,6 +211,7 @@ trait ProcessTrait
     public function setFlows(FlowCollectionInterface $flows)
     {
         $this->setProperty('flows', $flows);
+
         return $this;
     }
 
@@ -222,6 +225,7 @@ trait ProcessTrait
     public function setGateways(GatewayCollectionInterface $gateways)
     {
         $this->setProperty('gateways', $gateways);
+
         return $this;
     }
 
@@ -239,6 +243,7 @@ trait ProcessTrait
         if ($value instanceof FlowElementInterface) {
             $value->setOwnerProcess($this);
         }
+
         return $this;
     }
 
@@ -289,6 +294,7 @@ trait ProcessTrait
         $this->attachEvent(EndEventInterface::EVENT_EVENT_TRIGGERED, [$this, 'checkProcessCompleted']);
         $this->attachEvent(ActivityInterface::EVENT_ACTIVITY_CANCELLED, [$this, 'checkProcessCompleted']);
         $this->transitions = new Collection($transitions);
+
         return $this->transitions;
     }
 
@@ -327,6 +333,7 @@ trait ProcessTrait
         $bpmnEvents = $this->getBpmnEventClasses();
         $payload = new $bpmnEvents[$eventName](...$arguments);
         $this->getDispatcher()->dispatch($eventName, $payload);
+
         return $this;
     }
 
@@ -340,6 +347,7 @@ trait ProcessTrait
     {
         $activity->setOwnerProcess($this);
         $this->getProperty('activities')->push($activity);
+
         return $this;
     }
 
@@ -355,6 +363,7 @@ trait ProcessTrait
         $event->setOwnerProcess($this);
         $event->setProcess($this);
         $this->getProperty('events')->push($event);
+
         return $this;
     }
 
@@ -369,6 +378,7 @@ trait ProcessTrait
     {
         $gateway->setOwnerProcess($this);
         $this->getProperty('gateways')->push($gateway);
+
         return $this;
     }
 
@@ -390,6 +400,7 @@ trait ProcessTrait
     public function setDispatcher($dispatcher)
     {
         $this->dispatcher = $dispatcher;
+
         return $this;
     }
 
@@ -413,6 +424,7 @@ trait ProcessTrait
     public function addInstance(ExecutionInstanceInterface $instance)
     {
         $this->instances->push($instance);
+
         return $this;
     }
 
@@ -426,6 +438,7 @@ trait ProcessTrait
     public function setEngine(EngineInterface $engine = null)
     {
         $this->engine = $engine;
+
         return $this;
     }
 
@@ -459,6 +472,7 @@ trait ProcessTrait
                 $event->start($instance);
             }
         });
+
         return $instance;
     }
 
@@ -482,6 +496,7 @@ trait ProcessTrait
     public function setLaneSets(CollectionInterface $laneSets)
     {
         $this->setProperty(ProcessInterface::BPMN_PROPERTY_LANE_SET, $laneSets);
+
         return $this;
     }
 }

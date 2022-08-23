@@ -5,16 +5,17 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 /**
  * A Message Flow is used to show the flow of Messages between two Participants
  * that are prepared to send and receive them.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface MessageFlowInterface extends EntityInterface
 {
-
     const BPMN_PROPERTY_SOURCE = 'source';
+
     const BPMN_PROPERTY_TARGET = 'target';
+
     const BPMN_PROPERTY_SOURCE_REF = 'sourceRef';
+
     const BPMN_PROPERTY_TARGET_REF = 'targetRef';
+
     const BPMN_PROPERTY_COLLABORATION = 'collaboration';
 
     /**
@@ -26,7 +27,6 @@ interface MessageFlowInterface extends EntityInterface
      * @return InteractionNodeInterface
      */
     public function getTarget();
-
 
     /**
      * Set message of the message flow.

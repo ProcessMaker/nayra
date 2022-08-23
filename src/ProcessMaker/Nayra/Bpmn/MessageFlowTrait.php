@@ -13,11 +13,8 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
  * End event behavior's implementation.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait MessageFlowTrait
 {
-
     use BaseTrait;
 }

@@ -12,11 +12,9 @@ use ProcessMaker\Test\Models\TestBetsy;
 
 /**
  * FormalExpression implementation
- *
  */
 class FormalExpression implements FormalExpressionInterface
 {
-
     use FormalExpressionTrait;
 
     /**
@@ -60,6 +58,7 @@ class FormalExpression implements FormalExpressionInterface
     {
         $expression = $this->getProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY);
         $test = new TestBetsy($data, $expression);
+
         return $this->getDateExpression()
             ?: $this->getCycleExpression()
             ?: $this->getDurationExpression()
@@ -69,7 +68,7 @@ class FormalExpression implements FormalExpressionInterface
     /**
      * Verify if the expression is a date.
      *
-     * @return boolean
+     * @return bool
      */
     private function isDateExpression()
     {
@@ -79,13 +78,14 @@ class FormalExpression implements FormalExpressionInterface
         } catch (Exception $e) {
             return false;
         }
+
         return $date !== false;
     }
 
     /**
      * Verify if the expression is a cycle.
      *
-     * @return boolean
+     * @return bool
      */
     private function isCycleExpression()
     {
@@ -95,13 +95,14 @@ class FormalExpression implements FormalExpressionInterface
         } catch (Exception $e) {
             return false;
         }
+
         return $cycle !== false;
     }
 
     /**
      * Verify if the expression is a duration.
      *
-     * @return boolean
+     * @return bool
      */
     private function isDurationExpression()
     {
@@ -111,6 +112,7 @@ class FormalExpression implements FormalExpressionInterface
         } catch (Exception $e) {
             return false;
         }
+
         return $interval !== false;
     }
 }

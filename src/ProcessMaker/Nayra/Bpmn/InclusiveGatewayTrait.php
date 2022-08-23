@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Base implementation for a inclusive gateway.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait InclusiveGatewayTrait
 {
@@ -62,6 +60,7 @@ trait InclusiveGatewayTrait
 
             $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_CONSUMED, $this, $token);
         });
+
         return $incomingPlace;
     }
 
@@ -106,11 +105,12 @@ trait InclusiveGatewayTrait
                     ->persistGatewayTokenPassed($this, $token);
             }
 
-            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this,  $transition, $consumedTokens);
+            $this->notifyEvent(GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED, $this, $transition, $consumedTokens);
         });
         $this->transition->connectTo($outgoingPlace);
         $outgoingPlace->connectTo($outgoingTransition);
         $outgoingTransition->connectTo($targetFlow->getTarget()->getInputPlace($targetFlow));
+
         return $this;
     }
 }

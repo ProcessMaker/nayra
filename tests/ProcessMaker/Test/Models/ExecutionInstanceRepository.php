@@ -9,18 +9,15 @@ use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Execution Instance Repository.
- *
- * @package ProcessMaker\Models
  */
 class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterface
 {
     /**
      * Array to simulate a storage of execution instances.
      *
-     * @var array $data
+     * @var array
      */
     private static $data = [];
-
 
     /**
      * Load an execution instance from a persistent storage.
@@ -47,12 +44,13 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
         $process->getTransitions($storage->getFactory());
 
         //Load tokens:
-        foreach($data['tokens'] as $tokenInfo) {
+        foreach ($data['tokens'] as $tokenInfo) {
             $token = $storage->getFactory()->getTokenRepository()->createTokenInstance();
             $token->setProperties($tokenInfo);
             $element = $storage->getElementInstanceById($tokenInfo['elementId']);
             $element->addToken($instance, $token);
         }
+
         return $instance;
     }
 

@@ -12,14 +12,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test a terminate event.
- *
  */
 class MultiInstanceTest extends EngineTestCase
 {
-
     /**
      * Test a parallel multiinstance
-     *
      */
     public function testMultiInstanceParallelLoopCardinality()
     {
@@ -122,7 +119,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test MI script task with exception
-     *
      */
     public function testMultiInstanceParallelLoopCardinalityScriptException()
     {
@@ -231,7 +227,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test MI task cancel instance
-     *
      */
     public function testMultiInstanceParallelLoopCardinalityCancellInstance()
     {
@@ -328,7 +323,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test a sequential multiinstance
-     *
      */
     public function testMultiInstanceSequentialLoopCardinality()
     {
@@ -429,7 +423,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test MI script task with exception
-     *
      */
     public function testMultiInstanceSequentialLoopCardinalityScriptException()
     {
@@ -536,7 +529,6 @@ class MultiInstanceTest extends EngineTestCase
 
     /**
      * Test MI task cancel instance
-     *
      */
     public function testMultiInstanceSequentialLoopCardinalityCancelInstance()
     {
@@ -961,7 +953,7 @@ class MultiInstanceTest extends EngineTestCase
      */
     private function verifyStoredInstanceData(ExecutionInstanceInterface $instance)
     {
-        $instanceId=$instance->getId();
+        $instanceId = $instance->getId();
         $instanceData = $instance->getDataStore()->getData();
 
         $instanceRepository = $this->repository->createExecutionInstanceRepository();

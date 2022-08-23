@@ -6,15 +6,15 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 
 /**
  * ErrorEventDefinition interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ErrorEventDefinitionInterface extends EventDefinitionInterface
 {
     const BPMN_PROPERTY_ERROR_REF = 'errorRef';
+
     const BPMN_PROPERTY_ERROR = 'error';
 
     const EVENT_THROW_EVENT_DEFINITION = 'ThrowErrorEvent';
+
     const EVENT_CATCH_EVENT_DEFINITION = 'CatchErrorEvent';
 
     /**

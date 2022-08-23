@@ -6,8 +6,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
 
 /**
  * Collection of elements
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class Collection implements CollectionInterface
 {
@@ -38,7 +36,7 @@ class Collection implements CollectionInterface
     /**
      * Count the elements of the collection.
      *
-     * @return integer
+     * @return int
      */
     public function count()
     {
@@ -48,13 +46,13 @@ class Collection implements CollectionInterface
     /**
      * Find elements of the collection that match the $condition.
      *
-     * @param callback $condition
+     * @param callable $condition
      *
      * @return CollectionInterface Filtered collection
      */
     public function find($condition)
     {
-        return new Collection(array_values(array_filter($this->items, $condition)));
+        return new self(array_values(array_filter($this->items, $condition)));
     }
 
     /**
@@ -106,7 +104,7 @@ class Collection implements CollectionInterface
      *
      * @param mixed $item
      *
-     * @return integer
+     * @return int
      */
     public function indexOf($item)
     {
@@ -118,7 +116,7 @@ class Collection implements CollectionInterface
      *
      * @param callable $callback
      *
-     * @return double
+     * @return float
      */
     public function sum(callable $callback)
     {
@@ -188,7 +186,7 @@ class Collection implements CollectionInterface
     /**
      * Checks if current position is valid
      *
-     * @return boolean The return value will be casted to boolean and then evaluated.
+     * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
     public function valid()

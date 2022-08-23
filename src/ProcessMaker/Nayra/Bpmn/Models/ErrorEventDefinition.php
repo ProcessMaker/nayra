@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * ErrorEventDefinition class
- *
  */
 class ErrorEventDefinition implements ErrorEventDefinitionInterface
 {
@@ -26,7 +25,7 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
      * @param ExecutionInstanceInterface|null $instance
      * @param TokenInterface|null $token
      *
-     * @return boolean
+     * @return bool
      */
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
@@ -53,6 +52,7 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
     public function setError(ErrorInterface $error)
     {
         $this->setProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR, $error);
+
         return $this;
     }
 
@@ -92,6 +92,7 @@ class ErrorEventDefinition implements ErrorEventDefinitionInterface
     {
         $targetPayloadId = $this->getPayload() ? $this->getPayload()->getId() : $this->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF);
         $sourcePayloadId = $eventDefinition->getPayload() ? $eventDefinition->getPayload()->getId() : $eventDefinition->getProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR_REF);
+
         return !$targetPayloadId || ($targetPayloadId && $sourcePayloadId && $targetPayloadId === $sourcePayloadId);
     }
 }

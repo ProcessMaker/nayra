@@ -12,14 +12,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test an error end event.
- *
  */
 class ErrorEndEventTest extends EngineTestCase
 {
-
     /**
      * Test a global Error End Event
-     *
      */
     public function testErrorEndEventTopLevel()
     {
@@ -75,7 +72,6 @@ class ErrorEndEventTest extends EngineTestCase
 
     /**
      * Test a global Error End Event
-     *
      */
     public function testErrorEndEventCallActivity()
     {

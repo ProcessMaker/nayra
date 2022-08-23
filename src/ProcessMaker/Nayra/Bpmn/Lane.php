@@ -8,7 +8,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\LaneInterface;
 
 /**
  * Lane class
- *
  */
 class Lane implements LaneInterface
 {
@@ -16,7 +15,6 @@ class Lane implements LaneInterface
 
     /**
      * Initialize the lane set.
-     *
      */
     protected function initLane()
     {

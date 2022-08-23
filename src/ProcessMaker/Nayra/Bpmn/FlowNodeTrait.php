@@ -15,8 +15,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 /**
  * Flow node define the behavior of a element that can be used as
  * a source or target element in a flow.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait FlowNodeTrait
 {
@@ -51,14 +49,12 @@ trait FlowNodeTrait
     private $statesByName = [];
 
     /**
-     *
      * @var Process
      */
     private $process;
 
     /**
      * Initialize flow node.
-     *
      */
     protected function initFlowNode()
     {
@@ -79,6 +75,7 @@ trait FlowNodeTrait
         foreach ($this->getStates() as $state) {
             $tokens = array_merge($tokens, $state->getTokens($instance)->toArray());
         }
+
         return new Collection($tokens);
     }
 
@@ -92,6 +89,7 @@ trait FlowNodeTrait
     protected function addInput(StateInterface $input)
     {
         $this->inputs[] = $input;
+
         return $this;
     }
 
@@ -105,6 +103,7 @@ trait FlowNodeTrait
     public function addTransition(TransitionInterface $transition)
     {
         $this->transitions[] = $transition;
+
         return $this;
     }
 
@@ -155,6 +154,7 @@ trait FlowNodeTrait
         $this->states[] = $state;
         $this->statesByName[$state->getName()][] = $state;
         $state->setIndex(count($this->statesByName[$state->getName()]) - 1);
+
         return $this;
     }
 
@@ -194,6 +194,7 @@ trait FlowNodeTrait
     {
         $state = $this->getStateByName($token->getStatus(), $token->getIndex());
         $state ? $state->addToken($instance, $token, true) : null;
+
         return $this;
     }
 
@@ -217,6 +218,7 @@ trait FlowNodeTrait
         if (!empty($properties[FlowInterface::BPMN_PROPERTY_IS_DEFAULT])) {
             $this->setProperty(GatewayInterface::BPMN_PROPERTY_DEFAULT, $flow);
         }
+
         return $this;
     }
 
@@ -263,6 +265,7 @@ trait FlowNodeTrait
     public function setProcess(ProcessInterface $process)
     {
         $this->process = $process;
+
         return $this;
     }
 

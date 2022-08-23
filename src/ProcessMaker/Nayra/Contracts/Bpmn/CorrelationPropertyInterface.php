@@ -4,7 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 interface CorrelationPropertyInterface extends EntityInterface
 {
-
     /**
      * Get the type of the CorrelationProperty.
      *

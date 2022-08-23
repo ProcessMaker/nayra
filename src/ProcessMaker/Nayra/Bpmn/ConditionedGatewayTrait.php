@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Base behavior for gateway elements.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait ConditionedGatewayTrait
 {
@@ -49,7 +47,6 @@ trait ConditionedGatewayTrait
 
     /**
      * Initialize the ConditionedGatewayTrait.
-     *
      */
     protected function initConditionedGatewayTrait()
     {
@@ -70,6 +67,7 @@ trait ConditionedGatewayTrait
     ) {
         $transition->setCondition($condition);
         $this->conditionedTransitions->push($transition);
+
         return $transition;
     }
 
@@ -83,6 +81,7 @@ trait ConditionedGatewayTrait
     protected function setDefaultTransition(TransitionInterface $transition)
     {
         $this->defaultTransition = $transition;
+
         return $transition;
     }
 

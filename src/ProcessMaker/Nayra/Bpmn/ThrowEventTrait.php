@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 
 /**
  * Implementation of the behavior for a throw event.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait ThrowEventTrait
 {
@@ -16,7 +14,6 @@ trait ThrowEventTrait
 
     /**
      * Initialize catch event.
-     *
      */
     protected function initCatchEventTrait()
     {

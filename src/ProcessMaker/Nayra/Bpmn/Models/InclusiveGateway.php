@@ -15,7 +15,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  * of concurrent incoming branches (merging behavior). Further on, each firing
  * leads to the creation of threads on a certain subset out of the set of
  * outgoing branches (branching behavior).
- *
  */
 class InclusiveGateway implements InclusiveGatewayInterface
 {
@@ -26,7 +25,7 @@ class InclusiveGateway implements InclusiveGatewayInterface
      *
      * @param FlowNodeInterface $target
      * @param callable $condition
-     * @param boolean $isDefault
+     * @param bool $isDefault
      * @param RepositoryInterface $factory
      *
      * @return $this
@@ -41,6 +40,7 @@ class InclusiveGateway implements InclusiveGatewayInterface
             FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,
             FlowInterface::BPMN_PROPERTY_IS_DEFAULT => $isDefault,
         ]);
+
         return $this;
     }
 

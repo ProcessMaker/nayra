@@ -10,15 +10,13 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 /**
  * Verify the condition to transit following the exclusive transition rules.
  * If not accomplished the tokens are consumed.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ConditionedExclusiveTransition implements TransitionInterface, ConditionedTransitionInterface
 {
     use TransitionTrait;
 
     /**
-     * @var callable $condition
+     * @var callable
      */
     private $condition;
 
@@ -56,6 +54,7 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
             //evaluated to true.
             $result = $myIndex === $firstIndexTrue;
         }
+
         return $result;
     }
 
@@ -69,6 +68,7 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
     public function setCondition(callable $condition)
     {
         $this->condition = $condition;
+
         return $this;
     }
 
@@ -77,11 +77,12 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
      *
      * @param ExecutionInstanceInterface $executionInstance
      *
-     * @return boolean
+     * @return bool
      */
     protected function conditionIsFalse(ExecutionInstanceInterface $executionInstance)
     {
         $this->collect($executionInstance);
+
         return true;
     }
 

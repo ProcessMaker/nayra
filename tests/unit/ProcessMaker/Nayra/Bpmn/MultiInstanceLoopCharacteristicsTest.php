@@ -11,8 +11,6 @@ use ProcessMaker\Test\Models\FormalExpression;
 
 /**
  * Tests MultiInstanceLoopCharacteristics class getter/setters
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class MultiInstanceLoopCharacteristicsTest extends TestCase
 {

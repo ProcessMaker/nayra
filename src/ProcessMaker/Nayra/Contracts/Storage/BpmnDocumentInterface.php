@@ -8,7 +8,6 @@ use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 /**
  * BPMN DOM file interface
  *
- * @package \ProcessMaker\Nayra\Contracts\Storage
  *
  * @method DOMNode appendChild ( DOMNode $newnode )
  * @method string C14N ( bool $exclusive , bool $with_comments , array $xpath , array $ns_prefixes  )
@@ -60,7 +59,6 @@ use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
  */
 interface BpmnDocumentInterface extends StorageInterface
 {
-
     /**
      * Get the BPMN elements mapping.
      *
@@ -101,7 +99,7 @@ interface BpmnDocumentInterface extends StorageInterface
      *
      * @param string $id
      *
-     * @return boolean
+     * @return bool
      */
     public function hasBpmnInstance($id);
 

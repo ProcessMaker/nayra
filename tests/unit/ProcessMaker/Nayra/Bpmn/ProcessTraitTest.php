@@ -13,12 +13,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface;
 
 /**
  * Test the process base behavior.
- *
  */
 class ProcessTraitTest extends TestCase
 {
     /**
-     * @var ProcessTrait $object
+     * @var ProcessTrait
      */
     private $object;
 
@@ -35,7 +34,6 @@ class ProcessTraitTest extends TestCase
 
     /**
      * Test get process collection of elements by type
-     *
      */
     public function testCollections()
     {

@@ -12,8 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 
 /**
  * Execution instance for the engine.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait ExecutionInstanceTrait
 {
@@ -96,6 +94,7 @@ trait ExecutionInstanceTrait
     public function setProcess(ProcessInterface $process)
     {
         $this->process = $process;
+
         return $this;
     }
 
@@ -119,6 +118,7 @@ trait ExecutionInstanceTrait
     public function setDataStore(DataStoreInterface $dataStore)
     {
         $this->dataStore = $dataStore;
+
         return $this;
     }
 
@@ -143,6 +143,7 @@ trait ExecutionInstanceTrait
     {
         $this->getProcess()->setDispatcher($engine->getDispatcher());
         $this->transitions = $this->getProcess()->getTransitions($engine->getRepository());
+
         return $this;
     }
 
@@ -157,6 +158,7 @@ trait ExecutionInstanceTrait
         foreach ($tokens as $token) {
             $token->setStatus(ActivityInterface::TOKEN_STATE_CLOSED);
         }
+
         return true;
     }
 
@@ -170,6 +172,7 @@ trait ExecutionInstanceTrait
     public function addToken(TokenInterface $token)
     {
         $this->tokens->push($token);
+
         return $this;
     }
 
@@ -184,6 +187,7 @@ trait ExecutionInstanceTrait
     {
         $tokenIndex = $this->tokens->indexOf($token);
         $this->tokens->splice($tokenIndex, 1);
+
         return $this;
     }
 

@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Event raised when and activity is activated.
- *
- * @package ProcessMaker\Models
  */
 class ActivityActivatedEvent
 {

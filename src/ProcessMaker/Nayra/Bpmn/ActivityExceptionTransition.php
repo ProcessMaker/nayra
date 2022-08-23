@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Uncaught Exception Transition.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ActivityExceptionTransition extends BoundaryCaughtTransition implements TransitionInterface
 {
@@ -28,6 +26,7 @@ class ActivityExceptionTransition extends BoundaryCaughtTransition implements Tr
     {
         $eventType = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE);
         $matchType = $eventType === ErrorInterface::class || is_a($eventType, ErrorInterface::class);
+
         return $matchType;
     }
 }

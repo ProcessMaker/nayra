@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * RepositoryFactory
- *
- * @package ProcessMaker\Nayra\Contracts\Repositories
  */
 interface StorageInterface
 {
@@ -83,7 +81,7 @@ interface StorageInterface
      *
      * @param string $id
      *
-     * @return boolean
+     * @return bool
      */
     public function hasBpmnInstance($id);
 

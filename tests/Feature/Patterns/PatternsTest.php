@@ -13,7 +13,6 @@ use Tests\Feature\Engine\EngineTestCase;
 
 /**
  * Tests for the ServiceTask element
- *
  */
 class PatternsTest extends EngineTestCase
 {
@@ -30,6 +29,7 @@ class PatternsTest extends EngineTestCase
         foreach (glob($this->basePath . '*.bpmn') as $bpmnFile) {
             $data[] = [basename($bpmnFile)];
         }
+
         return $data;
     }
 
@@ -120,7 +120,7 @@ class PatternsTest extends EngineTestCase
         // create instance with initial data
         if ($start->getEventDefinitions()->count() > 0) {
             $start->execute($start->getEventDefinitions()->item(0));
-            $instance = $process->getInstances()->count() ?  $process->getInstances()->item(0) : null;
+            $instance = $process->getInstances()->count() ? $process->getInstances()->item(0) : null;
         } else {
             $instance = $this->engine->createExecutionInstance($process, $dataStore);
             $start->start($instance);
@@ -132,6 +132,7 @@ class PatternsTest extends EngineTestCase
             if ($output) {
                 $this->assertEquals($output, $dataStore->getData());
             }
+
             return;
         }
         $tokens = $instance->getTokens();
@@ -141,8 +142,8 @@ class PatternsTest extends EngineTestCase
             $error = $payload[1]->getProperty('error');
             if ($error) {
                 $runtimeErrors[] = [
-                    "element" => $payload[0]->getId(),
-                    "error" => $error instanceof ErrorInterface ? $error->getId() : $error,
+                    'element' => $payload[0]->getId(),
+                    'error' => $error instanceof ErrorInterface ? $error->getId() : $error,
                 ];
             }
         });
@@ -191,8 +192,8 @@ class PatternsTest extends EngineTestCase
                                 $error = $token->getProperty('error');
                                 $error = $error instanceof ErrorInterface ? $error->getId() : $error;
                                 $runtimeErrors[] = [
-                                    "element" => $token->getOwnerElement()->getId(),
-                                    "error" => $error,
+                                    'element' => $token->getOwnerElement()->getId(),
+                                    'error' => $error,
                                 ];
                             }
                         }

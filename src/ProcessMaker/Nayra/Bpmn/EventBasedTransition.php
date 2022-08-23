@@ -14,15 +14,13 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 /**
  * Verify the condition to transit following the exclusive transition rules.
  * If not accomplished the tokens are consumed.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class EventBasedTransition implements TransitionInterface
 {
     use TransitionTrait;
 
     /**
-     * @var callable $condition
+     * @var callable
      */
     private $condition;
 
@@ -77,6 +75,7 @@ class EventBasedTransition implements TransitionInterface
                 $consumedTokens[] = $token;
             }
         }
+
         return new Collection($consumedTokens);
     }
 
