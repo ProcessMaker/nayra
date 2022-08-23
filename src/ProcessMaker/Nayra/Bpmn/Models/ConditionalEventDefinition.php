@@ -47,6 +47,9 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
         $previous = $conditionals[$key] ?? null;
         // Evaluate condition
         $condition = $this->getCondition();
+        // Conditional in conditional start event should be treated as false when condition is empty and
+        // should not execute. But for Multi Instance Loops and Exclusive gateways it should be treated as
+        // true when conditional is empty, to avoid infinite loops and allows exclusive gateways to run.
         $current = empty($condition->getProperties()['body']) ? false : $condition($data);
         // Update previous value
         $conditionals[$key] = $current;
