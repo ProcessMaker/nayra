@@ -18,14 +18,6 @@ trait EventDefinitionTrait
     use BaseTrait;
 
     /**
-     * Initialize event definition ID if it was not defined in the bpmn model.
-     */
-    protected function initEventDefinitionTrait()
-    {
-        $this->setId(uniqid('event-definition-', true));
-    }
-
-    /**
      * Register event with a catch event
      *
      * @param EngineInterface $engine
