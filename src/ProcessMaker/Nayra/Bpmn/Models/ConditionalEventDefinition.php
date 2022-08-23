@@ -47,7 +47,7 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
         $previous = $conditionals[$key] ?? null;
         // Evaluate condition
         $condition = $this->getCondition();
-        $current = $condition($data);
+        $current = empty($condition->getProperties()['body']) ? false : $condition($data);
         // Update previous value
         $conditionals[$key] = $current;
         if ($instance && $target instanceof CatchEventInterface) {
