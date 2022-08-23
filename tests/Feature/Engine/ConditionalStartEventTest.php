@@ -41,4 +41,34 @@ class ConditionalStartEventTest extends EngineTestCase
         // Assertion: One process was started
         $this->assertEquals(1, $process->getInstances()->count());
     }
+
+    /**
+     * Test conditional start event should not trigger when empty condition
+     *
+     */
+    public function testConditionalStartEventShouldNotTriggerWhenEmptyCondition()
+    {
+        // Load a BpmnFile Repository
+        $bpmnRepository = new BpmnDocument();
+        $bpmnRepository->setEngine($this->engine);
+        $bpmnRepository->setFactory($this->repository);
+
+        $bpmnRepository->load(__DIR__ . '/files/Conditional_StartEvent_Empty_Condition.bpmn');
+
+        // Load a process from a bpmn repository by Id
+        $process = $bpmnRepository->getProcess('Conditional_StartEvent');
+        // When the process is loaded into the engine, the conditional start event is evaluated
+        $this->engine->loadProcess($process);
+        $this->engine->runToNextState();
+
+        // Assertion: No process was started
+        $this->assertEquals(0, $process->getInstances()->count());
+
+        // Add the environmental data required by the condition
+        $this->engine->getDataStore()->putData('a', '1');
+        $this->engine->runToNextState();
+
+        // Assertion: One process was started
+        $this->assertEquals(0, $process->getInstances()->count());
+    }
 }
