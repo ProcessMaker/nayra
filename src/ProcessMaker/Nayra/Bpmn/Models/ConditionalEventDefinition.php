@@ -43,7 +43,7 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
             $conditionals = $process->getProperty('conditionals', []);
         }
         // Get previous value
-        $key = $this->getId() ?: $this->getBpmnElement()->getNodePath();
+        $key = $this->getBpmnElement()->getNodePath();
         $previous = $conditionals[$key] ?? null;
         // Evaluate condition
         $condition = $this->getCondition();
