@@ -12,14 +12,13 @@ use ProcessMaker\Test\Models\TestTwoClassWithArgumentsConstructor;
 
 /**
  * Test Repository implementation
- *
  */
 class RepositoryTest extends TestCase
 {
     /**
      * Tests that the repository creates classes whose constructors have and don't have arguments
      */
-    public function testInstantiation ()
+    public function testInstantiation()
     {
         $factory = new Repository();
 
@@ -33,10 +32,10 @@ class RepositoryTest extends TestCase
         $this->assertInstanceOf(TestOneInterface::class, $object1);
 
         //instantiate an object that implementes a TestTwoInterface
-        $object2 = $factory->create(TestTwoInterface::class, "passedField1Value", "passedField2Value");
+        $object2 = $factory->create(TestTwoInterface::class, 'passedField1Value', 'passedField2Value');
 
         //Assertion: The instantiated object has uses its constructor
-        $this->assertEquals($object2->aField, "passedField1Value");
+        $this->assertEquals($object2->aField, 'passedField1Value');
 
         //Assertion: The instantiated object implements the TestTwoInterface
         $this->assertInstanceOf(TestTwoInterface::class, $object2);
@@ -44,7 +43,7 @@ class RepositoryTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         //Assertion: when trying to instantiate an interface that is not mapped an argument exception should be thrown
-        $object3 = $factory->create("NonExistentInterface");
+        $object3 = $factory->create('NonExistentInterface');
     }
 
     /**
@@ -56,7 +55,7 @@ class RepositoryTest extends TestCase
     {
         return [
             TestOneInterface::class => TestOneClassWithEmptyConstructor::class,
-            TestTwoInterface::class => TestTwoClassWithArgumentsConstructor::class
+            TestTwoInterface::class => TestTwoClassWithArgumentsConstructor::class,
         ];
     }
 }

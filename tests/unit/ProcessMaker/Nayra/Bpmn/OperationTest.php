@@ -2,7 +2,6 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
-
 use PHPUnit\Framework\TestCase;
 use ProcessMaker\Nayra\Bpmn\Models\Message;
 use ProcessMaker\Nayra\Bpmn\Models\Operation;
@@ -10,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 
 /**
  * Tests for the Operation class
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class OperationTest extends TestCase
 {
@@ -23,8 +20,9 @@ class OperationTest extends TestCase
         // Create the objects that will be set in the data store
         $operation = new Operation();
 
-
-        $dummyFunction = function() {return true;};
+        $dummyFunction = function () {
+            return true;
+        };
         $dummyMessage = new Message();
         // Use the setters
         $operation->setProperty(OperationInterface::BPMN_PROPERTY_IMPLEMENTATION, $dummyFunction);

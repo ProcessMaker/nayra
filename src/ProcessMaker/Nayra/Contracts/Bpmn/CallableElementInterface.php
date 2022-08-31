@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * CallableElement interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface CallableElementInterface extends EntityInterface
 {

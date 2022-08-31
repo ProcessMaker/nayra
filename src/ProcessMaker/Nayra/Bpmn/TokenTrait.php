@@ -10,21 +10,18 @@ use Throwable;
 
 /**
  * Trait for a token.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait TokenTrait
 {
     use BaseTrait;
 
     /**
-     *
      * @var StateInterface
      */
     private $owner;
 
     /**
-     * @var \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
+     * @var \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface
      */
     private $instance;
 
@@ -48,6 +45,7 @@ trait TokenTrait
     public function setOwner(StateInterface $owner)
     {
         $this->owner = $owner;
+
         return $this;
     }
 
@@ -71,6 +69,7 @@ trait TokenTrait
     public function setInstance(ExecutionInstanceInterface $instance = null)
     {
         $this->instance = $instance;
+
         return $this;
     }
 
@@ -104,6 +103,7 @@ trait TokenTrait
     public function setStatus($status)
     {
         $this->setProperty(TokenInterface::BPMN_PROPERTY_STATUS, $status);
+
         return $this;
     }
 
@@ -127,6 +127,7 @@ trait TokenTrait
     public function setIndex($index)
     {
         $this->setProperty(TokenInterface::BPMN_PROPERTY_INDEX, $index);
+
         return $this;
     }
 

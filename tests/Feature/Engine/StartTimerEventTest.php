@@ -9,14 +9,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Start Timer Event tests
- *
  */
 class StartTimerEventTest extends EngineTestCase
 {
-
     /**
      * Test the start timer event with a date time specified in ISO8601 format.
-     *
      */
     public function testStartTimerEventWithTimeDate()
     {
@@ -41,7 +38,6 @@ class StartTimerEventTest extends EngineTestCase
 
     /**
      * Test the start timer event with a time cycle specified in ISO8601 format.
-     *
      */
     public function testStartTimerEventWithTimeCycle()
     {
@@ -70,7 +66,6 @@ class StartTimerEventTest extends EngineTestCase
 
     /**
      * Test the start timer event with a date time specified by an expression.
-     *
      */
     public function testStartTimerEventWithTimeDateExpression()
     {
@@ -107,7 +102,6 @@ class StartTimerEventTest extends EngineTestCase
 
     /**
      * Test the start timer event with a time cycle specified by an expression.
-     *
      */
     public function testStartTimerEventWithTimeCycleExpression()
     {
@@ -154,8 +148,7 @@ class StartTimerEventTest extends EngineTestCase
      */
     private function assertValidDate($date)
     {
-        $this->assertTrue($date instanceof DateTime, "Failed asserting that ".json_encode($date)." is a valid date timer");
-
+        $this->assertTrue($date instanceof DateTime, 'Failed asserting that ' . json_encode($date) . ' is a valid date timer');
     }
 
     /**
@@ -165,7 +158,7 @@ class StartTimerEventTest extends EngineTestCase
      */
     private function assertValidCycle($cycle)
     {
-        $this->assertTrue($cycle instanceof DatePeriod, "Failed asserting that ".json_encode($cycle)." is a valid cyclic timer");
+        $this->assertTrue($cycle instanceof DatePeriod, 'Failed asserting that ' . json_encode($cycle) . ' is a valid cyclic timer');
     }
 
     /**
@@ -175,6 +168,6 @@ class StartTimerEventTest extends EngineTestCase
      */
     private function assertValidDuration($duration)
     {
-        $this->assertTrue($duration instanceof DateInterval, "Failed asserting that ".json_encode($duration)." is a valid duration timer");
+        $this->assertTrue($duration instanceof DateInterval, 'Failed asserting that ' . json_encode($duration) . ' is a valid duration timer');
     }
 }

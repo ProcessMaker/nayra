@@ -4,8 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Lane set interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface LaneSetInterface extends EntityInterface
 {

@@ -10,11 +10,9 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
  * Parallel gateway implementation.
- *
  */
 class ParallelGateway implements ParallelGatewayInterface
 {
-
     use ParallelGatewayTrait;
 
     /**
@@ -22,7 +20,7 @@ class ParallelGateway implements ParallelGatewayInterface
      *
      * @param FlowNodeInterface $target
      * @param callable $condition
-     * @param boolean $isDefault
+     * @param bool $isDefault
      * @param RepositoryInterface $factory
      *
      * @return $this

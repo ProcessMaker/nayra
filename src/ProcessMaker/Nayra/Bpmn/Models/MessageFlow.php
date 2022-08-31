@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 
 /**
  * End event implementation.
- *
- * @package ProcessMaker\Models
  */
 class MessageFlow implements MessageFlowInterface
 {

@@ -4,12 +4,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Collection of Events.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface EventCollectionInterface extends CollectionInterface
 {
-
     /**
      * Add an element to the collection.
      *

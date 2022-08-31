@@ -6,11 +6,11 @@ use Exception;
 
 /**
  * Test class for evaluate expression used in betsy BPMN files.
- *
  */
 class TestBetsy
 {
     public $data;
+
     private $code;
 
     /**
@@ -42,7 +42,7 @@ class TestBetsy
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function contains($name)
     {
@@ -58,6 +58,7 @@ class TestBetsy
     {
         $test = $this;
         $data = $this->data;
+
         return eval('return ' . $this->code . ';');
     }
 

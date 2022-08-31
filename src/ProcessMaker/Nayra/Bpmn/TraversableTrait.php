@@ -7,23 +7,20 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ConnectionNodeInterface;
 
 /**
  * Implements the search of paths through elements.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait TraversableTrait
 {
-
     /**
      * Collection of incoming flows.
      *
      * @var Collection
      */
     private $incoming;
+
     private $outgoing;
 
     /**
      * Initialize incoming/outgoing flows
-     *
      */
     protected function initFlowElementBehavior()
     {
@@ -61,6 +58,7 @@ trait TraversableTrait
         $flow = new Connection($this, $target);
         $this->outgoing()->push($flow);
         $target->incoming()->push($flow);
+
         return $flow;
     }
 
@@ -90,6 +88,7 @@ trait TraversableTrait
                 $flow->origin()->paths($condition, $while, $path, $passedthru, $paths);
             }
         });
+
         return new Collection($paths);
     }
 }

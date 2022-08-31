@@ -15,15 +15,12 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Activity behavior's implementation.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait ActivityTrait
 {
     use FlowNodeTrait;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
     private $activeState;
@@ -39,43 +36,36 @@ trait ActivityTrait
     private $interruptedState;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
     private $completedTransition;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
     private $failingState;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
     private $exceptionTransition;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
     private $closeExceptionTransition;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
     private $transition;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\StateInterface
      */
     private $completedState;
 
     /**
-     *
      * @var \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface
      */
     private $skippedTransition;
@@ -325,6 +315,7 @@ trait ActivityTrait
         $transition->connectTo($this->activeState);
         $invalidDataInput->connectTo($this->failingState);
         $this->addInput($ready);
+
         return $ready;
     }
 
@@ -353,6 +344,7 @@ trait ActivityTrait
             }
         );
         $this->skippedTransition->connectTo($place);
+
         return $this;
     }
 
@@ -366,6 +358,7 @@ trait ActivityTrait
     public function complete(TokenInterface $token)
     {
         $token->setStatus(ActivityInterface::TOKEN_STATE_COMPLETED);
+
         return $this;
     }
 
@@ -414,6 +407,7 @@ trait ActivityTrait
                 }
             }
         }
+
         return new Collection($boundaryElements);
     }
 
@@ -429,6 +423,7 @@ trait ActivityTrait
         unset($properties[TokenInterface::BPMN_PROPERTY_ID]);
         $this->interruptingEventState->addNewToken($instance, $properties);
         $this->waitInterruptState->addNewToken($instance, $properties);
+
         return $this;
     }
 }

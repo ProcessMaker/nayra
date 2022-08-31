@@ -11,7 +11,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 
 /**
  * Tests for the ScriptTask element
- *
  */
 class ScriptTaskTest extends EngineTestCase
 {

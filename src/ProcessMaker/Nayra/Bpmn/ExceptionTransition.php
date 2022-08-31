@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule when a exception is catch.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ExceptionTransition implements TransitionInterface
 {
@@ -19,7 +17,6 @@ class ExceptionTransition implements TransitionInterface
 
     /**
      * Initialize transition.
-     *
      */
     protected function initActivityTransition()
     {
@@ -41,7 +38,7 @@ class ExceptionTransition implements TransitionInterface
 
     /**
      * Mark token as error event.
-     * 
+     *
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
      */
     protected function onTokenTransit(TokenInterface $token)

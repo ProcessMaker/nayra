@@ -6,23 +6,20 @@ use SeekableIterator;
 
 /**
  * CollectionInterface
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface CollectionInterface extends SeekableIterator
 {
-
     /**
      * Count the elements of the collection.
      *
-     * @return integer
+     * @return int
      */
     public function count();
 
     /**
      * Find elements of the collection that match the $condition.
      *
-     * @param callback $condition
+     * @param callable $condition
      *
      * @return CollectionInterface Filtered collection
      */
@@ -65,7 +62,7 @@ interface CollectionInterface extends SeekableIterator
      *
      * @param mixed $item
      *
-     * @return integer
+     * @return int
      */
     public function indexOf($item);
 
@@ -74,7 +71,7 @@ interface CollectionInterface extends SeekableIterator
      *
      * @param callable $callback
      *
-     * @return double
+     * @return float
      */
     public function sum(callable $callback);
 

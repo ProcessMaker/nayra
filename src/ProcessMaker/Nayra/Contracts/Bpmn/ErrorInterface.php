@@ -4,8 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * ErrorInterface for the ErrorEventDefinition.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ErrorInterface extends EntityInterface
 {

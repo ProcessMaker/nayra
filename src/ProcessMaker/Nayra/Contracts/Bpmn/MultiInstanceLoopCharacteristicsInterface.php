@@ -11,29 +11,39 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
  * be sequential. Either an Expression is used to specify or calculate the
  * desired number of instances or a data driven setup can be used. In that case
  * a data input can be specified, which is able to
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface MultiInstanceLoopCharacteristicsInterface extends LoopCharacteristicsInterface
 {
     const BPMN_PROPERTY_IS_SEQUENTIAL = 'isSequential';
+
     const BPMN_PROPERTY_BEHAVIOR = 'behavior';
+
     const BPMN_PROPERTY_LOOP_CARDINALITY = 'loopCardinality';
+
     const BPMN_PROPERTY_ONE_BEHAVIOR_EVENT_REF = 'oneBehaviorEventRef';
+
     const BPMN_PROPERTY_NONE_BEHAVIOR_EVENT_REF = 'oneBehaviorEventRef';
+
     const BPMN_PROPERTY_LOOP_DATA_INPUT_REF = 'loopDataInputRef';
+
     const BPMN_PROPERTY_LOOP_DATA_OUTPUT_REF = 'loopDataOutputRef';
+
     const BPMN_PROPERTY_LOOP_DATA_INPUT = 'loopDataInputRef';
+
     const BPMN_PROPERTY_LOOP_DATA_OUTPUT = 'loopDataOutputRef';
+
     const BPMN_PROPERTY_INPUT_DATA_ITEM = 'inputDataItem';
+
     const BPMN_PROPERTY_OUTPUT_DATA_ITEM = 'outputDataItem';
+
     const BPMN_PROPERTY_COMPLEX_BEHAVIOR_DEFINITION = 'complexBehaviorDefinition';
+
     const BPMN_PROPERTY_COMPLETION_CONDITION = 'completionCondition';
 
     /**
      * Gets as isSequential
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsSequential();
 

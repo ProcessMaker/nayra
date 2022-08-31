@@ -15,7 +15,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 interface JobManagerInterface
 {
     const EVENT_SCHEDULE_DATE = 'ScheduleDate';
+
     const EVENT_SCHEDULE_CYCLE = 'ScheduleCycle';
+
     const EVENT_SCHEDULE_DURATION = 'ScheduleDuration';
 
     /**

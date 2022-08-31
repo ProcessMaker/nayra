@@ -4,18 +4,18 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * ThrowEvent interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ThrowEventInterface extends EventInterface
 {
-
     /**
      * Events defined for the the throw event interface
      */
     const EVENT_THROW_TOKEN_ARRIVES = 'ThrowEventTokenArrives';
+
     const EVENT_THROW_EXCEPTION = 'ThrowEventException';
+
     const EVENT_THROW_TOKEN_PASSED = 'ThrowEventTokenPassed';
+
     const EVENT_THROW_TOKEN_CONSUMED = 'ThrowEventTokenConsumed';
 
     /**

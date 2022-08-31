@@ -18,20 +18,18 @@ use ProcessMaker\Test\Models\TokenRepository;
 
 /**
  * Test to save execution instances
- *
  */
 class SaveExecutionInstancesTest extends EngineTestCase
 {
     /**
      * Array where to save the tokens of the execution instance tested.
      *
-     * @var array $storage
+     * @var array
      */
     private $storage = [];
 
     /**
      * Configure the Listener to save the tokens and instances.
-     *
      */
     protected function setUp()
     {
@@ -39,49 +37,48 @@ class SaveExecutionInstancesTest extends EngineTestCase
         //Prepare the listener to save tokens
         $dispatcher = $this->engine->getDispatcher();
         $dispatcher->listen(ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED,
-                            function(ProcessInstanceCreatedEvent $payload) {
-            $this->storage[$payload->instance->getId()] = [
-                'processId' => $payload->process->getId(),
-                'data'      => [],
-                'tokens'    => [],
-                'status'    => 'ACTIVE',
-            ];
-        });
+            function (ProcessInstanceCreatedEvent $payload) {
+                $this->storage[$payload->instance->getId()] = [
+                    'processId' => $payload->process->getId(),
+                    'data'      => [],
+                    'tokens'    => [],
+                    'status'    => 'ACTIVE',
+                ];
+            });
         $dispatcher->listen(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED,
-                            function(ProcessInstanceCompletedEvent $payload) {
-            $this->storage[$payload->instance->getId()]['status'] = 'COMPLETED';
-        });
+            function (ProcessInstanceCompletedEvent $payload) {
+                $this->storage[$payload->instance->getId()]['status'] = 'COMPLETED';
+            });
         $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-                            function(ActivityActivatedEvent $event) {
-            $id = $event->token->getInstance()->getId();
-            $this->storage[$id]['tokens'][$event->token->getId()] = [
-                'elementId' => $event->activity->getId(),
-                'status'    => $event->token->getStatus(),
-            ];
-        });
+            function (ActivityActivatedEvent $event) {
+                $id = $event->token->getInstance()->getId();
+                $this->storage[$id]['tokens'][$event->token->getId()] = [
+                    'elementId' => $event->activity->getId(),
+                    'status'    => $event->token->getStatus(),
+                ];
+            });
         $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_COMPLETED,
-                            function(ActivityCompletedEvent $event) {
-            $id = $event->token->getInstance()->getId();
-            $this->storage[$id]['tokens'][$event->token->getId()] = [
-                'elementId' => $event->activity->getId(),
-                'status'    => $event->token->getStatus(),
-            ];
-        });
+            function (ActivityCompletedEvent $event) {
+                $id = $event->token->getInstance()->getId();
+                $this->storage[$id]['tokens'][$event->token->getId()] = [
+                    'elementId' => $event->activity->getId(),
+                    'status'    => $event->token->getStatus(),
+                ];
+            });
         $dispatcher->listen(ActivityInterface::EVENT_ACTIVITY_CLOSED,
-                            function(ActivityClosedEvent $event) {
-            $id = $event->token->getInstance()->getId();
-            $this->storage[$id]['tokens'][$event->token->getId()] = [
-                'elementId' => $event->activity->getId(),
-                'status'    => $event->token->getStatus(),
-            ];
-        });
+            function (ActivityClosedEvent $event) {
+                $id = $event->token->getInstance()->getId();
+                $this->storage[$id]['tokens'][$event->token->getId()] = [
+                    'elementId' => $event->activity->getId(),
+                    'status'    => $event->token->getStatus(),
+                ];
+            });
         //Prepare a clean storage.
         $this->storage = [];
     }
 
     /**
      * Test to save a sequential process with one active token.
-     *
      */
     public function testSaveExecutionInstanceWithOneToken()
     {
@@ -123,7 +120,6 @@ class SaveExecutionInstancesTest extends EngineTestCase
 
     /**
      * Test save execution instance with multiple tokens
-     *
      */
     public function testSaveExecutionInstanceWithMultipleTokens()
     {

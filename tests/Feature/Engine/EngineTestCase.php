@@ -24,38 +24,39 @@ use ProcessMaker\Test\Models\Repository;
 
 /**
  * Test transitions
- *
  */
 class EngineTestCase extends TestCase
 {
     /**
-     *
      * @var EngineInterface
      */
     protected $engine;
+
     /**
      * Fired events during the test.
      *
      * @var array
      */
     protected $firedEvents = [];
+
     /**
      * Event listeners
      *
      * @var array
      */
     protected $listeners = [];
+
     /**
      * Scheduled jobs.
      *
-     * @var array $jobs
+     * @var array
      */
     protected $jobs = [];
 
     /**
      * Repository.
      *
-     * @var \ProcessMaker\Nayra\Contracts\RepositoryInterface $repository
+     * @var \ProcessMaker\Nayra\Contracts\RepositoryInterface
      */
     protected $repository;
 
@@ -89,7 +90,6 @@ class EngineTestCase extends TestCase
 
     /**
      * Initialize the engine and the factories.
-     *
      */
     protected function setUp()
     {
@@ -159,7 +159,6 @@ class EngineTestCase extends TestCase
 
     /**
      * Tear down the test case.
-     *
      */
     protected function tearDown()
     {
@@ -276,16 +275,15 @@ class EngineTestCase extends TestCase
     private function representJob($timer, FlowElementInterface $element, TokenInterface $token = null)
     {
         return sprintf(
-                '(%s) at "%s" token "%s"',
-                (is_object($timer) ? get_class($timer) : gettype($timer)),
-                $element->getId(),
-                $token ? $token->getId() : 'null'
+            '(%s) at "%s" token "%s"',
+            (is_object($timer) ? get_class($timer) : gettype($timer)),
+            $element->getId(),
+            $token ? $token->getId() : 'null'
         );
     }
 
     /**
      * Helper to dispatch a job from the JobManager mock
-     *
      */
     protected function dispatchJob()
     {
@@ -294,6 +292,7 @@ class EngineTestCase extends TestCase
             $this->jobs[] = $job;
         }
         $instance = $job['token'] ? $job['token']->getInstance() : null;
+
         return $job ? $job['element']->execute($job['eventDefinition'], $instance) : null;
     }
 

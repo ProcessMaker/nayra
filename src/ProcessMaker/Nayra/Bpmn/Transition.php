@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule that always pass the token.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class Transition implements TransitionInterface
 {
@@ -23,7 +21,7 @@ class Transition implements TransitionInterface
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface $owner
      * @param bool $preserveToken
      */
-    protected function initActivityTransition(FlowNodeInterface $owner, $preserveToken=true)
+    protected function initActivityTransition(FlowNodeInterface $owner, $preserveToken = true)
     {
         $this->setPreserveToken($preserveToken);
     }

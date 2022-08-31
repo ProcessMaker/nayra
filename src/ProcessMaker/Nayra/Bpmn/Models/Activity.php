@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 
 /**
  * Activity implementation.
- *
- * @package ProcessMaker\Models
  */
 class Activity implements ActivityInterface
 {

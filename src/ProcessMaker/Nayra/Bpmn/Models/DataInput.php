@@ -11,7 +11,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DataInputInterface;
  */
 class DataInput implements DataInputInterface
 {
-
     use FlowElementTrait;
 
     /**
@@ -27,7 +26,7 @@ class DataInput implements DataInputInterface
     /**
      * Get true is the data input is a collection.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCollection()
     {

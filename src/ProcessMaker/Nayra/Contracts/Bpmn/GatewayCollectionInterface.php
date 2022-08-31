@@ -4,12 +4,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Collection of gateways.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface GatewayCollectionInterface extends CollectionInterface
 {
-
     /**
      * Add an element to the collection.
      *

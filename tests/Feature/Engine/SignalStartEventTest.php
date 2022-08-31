@@ -28,7 +28,7 @@ class SignalStartEventTest extends EngineTestCase
             'id' => 'item',
             'isCollection' => true,
             'itemKind' => ItemDefinitionInterface::ITEM_KIND_INFORMATION,
-            'structure' => 'String'
+            'structure' => 'String',
         ]);
 
         $signal = $this->repository->createMessage();
@@ -43,7 +43,7 @@ class SignalStartEventTest extends EngineTestCase
         $activityA1 = $this->repository->createActivity();
         $eventA = $this->repository->createIntermediateThrowEvent();
         $signalEventDefA = $this->repository->createSignalEventDefinition();
-        $signalEventDefA->setId("signalEvent1");
+        $signalEventDefA->setId('signalEvent1');
         $signalEventDefA->setPayload($signal);
         $eventA->getEventDefinitions()->push($signalEventDefA);
         $activityA2 = $this->repository->createActivity();
@@ -83,7 +83,6 @@ class SignalStartEventTest extends EngineTestCase
         return [$processA, $processB];
     }
 
-
     /**
      * Tests the start of a process when it receives a signal
      */
@@ -119,7 +118,7 @@ class SignalStartEventTest extends EngineTestCase
         $eventA = $processA->getEvents()->item(1);
         $eventB = $processB->getEvents()->item(1);
 
-        $dataStoreA =$this->repository->createDataStore();
+        $dataStoreA = $this->repository->createDataStore();
         $dataStoreA->putData('A', '1');
 
         $dataStoreB = $this->repository->createDataStore();

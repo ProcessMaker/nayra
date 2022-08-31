@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Execution instance for the engine.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 interface ExecutionInstanceInterface extends EntityInterface
 {

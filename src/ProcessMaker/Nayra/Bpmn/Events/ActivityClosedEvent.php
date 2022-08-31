@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Event raised when and activity is closed.
- *
- * @package ProcessMaker\Models
  */
 class ActivityClosedEvent
 {

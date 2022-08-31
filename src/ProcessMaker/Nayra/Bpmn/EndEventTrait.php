@@ -16,8 +16,6 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
  * End event behavior's implementation.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait EndEventTrait
 {
@@ -130,6 +128,7 @@ trait EndEventTrait
                 return $eventDefinition;
             }
         }
+
         return null;
     }
 }

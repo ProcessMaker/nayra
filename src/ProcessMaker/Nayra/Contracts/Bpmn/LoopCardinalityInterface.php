@@ -4,8 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Activity interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface LoopCardinalityInterface extends FlowNodeInterface
 {
@@ -13,10 +11,15 @@ interface LoopCardinalityInterface extends FlowNodeInterface
      * Events defined for Activity
      */
     const EVENT_ACTIVITY_ACTIVATED = 'ActivityActivated';
+
     const EVENT_ACTIVITY_COMPLETED = 'ActivityCompleted';
+
     const EVENT_ACTIVITY_EXCEPTION = 'ActivityException';
+
     const EVENT_ACTIVITY_CANCELLED = 'ActivityCancelled';
+
     const EVENT_ACTIVITY_CLOSED = 'ActivityClosed';
+
     const EVENT_EVENT_TRIGGERED = 'EventTriggered';
 
     /**
@@ -28,8 +31,11 @@ interface LoopCardinalityInterface extends FlowNodeInterface
      * Token states defined for Activity
      */
     const TOKEN_STATE_ACTIVE = 'ACTIVE';
+
     const TOKEN_STATE_FAILING = 'FAILING';
+
     const TOKEN_STATE_COMPLETED = 'COMPLETED';
+
     const TOKEN_STATE_CLOSED = 'CLOSED';
 
     /**

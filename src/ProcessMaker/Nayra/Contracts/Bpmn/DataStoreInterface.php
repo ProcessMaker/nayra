@@ -4,17 +4,13 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Data store interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface DataStoreInterface extends ItemAwareElementInterface
 {
-
     /**
      * Type of element.
      */
     const TYPE = 'bpmnDataStore';
-
 
     /**
      * Properties.
@@ -42,7 +38,7 @@ interface DataStoreInterface extends ItemAwareElementInterface
         'APP_DURATION' => '0',
         'APP_DELAY_DURATION' => '0',
         'APP_DRIVE_FOLDER_UID' => '',
-        'APP_ROUTING_DATA' => null
+        'APP_ROUTING_DATA' => null,
     ];
 
     /**

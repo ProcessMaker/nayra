@@ -4,19 +4,18 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Artifact interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ArtifactInterface extends EntityInterface
 {
-
     /**
      * Type of element.
      */
     const TYPE = 'bpmnArtifact';
 
     const TYPE_HORIZONTAL_LINE = 'HORIZONTAL_LINE';
+
     const TYPE_VERTICAL_LINE = 'VERTICAL_LINE';
+
     const TYPE_TEXT_ANNOTATION = 'TEXT_ANNOTATION';
 
     /**
@@ -24,10 +23,10 @@ interface ArtifactInterface extends EntityInterface
      */
     const PROPERTIES = [
         'ART_UID' => '',
-        'PRO_ID' => NULL,
-        'ART_TYPE' => NULL,
-        'ART_NAME' => NULL,
-        'ART_CATEGORY_REF' => NULL
+        'PRO_ID' => null,
+        'ART_TYPE' => null,
+        'ART_NAME' => null,
+        'ART_CATEGORY_REF' => null,
     ];
 
     /**
@@ -37,7 +36,6 @@ interface ArtifactInterface extends EntityInterface
 
     ];
 
-    
     /**
      * Get Process of the artifact.
      *
@@ -51,6 +49,4 @@ interface ArtifactInterface extends EntityInterface
      * @return ProcessInterface
      */
     public function setProcess(ProcessInterface $process);
-    
-
 }

@@ -4,8 +4,6 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Behavior that must implement all event messages
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface SignalInterface extends EntityInterface
 {

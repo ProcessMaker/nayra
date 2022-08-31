@@ -14,11 +14,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
 
 /**
  * Test transitions
- *
  */
 class ParallelGatewayTest extends EngineTestCase
 {
-
     /**
      * Parallel Gateway
      *           ┌─────────┐
@@ -42,7 +40,7 @@ class ParallelGatewayTest extends EngineTestCase
         $activityC = $this->repository->createActivity();
 
         $gatewayB = $this->repository->createParallelGateway();
-        $end =  $this->repository->createEndEvent();
+        $end = $this->repository->createEndEvent();
         $process
             ->addActivity($activityA)
             ->addActivity($activityB)
@@ -63,6 +61,7 @@ class ParallelGatewayTest extends EngineTestCase
         $activityB->createFlowTo($gatewayB, $this->repository);
         $gatewayB->createFlowTo($activityC, $this->repository);
         $activityC->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
@@ -111,17 +110,17 @@ class ParallelGatewayTest extends EngineTestCase
         $activityB->createFlowTo($gatewayB, $this->repository);
         $gatewayB->createFlowTo($activityC, $this->repository);
         $activityC->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
     /**
      * Test a parallel gateway with two outgoing flows.
-     *
      */
     public function testParallelGateway()
     {
         //Create a data store with data.
-        $dataStore =  $this->repository->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createProcessWithParallelGateway();
@@ -148,7 +147,7 @@ class ParallelGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         //Completes the Activity A
@@ -214,7 +213,7 @@ class ParallelGatewayTest extends EngineTestCase
     public function testParallelDivergingInclusiveConverging()
     {
         //Create a data store with data.
-        $dataStore =  $this->repository->createDataStore();
+        $dataStore = $this->repository->createDataStore();
 
         //Load the process
         $process = $this->createParallelDivergingInclusiveConverging();
@@ -241,7 +240,7 @@ class ParallelGatewayTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         //Completes the Activity A
@@ -301,18 +300,18 @@ class ParallelGatewayTest extends EngineTestCase
 
     /**
      * Test parallel gateway can not have conditioned outgoing flows.
-     *
      */
     public function testParallelCanNotHaveConditionedOutgoingFlow()
     {
         //Create a parallel gateway and an activity.
-        $gatewayA =  $this->repository->createParallelGateway();
-        $activityA =  $this->repository->createActivity();
+        $gatewayA = $this->repository->createParallelGateway();
+        $activityA = $this->repository->createActivity();
 
         //Assertion: Throw exception when creating a conditioned flow from parallel.
         $this->expectException('ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException');
-        $gatewayA->createConditionedFlowTo($activityA, function() {}, false, $this->repository);
-        $process =  $this->repository->createProcess();
+        $gatewayA->createConditionedFlowTo($activityA, function () {
+        }, false, $this->repository);
+        $process = $this->repository->createProcess();
         $process
             ->addActivity($activityA)
             ->addGateway($gatewayA);

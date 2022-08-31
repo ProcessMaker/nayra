@@ -15,8 +15,6 @@ use ProcessMaker\Nayra\Exceptions\NamespaceNotImplementedException;
  * Description of BpmnFileElement
  *
  * @property BpmnDocument $ownerDocument
- *
- * @package \ProcessMaker\Nayra\Storage
  */
 class BpmnElement extends DOMElement implements BpmnElementInterface
 {
@@ -78,6 +76,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
             $this->loadBodyContent($mapProperties, $bpmnElement);
             $this->loadChildElements($bpmnElement, $mapProperties);
         }
+
         return $bpmnElement;
     }
 
@@ -90,7 +89,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
     private function loadChildElements(EntityInterface $owner, array $mapProperties)
     {
         foreach ($this->childNodes as $node) {
-            if (!($node instanceof BpmnElement)) {
+            if (!($node instanceof self)) {
                 continue;
             }
             $bpmn = $node->getBpmnElementInstance($owner);
@@ -108,7 +107,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
      * @param array $mapProperties
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface $to
      */
-    private function setBpmnPropertyTo($value, BpmnElement $node, array $mapProperties, EntityInterface $to)
+    private function setBpmnPropertyTo($value, self $node, array $mapProperties, EntityInterface $to)
     {
         foreach ($mapProperties as $name => $property) {
             list($multiplicity, $type) = $property;
@@ -145,6 +144,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 $setter = 'set' . $name;
                 method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($ref)
                     : $bpmnElement->setProperty($name, $ref);
+
                 return;
             }
             if ($node->name === $name && $property === BpmnDocument::IS_BOOLEAN) {
@@ -152,6 +152,7 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 $setter = 'set' . $name;
                 method_exists($bpmnElement, $setter) ? $bpmnElement->$setter($value)
                     : $bpmnElement->setProperty($name, $value);
+
                 return;
             }
         }

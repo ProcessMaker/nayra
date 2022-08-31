@@ -10,8 +10,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule when an activity is interrupted.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class ActivityInterruptedTransition implements TransitionInterface
 {
@@ -56,7 +54,7 @@ class ActivityInterruptedTransition implements TransitionInterface
             ActivityInterface::TOKEN_STATE_COMPLETED,
         ];
         foreach ($consumeTokens as $token) {
-            $ownerName =$token->getOwner()->getName();
+            $ownerName = $token->getOwner()->getName();
             if (in_array($ownerName, $cancelableStates)) {
                 $chosenToken = $token;
             }
@@ -65,6 +63,7 @@ class ActivityInterruptedTransition implements TransitionInterface
         if ($chosenToken) {
             $chosenToken->setProperties($properties);
         }
+
         return $chosenToken;
     }
 
@@ -73,7 +72,7 @@ class ActivityInterruptedTransition implements TransitionInterface
      *
      * @param ExecutionInstanceInterface $instance
      *
-     * @return boolean
+     * @return bool
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $instance)
     {
@@ -87,6 +86,7 @@ class ActivityInterruptedTransition implements TransitionInterface
                 $hasToken = $hasToken || $origin->getTokens($instance)->count() >= 1;
             }
         }
+
         return $hasInterruption && $hasToken;
     }
 }

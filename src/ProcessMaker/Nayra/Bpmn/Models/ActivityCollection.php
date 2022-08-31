@@ -8,12 +8,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 
 /**
  * ActivityCollection
- *
- * @package ProcessMaker\Models
  */
 class ActivityCollection extends Collection implements ActivityCollectionInterface
 {
-
     /**
      * Add an activity to the collection.
      *
@@ -24,6 +21,7 @@ class ActivityCollection extends Collection implements ActivityCollectionInterfa
     public function add(ActivityInterface $element)
     {
         $this->push($element);
+
         return $this;
     }
 }

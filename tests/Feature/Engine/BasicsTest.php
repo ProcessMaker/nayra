@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
 
 /**
  * Test transitions
- *
  */
 class BasicsTest extends EngineTestCase
 {
@@ -39,6 +38,7 @@ class BasicsTest extends EngineTestCase
         //flows
         $start->createFlowTo($activity, $this->repository);
         $activity->createFlowTo($end, $this->repository);
+
         return $process;
     }
 
@@ -46,7 +46,6 @@ class BasicsTest extends EngineTestCase
      * Sequence flow
      *
      * Test transitions between start event, activity and end event.
-     *
      */
     public function testSimpleTransitions()
     {
@@ -203,7 +202,7 @@ class BasicsTest extends EngineTestCase
     {
         // Register a next state callback
         $this->checked = false;
-        $this->engine->nextState(function() {
+        $this->engine->nextState(function () {
             $this->checked = true;
         });
         // Load a process

@@ -8,11 +8,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 
 /**
  * DataStore collection.
- *
  */
 class DataStoreCollection extends Collection implements DataStoreCollectionInterface
 {
-
     /**
      * Add element to the collection.
      *
@@ -23,6 +21,7 @@ class DataStoreCollection extends Collection implements DataStoreCollectionInter
     public function add(DataStoreInterface $element)
     {
         $this->push($element);
+
         return $this;
     }
 }

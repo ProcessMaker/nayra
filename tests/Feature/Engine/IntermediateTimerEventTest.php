@@ -52,7 +52,6 @@ class IntermediateTimerEventTest extends EngineTestCase
         return $process;
     }
 
-
     /**
      * Tests that a intermediate timer event that uses duration, sends the events to schedules the job
      */
@@ -70,7 +69,7 @@ class IntermediateTimerEventTest extends EngineTestCase
         $activityB = $process->getActivities()->item(1);
         $timerEvent = $process->getEvents()->item(1);
 
-        $this->addTimerEventDefinition($timerEvent, "duration");
+        $this->addTimerEventDefinition($timerEvent, 'duration');
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -130,7 +129,7 @@ class IntermediateTimerEventTest extends EngineTestCase
         $activityB = $process->getActivities()->item(1);
         $timerEvent = $process->getEvents()->item(1);
 
-        $this->addTimerEventDefinition($timerEvent, "cycle");
+        $this->addTimerEventDefinition($timerEvent, 'cycle');
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -190,7 +189,7 @@ class IntermediateTimerEventTest extends EngineTestCase
         $activityB = $process->getActivities()->item(1);
         $timerEvent = $process->getEvents()->item(1);
 
-        $this->addTimerEventDefinition($timerEvent, "date");
+        $this->addTimerEventDefinition($timerEvent, 'date');
 
         //create an instance of the process
         $instance = $this->engine->createExecutionInstance($process, $dataStore);
@@ -233,7 +232,6 @@ class IntermediateTimerEventTest extends EngineTestCase
         ]);
     }
 
-
     /**
      * Adds a test timer event definition for the timer event passed
      *
@@ -242,7 +240,7 @@ class IntermediateTimerEventTest extends EngineTestCase
      *
      * @return \ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition
      */
-    private function addTimerEventDefinition (EventInterface $timerEvent, $type)
+    private function addTimerEventDefinition(EventInterface $timerEvent, $type)
     {
         $formalExpression = new FormalExpression();
         $formalExpression->setId('formalExpression');
@@ -250,19 +248,26 @@ class IntermediateTimerEventTest extends EngineTestCase
         $timerEventDefinition = $this->repository->createTimerEventDefinition();
         $timerEventDefinition->setRepository($this->repository);
 
-        $timerEventDefinition->setId("TimerEventDefinition");
+        $timerEventDefinition->setId('TimerEventDefinition');
         switch ($type) {
-            case "duration":
-                $timerEventDefinition->setTimeDuration(function ($data) {return 'PT1H';});
+            case 'duration':
+                $timerEventDefinition->setTimeDuration(function ($data) {
+                    return 'PT1H';
+                });
                 break;
-            case "cycle":
-                $timerEventDefinition->setTimeCycle(function ($data) { return 'R4/2018-05-01T00:00:00Z/PT1M';});
+            case 'cycle':
+                $timerEventDefinition->setTimeCycle(function ($data) {
+                    return 'R4/2018-05-01T00:00:00Z/PT1M';
+                });
                 break;
             default:
-                $timerEventDefinition->setTimeDate(function ($data) {return '2018-05-01T14:30:00';});
+                $timerEventDefinition->setTimeDate(function ($data) {
+                    return '2018-05-01T14:30:00';
+                });
         }
 
         $timerEvent->getEventDefinitions()->push($timerEventDefinition);
+
         return $timerEventDefinition;
     }
 }

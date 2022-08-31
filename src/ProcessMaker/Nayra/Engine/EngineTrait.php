@@ -19,8 +19,6 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Engine base behavior.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait EngineTrait
 {
@@ -41,7 +39,7 @@ trait EngineTrait
     /**
      * Engine data store.
      *
-     * @var DataStoreInterface $dataStore
+     * @var DataStoreInterface
      */
     private $dataStore;
 
@@ -73,6 +71,7 @@ trait EngineTrait
         foreach ($this->executionInstances as $executionInstance) {
             $sum += $executionInstance->getTransitions()->sum(function (TransitionInterface $transition) use ($executionInstance) {
                 $result = $transition->execute($executionInstance) ? 1 : 0;
+
                 return $result;
             }) > 0;
         }
@@ -82,6 +81,7 @@ trait EngineTrait
                 $action();
             }
         }
+
         return $sum;
     }
 
@@ -106,6 +106,7 @@ trait EngineTrait
                 return false;
             }
         }
+
         return true;
     }
 
@@ -119,6 +120,7 @@ trait EngineTrait
     public function nextState(callable $callable)
     {
         $this->onNextState[] = $callable;
+
         return $this;
     }
 
@@ -146,6 +148,7 @@ trait EngineTrait
 
         $instanceRepo->persistInstanceCreated($executionInstance);
         $process->notifyInstanceEvent(ProcessInterface::EVENT_PROCESS_INSTANCE_CREATED, $executionInstance, $event);
+
         return $executionInstance;
     }
 
@@ -193,6 +196,7 @@ trait EngineTrait
                 return !$executionInstance->close();
             }
         );
+
         return count($this->executionInstances) === 0;
     }
 
@@ -216,6 +220,7 @@ trait EngineTrait
     public function setDataStore(DataStoreInterface $dataStore)
     {
         $this->dataStore = $dataStore;
+
         return $this;
     }
 
@@ -233,6 +238,7 @@ trait EngineTrait
             $this->processes[] = $process;
             $this->registerCatchEvents($process);
         }
+
         return $this;
     }
 
@@ -253,6 +259,7 @@ trait EngineTrait
         foreach ($processes as $process) {
             $this->loadProcess($process->getBpmnElementInstance());
         }
+
         return $this;
     }
 
@@ -266,6 +273,7 @@ trait EngineTrait
     public function loadCollaboration(CollaborationInterface $collaboration)
     {
         $this->getEventDefinitionBus()->setCollaboration($collaboration);
+
         return $this;
     }
 
@@ -303,6 +311,7 @@ trait EngineTrait
     public function setJobManager(JobManagerInterface $jobManager = null)
     {
         $this->jobManager = $jobManager;
+
         return $this;
     }
 
@@ -316,6 +325,7 @@ trait EngineTrait
     public function setEventDefinitionBus(EventDefinitionBusInterface $eventDefinitionBus)
     {
         $this->eventDefinitionBus = $eventDefinitionBus;
+
         return $this;
     }
 
@@ -327,6 +337,7 @@ trait EngineTrait
     public function getEventDefinitionBus()
     {
         $this->eventDefinitionBus = $this->eventDefinitionBus ?: new EventDefinitionBus;
+
         return $this->eventDefinitionBus;
     }
 

@@ -5,7 +5,6 @@ namespace ProcessMaker\Nayra\Contracts\Storage;
 /**
  * BPMN Element interface
  *
- * @package \ProcessMaker\Nayra\Contracts\Storage
  *
  * @method string C14N( bool $exclusive, bool $with_comments, array $xpath, array $ns_prefixes )
  * @method string getAttribute( string $name )
@@ -45,7 +44,6 @@ namespace ProcessMaker\Nayra\Contracts\Storage;
  */
 interface BpmnElementInterface
 {
-
     /**
      * Get instance of the BPMN element.
      *

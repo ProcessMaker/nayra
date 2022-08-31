@@ -9,7 +9,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\OperationInterface;
 
 /**
  * Implementation of the operation class.
- *
  */
 class Operation implements OperationInterface
 {
@@ -19,7 +18,7 @@ class Operation implements OperationInterface
      * This attribute allows to reference a concrete artifact in the underlying
      * implementation technology representing that operation.
      *
-     * @return callback
+     * @return callable
      */
     public function getImplementation()
     {

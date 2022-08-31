@@ -13,8 +13,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Standard implementation.
- *
- * @package ProcessMaker\Models
  */
 class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterface
 {
@@ -23,7 +21,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     /**
      * Check if the loop can be formally executed
      *
-     * @return boolean
+     * @return bool
      */
     public function isExecutable()
     {
@@ -47,13 +45,14 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      * Get item of the input data collection by index
      *
      * @param ExecutionInstanceInterface $instance
-     * @param integer $index
+     * @param int $index
      *
      * @return mixed
      */
     private function getInputDataItemValue(ExecutionInstanceInterface $instance, $index)
     {
         $dataStore = $instance->getDataStore();
+
         return $dataStore;
     }
 
@@ -92,7 +91,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     /**
      * @param ExecutionInstanceInterface $instance
      * @param array $properties
-     * @param integer $loopCounter
+     * @param int $loopCounter
      * @param StateInterface $nextState
      * @param TransitionInterface $source
      * @return void
@@ -138,6 +137,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
         if ($this->getTestBefore()) {
             return !$this->checkBeforeLoop($instance, $token);
         }
+
         return !$this->checkAfterLoop($instance, $token);
     }
 
@@ -146,7 +146,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      *
      * @param ExecutionInstanceInterface $instance
      * @param TokenInterface $token
-     * 
+     *
      * @return bool
      */
     private function checkBeforeLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
@@ -157,10 +157,11 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
         $evaluatedCondition = $condition($data);
         $loopMaximum = $this->getLoopMaximumFormalExpression($data);
         $loopCounter = $this->getLoopInstanceProperty($token, 'loopCounter', 0);
-        $loopCondition = $loopMaximum === null  || $loopMaximum === 0 || $loopCounter < $loopMaximum;
+        $loopCondition = $loopMaximum === null || $loopMaximum === 0 || $loopCounter < $loopMaximum;
         if ($testBefore && $evaluatedCondition && $loopCondition) {
             return true;
         }
+
         return false;
     }
 
@@ -169,7 +170,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      *
      * @param ExecutionInstanceInterface $instance
      * @param TokenInterface $token
-     * 
+     *
      * @return bool
      */
     private function checkAfterLoop(ExecutionInstanceInterface $instance, TokenInterface $token)
@@ -201,7 +202,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
      * getLoopMaximumFormalExpression
      *
      * @param array $data
-     * 
+     *
      * @return int
      */
     private function getLoopMaximumFormalExpression(array $data)
@@ -209,6 +210,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
         $expression = $this->getLoopMaximum();
         $formalExpression = $this->getRepository()->createFormalExpression();
         $formalExpression->setProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY, $expression);
+
         return $formalExpression($data);
     }
 }

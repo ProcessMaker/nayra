@@ -4,13 +4,13 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * ServiceInterface (BPMN Interface) defines a set of operations that are implemented by Services.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ServiceInterface extends EntityInterface
 {
     const BPMN_PROPERTY_IMPLEMENTATION_REF = 'implementationRef';
+
     const BPMN_PROPERTY_OPERATIONS = 'operations';
+
     const BPMN_PROPERTY_CALLABLE_ELEMENTS = 'callableElements';
 
     /**

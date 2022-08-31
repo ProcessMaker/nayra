@@ -10,8 +10,6 @@ use ReflectionClass;
 
 /**
  * BaseTrait
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait BaseTrait
 {
@@ -20,21 +18,21 @@ trait BaseTrait
     /**
      * Factory used to build this element.
      *
-     * @var RepositoryInterface $factory
+     * @var RepositoryInterface
      */
     private $repository;
 
     /**
      * BPMN document of this object.
      *
-     * @var StorageInterface $ownerDocument
+     * @var StorageInterface
      */
     private $ownerDocument;
 
     /**
      * Bpmn Element of this object.
      *
-     * @var BpmnElementInterface $bpmnElement
+     * @var BpmnElementInterface
      */
     private $bpmnElement;
 
@@ -84,6 +82,7 @@ trait BaseTrait
     public function setRepository(RepositoryInterface $repository)
     {
         $this->repository = $repository;
+
         return $this;
     }
 
@@ -107,6 +106,7 @@ trait BaseTrait
     public function setOwnerDocument(StorageInterface $ownerDocument)
     {
         $this->ownerDocument = $ownerDocument;
+
         return $this;
     }
 
@@ -130,6 +130,7 @@ trait BaseTrait
     public function setBpmnElement(BpmnElementInterface $bpmnElement)
     {
         $this->bpmnElement = $bpmnElement;
+
         return $this;
     }
 
@@ -159,6 +160,7 @@ trait BaseTrait
                 $this->setProperty($name, $value);
             }
         }
+
         return $this;
     }
 
@@ -173,6 +175,7 @@ trait BaseTrait
     public function setProperty($name, $value)
     {
         $this->properties[$name] = $value;
+
         return $this;
     }
 
@@ -201,6 +204,7 @@ trait BaseTrait
     {
         $this->properties[$name] = isset($this->properties[$name]) ? $this->properties[$name] : new Collection;
         $this->properties[$name]->push($value);
+
         return $this;
     }
 
@@ -224,6 +228,7 @@ trait BaseTrait
     public function setId($id)
     {
         $this->setProperty(static::BPMN_PROPERTY_ID, $id);
+
         return $this;
     }
 

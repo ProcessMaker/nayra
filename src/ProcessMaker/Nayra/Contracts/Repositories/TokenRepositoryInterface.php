@@ -14,7 +14,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 /**
  * Repository for TokenInterface
- *
  */
 interface TokenRepositoryInterface
 {

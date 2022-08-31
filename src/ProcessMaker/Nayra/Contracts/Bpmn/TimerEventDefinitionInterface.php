@@ -6,16 +6,17 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 
 /**
  * TimerEventDefinition interface.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface TimerEventDefinitionInterface extends EventDefinitionInterface
 {
     const BPMN_PROPERTY_TIME_DATE = 'timeDate';
+
     const BPMN_PROPERTY_TIME_CYCLE = 'timeCycle';
+
     const BPMN_PROPERTY_TIME_DURATION = 'timeDuration';
 
     const EVENT_THROW_EVENT_DEFINITION = 'ThrowTimerEvent';
+
     const EVENT_CATCH_EVENT_DEFINITION = 'CatchTimerEvent';
 
     /**

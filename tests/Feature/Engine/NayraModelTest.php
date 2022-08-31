@@ -23,8 +23,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Tests for the Nayra/Bpmn/Model classes
- *
- * @package Tests\Feature\Engine
  */
 class NayraModelTest extends EngineTestCase
 {
@@ -100,7 +98,7 @@ class NayraModelTest extends EngineTestCase
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             GatewayInterface::EVENT_GATEWAY_TOKEN_PASSED,
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
-            ActivityInterface::EVENT_ACTIVITY_ACTIVATED
+            ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
         ]);
 
         //Completes the Activity A
@@ -189,10 +187,10 @@ class NayraModelTest extends EngineTestCase
         $start->createFlowTo($gatewayA, $factory);
         $gatewayA
             ->createConditionedFlowTo($activityA, function ($data) {
-                return $data['A']=='1';
+                return $data['A'] == '1';
             }, false, $factory)
             ->createConditionedFlowTo($activityB, function ($data) {
-                return $data['B']=='1';
+                return $data['B'] == '1';
             }, false, $factory)
             ->createFlowTo($activityC, $factory);
 
@@ -252,6 +250,7 @@ class NayraModelTest extends EngineTestCase
         $activityA->createFlowTo($gatewayB, $factory);
         $activityB->createFlowTo($gatewayB, $factory);
         $gatewayB->createFlowTo($end, $factory);
+
         return [
             'process' => $process,
             'start' => $start,

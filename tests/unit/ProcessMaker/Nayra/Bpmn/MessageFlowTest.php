@@ -12,8 +12,6 @@ use ProcessMaker\Nayra\Bpmn\Models\MessageFlow;
 
 /**
  * Tests for the MessageFlow class
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class MessageFlowTest extends TestCase
 {

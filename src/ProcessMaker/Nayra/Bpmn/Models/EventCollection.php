@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 
 /**
  * Event Collection
- *
- * @package ProcessMaker\Models
  */
 class EventCollection extends Collection implements EventCollectionInterface
 {
@@ -23,6 +21,7 @@ class EventCollection extends Collection implements EventCollectionInterface
     public function add(EventInterface $element)
     {
         $this->push($element);
+
         return $this;
     }
 }

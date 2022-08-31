@@ -7,12 +7,9 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 
 /**
  * Process describes a business work using a sequence or flow of activities.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ProcessInterface extends CallableElementInterface
 {
-
     /**
      * Type of element.
      */
@@ -22,15 +19,20 @@ interface ProcessInterface extends CallableElementInterface
      * Properties.
      */
     const BPMN_PROPERTY_IS_CLOSED = 'isClosed';
+
     const BPMN_PROPERTY_IS_EXECUTABLE = 'isExecutable';
+
     const BPMN_PROPERTY_PROCESS_TYPE = 'processType';
+
     const BPMN_PROPERTY_PARTICIPANT = 'participant';
+
     const BPMN_PROPERTY_LANE_SET = 'laneSet';
 
     /**
      * Events defined for Activity
      */
     const EVENT_PROCESS_INSTANCE_CREATED = 'ProcessInstanceCreated';
+
     const EVENT_PROCESS_INSTANCE_COMPLETED = 'ProcessInstanceCompleted';
 
     /**
@@ -48,7 +50,7 @@ interface ProcessInterface extends CallableElementInterface
      * @return DiagramInterface
      */
     public function setDiagram(DiagramInterface $diagram);
-    
+
     /**
      * Get Activities of the process.
      *
@@ -64,7 +66,7 @@ interface ProcessInterface extends CallableElementInterface
      * @return ActivityCollectionInterface
      */
     public function setActivities(ActivityCollectionInterface $activities);
-    
+
     /**
      * Get Gateways of the process.
      *
@@ -80,7 +82,7 @@ interface ProcessInterface extends CallableElementInterface
      * @return GatewayCollectionInterface
      */
     public function setGateways(GatewayCollectionInterface $gateways);
-    
+
     /**
      * Get Events of the process.
      *
@@ -96,7 +98,7 @@ interface ProcessInterface extends CallableElementInterface
      * @return EventCollectionInterface
      */
     public function setEvents(EventCollectionInterface $events);
-    
+
     /**
      * Get Artifacts of the process.
      *
@@ -112,7 +114,7 @@ interface ProcessInterface extends CallableElementInterface
      * @return ArtifactCollectionInterface
      */
     public function setArtifacts(ArtifactCollectionInterface $artifacts);
-    
+
     /**
      * Get Flows of the process.
      *
@@ -128,7 +130,7 @@ interface ProcessInterface extends CallableElementInterface
      * @return FlowCollectionInterface
      */
     public function setFlows(FlowCollectionInterface $flows);
-    
+
     /**
      * Get data stores of the process.
      *

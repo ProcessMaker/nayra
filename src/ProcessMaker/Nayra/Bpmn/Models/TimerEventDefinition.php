@@ -15,7 +15,6 @@ use ProcessMaker\Nayra\Contracts\Engine\JobManagerInterface;
 
 /**
  * MessageEventDefinition class
- *
  */
 class TimerEventDefinition implements TimerEventDefinitionInterface
 {
@@ -61,7 +60,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
      * @param ExecutionInstanceInterface|null $instance
      * @param TokenInterface|null $token
      *
-     * @return boolean
+     * @return bool
      */
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
@@ -107,6 +106,7 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
     private function getDataFrom(EngineInterface $engine, TokenInterface $token = null)
     {
         $dataStore = $token ? $token->getInstance()->getDataStore() : $engine->getDataStore();
+
         return $dataStore ? $dataStore->getData() : [];
     }
 
@@ -124,8 +124,10 @@ class TimerEventDefinition implements TimerEventDefinitionInterface
         if (is_string($value)) {
             $formal = $this->getRepository()->createFormalExpression();
             $formal->setProperty('body', $value);
+
             return $formal($data);
         }
+
         return $value;
     }
 

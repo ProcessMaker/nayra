@@ -7,11 +7,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\DataOutputInterface;
 
 /**
  * Data output implementation.
- *
  */
 class DataOutput implements DataOutputInterface
 {
-
     use FlowElementTrait;
 
     /**
@@ -27,7 +25,7 @@ class DataOutput implements DataOutputInterface
     /**
      * Get true is the data input is a collection.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCollection()
     {

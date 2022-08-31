@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 class CollectionTest extends TestCase
 {
     /**
-     * @var Collection $object
+     * @var Collection
      */
     private $object;
 
@@ -19,7 +19,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test count.
-     *
      */
     public function testCount()
     {
@@ -28,7 +27,6 @@ class CollectionTest extends TestCase
 
     /**
      * Find elements of the collection that match the $condition.
-     *
      */
     public function testFind()
     {
@@ -42,7 +40,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test push item.
-     *
      */
     public function testPush()
     {
@@ -52,7 +49,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test pop item.
-     *
      */
     public function testPop()
     {
@@ -62,7 +58,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test unshift.
-     *
      */
     public function testUnshift()
     {
@@ -73,7 +68,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test indexOf.
-     *
      */
     public function testIndexOf()
     {
@@ -82,16 +76,16 @@ class CollectionTest extends TestCase
 
     /**
      * Sum the $callback result for each element.
-     *
      */
     public function testSum()
     {
-        $this->assertEquals(6, $this->object->sum(function($item){return $item;}));
+        $this->assertEquals(6, $this->object->sum(function ($item) {
+            return $item;
+        }));
     }
 
     /**
      * Test get item.
-     *
      */
     public function testItem()
     {
@@ -100,15 +94,14 @@ class CollectionTest extends TestCase
 
     /**
      * Test splice.
-     *
      */
     public function testSplice()
     {
-        $this->object->splice(1,1, [20]);
+        $this->object->splice(1, 1, [20]);
         $this->assertEquals(20, $this->object->item(1));
-        $this->object->splice(1,1, [20]);
+        $this->object->splice(1, 1, [20]);
         $this->assertEquals(20, $this->object->item(1));
-        $this->object->splice(1,1, [20, 21]);
+        $this->object->splice(1, 1, [20, 21]);
         $this->assertEquals(20, $this->object->item(1));
         $this->assertEquals(21, $this->object->item(2));
         $this->assertEquals(3, $this->object->item(3));
@@ -116,18 +109,16 @@ class CollectionTest extends TestCase
 
     /**
      * Test current
-     *
      */
     public function testCurrent()
     {
-        foreach($this->object as $item) {
+        foreach ($this->object as $item) {
             $this->assertEquals($item, $this->object->current());
         }
     }
 
     /**
      * Test next
-     *
      */
     public function testNext()
     {
@@ -138,7 +129,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test get key.
-     *
      */
     public function testKey()
     {
@@ -150,7 +140,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test valid.
-     *
      */
     public function testValid()
     {
@@ -163,7 +152,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test rewind
-     *
      */
     public function testRewind()
     {
@@ -175,7 +163,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test seek
-     *
      */
     public function testSeek()
     {
@@ -186,7 +173,6 @@ class CollectionTest extends TestCase
 
     /**
      * Find first element of the collection that match the $condition.
-     *
      */
     public function testFindFirst()
     {

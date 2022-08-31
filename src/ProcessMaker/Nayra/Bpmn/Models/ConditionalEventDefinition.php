@@ -13,7 +13,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * ConditionalEventDefinition class
- *
  */
 class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
 {
@@ -27,7 +26,7 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
      * @param ExecutionInstanceInterface|null $instance
      * @param TokenInterface|null $token
      *
-     * @return boolean
+     * @return bool
      */
     public function assertsRule(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
@@ -60,6 +59,7 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
         } else {
             $process->setProperty('conditionals', $conditionals);
         }
+
         return !$previous && $current;
     }
 

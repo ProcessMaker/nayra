@@ -12,7 +12,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 /**
  * Implementation of the behavior for a catch event.
  *
- * @package ProcessMaker\Nayra\Bpmn
  * @see CatchEventInterface
  */
 trait CatchEventTrait
@@ -26,7 +25,6 @@ trait CatchEventTrait
 
     /**
      * Initialize catch event.
-     *
      */
     protected function initCatchEventTrait()
     {
@@ -56,6 +54,7 @@ trait CatchEventTrait
         foreach ($this->getEventDefinitions() as $eventDefinition) {
             $eventDefinition->registerWithCatchEvent($engine, $this);
         }
+
         return $this;
     }
 
@@ -71,6 +70,7 @@ trait CatchEventTrait
         foreach ($this->getEventDefinitions() as $eventDefinition) {
             $eventDefinition->catchEventActivated($this->getOwnerProcess()->getEngine(), $this, $token);
         }
+
         return $this;
     }
 
@@ -84,6 +84,7 @@ trait CatchEventTrait
     public function registerWithEngine(EngineInterface $engine)
     {
         $this->registerCatchEvents($engine);
+
         return $this;
     }
 
@@ -112,6 +113,7 @@ trait CatchEventTrait
                 }
             }
         }
+
         return $this;
     }
 

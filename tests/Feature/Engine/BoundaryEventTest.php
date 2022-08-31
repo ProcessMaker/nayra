@@ -21,7 +21,6 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Tests for the BoundaryEvent elements
- *
  */
 class BoundaryEventTest extends EngineTestCase
 {
@@ -106,7 +105,7 @@ class BoundaryEventTest extends EngineTestCase
         $process = $bpmnRepository->getProcess('ProcessId');
         $dataStore = $this->repository->createDataStore();
         $dataStore->setData([
-            'array' => [1,2],
+            'array' => [1, 2],
         ]);
 
         // Create an instance of the process

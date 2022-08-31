@@ -7,11 +7,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ItemDefinitionInterface;
 
 /**
  * ItemDefinition class
- *
  */
 class ItemDefinition implements ItemDefinitionInterface
 {
-
     use BaseTrait;
 
     /**
@@ -38,7 +36,7 @@ class ItemDefinition implements ItemDefinitionInterface
     /**
      * Get true if the data structure represents a collection.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCollection()
     {

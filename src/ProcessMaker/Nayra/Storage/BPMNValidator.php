@@ -7,11 +7,9 @@ use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 
 /**
  * Validate a BPMN document
- *
  */
 class BPMNValidator
 {
-
     /**
      * @var BpmnDocument
      */
@@ -43,6 +41,7 @@ class BPMNValidator
     {
         $errorString = "Error $error->code (Line:{$error->line}):";
         $errorString .= trim($error->message);
+
         return $errorString;
     }
 
@@ -57,6 +56,7 @@ class BPMNValidator
             $result[] = $this->libxmlDisplayError($error);
         }
         libxml_clear_errors();
+
         return $result;
     }
 
@@ -76,6 +76,7 @@ class BPMNValidator
             $this->errors = array_merge($this->errors, $this->getLibxmlErrors());
             $hasErrors = true;
         }
+
         return !$hasErrors;
     }
 

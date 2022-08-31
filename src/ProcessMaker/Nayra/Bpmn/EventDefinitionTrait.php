@@ -10,20 +10,10 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Base implementation for a exclusive gateway.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait EventDefinitionTrait
 {
     use BaseTrait;
-
-    /**
-     * Initialize event definition ID if it was not defined in the bpmn model.
-     */
-    protected function initEventDefinitionTrait()
-    {
-        $this->setId(uniqid('event-definition-', true));
-    }
 
     /**
      * Register event with a catch event
@@ -86,6 +76,7 @@ trait EventDefinitionTrait
     public function setDoNotTriggerStartEvents($value)
     {
         $this->setProperty('doNotTriggerStartEvents', $value);
+
         return $this;
     }
 

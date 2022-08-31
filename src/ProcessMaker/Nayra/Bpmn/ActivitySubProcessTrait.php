@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Sub-Process/Call Activity base implementation.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait ActivitySubProcessTrait
 {
@@ -20,7 +18,6 @@ trait ActivitySubProcessTrait
 
     /**
      * Configure the activity to go to a FAILING status when activated.
-     *
      */
     protected function initActivity()
     {
@@ -44,6 +41,7 @@ trait ActivitySubProcessTrait
     {
         $dataStore = $this->getRepository()->createDataStore();
         $dataStore->setData($token->getInstance()->getDataStore()->getData());
+
         return $this->getCalledElement()->call($dataStore);
     }
 
@@ -121,6 +119,7 @@ trait ActivitySubProcessTrait
     {
         $token->setStatus(ActivityInterface::TOKEN_STATE_FAILING);
         $token->setProperty(ErrorEventDefinitionInterface::BPMN_PROPERTY_ERROR, $error);
+
         return $this;
     }
 
@@ -134,6 +133,7 @@ trait ActivitySubProcessTrait
     protected function cancelSubprocess(ExecutionInstanceInterface $instance = null)
     {
         $instance ? $instance->close() : null;
+
         return $this;
     }
 }

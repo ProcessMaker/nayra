@@ -15,7 +15,6 @@ use ProcessMaker\Nayra\Exceptions\InvalidSequenceFlowException;
  * where the alternative paths that follow the Gateway are based on
  * Events that occur, rather than the evaluation of Expressions using
  * Process data
- *
  */
 class EventBasedGateway implements EventBasedGatewayInterface
 {
@@ -30,7 +29,6 @@ class EventBasedGateway implements EventBasedGatewayInterface
      * @param RepositoryInterface $factory
      *
      * @return $this
-     *
      */
     public function createConditionedFlowTo(
         FlowNodeInterface $target,

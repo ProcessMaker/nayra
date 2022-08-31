@@ -15,12 +15,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 /**
  * Process implementation
- *
- * @package ProcessMaker\Models
  */
 class Process implements ProcessInterface
 {
-
     use ProcessTrait;
 
     /**

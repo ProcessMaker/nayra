@@ -8,8 +8,6 @@ use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
 
 /**
  * Tests for the event collection
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class EventCollectionTest extends TestCase
 {

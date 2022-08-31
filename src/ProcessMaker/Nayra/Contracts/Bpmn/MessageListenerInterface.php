@@ -6,8 +6,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Behavior that must implement objects that listen to message notifications
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface MessageListenerInterface
 {

@@ -45,14 +45,11 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
  * Test load of process from BPMN files.
- *
  */
 class LoadFromBPMNFileTest extends EngineTestCase
 {
-
     /**
      * Test parallel gateway loaded from BPMN file.
-     *
      */
     public function testParallelGateway()
     {
@@ -175,7 +172,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
     /**
      * Test inclusive gateway loaded from BPMN file.
-     *
      */
     public function testInclusiveGatewayWithDefault()
     {
@@ -282,7 +278,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
     /**
      * Test to load a collaboration.
-     *
      */
     public function testLoadCollaborationWithMultipleProcesses()
     {
@@ -495,7 +490,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
     /**
      * Test to set a custom element mapping.
-     *
      */
     public function testUseACustomElementMapping()
     {
@@ -504,13 +498,13 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->setBpmnElementMapping('http://www.processmaker.org/spec/PM/20100607/MODEL', 'webEntry', [
-                StartEventInterface::class,
-                [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                    StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
-                ]
-            ]);
+            StartEventInterface::class,
+            [
+                FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                FlowNodeInterface::BPMN_PROPERTY_OUTGOING  => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                StartEventInterface::BPMN_PROPERTY_EVENT_DEFINITIONS  => ['n', EventDefinitionInterface::class],
+            ],
+        ]);
         $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
         $task = $bpmnRepository->getActivity('_2');
         $this->assertEquals('Web Entry', $task->getName());
@@ -518,7 +512,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
     /**
      * Test to load custom elements.
-     *
      */
     public function testCustomNameSpaceNotImplemented()
     {
@@ -533,7 +526,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
     /**
      * Test to load custom elements.
-     *
      */
     public function testCustomElementNotImplemented()
     {
@@ -544,21 +536,20 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->setBpmnElementMapping('http://www.processmaker.org/spec/PM/20100607/MODEL', 'task', [
-                ActivityInterface::class,
-                [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                ]
-            ]);
+            ActivityInterface::class,
+            [
+                FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+            ],
+        ]);
         $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
-        
+
         //Try to get custom element
         $bpmnRepository->getActivity('_2');
     }
 
     /**
      * Test skip loading of non implemented elements.
-     *
      */
     public function testSkipCustomElementNotImplemented()
     {
@@ -568,14 +559,14 @@ class LoadFromBPMNFileTest extends EngineTestCase
         $bpmnRepository->setEngine($this->engine);
         $bpmnRepository->setFactory($this->repository);
         $bpmnRepository->setBpmnElementMapping('http://www.processmaker.org/spec/PM/20100607/MODEL', 'task', [
-                ActivityInterface::class,
-                [
-                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
-                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
-                ]
-            ]);
+            ActivityInterface::class,
+            [
+                FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [BpmnDocument::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+            ],
+        ]);
         $bpmnRepository->load(__DIR__ . '/files/CustomElements.bpmn');
-        
+
         //Try to get custom element
         $process = $bpmnRepository->getActivity('PROCESS_1');
 
@@ -586,7 +577,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
     /**
      * Test to get a missing BPMN element.
-     *
      */
     public function testGetMissingElement()
     {
@@ -604,7 +594,6 @@ class LoadFromBPMNFileTest extends EngineTestCase
 
     /**
      * Test if an BPMN element exists.
-     *
      */
     public function testBPMNElementExists()
     {

@@ -13,11 +13,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FormalExpressionInterface;
  * Formal expression base trait.
  *
  * Include timer expressions.
- *
  */
 trait FormalExpressionTrait
 {
-
     use BaseTrait;
 
     /**
@@ -28,9 +26,10 @@ trait FormalExpressionTrait
     protected function getDateExpression()
     {
         $expression = $this->getProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY);
-        $regexpValidDate ='/^[0-9]{4}-[0-9]{2}-[0-9]{2}[T ][0-9]{2}:[0-9]{2}(:[0-9]{2})?(?:[\+-][0-9]{2}:[0-9]{2}|Z)?/';
+        $regexpValidDate = '/^[0-9]{4}-[0-9]{2}-[0-9]{2}[T ][0-9]{2}:[0-9]{2}(:[0-9]{2})?(?:[\+-][0-9]{2}:[0-9]{2}|Z)?/';
         if (preg_match($regexpValidDate, $expression)) {
             $date = new DateTime($expression);
+
             return $date;
         } else {
             return null;
@@ -39,7 +38,7 @@ trait FormalExpressionTrait
 
     /**
      * Get a DatePeriod if the expression is a cycle.
-     * 
+     *
      * Ex. R4/2018-05-01T00:00:00Z/PT1M
      *     R/2018-05-01T00:00:00Z/PT1M/2025-10-02T00:00:00Z
      *
@@ -58,6 +57,7 @@ trait FormalExpressionTrait
         } catch (Exception $e) {
             $cycle = false;
         }
+
         return $cycle;
     }
 
@@ -74,6 +74,7 @@ trait FormalExpressionTrait
         } catch (Exception $e) {
             $duration = false;
         }
+
         return $duration;
     }
 }

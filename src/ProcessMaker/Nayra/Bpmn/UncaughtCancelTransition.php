@@ -9,8 +9,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Uncaught Cancel Transition.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class UncaughtCancelTransition extends BoundaryCaughtTransition implements TransitionInterface
 {
@@ -30,6 +28,7 @@ class UncaughtCancelTransition extends BoundaryCaughtTransition implements Trans
         $eventType = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_TYPE);
         $eventDefinitionId = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT);
         $matchType = $eventType === CancelInterface::class || is_a($eventType, CancelInterface::class);
+
         return $matchType && !$this->existsBoundaryFor($activity, $eventType, $eventDefinitionId);
     }
 }

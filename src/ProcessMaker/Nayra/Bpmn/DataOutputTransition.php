@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Transition rule that always pass the token.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class DataOutputTransition implements TransitionInterface
 {
@@ -40,6 +38,7 @@ class DataOutputTransition implements TransitionInterface
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         $loop = $this->getOwner()->getLoopCharacteristics();
+
         return !$loop || !$loop->isExecutable() || $loop->isLoopCompleted($executionInstance, $token);
     }
 

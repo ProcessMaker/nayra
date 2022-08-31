@@ -1,4 +1,5 @@
 <?php
+
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
@@ -9,8 +10,6 @@ use Tests\Feature\Engine\EngineTestCase;
 
 /**
  * Tests for the DataStore class
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 class DataStoreTest extends EngineTestCase
 {
@@ -25,7 +24,7 @@ class DataStoreTest extends EngineTestCase
         $process->setRepository($this->repository);
         $dummyActivity = $this->repository->createActivity();
         $dummyActivity->setRepository($this->repository);
-        $state = $this->repository->createState($dummyActivity,'');
+        $state = $this->repository->createState($dummyActivity, '');
 
         // Set process and state object to the data store
         $dataStore->setOwnerProcess($process);

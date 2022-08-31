@@ -14,7 +14,6 @@ use ProcessMaker\Nayra\Contracts\RepositoryInterface;
  * Has pass-through semantics for a set of incoming branches
  * (merging behavior). Further on, each activation leads to the activation of
  * exactly one out of the set of outgoing branches (branching behavior)
- *
  */
 class ExclusiveGateway implements ExclusiveGatewayInterface
 {
@@ -29,7 +28,6 @@ class ExclusiveGateway implements ExclusiveGatewayInterface
      * @param RepositoryInterface $factory
      *
      * @return $this
-     *
      */
     public function createConditionedFlowTo(
         FlowNodeInterface $target,
@@ -41,6 +39,7 @@ class ExclusiveGateway implements ExclusiveGatewayInterface
             FlowInterface::BPMN_PROPERTY_CONDITION_EXPRESSION => $condition,
             FlowInterface::BPMN_PROPERTY_IS_DEFAULT => $isDefault,
         ]);
+
         return $this;
     }
 

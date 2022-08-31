@@ -9,29 +9,28 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageInterface;
 
 /**
  * Message implementation.
- *
  */
 class Message implements MessageInterface
 {
     use BaseTrait;
 
     /**
-     * @var string $id
+     * @var string
      */
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      */
     private $name;
 
     /**
-     * @var ItemDefinitionInterface $item
+     * @var ItemDefinitionInterface
      */
     private $item;
 
     /**
-     * @var MessageFlowInterface $messageFlow
+     * @var MessageFlowInterface
      */
     private $messageFlow;
 
@@ -55,6 +54,7 @@ class Message implements MessageInterface
     public function setItem(ItemDefinitionInterface $item)
     {
         $this->item = $item;
+
         return $this;
     }
 

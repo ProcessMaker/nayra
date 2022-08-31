@@ -11,14 +11,13 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Trait to implement state of a node in which tokens can be received.
- *
- * @package ProcessMaker\Nayra\Bpmn
  */
 trait StateTrait
 {
     use BaseTrait,
         TraversableTrait,
         ObservableTrait;
+
     /**
      * Collection of tokens.
      *
@@ -41,7 +40,7 @@ trait StateTrait
     private $index;
 
     /**
-     * @var FlowNodeInterface $owner
+     * @var FlowNodeInterface
      */
     private $owner;
 
@@ -76,6 +75,7 @@ trait StateTrait
             $this->notifyEvent(StateInterface::EVENT_TOKEN_CONSUMED, $token);
             $token->getInstance()->removeToken($token);
         }
+
         return $valid;
     }
 
@@ -100,6 +100,7 @@ trait StateTrait
         !$instance ?: $instance->addToken($token);
         $this->tokens->push($token);
         $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
+
         return $token;
     }
 
@@ -121,6 +122,7 @@ trait StateTrait
         $token->setInstance($instance);
         $this->getName() ? $token->setStatus($this->getName()) : '';
         $token->setIndex($this->getIndex());
+
         return $token;
     }
 
@@ -129,7 +131,7 @@ trait StateTrait
      *
      * @param \ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface $instance
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface $token
-     * @param boolean $skipEvents
+     * @param bool $skipEvents
      * @param \ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface|null $source
      *
      * @return TokenInterface
@@ -143,6 +145,7 @@ trait StateTrait
         $instance->addToken($token);
         $this->tokens->push($token);
         $skipEvents ?: $this->notifyEvent(StateInterface::EVENT_TOKEN_ARRIVED, $token, $source);
+
         return $token;
     }
 
@@ -180,6 +183,7 @@ trait StateTrait
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -203,6 +207,7 @@ trait StateTrait
     public function setIndex($index)
     {
         $this->index = $index;
+
         return $this;
     }
 
@@ -216,6 +221,7 @@ trait StateTrait
     public function setOwner(FlowNodeInterface $owner)
     {
         $this->owner = $owner;
+
         return $this;
     }
 

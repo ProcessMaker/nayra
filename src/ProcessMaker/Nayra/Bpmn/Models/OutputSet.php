@@ -10,16 +10,13 @@ use ProcessMaker\Nayra\Contracts\Bpmn\OutputSetInterface;
 /**
  * An OutputSet is a collection of DataOutputs elements that together can be
  * produced as output.
- *
  */
 class OutputSet implements OutputSetInterface
 {
-
     use BaseTrait;
 
     /**
      * Initialize input set.
-     *
      */
     protected function initInputSet()
     {

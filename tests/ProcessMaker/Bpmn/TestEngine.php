@@ -11,8 +11,6 @@ use ProcessMaker\Nayra\Engine\EngineTrait;
 
 /**
  * Test implementation for EngineInterface.
- *
- * @package ProcessMaker\Bpmn
  */
 class TestEngine implements EngineInterface
 {
@@ -24,7 +22,7 @@ class TestEngine implements EngineInterface
     private $repository;
 
     /**
-     * @var EventBusInterface $dispatcher
+     * @var EventBusInterface
      */
     protected $dispatcher;
 
@@ -61,6 +59,7 @@ class TestEngine implements EngineInterface
     public function setDispatcher(EventBusInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
+
         return $this;
     }
 
@@ -80,6 +79,7 @@ class TestEngine implements EngineInterface
     public function setRepository(RepositoryInterface $repository)
     {
         $this->repository = $repository;
+
         return $this;
     }
 }

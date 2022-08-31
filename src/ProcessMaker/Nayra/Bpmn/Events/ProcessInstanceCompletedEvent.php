@@ -7,8 +7,6 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 
 /**
  * Event raised when process instance is completed.
- *
- * @package ProcessMaker\Nayra\Bpmn\Events
  */
 class ProcessInstanceCompletedEvent
 {

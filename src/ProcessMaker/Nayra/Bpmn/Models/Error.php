@@ -8,11 +8,10 @@ use ProcessMaker\Nayra\Contracts\Bpmn\MessageFlowInterface;
 
 class Error implements ErrorInterface
 {
-
     use BaseTrait;
 
     /**
-     * @var MessageFlowInterface $messageFlow
+     * @var MessageFlowInterface
      */
     private $messageFlow;
 

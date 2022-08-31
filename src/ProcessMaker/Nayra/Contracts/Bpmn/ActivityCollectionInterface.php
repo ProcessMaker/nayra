@@ -4,12 +4,9 @@ namespace ProcessMaker\Nayra\Contracts\Bpmn;
 
 /**
  * Collection of activities.
- *
- * @package ProcessMaker\Nayra\Contracts\Bpmn
  */
 interface ActivityCollectionInterface extends CollectionInterface
 {
-
     /**
      * Add an element to the collection.
      *

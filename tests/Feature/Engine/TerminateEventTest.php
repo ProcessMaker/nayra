@@ -14,14 +14,11 @@ use ProcessMaker\Repositories\BpmnFileRepository;
 
 /**
  * Test a terminate event.
- *
  */
 class TerminateEventTest extends EngineTestCase
 {
-
     /**
      * Test terminate end event
-     *
      */
     public function testTerminateEndEvent()
     {
