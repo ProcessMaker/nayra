@@ -42,11 +42,14 @@ class ConditionalEventDefinition implements ConditionalEventDefinitionInterface
             $conditionals = $process->getProperty('conditionals', []);
         }
         // Get previous value
-        $key = $this->getId() ?: $this->getBpmnElement()->getNodePath();
+        $key = $this->getBpmnElement()->getNodePath();
         $previous = $conditionals[$key] ?? null;
         // Evaluate condition
         $condition = $this->getCondition();
-        $current = $condition($data);
+        // Conditional in conditional start event should be treated as false when condition is empty and
+        // should not execute. But for Multi Instance Loops and Exclusive gateways it should be treated as
+        // true when conditional is empty, to avoid infinite loops and allows exclusive gateways to run.
+        $current = empty($condition->getProperties()['body']) ? false : $condition($data);
         // Update previous value
         $conditionals[$key] = $current;
         if ($instance && $target instanceof CatchEventInterface) {
