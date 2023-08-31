@@ -108,7 +108,7 @@ trait ActivityTrait
 
         $this->activityInterruptedTransition = new ActivityInterruptedTransition($this, true);
         $this->activityInterruptedTransition->attachEvent(
-            TransitionInterface::EVENT_AFTER_TRANSIT,
+            TransitionInterface::EVENT_BEFORE_TRANSIT,
             function ($transition, $consumedTokens) {
                 foreach ($consumedTokens as $token) {
                     $previousState = $token->getOwner()->getName();
