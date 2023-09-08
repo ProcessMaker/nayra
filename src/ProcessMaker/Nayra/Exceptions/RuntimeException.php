@@ -10,8 +10,14 @@ use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
  */
 class RuntimeException extends Exception
 {
-    public function __construct($message = "", $code = 0, Exception $previous = null, public FlowNodeInterface $element)
+    /**
+     * @var FlowNodeInterface
+     */
+    public $element;
+
+    public function __construct($message = "", $code = 0, Exception $previous = null, FlowNodeInterface $element)
     {
+        $this->element = $element;
         parent::__construct($message, $code, $previous);
     }
 }
