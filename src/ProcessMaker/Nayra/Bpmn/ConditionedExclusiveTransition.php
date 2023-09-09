@@ -6,6 +6,8 @@ use ProcessMaker\Nayra\Contracts\Bpmn\ConditionedTransitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Exceptions\RuntimeException;
+use Throwable;
 
 /**
  * Verify the condition to transit following the exclusive transition rules.
@@ -30,32 +32,36 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
-        $result = false;
-        $myIndex = $this->owner->getConditionedTransitions()->indexOf($this);
-        $condition = $this->condition;
-        $dataStore = $executionInstance ? $executionInstance->getDataStore()
-            : $this->getOwnerProcess()->getEngine()->getDataStore();
-        $myCondition = $condition($dataStore->getData());
+        try {
+            $result = false;
+            $myIndex = $this->owner->getConditionedTransitions()->indexOf($this);
+            $condition = $this->condition;
+            $dataStore = $executionInstance ? $executionInstance->getDataStore()
+                : $this->getOwnerProcess()->getEngine()->getDataStore();
+            $myCondition = $condition($dataStore->getData());
 
-        $firstIndexTrue = $myIndex;
-        if ($myCondition) {
-            //find the first condition that evaluates to true
-            foreach ($this->owner->getConditionedTransitions() as $index => $transition) {
-                if ($index >= $myIndex) {
-                    break;
+            $firstIndexTrue = $myIndex;
+            if ($myCondition) {
+                //find the first condition that evaluates to true
+                foreach ($this->owner->getConditionedTransitions() as $index => $transition) {
+                    if ($index >= $myIndex) {
+                        break;
+                    }
+                    if ($transition->assertCondition($token, $executionInstance)) {
+                        $firstIndexTrue = $index;
+                        break;
+                    }
                 }
-                if ($transition->assertCondition($token, $executionInstance)) {
-                    $firstIndexTrue = $index;
-                    break;
-                }
+
+                //the transition will be executed just if this transition is the first one of all transitions that are
+                //evaluated to true.
+                $result = $myIndex === $firstIndexTrue;
             }
 
-            //the transition will be executed just if this transition is the first one of all transitions that are
-            //evaluated to true.
-            $result = $myIndex === $firstIndexTrue;
+            return $result;
+        } catch (Throwable $exception) {
+            throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception, $this->owner);
         }
-
-        return $result;
     }
 
     /**

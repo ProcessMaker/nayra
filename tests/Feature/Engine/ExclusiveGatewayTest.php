@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Engine;
 
+use Exception;
 use ProcessMaker\Nayra\Bpmn\DefaultTransition;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
@@ -10,6 +11,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ScriptTaskInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
+use ProcessMaker\Nayra\Exceptions\RuntimeException;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 
 /**
@@ -454,5 +456,35 @@ class ExclusiveGatewayTest extends EngineTestCase
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             ScriptTaskInterface::EVENT_SCRIPT_TASK_ACTIVATED,
         ]);
+    }
+
+    /**
+     * Test runtime error when evaluating an exclusive gateway
+     */
+    public function testExclusiveGatewayMissingVariable()
+    {
+        // Create a data store with data.
+        $dataStore = $this->repository->createDataStore();
+
+        // Load the process
+        $process = $this->createProcessWithExclusiveGateway();
+        $instance = $this->engine->createExecutionInstance($process, $dataStore);
+
+        // simulate a formal expression runtime error when evaluating a gateway condition
+        $gatewayA = $process->getGateways()->item(0);
+        $gatewayA->getConditionedTransitions()->item(0)->setCondition(function ($data) {
+            throw new Exception('Variable A is missing');
+        });
+
+        // Get References
+        $start = $process->getEvents()->item(0);
+
+        // Expect a RuntimeException
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Variable A is missing');
+
+        // Run the process
+        $start->start($instance);
+        $this->engine->runToNextState();
     }
 }
