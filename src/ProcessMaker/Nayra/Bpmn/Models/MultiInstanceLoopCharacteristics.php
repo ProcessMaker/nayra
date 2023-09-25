@@ -63,7 +63,10 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
      */
     private function getInputDataValue(DataInputInterface $dataInput, DataStoreInterface $dataStore)
     {
-        return $dataStore->getData($dataInput->getName(), []);
+        $expression = $this->getRepository()->createFormalExpression();
+        $expression->setBody($dataInput->getName());
+        $data = $expression($dataStore->getData());
+        return $data;
     }
 
     /**
