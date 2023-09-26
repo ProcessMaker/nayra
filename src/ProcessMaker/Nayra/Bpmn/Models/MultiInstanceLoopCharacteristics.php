@@ -65,8 +65,7 @@ class MultiInstanceLoopCharacteristics implements MultiInstanceLoopCharacteristi
     {
         $expression = $this->getRepository()->createFormalExpression();
         $expression->setBody($dataInput->getName());
-        $data = $expression($dataStore->getData());
-        return $data;
+        return $expression($dataStore->getData());
     }
 
     /**
