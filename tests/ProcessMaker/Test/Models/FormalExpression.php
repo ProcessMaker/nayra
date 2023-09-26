@@ -115,4 +115,14 @@ class FormalExpression implements FormalExpressionInterface
 
         return $interval !== false;
     }
+
+    /**
+     * Set the body of the Expression.
+     *
+     * @param string $body
+     */
+    public function setBody($body)
+    {
+        $this->setProperty(FormalExpressionInterface::BPMN_PROPERTY_BODY, $body);
+    }
 }
