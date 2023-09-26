@@ -34,7 +34,7 @@ interface FormalExpressionInterface extends EntityInterface
     public function getBody();
 
     /**
-     * set the body of the Expression.
+     * Set the body of the Expression.
      *
      * @param string $body
      */
