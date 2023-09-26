@@ -22,6 +22,11 @@ class TestBetsy
     public function __construct($data, $expression)
     {
         $this->data = $data;
+        $isDotNamedExpression = preg_match('/^[a-zA-Z0-9_\.]+$/', trim($expression));
+        if ($isDotNamedExpression) {
+            $this->code = '$this->getDotNotationValue($this->data, ' . var_export(trim($expression), true) . ')';
+            return;
+        }
         $tokens = token_get_all('<?php ' . $expression);
         $tokens[0] = '';
         $code = '';
@@ -65,5 +70,16 @@ class TestBetsy
     private function throwException($message)
     {
         throw new Exception($message);
+    }
+
+    function getDotNotationValue($array, $dotNotation) {
+        $keys = explode('.', $dotNotation);
+        foreach ($keys as $key) {
+            if (!isset($array[$key])) {
+                return null; // or throw an exception
+            }
+            $array = $array[$key];
+        }
+        return $array;
     }
 }
