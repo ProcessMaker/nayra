@@ -52,8 +52,7 @@ class StandardLoopCharacteristics implements StandardLoopCharacteristicsInterfac
     private function getInputDataItemValue(ExecutionInstanceInterface $instance, $index)
     {
         $dataStore = $instance->getDataStore();
-
-        return $dataStore;
+        return $dataStore->getData();
     }
 
     /**
