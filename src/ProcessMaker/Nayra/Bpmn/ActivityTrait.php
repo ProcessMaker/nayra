@@ -234,9 +234,9 @@ trait ActivityTrait
                 $boundaryEvents = $this->getBoundaryEvents();
                 foreach ($tokens as $token) {
                     foreach ($boundaryEvents as $boundaryEvent) {
-                        $caughtEventDefinition = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT);
+                        $caughtEventId = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_ID);
                         foreach ($boundaryEvent->getEventDefinitions() as $eventDefinition) {
-                            if ($caughtEventDefinition === $eventDefinition->getId()) {
+                            if ($caughtEventId === $eventDefinition->getPayload()->getId()) {
                                 $boundaryEvent->notifyInternalEvent($token);
                                 break 3;
                             }
