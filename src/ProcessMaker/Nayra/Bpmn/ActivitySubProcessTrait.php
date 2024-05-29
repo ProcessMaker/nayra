@@ -3,6 +3,7 @@
 namespace ProcessMaker\Nayra\Bpmn;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ErrorInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
@@ -79,7 +80,13 @@ trait ActivitySubProcessTrait
         $this->getCalledElement()->attachEvent(
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
             function ($element, $innerToken, $error) use ($token, $instance) {
-                if ($innerToken->getInstance() === $instance) {
+                $elementHasErrorBoundary = false;
+                foreach($this->getBoundaryEvents() as $boundary) {
+                    if ($boundary->getEventDefinitions()->item(0)instanceof ErrorEventDefinitionInterface) {
+                        $elementHasErrorBoundary = true;
+                    }
+                }
+                if (!$elementHasErrorBoundary && $innerToken->getInstance() === $instance) {
                     $this->catchSubprocessError($token, $error, $instance);
                 }
             }
