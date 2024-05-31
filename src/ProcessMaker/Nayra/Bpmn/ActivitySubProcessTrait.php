@@ -81,8 +81,8 @@ trait ActivitySubProcessTrait
             ActivityInterface::EVENT_ACTIVITY_EXCEPTION,
             function ($element, $innerToken, $error) use ($token, $instance) {
                 $elementHasErrorBoundary = false;
-                foreach($this->getBoundaryEvents() as $boundary) {
-                    if ($boundary->getEventDefinitions()->item(0)instanceof ErrorEventDefinitionInterface) {
+                foreach($element->getBoundaryEvents() as $boundary) {
+                    if ($boundary->getEventDefinitions()->item(0) instanceof ErrorEventDefinitionInterface) {
                         $elementHasErrorBoundary = true;
                     }
                 }
