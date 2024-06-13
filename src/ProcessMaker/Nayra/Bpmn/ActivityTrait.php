@@ -235,8 +235,14 @@ trait ActivityTrait
                 foreach ($tokens as $token) {
                     foreach ($boundaryEvents as $boundaryEvent) {
                         $caughtEventDefinition = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_DEFINITION_CAUGHT);
+                        $caughtEventId = $token->getProperty(TokenInterface::BPMN_PROPERTY_EVENT_ID);
                         foreach ($boundaryEvent->getEventDefinitions() as $eventDefinition) {
-                            if ($caughtEventDefinition === $eventDefinition->getId()) {
+                            $payload = $eventDefinition->getPayload();
+                            $eventDefinitionId = $payload ? $payload->getId() : null;
+                            $hasPayloadId = !empty($caughtEventId) && !empty($eventDefinitionId);
+                            $matchPayload = $hasPayloadId && ($caughtEventId === $eventDefinitionId);
+                            $matchEventDefinition = !$hasPayloadId && ($caughtEventDefinition === $eventDefinition->getId());
+                            if ($matchEventDefinition || $matchPayload) {
                                 $boundaryEvent->notifyInternalEvent($token);
                                 break 3;
                             }
