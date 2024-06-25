@@ -11,7 +11,7 @@ class CollectionTest extends TestCase
      */
     private $object;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->object = new Collection([1, 2, 3]);

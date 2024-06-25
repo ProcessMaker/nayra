@@ -15,6 +15,14 @@ use ProcessMaker\Nayra\Bpmn\Models\DatePeriod;
  */
 class DatePeriodTest extends TestCase
 {
+    public function assertArraySubset2($subset, $array)
+    {
+        foreach ($subset as $key => $value) {
+            $this->assertArrayHasKey($key, $array);
+            $this->assertEquals($value, $array[$key]);
+        }
+    }
+
     /**
      * Tests DatePeriod with different time zones
      */
@@ -22,13 +30,13 @@ class DatePeriodTest extends TestCase
     {
         $cycle = new DatePeriod('R/2018-10-02T08:00:00Z/P1D/2018-10-07T08:00:00-04:00');
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals('2018-10-07 12:00:00', $cycle->end->setTimeZone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval, $cycle->end);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals('2018-10-07 12:00:00', $cycle->end->setTimeZone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
     }
@@ -40,13 +48,13 @@ class DatePeriodTest extends TestCase
     {
         $cycle = new DatePeriod('R3/2018-10-02T08:00:00Z/P1D/2018-10-07T08:00:00-04:00');
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals('2018-10-07 12:00:00', $cycle->end->setTimeZone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
         $this->assertEquals(4, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval, [$cycle->end, $cycle->recurrences - 1]);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals('2018-10-07 12:00:00', $cycle->end->setTimeZone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
         $this->assertEquals(4, $cycle->recurrences);
     }
@@ -58,13 +66,13 @@ class DatePeriodTest extends TestCase
     {
         $cycle = new DatePeriod('R/2018-10-02T08:00:00Z/P1D');
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
     }
@@ -75,12 +83,12 @@ class DatePeriodTest extends TestCase
     public function testPeriodsWithoutStart()
     {
         $cycle = new DatePeriod('R/P1D/2018-10-02T08:00:00Z');
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->end->format('Y-m-d H:i:s'));
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval, $cycle->end);
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->end->format('Y-m-d H:i:s'));
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
     }
@@ -92,13 +100,13 @@ class DatePeriodTest extends TestCase
     {
         $cycle = new DatePeriod('R/P1D');
         $this->assertEquals(null, $cycle->start);
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval, $cycle->end);
         $this->assertEquals(null, $cycle->start);
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(DatePeriod::INF_RECURRENCES, $cycle->recurrences);
     }
@@ -110,14 +118,14 @@ class DatePeriodTest extends TestCase
     {
         $cycle = new DatePeriod('R3/2018-10-02T08:00:00Z/P1D');
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         // Assertion: Recurrences = Repetitions -1
         $this->assertEquals(4, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval, $cycle->recurrences - 1);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(4, $cycle->recurrences);
     }
@@ -129,13 +137,13 @@ class DatePeriodTest extends TestCase
     {
         $cycle = new DatePeriod('R3/2018-10-02T08:00:00Z/P1D');
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(4, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval, $cycle->recurrences - 1);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->start->format('Y-m-d H:i:s'));
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(4, $cycle->recurrences);
     }
@@ -147,13 +155,13 @@ class DatePeriodTest extends TestCase
     {
         $cycle = new DatePeriod('R3/P1D/2018-10-02T08:00:00Z');
         $this->assertEquals(null, $cycle->start);
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->end->format('Y-m-d H:i:s'));
         $this->assertEquals(4, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval, [$cycle->end, $cycle->recurrences - 1]);
         $this->assertEquals(null, $cycle->start);
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals('2018-10-02 08:00:00', $cycle->end->format('Y-m-d H:i:s'));
         $this->assertEquals(4, $cycle->recurrences);
     }
@@ -165,13 +173,13 @@ class DatePeriodTest extends TestCase
     {
         $cycle = new DatePeriod('R3/P1D');
         $this->assertEquals(null, $cycle->start);
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(4, $cycle->recurrences);
 
         $cycle = new DatePeriod($cycle->start, $cycle->interval, $cycle->recurrences - 1);
         $this->assertEquals(null, $cycle->start);
-        $this->assertArraySubset(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
+        $this->assertArraySubset2(['y' => 0, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 's' => 0], (array) $cycle->interval);
         $this->assertEquals(null, $cycle->end);
         $this->assertEquals(4, $cycle->recurrences);
     }

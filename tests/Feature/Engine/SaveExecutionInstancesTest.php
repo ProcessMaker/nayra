@@ -31,7 +31,7 @@ class SaveExecutionInstancesTest extends EngineTestCase
     /**
      * Configure the Listener to save the tokens and instances.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         //Prepare the listener to save tokens
