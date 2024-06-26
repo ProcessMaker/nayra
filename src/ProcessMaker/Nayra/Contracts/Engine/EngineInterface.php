@@ -14,7 +14,7 @@ use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 /**
  * Engine interface.
  */
-interface EngineInterface
+interface EngineInterface extends DemoModeInterface
 {
     /**
      * Factory used to create the concrete bpmn classes for the engine.
