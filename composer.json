@@ -20,7 +20,7 @@
     },
     "scripts": {
         "test": "phpunit",
-        "coverage": "phpunit -d memory_limit=-1 --coverage-html coverage"
+        "coverage": "@php -d zend_extension=xdebug.so -d xdebug.mode=coverage -d xdebug.start_with_request=no vendor/bin/phpunit"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
