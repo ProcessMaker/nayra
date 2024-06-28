@@ -16,6 +16,7 @@ use Throwable;
 class ConditionedExclusiveTransition implements TransitionInterface, ConditionedTransitionInterface
 {
     use TransitionTrait;
+    use ForceGatewayTransitionTrait;
 
     /**
      * @var callable
@@ -33,6 +34,15 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
         try {
+            // If debug mode is enabled, the transition is triggered only if it is selected
+            if ($executionInstance && $this->shouldDebugTriggerThisTransition($executionInstance)) {
+                return true;
+            }
+            // If debug mode is enabled, the transition is not triggered if it is not selected
+            if ($executionInstance && $this->shouldDebugSkipThisTransition($executionInstance)) {
+                return false;
+            }
+
             $result = false;
             $myIndex = $this->owner->getConditionedTransitions()->indexOf($this);
             $condition = $this->condition;
@@ -60,7 +70,7 @@ class ConditionedExclusiveTransition implements TransitionInterface, Conditioned
 
             return $result;
         } catch (Throwable $exception) {
-            throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception, $this->owner);
+            throw new RuntimeException($exception->getMessage(), $exception->getCode(), null, $this->owner);
         }
     }
 

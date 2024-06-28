@@ -12,6 +12,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 class ExclusiveGatewayTransition implements TransitionInterface
 {
     use TransitionTrait;
+    use PauseOnGatewayTransitionTrait;
 
     /**
      * Initialize the tokens consumed property, the Exclusive Gateway consumes
@@ -34,7 +35,8 @@ class ExclusiveGatewayTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
-        return true;
+        // Execution is paused if Engine is in demo mode and the gateway choose is not selected
+        return !$this->shouldPauseGatewayTransition($executionInstance);
     }
 
     /**
@@ -46,11 +48,14 @@ class ExclusiveGatewayTransition implements TransitionInterface
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
+        if ($this->doesDemoHasAllRequiredTokens($executionInstance)) {
+            return true;
+        }
+
         $withToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
             return $flow->originState()->getTokens($executionInstance)->count() > 0;
         });
-        $rule = $withToken->count() > 0;
 
-        return $rule;
+        return $withToken->count() > 0;
     }
 }

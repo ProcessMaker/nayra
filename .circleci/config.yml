@@ -3,10 +3,15 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/php:7.1-node-browsers
+      - image: php:8.2.0-fpm
     steps:
       - checkout
-      - run: sudo composer self-update
+      - run: apt-get update && apt-get install -y git unzip
+      - run: pecl install xdebug && docker-php-ext-enable xdebug
+      - run: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      - run: |
+          echo "error_reporting = E_ALL & ~E_DEPRECATED" > /usr/local/etc/php/conf.d/error_reporting.ini
+      - run: composer self-update
       - restore_cache:
           keys:
             - composer-v1-{{ checksum "composer.json" }}
@@ -16,8 +21,7 @@ jobs:
           key: composer-v1-{{ checksum "composer.json" }}
           paths:
             - vendor
-      - run: sudo docker-php-ext-enable xdebug
-      - run: ./vendor/bin/phpunit -d memory_limit=-1 --coverage-html coverage
+      - run: composer coverage
       - run: ./check_coverage.php
       - store_artifacts:
           path: coverage

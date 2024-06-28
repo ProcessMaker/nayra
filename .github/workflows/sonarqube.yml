@@ -4,17 +4,49 @@ on:
   push:
     branches:
       - develop
+      - next
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
-  build:
-    name: Scan
+  test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+
+      - name: Update Composer
+        run: sudo composer self-update
+
+      - name: Cache Composer dependencies
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: composer-v1-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            composer-v1-
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: xdebug
+          coverage: xdebug
+          ini-values: xdebug.mode=coverage
+
+      - name: Install Composer dependencies
+        run: composer install -n --prefer-dist
+
+      - name: Run PHPUnit tests
+        run: ./vendor/bin/phpunit -d memory_limit=-1
+
+      - name: List coverage files
+        run: ls -l coverage
+
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

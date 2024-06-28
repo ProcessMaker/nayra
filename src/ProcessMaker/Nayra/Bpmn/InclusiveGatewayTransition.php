@@ -6,6 +6,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\StateInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Engine\DemoModeTrait;
 
 /**
  * Transition rule for a inclusive gateway.
@@ -13,6 +14,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 class InclusiveGatewayTransition implements TransitionInterface
 {
     use TransitionTrait;
+    use PauseOnGatewayTransitionTrait;
 
     /**
      * Initialize the tokens consumed property, the Inclusive Gateway consumes
@@ -34,7 +36,8 @@ class InclusiveGatewayTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
-        return true;
+        // Execution is paused if Engine is in demo mode and the gateway choose is not selected
+        return !$this->shouldPauseGatewayTransition($executionInstance);
     }
 
     /**
@@ -54,6 +57,10 @@ class InclusiveGatewayTransition implements TransitionInterface
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
+        if ($this->doesDemoHasAllRequiredTokens($executionInstance)) {
+            return true;
+        }
+
         $withToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
             return $flow->originState()->getTokens($executionInstance)->count() > 0;
         });

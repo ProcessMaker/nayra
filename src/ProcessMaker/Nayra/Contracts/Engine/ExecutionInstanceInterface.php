@@ -100,4 +100,11 @@ interface ExecutionInstanceInterface extends EntityInterface
      * @return $this
      */
     public function linkToEngine(EngineInterface $engine);
+
+    /**
+     * Get the engine.
+     *
+     * @return EngineInterface
+     */
+    public function getEngine();
 }

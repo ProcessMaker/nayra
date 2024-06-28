@@ -200,4 +200,14 @@ trait ExecutionInstanceTrait
     {
         return $this->tokens;
     }
+
+    /**
+     * Get the engine.
+     *
+     * @return EngineInterface
+     */
+    public function getEngine()
+    {
+        return $this->getProcess()->getEngine();
+    }
 }

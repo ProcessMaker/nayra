@@ -46,6 +46,8 @@ class DatePeriod implements DatePeriodInterface
 
     public $include_start_date = true;
 
+    public $include_end_date = false;
+
     private $position = 0;
 
     private $last;

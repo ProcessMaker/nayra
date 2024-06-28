@@ -91,7 +91,7 @@ class EngineTestCase extends TestCase
     /**
      * Initialize the engine and the factories.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->repository = $this->createRepository();
@@ -160,7 +160,7 @@ class EngineTestCase extends TestCase
     /**
      * Tear down the test case.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->engine->closeExecutionInstances();
         parent::tearDown();

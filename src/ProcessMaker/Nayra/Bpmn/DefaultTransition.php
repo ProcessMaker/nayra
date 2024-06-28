@@ -13,6 +13,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 class DefaultTransition implements TransitionInterface
 {
     use TransitionTrait;
+    use ForceGatewayTransitionTrait;
 
     /**
      * Returns true if the condition of the transition is met with the DataStore of the passed execution instance
@@ -24,6 +25,15 @@ class DefaultTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
+        // If debug mode is enabled, the transition is triggered only if it is selected
+        if ($this->shouldDebugTriggerThisTransition($executionInstance)) {
+            return true;
+        }
+        // If debug mode is enabled, the transition is not triggered if it is not selected
+        if ($this->shouldDebugSkipThisTransition($executionInstance)) {
+            return false;
+        }
+
         $executeDefaultTransition = true;
         foreach ($this->owner->getConditionedTransitions() as $transition) {
             if ($transition->assertCondition($token, $executionInstance)) {

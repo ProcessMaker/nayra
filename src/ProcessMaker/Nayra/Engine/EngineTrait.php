@@ -22,6 +22,8 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
  */
 trait EngineTrait
 {
+    use DemoModeTrait;
+
     /**
      * Instances of process.
      *

@@ -74,7 +74,7 @@ trait ParallelGatewayTrait
     protected function buildConnectionTo(FlowInterface $targetFlow)
     {
         $outgoingPlace = new State($this, GatewayInterface::TOKEN_STATE_OUTGOING);
-        $outgoingTransition = new Transition($this);
+        $outgoingTransition = new ParallelOutputTransition($this);
         $outgoingTransition->attachEvent(
             TransitionInterface::EVENT_AFTER_CONSUME,
             function (TransitionInterface $transition, Collection $consumedTokens) {
