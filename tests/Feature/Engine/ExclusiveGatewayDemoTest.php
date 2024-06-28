@@ -16,7 +16,7 @@ use ProcessMaker\Nayra\Storage\BpmnDocument;
 /**
  * Test transitions
  */
-class ExclusiveGatewayDebugTest extends EngineTestCase
+class ExclusiveGatewayDemoTest extends EngineTestCase
 {
     /**
      * Creates a process where the exclusive gateway has conditioned and simple transitions
