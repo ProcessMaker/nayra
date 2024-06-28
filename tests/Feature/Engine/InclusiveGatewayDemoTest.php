@@ -2,17 +2,11 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Bpmn\DefaultTransition;
-use ProcessMaker\Nayra\Bpmn\Models\InclusiveGateway;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\InclusiveGatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 
 /**
  * Test transitions
