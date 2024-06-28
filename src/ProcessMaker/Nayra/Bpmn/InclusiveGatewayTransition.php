@@ -57,6 +57,10 @@ class InclusiveGatewayTransition implements TransitionInterface
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
+        if ($this->doesDemoHasAllRequiredTokens($executionInstance)) {
+            return true;
+        }
+
         $withToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
             return $flow->originState()->getTokens($executionInstance)->count() > 0;
         });

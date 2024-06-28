@@ -48,11 +48,14 @@ class ExclusiveGatewayTransition implements TransitionInterface
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
+        if ($this->doesDemoHasAllRequiredTokens($executionInstance)) {
+            return true;
+        }
+
         $withToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
             return $flow->originState()->getTokens($executionInstance)->count() > 0;
         });
-        $rule = $withToken->count() > 0;
 
-        return $rule;
+        return $withToken->count() > 0;
     }
 }
