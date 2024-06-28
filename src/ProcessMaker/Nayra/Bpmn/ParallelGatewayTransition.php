@@ -12,16 +12,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 class ParallelGatewayTransition implements TransitionInterface
 {
     use TransitionTrait;
-
-    /**
-     * Initialize the tokens consumed property, the Parallel Gateway consumes
-     * exactly one token from each incoming Sequence Flow.
-     */
-    protected function initParallelGatewayTransition()
-    {
-        $this->setTokensConsumedPerTransition(-1);
-        $this->setTokensConsumedPerIncoming(1);
-    }
+    use PauseOnGatewayTransitionTrait;
 
     /**
      * Always true because the conditions are not defined in the gateway, but for each
@@ -33,7 +24,7 @@ class ParallelGatewayTransition implements TransitionInterface
      */
     public function assertCondition(TokenInterface $token = null, ExecutionInstanceInterface $executionInstance = null)
     {
-        return true;
+        return !$this->shouldPauseGatewayTransition($executionInstance);
     }
 
     /**
@@ -46,6 +37,10 @@ class ParallelGatewayTransition implements TransitionInterface
      */
     protected function hasAllRequiredTokens(ExecutionInstanceInterface $executionInstance)
     {
+        if ($this->doesDemoHasAllRequiredTokens($executionInstance)) {
+            return true;
+        }
+
         $incomingWithToken = $this->incoming()->find(function (Connection $flow) use ($executionInstance) {
             return $flow->originState()->getTokens($executionInstance)->count() > 0;
         });
