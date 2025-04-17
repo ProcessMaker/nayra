@@ -169,6 +169,7 @@ trait RepositoryTrait
      */
     public function createEventBasedGateway()
     {
+        // TODO: Implement createEventBasedGateway() method.
         return new EventBasedGateway();
     }
 
