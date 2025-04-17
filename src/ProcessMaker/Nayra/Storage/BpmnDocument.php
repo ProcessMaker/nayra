@@ -509,6 +509,52 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
     }
 
     /**
+     * Load the XML source and replace the html entities with the correct characters.
+     *
+     * This is a workaround to avoid the DOMDocument::loadXML() function to throw an error when
+     * the XML contains html entities.
+     * HTML entities can be introduced by the ProcessMaker Modeler when the user inserts html
+     * tags in the documentation field of a task.
+     *
+     * @param string $source
+     * @param int $options
+     * @return bool
+     */
+    public function loadXML(string $source, int $options = 0): bool
+    {
+        $source = self::replaceHtmlEntities($source);
+        return parent::loadXML($source, $options);
+    }
+
+    /**
+     * Replace the html entities with the correct characters.
+     *
+     * @param string $source
+     *
+     * @return string
+     */
+    public static function replaceHtmlEntities($source)
+    {
+        $source = str_replace([
+            '&nbsp;',
+            '&lt;',
+            '&gt;',
+            '&amp;',
+            '&apos;',
+            '&quot;',
+        ], [
+            '&#160;',
+            '&#60;',
+            '&#62;',
+            '&#38;',
+            '&#39;',
+            '&#34;',
+        ], $source);
+
+        return $source;
+    }
+
+    /**
      * Set the factory used to create BPMN elements.
      *
      * @param RepositoryInterface $factory
