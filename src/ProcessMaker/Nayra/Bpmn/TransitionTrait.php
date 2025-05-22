@@ -105,7 +105,7 @@ trait TransitionTrait
                 return $flowElement->getTarget() === $target;
             });
 
-            $this->notifyConditionedTransition(TransitionInterface::EVENT_CONDITIONED_TRANSITION, $this, $flow, $executionInstance);
+            $this->notifyTransition(TransitionInterface::EVENT_CONDITIONED_TRANSITION, $this, $flow, $executionInstance);
         }
 
         $this->notifyEvent(TransitionInterface::EVENT_BEFORE_TRANSIT, $this, $consumeTokens);
@@ -132,6 +132,8 @@ trait TransitionTrait
 
         $this->notifyEvent(TransitionInterface::EVENT_AFTER_TRANSIT, $this, $consumeTokens);
 
+        $this->notifyTransition(TransitionInterface::EVENT_AFTER_TRANSIT, $this, $consumeTokens, $executionInstance);
+
         return true;
     }
 
@@ -141,7 +143,7 @@ trait TransitionTrait
      * @param mixed $event
      * @param mixed ...$arguments
      */
-    protected function notifyConditionedTransition($event, ...$arguments)
+    protected function notifyTransition($event, ...$arguments)
     {
         $this->getOwner()->getOwnerProcess()->getDispatcher()->dispatch($event, $arguments);
         array_unshift($arguments, $event);
