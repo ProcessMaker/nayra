@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:pm="http://processmaker.com/BPMN/2.0/Schema.xsd" xmlns:tns="http://sourceforge.net/bpmn/definitions/_1530553328908" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bpmn.io/schema/bpmn" exporter="ProcessMaker Modeler" exporterVersion="1.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
+  <bpmn:process id="ProcessId" name="ProcessName" isExecutable="true">
+    <bpmn:startEvent id="node_3" name="Start Event" pm:allowInterstitial="true" pm:interstitialScreenRef="1" pm:config="{&#34;web_entry&#34;:null}">
+      <bpmn:outgoing>node_34</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="node_5" name="End Event" pm:elementDestination="{&#34;type&#34;:&#34;summaryScreen&#34;,&#34;value&#34;:null}">
+      <bpmn:incoming>node_63</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:intermediateThrowEvent id="node_6" name="target_catch_event_id">
+      <bpmn:incoming>node_34</bpmn:incoming>
+      <bpmn:outgoing>node_66</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="node_6_message" pm:target_catch_event_id="node_36" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="node_34" name="" sourceRef="node_3" targetRef="node_6" />
+    <bpmn:sequenceFlow id="node_19" name="" sourceRef="node_36" targetRef="node_8" />
+    <bpmn:task id="node_38" name="Task A" pm:allowInterstitial="false" pm:assignment="requester" pm:assignmentLock="false" pm:allowReassignment="false" pm:config="{&#34;email_notifications&#34;:{&#34;notifications&#34;:[{&#34;sendAt&#34;:&#34;task-start&#34;,&#34;expression&#34;:&#34;&#34;,&#34;subject&#34;:&#34;RE: {{_user.firstname}} assigned you in \&#34;{{_task_name}}\&#34;&#34;,&#34;type&#34;:&#34;screen&#34;,&#34;textBody&#34;:&#34;&#34;,&#34;screenRef&#34;:2,&#34;usersAndGroupsOptionSelected&#34;:null,&#34;toRecipients&#34;:[{&#34;type&#34;:&#34;assignedUser&#34;,&#34;value&#34;:null}],&#34;ccRecipients&#34;:[],&#34;bccRecipients&#34;:[],&#34;i&#34;:7}]},&#34;web_entry&#34;:null}" pm:elementDestination="{&#34;type&#34;:&#34;taskSource&#34;,&#34;value&#34;:null}">
+      <bpmn:incoming>node_67</bpmn:incoming>
+      <bpmn:outgoing>node_63</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="node_28" name="" sourceRef="node_8" targetRef="node_57" />
+    <bpmn:sequenceFlow id="node_63" sourceRef="node_38" targetRef="node_5" />
+    <bpmn:intermediateCatchEvent id="node_65" name="catch">
+      <bpmn:incoming>node_66</bpmn:incoming>
+      <bpmn:outgoing>node_67</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="node_57_message" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="node_66" sourceRef="node_6" targetRef="node_65" />
+    <bpmn:sequenceFlow id="node_67" sourceRef="node_65" targetRef="node_38" />
+  </bpmn:process>
+  <bpmn:collaboration id="collaboration_0">
+    <bpmn:participant id="node_1" name="Pool" processRef="ProcessId" />
+    <bpmn:participant id="node_2" name="Pool" processRef="Process_1" />
+    <bpmn:messageFlow id="node_37" name="" sourceRef="node_6" targetRef="node_36" />
+    <bpmn:messageFlow id="node_75" name="" sourceRef="node_57" targetRef="node_65" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1">
+    <bpmn:task id="node_8" name="Task B" pm:allowInterstitial="false" pm:assignment="requester" pm:assignmentLock="false" pm:allowReassignment="false" pm:config="{&#34;email_notifications&#34;:{&#34;notifications&#34;:[{&#34;sendAt&#34;:&#34;task-start&#34;,&#34;expression&#34;:&#34;&#34;,&#34;subject&#34;:&#34;RE: {{_user.firstname}} assigned you in \&#34;{{_task_name}}\&#34;&#34;,&#34;type&#34;:&#34;screen&#34;,&#34;textBody&#34;:&#34;&#34;,&#34;screenRef&#34;:2,&#34;usersAndGroupsOptionSelected&#34;:null,&#34;toRecipients&#34;:[{&#34;type&#34;:&#34;assignedUser&#34;,&#34;value&#34;:null}],&#34;ccRecipients&#34;:[],&#34;bccRecipients&#34;:[],&#34;i&#34;:5}]},&#34;web_entry&#34;:null}" pm:elementDestination="{&#34;type&#34;:&#34;taskSource&#34;,&#34;value&#34;:null}">
+      <bpmn:incoming>node_19</bpmn:incoming>
+      <bpmn:outgoing>node_28</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:startEvent id="node_36" name="Message Start Event">
+      <bpmn:outgoing>node_19</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="node_6_message" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="node_57" name="Message End Event">
+      <bpmn:incoming>node_28</bpmn:incoming>
+      <bpmn:messageEventDefinition messageRef="node_57_message" pm:target_instance_id="instance_NOT_MATCH" />
+    </bpmn:endEvent>
+  </bpmn:process>
+  <bpmn:message id="node_6_message" name="node_6_message" />
+  <bpmn:message id="node_57_message" name="node_57_message" />
+  <bpmndi:BPMNDiagram id="BPMNDiagramId">
+    <bpmndi:BPMNPlane id="BPMNPlaneId" bpmnElement="collaboration_0">
+      <bpmndi:BPMNShape id="node_1_di" bpmnElement="node_1">
+        <dc:Bounds x="358" y="31" width="772" height="309" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_2_di" bpmnElement="node_2">
+        <dc:Bounds x="351" y="357" width="600" height="300" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_3_di" bpmnElement="node_3">
+        <dc:Bounds x="441" y="163" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_5_di" bpmnElement="node_5">
+        <dc:Bounds x="1027" y="161" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_6_di" bpmnElement="node_6">
+        <dc:Bounds x="562.6666666666666" y="163" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_8_di" bpmnElement="node_8">
+        <dc:Bounds x="560" y="454" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_34_di" bpmnElement="node_34">
+        <di:waypoint x="459" y="181" />
+        <di:waypoint x="580.67" y="181" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="node_36_di" bpmnElement="node_36">
+        <dc:Bounds x="440" y="474" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_19_di" bpmnElement="node_19">
+        <di:waypoint x="458" y="492" />
+        <di:waypoint x="618" y="492" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="node_37_di" bpmnElement="node_37">
+        <di:waypoint x="580.67" y="181" />
+        <di:waypoint x="552.6666666666666" y="293" />
+        <di:waypoint x="458" y="492" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="node_38_di" bpmnElement="node_38">
+        <dc:Bounds x="817.3333333333333" y="142" width="116" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="node_57_di" bpmnElement="node_57">
+        <dc:Bounds x="772" y="474" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_28_di" bpmnElement="node_28">
+        <di:waypoint x="618" y="492" />
+        <di:waypoint x="790" y="492" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="node_63_di" bpmnElement="node_63">
+        <di:waypoint x="875.33" y="180" />
+        <di:waypoint x="1045" y="179" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="node_65_di" bpmnElement="node_65">
+        <dc:Bounds x="703" y="167" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="node_66_di" bpmnElement="node_66">
+        <di:waypoint x="580.67" y="181" />
+        <di:waypoint x="721" y="185" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="node_67_di" bpmnElement="node_67">
+        <di:waypoint x="721" y="185" />
+        <di:waypoint x="875.33" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="node_75_di" bpmnElement="node_75">
+        <di:waypoint x="790" y="492" />
+        <di:waypoint x="770" y="380" />
+        <di:waypoint x="721" y="185" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
