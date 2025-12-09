@@ -92,8 +92,13 @@ class MessageEventDefinition implements MessageEventDefinitionInterface
      */
     public function execute(EventDefinitionInterface $event, FlowNodeInterface $target, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
-        $throwEvent = $token->getOwnerElement();
-        $this->executeMessageMapping($throwEvent, $target, $instance, $token);
+        if ($token !== null) {
+            $throwEvent = $token->getOwnerElement();
+            if ($throwEvent instanceof ThrowEventInterface && $target instanceof CatchEventInterface) {
+                $this->executeMessageMapping($throwEvent, $target, $instance, $token);
+            }
+        }
+
         return $this;
     }
 
