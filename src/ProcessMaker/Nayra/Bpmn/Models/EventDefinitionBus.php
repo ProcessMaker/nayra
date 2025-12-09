@@ -65,7 +65,7 @@ class EventDefinitionBus implements EventDefinitionBusInterface
                     $instances = $this->getInstancesFor($catchEvent);
                     foreach ($instances as $instance) {
                         $targetInstance = $sourceEventDefinition->getProperty('target_instance_id');
-                        if ($targetInstance && $instance->getKey() !== $targetInstance) {
+                        if ($targetInstance && $instance->getId() !== $targetInstance) {
                             continue;
                         }
                         $callable($eventDefinition, $instance, $token);
