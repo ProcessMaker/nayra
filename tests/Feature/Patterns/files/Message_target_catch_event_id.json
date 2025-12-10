@@ -1,0 +1,12 @@
+[
+    {
+        "comment": "Message with target_catch_event_id",
+        "startEvent": "node_3",
+        "data": {
+        },
+        "result": [
+        ],
+        "output": {
+        }
+    }
+]

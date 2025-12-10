@@ -117,6 +117,7 @@ class PatternsTest extends EngineTestCase
         $dataStore->setData($data);
         // set global data storage
         $this->engine->setDataStore($dataStore);
+        $this->engine->loadBpmnDocument($bpmnRepository);
         // create instance with initial data
         if ($start->getEventDefinitions()->count() > 0) {
             $start->execute($start->getEventDefinitions()->item(0));

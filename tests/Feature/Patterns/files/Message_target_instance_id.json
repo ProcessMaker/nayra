@@ -1,0 +1,13 @@
+[
+    {
+        "comment": "Message with matched target_instance_id but that does not matches the target instance id",
+        "startEvent": "node_3",
+        "data": {
+        },
+        "result": [
+            "node_8"
+        ],
+        "output": {
+        }
+    }
+]
