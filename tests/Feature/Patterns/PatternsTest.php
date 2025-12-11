@@ -212,6 +212,20 @@ class PatternsTest extends EngineTestCase
         if ($errors) {
             $this->assertData($errors, $runtimeErrors);
         }
+        // Check data from all instances
+        $expectedDataByInstances = $json['expectedDataByInstances'] ?? false;
+        if ($expectedDataByInstances ?? false) {
+            $i = 0;
+            foreach ($processes as $process) {
+                foreach ($process->getBpmnElementInstance()->getInstances() as $ins) {
+                    if (!isset($expectedDataByInstances[$i])) {
+                        $this->fail('Data instance ' . $i . ' not found for test' . $testName);
+                    }
+                    $this->assertData($expectedDataByInstances[$i], $ins->getDataStore()->getData());
+                    $i++;
+                }
+            }
+        }
     }
 
     /**

@@ -2,10 +2,14 @@
 
 namespace ProcessMaker\Nayra\Bpmn;
 
+use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollectionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\EndEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
@@ -116,7 +120,11 @@ trait StartEventTrait
                     $process = $this->getOwnerProcess();
                     $data = $eventDefinition->getPayloadData($token, $this);
                     $dataStorage = $process->getRepository()->createDataStore();
-                    $dataStorage->setData($data);
+                    $sourceHasDataMapping = $token?->getOwnerElement()?->getDataInputs()?->count();
+                    $targetHasDataMapping = $this->getDataOutputAssociations()?->count();
+                    if (!$sourceHasDataMapping && !$targetHasDataMapping) {
+                        $dataStorage->setData($data);
+                    }
                     $instance = $process->getEngine()->createExecutionInstance($process, $dataStorage);
                 }
                 $this->triggerPlace[$index]->addNewToken($instance);
