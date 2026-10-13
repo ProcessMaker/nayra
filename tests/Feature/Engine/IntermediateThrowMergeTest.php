@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Engine;
 
-use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\IntermediateThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
@@ -30,6 +29,11 @@ class IntermediateThrowMergeTest extends EngineTestCase
         $activityA = $this->repository->createActivity();
         $activityB = $this->repository->createActivity();
         $throw = $this->repository->createIntermediateThrowEvent();
+        $message = $this->repository->createMessage();
+        $message->setId('MessageA');
+        $messageEventDef = $this->repository->createMessageEventDefinition();
+        $messageEventDef->setPayload($message);
+        $throw->getEventDefinitions()->push($messageEventDef);
         $end = $this->repository->createEndEvent();
 
         $start->createFlowTo($gateway, $this->repository);
@@ -62,15 +66,17 @@ class IntermediateThrowMergeTest extends EngineTestCase
 
         $start->start($instance);
         $this->engine->runToNextState();
+        $this->firedEvents = [];
 
         // Only ActivityA finishes; ActivityB still has its token.
         $tokenA = $activityA->getTokens($instance)->item(0);
         $activityA->complete($tokenA);
         $this->engine->runToNextState();
 
-        // FOUR-6787 expectation: the throw event passes the token from ActivityA now.
+        // FOUR-6787 expectation: the throw event passes the token from ActivityA now,
+        // and the request stays open because ActivityB has not finished.
         $this->assertContains(IntermediateThrowEventInterface::EVENT_THROW_TOKEN_PASSED, $this->firedEvents);
-        $this->assertContains(ActivityInterface::EVENT_ACTIVITY_ACTIVATED, $this->firedEvents);
+        $this->assertNotContains(ProcessInterface::EVENT_PROCESS_INSTANCE_COMPLETED, $this->firedEvents);
         $this->firedEvents = [];
 
         // Finishing ActivityB later fires the throw event again for its own token.
