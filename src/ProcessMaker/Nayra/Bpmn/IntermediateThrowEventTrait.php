@@ -40,7 +40,12 @@ trait IntermediateThrowEventTrait
     {
         $this->setRepository($factory);
 
+        // Shared merge point: every incoming flow converges here, so the event
+        // fires for each arriving token instead of waiting for all incoming flows (FOUR-6787).
+        $this->endState = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
+
         $this->transition = new IntermediateThrowEventTransition($this);
+        $this->endState->connectTo($this->transition);
 
         $this->transition->attachEvent(TransitionInterface::EVENT_AFTER_CONSUME, function (TransitionInterface $interface, Collection $consumedTokens) {
             foreach ($consumedTokens as $token) {
@@ -62,8 +67,11 @@ trait IntermediateThrowEventTrait
      */
     public function getInputPlace(FlowInterface $targetFlow = null)
     {
+        // One input state and one pass-through transition per incoming flow (FOUR-6787).
         $incomingPlace = new State($this, GatewayInterface::TOKEN_STATE_INCOMING);
-        $incomingPlace->connectTo($this->transition);
+        $inputTransition = new Transition($this, false);
+        $incomingPlace->connectTo($inputTransition);
+        $inputTransition->connectTo($this->endState);
         $incomingPlace->attachEvent(State::EVENT_TOKEN_ARRIVED, function (TokenInterface $token) {
             $this->getProcess()->getEngine()->getEventDefinitionBus()->dispatchEventDefinition($this, $this->getEventDefinitions()->item(0), $token);
 
