@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  id="Definitions_EventSubProcess"
+                  targetNamespace="http://processmaker.com/nayra/subprocess">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Order" processRef="OrderProcess"/>
+    <bpmn:participant id="Participant_Sender" processRef="SenderProcess"/>
+    <bpmn:messageFlow id="MessageFlow_1" sourceRef="Throw_Message" targetRef="MessageStart_EventSub"/>
+  </bpmn:collaboration>
+  <bpmn:message id="Message_1" name="OrderMessage"/>
+  <bpmn:process id="OrderProcess" isExecutable="true">
+    <bpmn:startEvent id="Start_Order">
+      <bpmn:outgoing>Flow_To_User</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="User_Task" name="User Task">
+      <bpmn:incoming>Flow_To_User</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_End</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_Order">
+      <bpmn:incoming>Flow_To_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_To_User" sourceRef="Start_Order" targetRef="User_Task"/>
+    <bpmn:sequenceFlow id="Flow_To_End" sourceRef="User_Task" targetRef="End_Order"/>
+    <bpmn:subProcess id="Event_Sub" name="Event SubProcess" triggeredByEvent="true">
+      <bpmn:startEvent id="MessageStart_EventSub">
+        <bpmn:outgoing>Flow_Event_Inner</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MsgDef_1" messageRef="Message_1"/>
+      </bpmn:startEvent>
+      <bpmn:userTask id="Event_Inner_Task" name="Handle Message">
+        <bpmn:incoming>Flow_Event_Inner</bpmn:incoming>
+        <bpmn:outgoing>Flow_Event_End</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="End_Event_Sub">
+        <bpmn:incoming>Flow_Event_End</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_Event_Inner" sourceRef="MessageStart_EventSub" targetRef="Event_Inner_Task"/>
+      <bpmn:sequenceFlow id="Flow_Event_End" sourceRef="Event_Inner_Task" targetRef="End_Event_Sub"/>
+    </bpmn:subProcess>
+  </bpmn:process>
+  <bpmn:process id="SenderProcess" isExecutable="true">
+    <bpmn:startEvent id="Start_Sender">
+      <bpmn:outgoing>Flow_To_Throw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:intermediateThrowEvent id="Throw_Message">
+      <bpmn:incoming>Flow_To_Throw</bpmn:incoming>
+      <bpmn:outgoing>Flow_Sender_End</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MsgDef_Throw" messageRef="Message_1"/>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="End_Sender">
+      <bpmn:incoming>Flow_Sender_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_To_Throw" sourceRef="Start_Sender" targetRef="Throw_Message"/>
+    <bpmn:sequenceFlow id="Flow_Sender_End" sourceRef="Throw_Message" targetRef="End_Sender"/>
+  </bpmn:process>
+</bpmn:definitions>

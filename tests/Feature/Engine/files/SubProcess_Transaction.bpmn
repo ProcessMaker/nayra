@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  id="Definitions_Transaction"
+                  targetNamespace="http://processmaker.com/nayra/subprocess">
+  <bpmn:process id="Process_Transaction" isExecutable="true">
+    <bpmn:startEvent id="Start_Parent">
+      <bpmn:outgoing>Flow_To_Tx</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:transaction id="Transaction_1" name="Tx">
+      <bpmn:incoming>Flow_To_Tx</bpmn:incoming>
+      <bpmn:outgoing>Flow_After</bpmn:outgoing>
+      <bpmn:startEvent id="Start_Tx">
+        <bpmn:outgoing>Flow_To_Work</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="Work" name="Work">
+        <bpmn:incoming>Flow_To_Work</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_Tx_End</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:userTask id="Compensate" name="Compensate" isForCompensation="true"/>
+      <bpmn:endEvent id="End_Tx">
+        <bpmn:incoming>Flow_To_Tx_End</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_To_Work" sourceRef="Start_Tx" targetRef="Work"/>
+      <bpmn:sequenceFlow id="Flow_To_Tx_End" sourceRef="Work" targetRef="End_Tx"/>
+    </bpmn:transaction>
+    <bpmn:userTask id="After" name="After">
+      <bpmn:incoming>Flow_After</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_End</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_Parent">
+      <bpmn:incoming>Flow_To_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_To_Tx" sourceRef="Start_Parent" targetRef="Transaction_1"/>
+    <bpmn:sequenceFlow id="Flow_After" sourceRef="Transaction_1" targetRef="After"/>
+    <bpmn:sequenceFlow id="Flow_To_End" sourceRef="After" targetRef="End_Parent"/>
+  </bpmn:process>
+</bpmn:definitions>

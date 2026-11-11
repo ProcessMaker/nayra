@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  id="Definitions_GatewaySubProcess"
+                  targetNamespace="http://processmaker.com/nayra/subprocess">
+  <bpmn:process id="Process_Gateway" isExecutable="true">
+    <bpmn:startEvent id="Start_Parent">
+      <bpmn:outgoing>Flow_To_Sub</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:subProcess id="SubProcess_1" name="Exclusive Inner">
+      <bpmn:incoming>Flow_To_Sub</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_End</bpmn:outgoing>
+      <bpmn:startEvent id="Start_1">
+        <bpmn:outgoing>Flow_To_Xor</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:exclusiveGateway id="Xor" default="Flow_Default">
+        <bpmn:incoming>Flow_To_Xor</bpmn:incoming>
+        <bpmn:outgoing>Flow_Cond</bpmn:outgoing>
+        <bpmn:outgoing>Flow_Default</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:userTask id="CondTask" name="Conditional">
+        <bpmn:incoming>Flow_Cond</bpmn:incoming>
+        <bpmn:outgoing>Flow_Cond_End</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:userTask id="DefaultTask" name="Default">
+        <bpmn:incoming>Flow_Default</bpmn:incoming>
+        <bpmn:outgoing>Flow_Default_End</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="End_Cond">
+        <bpmn:incoming>Flow_Cond_End</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:endEvent id="End_Default">
+        <bpmn:incoming>Flow_Default_End</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_To_Xor" sourceRef="Start_1" targetRef="Xor"/>
+      <bpmn:sequenceFlow id="Flow_Cond" sourceRef="Xor" targetRef="CondTask">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">takeCond</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_Default" sourceRef="Xor" targetRef="DefaultTask"/>
+      <bpmn:sequenceFlow id="Flow_Cond_End" sourceRef="CondTask" targetRef="End_Cond"/>
+      <bpmn:sequenceFlow id="Flow_Default_End" sourceRef="DefaultTask" targetRef="End_Default"/>
+    </bpmn:subProcess>
+    <bpmn:endEvent id="End_Parent">
+      <bpmn:incoming>Flow_To_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_To_Sub" sourceRef="Start_Parent" targetRef="SubProcess_1"/>
+    <bpmn:sequenceFlow id="Flow_To_End" sourceRef="SubProcess_1" targetRef="End_Parent"/>
+  </bpmn:process>
+</bpmn:definitions>

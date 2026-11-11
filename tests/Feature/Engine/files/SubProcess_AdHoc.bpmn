@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  id="Definitions_AdHoc"
+                  targetNamespace="http://processmaker.com/nayra/subprocess">
+  <bpmn:process id="Process_AdHoc" isExecutable="true">
+    <bpmn:startEvent id="Start_Parent">
+      <bpmn:outgoing>Flow_To_AdHoc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:adHocSubProcess id="AdHoc_1" name="AdHoc" ordering="Parallel">
+      <bpmn:incoming>Flow_To_AdHoc</bpmn:incoming>
+      <bpmn:outgoing>Flow_After</bpmn:outgoing>
+      <bpmn:userTask id="Left" name="Left"/>
+      <bpmn:userTask id="Right" name="Right"/>
+      <bpmn:completionCondition xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">done</bpmn:completionCondition>
+    </bpmn:adHocSubProcess>
+    <bpmn:userTask id="After" name="After">
+      <bpmn:incoming>Flow_After</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_End</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_Parent">
+      <bpmn:incoming>Flow_To_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_To_AdHoc" sourceRef="Start_Parent" targetRef="AdHoc_1"/>
+    <bpmn:sequenceFlow id="Flow_After" sourceRef="AdHoc_1" targetRef="After"/>
+    <bpmn:sequenceFlow id="Flow_To_End" sourceRef="After" targetRef="End_Parent"/>
+  </bpmn:process>
+</bpmn:definitions>
