@@ -6,9 +6,12 @@ use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\AdHocSubProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ArtifactInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\AssignmentInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\BoundaryEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\CancelEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CatchEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ConditionalEventDefinitionInterface;
@@ -54,9 +57,11 @@ use ProcessMaker\Nayra\Contracts\Bpmn\SignalEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\SignalInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StandardLoopCharacteristicsInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SubProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TerminateEventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TimerEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TransactionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
@@ -183,6 +188,67 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
                     ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
                 ],
             ],
+            'subProcess' => [
+                SubProcessInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    'activities' => ['n', ActivityInterface::class],
+                    'gateways' => ['n', GatewayInterface::class],
+                    'events' => ['n', EventInterface::class],
+                    'artifacts' => ['n', ArtifactInterface::class],
+                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [self::BPMN_MODEL, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
+                    SubProcessInterface::BPMN_PROPERTY_TRIGGERED_BY_EVENT => self::IS_BOOLEAN,
+                    ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
+                ],
+            ],
+            'transaction' => [
+                TransactionInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    'activities' => ['n', ActivityInterface::class],
+                    'gateways' => ['n', GatewayInterface::class],
+                    'events' => ['n', EventInterface::class],
+                    'artifacts' => ['n', ArtifactInterface::class],
+                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [self::BPMN_MODEL, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
+                    ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
+                ],
+            ],
+            'adHocSubProcess' => [
+                AdHocSubProcessInterface::class,
+                [
+                    FlowNodeInterface::BPMN_PROPERTY_INCOMING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_INCOMING]],
+                    FlowNodeInterface::BPMN_PROPERTY_OUTGOING => ['n', [self::BPMN_MODEL, FlowNodeInterface::BPMN_PROPERTY_OUTGOING]],
+                    'activities' => ['n', ActivityInterface::class],
+                    'gateways' => ['n', GatewayInterface::class],
+                    'events' => ['n', EventInterface::class],
+                    'artifacts' => ['n', ArtifactInterface::class],
+                    ProcessInterface::BPMN_PROPERTY_LANE_SET => ['n', [self::BPMN_MODEL, ProcessInterface::BPMN_PROPERTY_LANE_SET]],
+                    AdHocSubProcessInterface::BPMN_PROPERTY_COMPLETION_CONDITION => ['1', [self::BPMN_MODEL, 'completionCondition']],
+                    ActivityInterface::BPMN_PROPERTY_LOOP_CHARACTERISTICS => ['1', LoopCharacteristicsInterface::class],
+                    ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION => ['1', [self::BPMN_MODEL, ActivityInterface::BPMN_PROPERTY_IO_SPECIFICATION]],
+                ],
+            ],
+            'completionCondition' => [
+                FormalExpressionInterface::class,
+                [
+                    FormalExpressionInterface::BPMN_PROPERTY_BODY => ['1', self::DOM_ELEMENT_BODY],
+                ],
+            ],
+            'cancelEventDefinition' => [
+                CancelEventDefinitionInterface::class,
+                [],
+            ],
+            'textAnnotation' => [
+                ArtifactInterface::class,
+                [
+                    'text' => ['1', self::DOM_ELEMENT_BODY],
+                ],
+            ],
+            'text' => [self::TEXT_PROPERTY, []],
             'parallelGateway' => [
                 ParallelGatewayInterface::class,
                 [
@@ -785,6 +851,18 @@ class BpmnDocument extends DOMDocument implements BpmnDocumentInterface
      * @return \ProcessMaker\Nayra\Contracts\Bpmn\CallActivityInterface
      */
     public function getCallActivity($id)
+    {
+        return $this->getElementInstanceById($id);
+    }
+
+    /**
+     * Get SubProcess instance by id.
+     *
+     * @param string $id
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\SubProcessInterface
+     */
+    public function getSubProcess($id)
     {
         return $this->getElementInstanceById($id);
     }

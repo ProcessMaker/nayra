@@ -251,6 +251,41 @@ interface RepositoryInterface
     public function createStartEvent();
 
     /**
+     * Create instance of SubProcess.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\SubProcessInterface
+     */
+    public function createSubProcess();
+
+    /**
+     * Create instance of Transaction.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TransactionInterface
+     */
+    public function createTransaction();
+
+    /**
+     * Create instance of AdHocSubProcess.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\AdHocSubProcessInterface
+     */
+    public function createAdHocSubProcess();
+
+    /**
+     * Create instance of CancelEventDefinition.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CancelEventDefinitionInterface
+     */
+    public function createCancelEventDefinition();
+
+    /**
+     * Create instance of Artifact.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ArtifactInterface
+     */
+    public function createArtifact();
+
+    /**
      * Create instance of State.
      *
      * @param FlowNodeInterface $owner

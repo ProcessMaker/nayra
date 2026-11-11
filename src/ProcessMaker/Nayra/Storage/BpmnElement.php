@@ -6,7 +6,10 @@ use DOMAttr;
 use DOMElement;
 use ProcessMaker\Nayra\Contracts\Bpmn\CallableElementInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EntityInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\FlowElementsContainerInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnElementInterface;
 use ProcessMaker\Nayra\Exceptions\ElementNotImplementedException;
 use ProcessMaker\Nayra\Exceptions\NamespaceNotImplementedException;
@@ -67,9 +70,18 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 $bpmnElement->setEngine($this->ownerDocument->getEngine());
             }
             if ($bpmnElement instanceof FlowNodeInterface) {
-                $process = $this->ownerDocument->getElementInstanceById($this->parentNode->getAttribute('id'));
-                $bpmnElement->setOwnerProcess($process);
-                $bpmnElement->setProcess($process);
+                $parentId = $this->parentNode->getAttribute('id');
+                $parentInstance = $parentId ? $this->ownerDocument->getElementInstanceById($parentId) : null;
+                $process = $this->resolveOwnerProcess($parentInstance);
+                if ($parentInstance instanceof FlowElementsContainerInterface
+                    && !($parentInstance instanceof ProcessInterface)
+                    && $bpmnElement instanceof FlowElementInterface) {
+                    $bpmnElement->setContainer($parentInstance);
+                }
+                if ($process instanceof ProcessInterface) {
+                    $bpmnElement->setOwnerProcess($process);
+                    $bpmnElement->setProcess($process);
+                }
             }
             $this->loadParentRef($mapProperties, $bpmnElement);
             foreach ($this->attributes as $attribute) {
@@ -194,5 +206,28 @@ class BpmnElement extends DOMElement implements BpmnElementInterface
                 $bpmnElement->setProperty($name, $this->parentNode->getBpmnElementInstance());
             }
         }
+    }
+
+    /**
+     * Walk up from a parent BPMN instance to the owning Process.
+     *
+     * @param mixed $parentInstance
+     *
+     * @return ProcessInterface|null
+     */
+    private function resolveOwnerProcess($parentInstance)
+    {
+        $current = $parentInstance;
+        while ($current) {
+            if ($current instanceof ProcessInterface) {
+                return $current;
+            }
+            if ($current instanceof FlowElementInterface && $current->getOwnerProcess()) {
+                return $current->getOwnerProcess();
+            }
+            $current = method_exists($current, 'getContainer') ? $current->getContainer() : null;
+        }
+
+        return null;
     }
 }

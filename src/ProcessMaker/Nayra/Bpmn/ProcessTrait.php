@@ -19,6 +19,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\GatewayCollectionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\GatewayInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\StartEventInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SubProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
@@ -279,13 +280,16 @@ trait ProcessTrait
         foreach ($this->getProperty('gateways') as $gateway) {
             $gateway->buildFlowTransitions($factory);
         }
-        //Get the transitions
+        //Get the transitions (include nested subprocess content)
         $transitions = [];
         foreach ($this->getProperty('events') as $event) {
             $transitions = array_merge($transitions, $event->getTransitions());
         }
         foreach ($this->getProperty('activities') as $activity) {
             $transitions = array_merge($transitions, $activity->getTransitions());
+            if ($activity instanceof SubProcessInterface) {
+                $activity->buildInnerTransitions($factory, $transitions);
+            }
         }
         foreach ($this->getProperty('gateways') as $gateway) {
             $transitions = array_merge($transitions, $gateway->getTransitions());

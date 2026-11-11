@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\EventDefinitionInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\MessageEventDefinitionInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SubProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ThrowEventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
@@ -114,6 +115,10 @@ trait StartEventTrait
      */
     public function execute(EventDefinitionInterface $eventDef, ExecutionInstanceInterface $instance = null, TokenInterface $token = null)
     {
+        $container = $this->getContainer();
+        if ($container instanceof SubProcessInterface && $container->getTriggeredByEvent()) {
+            return $this->executeEventSubProcessStart($eventDef, $instance, $token);
+        }
         foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
             if ($eventDefinition->assertsRule($eventDef, $this, $instance, $token)) {
                 if ($instance === null) {
@@ -133,6 +138,64 @@ trait StartEventTrait
         }
 
         return $this;
+    }
+
+    /**
+     * Event subprocess starts inside an existing parent process instance.
+     *
+     * @param EventDefinitionInterface $eventDef
+     * @param ExecutionInstanceInterface|null $instance
+     * @param TokenInterface|null $token
+     *
+     * @return $this
+     */
+    private function executeEventSubProcessStart(
+        EventDefinitionInterface $eventDef,
+        ExecutionInstanceInterface $instance = null,
+        TokenInterface $token = null
+    ) {
+        $targets = [];
+        if ($instance !== null) {
+            if ($instance->getTokens()->count() > 0) {
+                $targets[] = $instance;
+            }
+        } else {
+            foreach ($this->getOwnerProcess()->getInstances() as $activeInstance) {
+                if ($activeInstance->getTokens()->count() > 0) {
+                    $targets[] = $activeInstance;
+                }
+            }
+        }
+        if (count($targets) === 0) {
+            return $this;
+        }
+        foreach ($targets as $targetInstance) {
+            foreach ($this->getEventDefinitions() as $index => $eventDefinition) {
+                if ($eventDefinition->assertsRule($eventDef, $this, $targetInstance, $token)) {
+                    $this->triggerPlace[$index]->addNewToken($targetInstance);
+                    $eventDefinition->execute($eventDef, $this, $targetInstance, $token);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Whether this event-subprocess start is still subscribed for a parent instance.
+     *
+     * @param ExecutionInstanceInterface $instance
+     *
+     * @return bool
+     */
+    public function isSubscribedForInstance(ExecutionInstanceInterface $instance)
+    {
+        $container = $this->getContainer();
+        if (!($container instanceof SubProcessInterface) || !$container->getTriggeredByEvent()) {
+            return true;
+        }
+
+        return $instance->getTokens()->count() > 0;
     }
 
     /**

@@ -8,6 +8,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\CollaborationInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\EventInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\SubProcessInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TransitionInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\Engine\EventDefinitionBusInterface;
@@ -289,6 +290,30 @@ trait EngineTrait
         foreach ($process->getEvents() as $event) {
             if ($event instanceof CatchEventInterface) {
                 $event->registerWithEngine($this);
+            }
+        }
+        foreach ($process->getActivities() as $activity) {
+            if ($activity instanceof SubProcessInterface) {
+                $this->registerSubProcessCatchEvents($activity);
+            }
+        }
+    }
+
+    /**
+     * Register catch events nested in subprocesses (including event subprocesses).
+     *
+     * @param SubProcessInterface $subProcess
+     */
+    private function registerSubProcessCatchEvents(SubProcessInterface $subProcess)
+    {
+        foreach ($subProcess->getEvents() as $event) {
+            if ($event instanceof CatchEventInterface) {
+                $event->registerWithEngine($this);
+            }
+        }
+        foreach ($subProcess->getActivities() as $activity) {
+            if ($activity instanceof SubProcessInterface) {
+                $this->registerSubProcessCatchEvents($activity);
             }
         }
     }

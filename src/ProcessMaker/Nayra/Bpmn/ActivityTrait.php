@@ -167,7 +167,7 @@ trait ActivityTrait
 
         $this->activeState->attachEvent(
             StateInterface::EVENT_TOKEN_ARRIVED,
-            function (TokenInterface $token, TransitionInterface $source) {
+            function (TokenInterface $token, TransitionInterface $source = null) {
                 try {
                     $this->getRepository()
                     ->getTokenRepository()
