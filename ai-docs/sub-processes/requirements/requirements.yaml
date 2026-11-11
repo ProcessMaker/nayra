@@ -1,0 +1,411 @@
+# Catalog for the Nayra BPMN 2.0 SubProcess specification.
+specId: spec
+kind: component
+title: BPMN 2.0 SubProcess in Nayra
+description: >
+  Requirements for embedded subprocesses, event subprocesses, transactions, ad hoc subprocesses,
+  nesting, import, export, execution scopes, and validation.
+dependsOn: []
+config:
+  bpmnNamespace: http://www.omg.org/spec/BPMN/20100524/MODEL
+  elements:
+    embedded: bpmn:subProcess
+    event: bpmn:subProcess with triggeredByEvent true
+    transaction: bpmn:transaction
+    adHoc: bpmn:adHocSubProcess
+  runtime:
+    scope: ScopeExecution
+    parentTokenWhileChildRuns: waiting
+  delivery:
+    phase1: Embedded subprocess import, export, runtime, nesting, and execution scopes
+    phase2: Event subprocess subscriptions and scope-level listeners
+    phase3: Transaction cancel, compensation, and atomic completion
+    phase4: Ad hoc completion conditions and non-sequential execution
+  specNotes:
+    - Section 16 calls transaction parse/export its phase 1 and runtime its phase 2. Section 22 schedules transaction runtime as delivery phase 3.
+    - Section 17 calls ad hoc parse its phase 1 and runtime its phase 2. Section 22 schedules ad hoc runtime as delivery phase 4.
+    - Section 21 requires import tests for transaction and ad hoc subprocesses in addition to the phase-1 execution tests.
+requirements:
+  - id: FR-001
+    requirementType: Functional
+    title: Import an embedded subprocess
+    statement: Importing BPMN XML that contains bpmn:subProcess creates a subprocess activity in the parent process with the id and name from the XML.
+    priority: High
+    status: Draft
+    tags: [subprocess, import, phase-1]
+    acceptanceCriteria:
+      - given: A BPMN document whose parent process contains bpmn:subProcess id SubProcess_1 name Review, with a start event, a user task, and an end event inside it
+        when: The document is imported
+        then: The parent process contains a subprocess activity with id SubProcess_1 and name Review
+    traceability:
+      testCases:
+        - Import Embedded SubProcess
+
+  - id: FR-002
+    requirementType: Functional
+    title: Nested nodes belong to the subprocess
+    statement: Every flow element, artifact, and lane set nested in a subprocess is stored on that subprocess, and each nested flow node has that subprocess as its container.
+    priority: High
+    status: Draft
+    tags: [subprocess, import, validation, phase-1]
+    dependencies:
+      - spec#FR-001
+    acceptanceCriteria:
+      - given: SubProcess_1 contains start event Start_1, user task Task_1, and end event End_1
+        when: The document is imported
+        then: Start_1, Task_1, and End_1 are stored as flow elements of SubProcess_1 and each reports SubProcess_1 as its container
+      - given: SubProcess_1 also contains one artifact and one lane set
+        when: The document is imported
+        then: That artifact and that lane set are stored on SubProcess_1
+      - given: A flow node is serialized inside SubProcess_1 but its container is a different process
+        when: The document is validated
+        then: Validation fails because the node does not belong to SubProcess_1
+    traceability:
+      testCases:
+        - Import Embedded SubProcess
+
+  - id: FR-003
+    requirementType: Functional
+    title: Sequence flows stay inside the subprocess
+    statement: A sequence flow whose source is inside a subprocess cannot target a flow node outside that subprocess.
+    priority: High
+    status: Draft
+    tags: [subprocess, validation, phase-1]
+    dependencies:
+      - spec#FR-002
+    acceptanceCriteria:
+      - given: User task Task_1 is inside SubProcess_1 and user task Task_Outside is in the parent process
+        when: A sequence flow from Task_1 to Task_Outside is validated
+        then: Validation fails because the sequence flow leaves SubProcess_1
+      - given: Start_1, Task_1, and End_1 are all inside SubProcess_1
+        when: Sequence flows Start_1 to Task_1 and Task_1 to End_1 are validated
+        then: Validation passes for those sequence flows
+
+  - id: FR-004
+    requirementType: Functional
+    title: Embedded subprocess start events
+    statement: An embedded subprocess with triggeredByEvent false must contain at least one start event, and that start event must belong to the subprocess.
+    priority: High
+    status: Draft
+    tags: [subprocess, validation, phase-1]
+    dependencies:
+      - spec#FR-002
+    acceptanceCriteria:
+      - given: An embedded subprocess with triggeredByEvent false contains start event Start_1
+        when: The document is validated
+        then: Start_1 belongs to that subprocess and validation accepts the start event
+      - given: An embedded subprocess with triggeredByEvent false contains no start event
+        when: The document is validated
+        then: Validation fails because the embedded subprocess has no start event
+      - given: Start_1 is referenced by an embedded subprocess but its container is a different process
+        when: The document is validated
+        then: Validation fails because the start event does not belong to the subprocess
+
+  - id: FR-005
+    requirementType: Functional
+    title: Subprocess containment is acyclic
+    statement: A subprocess cannot be nested inside itself through any chain of parent containers.
+    priority: High
+    status: Draft
+    tags: [subprocess, validation, phase-1]
+    acceptanceCriteria:
+      - given: Subprocess A contains subprocess B and subprocess B contains subprocess A
+        when: The document is validated
+        then: Validation fails because the parent relationship is cyclic
+      - given: Subprocess A contains subprocess B and subprocess B contains only a start event, a user task, and an end event
+        when: The document is validated
+        then: Validation accepts the parent relationship
+
+  - id: FR-006
+    requirementType: Functional
+    title: Subprocess identifier is required
+    statement: A subprocess element without an identifier is rejected.
+    priority: High
+    status: Draft
+    tags: [subprocess, validation, phase-1]
+    acceptanceCriteria:
+      - given: A bpmn:subProcess element with no id attribute
+        when: The document is validated
+        then: Validation fails because the identifier is missing
+      - given: A bpmn:subProcess element with id SubProcess_1
+        when: The document is validated
+        then: Validation accepts SubProcess_1 as the subprocess identifier
+
+  - id: FR-007
+    requirementType: Functional
+    title: Entering a subprocess opens a child scope
+    statement: When a token reaches an embedded subprocess, the engine opens a child execution scope, places tokens on the subprocess start events, and leaves the parent token waiting. The subprocess does not complete as an ordinary activity on entry, and the next parent activity stays inactive.
+    priority: Critical
+    status: Draft
+    tags: [subprocess, execution, phase-1]
+    dependencies:
+      - spec#FR-001
+      - spec#FR-004
+    acceptanceCriteria:
+      - given: The parent flow is Task A, then SubProcess_1, then Task B. SubProcess_1 contains Start_1, then user task Review, then End_1
+        when: Task A completes and the engine runs to the next stable state
+        then: A child scope of SubProcess_1 exists, Review is active, the parent token at SubProcess_1 is waiting, and Task B is not active
+      - given: The same process at the moment the token enters SubProcess_1
+        when: The engine runs to the next stable state
+        then: SubProcess_1 is not completed in that step and Task B has not been created
+    traceability:
+      testCases:
+        - Execute simple SubProcess
+
+  - id: FR-008
+    requirementType: Functional
+    title: Internal flow uses existing node behavior
+    statement: Activities, gateways, and events inside a subprocess run with the same behaviors Nayra already uses for those nodes in a top-level process. No separate execution path is introduced for nodes inside a subprocess.
+    priority: High
+    status: Draft
+    tags: [subprocess, execution, phase-1]
+    dependencies:
+      - spec#FR-007
+    acceptanceCriteria:
+      - given: Review is the active user task inside SubProcess_1 and its outgoing sequence flow targets End_1
+        when: Review is completed
+        then: The token inside the child scope advances from Review to End_1
+      - given: SubProcess_1 contains a parallel gateway that splits to user task Left and user task Right
+        when: The subprocess start is passed and the engine reaches the next stable state
+        then: Left and Right are both active
+      - given: SubProcess_1 contains an exclusive gateway with one conditional outgoing flow whose condition is true and one default outgoing flow
+        when: The gateway is reached
+        then: Only the target of the conditional flow is active
+      - given: The same exclusive gateway and the conditional flow's condition is false
+        when: The gateway is reached
+        then: Only the target of the default flow is active
+    traceability:
+      testCases:
+        - Execute parallel paths inside SubProcess
+        - Execute gateway inside SubProcess
+
+  - id: FR-009
+    requirementType: Functional
+    title: Completing a subprocess resumes the parent
+    statement: A subprocess completes only when its child scope has no active tokens. Completion removes the child scope, resumes the waiting parent token, and follows the subprocess outgoing sequence flows.
+    priority: Critical
+    status: Draft
+    tags: [subprocess, execution, phase-1]
+    dependencies:
+      - spec#FR-008
+    acceptanceCriteria:
+      - given: SubProcess_1 has a waiting parent token, its only remaining child token is at End_1, and Task B follows SubProcess_1
+        when: End_1 is reached and the child scope has zero active tokens
+        then: The child scope is gone, the parent token is no longer waiting at SubProcess_1, and Task B is active
+      - given: Review is still active inside SubProcess_1
+        when: The engine evaluates subprocess completion
+        then: SubProcess_1 does not complete and Task B is not active
+    traceability:
+      testCases:
+        - Complete SubProcess
+        - Resume parent execution
+
+  - id: FR-010
+    requirementType: Functional
+    title: Nested subprocesses keep recursive scopes
+    statement: A subprocess nested inside another subprocess runs in its own scope whose parent is the enclosing subprocess scope. Nesting is recursive and has no fixed depth limit.
+    priority: High
+    status: Draft
+    tags: [subprocess, execution, nesting, phase-1]
+    dependencies:
+      - spec#FR-007
+      - spec#FR-009
+    acceptanceCriteria:
+      - given: Outer subprocess Outer contains inner subprocess Inner, and Inner contains user task Review
+        when: The parent process enters Outer and the engine runs to the next stable state
+        then: Review is active, Inner's scope parent is Outer's scope, and the process token that entered Outer stays waiting
+      - given: Three subprocesses nested as Level1 contains Level2 contains Level3, and Level3 contains user task Review
+        when: The parent process enters Level1 and the engine runs to the next stable state
+        then: Review is active and each scope's parent is the scope of the subprocess that contains it
+      - given: The three-level nesting above, with Task B after Level1 in the parent process
+        when: Review completes and every nested scope reaches zero active tokens
+        then: All three child scopes are gone and Task B is active
+    traceability:
+      testCases:
+        - Import Nested SubProcess
+        - Execute nested SubProcess
+
+  - id: FR-011
+    requirementType: Functional
+    title: Event subprocess starts from its event
+    statement: A subprocess with triggeredByEvent true is not entered by a sequence flow. It stays subscribed while its parent scope exists, and it starts inside that parent scope when its triggering event occurs. It is valid with only event-triggered start events.
+    priority: High
+    status: Draft
+    tags: [subprocess, event-subprocess, phase-2]
+    dependencies:
+      - spec#FR-001
+    acceptanceCriteria:
+      - given: An order process contains a user task and an event subprocess with triggeredByEvent true whose start event is a message start. No matching message has arrived
+        when: The order process starts and the engine reaches the next stable state
+        then: The user task is active and no activity inside the event subprocess is active
+      - given: That order process is still active and the event subprocess start is subscribed
+        when: The matching message arrives
+        then: The event subprocess starts inside the order process scope and its first inner activity becomes active
+      - given: The event subprocess was subscribed while the order process scope existed
+        when: The order process scope completes
+        then: The event subprocess start is no longer subscribed
+      - given: An event subprocess whose only start event is a message start event
+        when: The document is imported and validated
+        then: Import succeeds and validation does not require a none start event inside that event subprocess
+    traceability:
+      testCases:
+        - Import Event SubProcess
+
+  - id: FR-012
+    requirementType: Functional
+    title: Import and export a transaction
+    statement: bpmn:transaction is imported as a transaction subprocess and exported again as bpmn:transaction. This requirement is parse and export only.
+    priority: High
+    status: Draft
+    tags: [subprocess, transaction, import, export, phase-1]
+    acceptanceCriteria:
+      - given: A BPMN document contains bpmn:transaction with id Transaction_1
+        when: The document is imported
+        then: The process contains a transaction subprocess with id Transaction_1 and that element is not stored as a plain subprocess
+      - given: Transaction_1 was imported from bpmn:transaction
+        when: The document is exported
+        then: The export writes Transaction_1 as bpmn:transaction with id Transaction_1
+    traceability:
+      testCases:
+        - Import Transaction
+
+  - id: FR-013
+    requirementType: Functional
+    title: Transaction cancel, compensation, and completion
+    statement: A transaction that finishes with no cancel resumes the parent on its outgoing sequence flows. A cancel event inside the transaction does not resume that success path, and compensation handlers of completed inner activities start.
+    priority: Medium
+    status: Draft
+    tags: [subprocess, transaction, phase-3]
+    dependencies:
+      - spec#FR-012
+    assumptions:
+      - Compensation, cancel, and atomic semantics are named without token-level steps. These criteria use only those three outcomes.
+      - Section 16 calls this runtime work phase 2. Section 22 schedules it as delivery phase 3.
+    acceptanceCriteria:
+      - given: Transaction_1 contains a path to a normal end event, no cancel event fires, and user task After follows Transaction_1
+        when: The transaction scope reaches zero active tokens through that normal end event
+        then: After becomes active
+      - given: Transaction_1 contains a completed activity whose compensation handler is Compensate, and a cancel end event is reached. User task After follows Transaction_1
+        when: The cancel end event completes
+        then: Compensate becomes active and After does not become active
+
+  - id: FR-014
+    requirementType: Functional
+    title: Import and export an ad hoc subprocess
+    statement: bpmn:adHocSubProcess is imported as an ad hoc subprocess and exported again as bpmn:adHocSubProcess. This requirement is parse and export only.
+    priority: High
+    status: Draft
+    tags: [subprocess, ad-hoc, import, export, phase-1]
+    acceptanceCriteria:
+      - given: A BPMN document contains bpmn:adHocSubProcess with id AdHoc_1
+        when: The document is imported
+        then: The process contains an ad hoc subprocess with id AdHoc_1 and that element is not stored as a plain subprocess
+      - given: AdHoc_1 was imported from bpmn:adHocSubProcess
+        when: The document is exported
+        then: The export writes AdHoc_1 as bpmn:adHocSubProcess with id AdHoc_1
+    traceability:
+      testCases:
+        - Import AdHoc SubProcess
+
+  - id: FR-015
+    requirementType: Functional
+    title: Ad hoc completion and non-sequential execution
+    statement: An ad hoc subprocess can run its inner activities together when execution is non-sequential, and it completes when its completion condition is met without requiring every inner activity to finish.
+    priority: Medium
+    status: Draft
+    tags: [subprocess, ad-hoc, phase-4]
+    dependencies:
+      - spec#FR-014
+    assumptions:
+      - Completion conditions and non-sequential execution are named without attribute syntax. Non-sequential means the inner activities are not forced to run one at a time.
+      - Section 17 calls this runtime work phase 2. Section 22 schedules it as delivery phase 4.
+    acceptanceCriteria:
+      - given: AdHoc_1 is non-sequential and contains user task Left and user task Right
+        when: AdHoc_1 is active and the engine reaches the next stable state
+        then: Left and Right are both active
+      - given: AdHoc_1 contains user task First and user task Second, and its completion condition becomes true when First completes. User task After follows AdHoc_1
+        when: First completes and the completion condition is true
+        then: AdHoc_1 completes, After becomes active, and Second is not required to complete before After
+
+  - id: FR-016
+    requirementType: Functional
+    title: Export subprocess contents
+    statement: Export writes an embedded subprocess as bpmn:subProcess with its id and name, and includes its flow elements, artifacts, and lane sets.
+    priority: High
+    status: Draft
+    tags: [subprocess, export, phase-1]
+    dependencies:
+      - spec#FR-002
+    acceptanceCriteria:
+      - given: Imported subprocess SubProcess_1 name Review contains flow elements Start_1, Task_1, and End_1, plus one artifact and one lane set
+        when: The document is exported
+        then: The export contains bpmn:subProcess id SubProcess_1 name Review and includes Start_1, Task_1, End_1, that artifact, and that lane set
+
+  - id: FR-017
+    requirementType: Functional
+    title: Subprocess round-trip keeps the same content
+    statement: Importing a document, exporting it, and importing the export again yields the same subprocess id, name, triggeredByEvent value, child flow element ids, artifact ids, and lane set ids.
+    priority: High
+    status: Draft
+    tags: [subprocess, export, phase-1]
+    dependencies:
+      - spec#FR-016
+      - spec#FR-012
+      - spec#FR-014
+    assumptions:
+      - Round-trip equality is content equality of the subprocess structure. It does not require byte-identical XML.
+    acceptanceCriteria:
+      - given: A document contains SubProcess_1 with triggeredByEvent false, child flow elements Start_1 and End_1, one artifact, and one lane set
+        when: The document is imported, exported, and the export is imported again
+        then: The second import has subprocess id SubProcess_1, name and triggeredByEvent unchanged, and the same child flow element ids, artifact ids, and lane set ids
+      - given: A document contains Transaction_1 as bpmn:transaction and AdHoc_1 as bpmn:adHocSubProcess
+        when: The document is imported, exported, and the export is imported again
+        then: The second import still has Transaction_1 as a transaction and AdHoc_1 as an ad hoc subprocess
+    traceability:
+      testCases:
+        - Round-trip XML consistency
+
+  - id: FR-018
+    requirementType: Functional
+    title: Restore an active subprocess scope
+    statement: When runtime persistence is enabled, saving and loading an active subprocess restores the parent execution, the child scope, the scope tokens, and the subprocess reference.
+    priority: Medium
+    status: Draft
+    tags: [subprocess, persistence]
+    dependencies:
+      - spec#FR-007
+    assumptions:
+      - This requirement applies only when Nayra runtime persistence is enabled. The specification does not define a storage schema beyond those four pieces of state.
+    acceptanceCriteria:
+      - given: Persistence is enabled, SubProcess_1 has a child scope, and user task Review is active in that scope
+        when: The execution state is saved and later loaded
+        then: The loaded state contains the parent execution, the child scope, the token on Review, and the reference to SubProcess_1
+
+  - id: FR-019
+    requirementType: Functional
+    title: Processes without a subprocess are unchanged
+    statement: A process that contains no subprocess still starts, activates its user task, and completes on the end event after subprocess support is added. No child scope is created.
+    priority: High
+    status: Draft
+    tags: [subprocess, regression, phase-1]
+    acceptanceCriteria:
+      - given: A process contains start event Start_1, user task Task_1, and end event End_1, and it contains no subprocess
+        when: Start_1 is triggered and Task_1 is completed
+        then: End_1 is reached, the instance completes, and no subprocess scope is created
+
+  - id: NFR-001
+    requirementType: NonFunctional
+    title: Exported subprocess XML uses the BPMN model namespace
+    statement: Subprocess markup written by the exporter uses the OMG BPMN 2.0 model namespace from the specification references.
+    priority: High
+    status: Draft
+    category: compatibility
+    tags: [subprocess, export, phase-1]
+    verificationMethod: Inspection
+    metrics:
+      - name: bpmn-model-namespace
+        operator: "="
+        value: http://www.omg.org/spec/BPMN/20100524/MODEL
+        unit: uri
+    dependencies:
+      - spec#FR-016
