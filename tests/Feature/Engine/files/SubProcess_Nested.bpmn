@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  id="Definitions_NestedSubProcess"
+                  targetNamespace="http://processmaker.com/nayra/subprocess">
+  <bpmn:process id="Process_Nested" isExecutable="true">
+    <bpmn:startEvent id="Start_Parent">
+      <bpmn:outgoing>Flow_To_Outer</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:subProcess id="Outer" name="Outer">
+      <bpmn:incoming>Flow_To_Outer</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_After</bpmn:outgoing>
+      <bpmn:startEvent id="Start_Outer">
+        <bpmn:outgoing>Flow_To_Inner</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:subProcess id="Inner" name="Inner">
+        <bpmn:incoming>Flow_To_Inner</bpmn:incoming>
+        <bpmn:outgoing>Flow_Outer_End</bpmn:outgoing>
+        <bpmn:startEvent id="Start_Inner">
+          <bpmn:outgoing>Flow_To_Review</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:userTask id="Review" name="Review">
+          <bpmn:incoming>Flow_To_Review</bpmn:incoming>
+          <bpmn:outgoing>Flow_Inner_End</bpmn:outgoing>
+        </bpmn:userTask>
+        <bpmn:endEvent id="End_Inner">
+          <bpmn:incoming>Flow_Inner_End</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="Flow_To_Review" sourceRef="Start_Inner" targetRef="Review"/>
+        <bpmn:sequenceFlow id="Flow_Inner_End" sourceRef="Review" targetRef="End_Inner"/>
+      </bpmn:subProcess>
+      <bpmn:endEvent id="End_Outer">
+        <bpmn:incoming>Flow_Outer_End</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_To_Inner" sourceRef="Start_Outer" targetRef="Inner"/>
+      <bpmn:sequenceFlow id="Flow_Outer_End" sourceRef="Inner" targetRef="End_Outer"/>
+    </bpmn:subProcess>
+    <bpmn:userTask id="Task_B" name="Task B">
+      <bpmn:incoming>Flow_To_After</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_End</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_Parent">
+      <bpmn:incoming>Flow_To_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_To_Outer" sourceRef="Start_Parent" targetRef="Outer"/>
+    <bpmn:sequenceFlow id="Flow_To_After" sourceRef="Outer" targetRef="Task_B"/>
+    <bpmn:sequenceFlow id="Flow_To_End" sourceRef="Task_B" targetRef="End_Parent"/>
+  </bpmn:process>
+</bpmn:definitions>

@@ -17,4 +17,18 @@ interface FlowElementInterface extends EntityInterface
      * @return ProcessInterface
      */
     public function getOwnerProcess();
+
+    /**
+     * Immediate container (Process or SubProcess), when nested.
+     *
+     * @return FlowElementsContainerInterface|null
+     */
+    public function getContainer();
+
+    /**
+     * @param FlowElementsContainerInterface|null $container
+     *
+     * @return $this
+     */
+    public function setContainer($container);
 }

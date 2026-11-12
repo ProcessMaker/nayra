@@ -41,9 +41,14 @@ use ProcessMaker\Nayra\Bpmn\Models\ServiceTask;
 use ProcessMaker\Nayra\Bpmn\Models\Signal;
 use ProcessMaker\Nayra\Bpmn\Models\SignalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\StandardLoopCharacteristics;
+use ProcessMaker\Nayra\Bpmn\Models\AdHocSubProcess;
+use ProcessMaker\Nayra\Bpmn\Models\Artifact;
+use ProcessMaker\Nayra\Bpmn\Models\CancelEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
+use ProcessMaker\Nayra\Bpmn\Models\SubProcess;
 use ProcessMaker\Nayra\Bpmn\Models\TerminateEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\TimerEventDefinition;
+use ProcessMaker\Nayra\Bpmn\Models\Transaction;
 use ProcessMaker\Nayra\Bpmn\State;
 use ProcessMaker\Nayra\Contracts\Bpmn\FlowNodeInterface;
 use ProcessMaker\Test\Models\TokenRepository;
@@ -396,6 +401,56 @@ trait RepositoryTrait
     public function createStartEvent()
     {
         return new StartEvent();
+    }
+
+    /**
+     * Create instance of SubProcess.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\SubProcessInterface
+     */
+    public function createSubProcess()
+    {
+        return new SubProcess();
+    }
+
+    /**
+     * Create instance of Transaction.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\TransactionInterface
+     */
+    public function createTransaction()
+    {
+        return new Transaction();
+    }
+
+    /**
+     * Create instance of AdHocSubProcess.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\AdHocSubProcessInterface
+     */
+    public function createAdHocSubProcess()
+    {
+        return new AdHocSubProcess();
+    }
+
+    /**
+     * Create instance of CancelEventDefinition.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\CancelEventDefinitionInterface
+     */
+    public function createCancelEventDefinition()
+    {
+        return new CancelEventDefinition();
+    }
+
+    /**
+     * Create instance of Artifact.
+     *
+     * @return \ProcessMaker\Nayra\Contracts\Bpmn\ArtifactInterface
+     */
+    public function createArtifact()
+    {
+        return new Artifact();
     }
 
     /**
