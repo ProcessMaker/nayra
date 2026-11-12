@@ -45,12 +45,24 @@ trait EmbeddedSubProcessTrait
         $this->attachEvent(
             ActivityInterface::EVENT_ACTIVITY_ACTIVATED,
             function ($self, TokenInterface $token) {
-                if ($this->getTriggeredByEvent()) {
-                    return;
-                }
-                $this->enterSubProcess($token);
+                $this->onEmbeddedSubProcessActivated($token);
             }
         );
+    }
+
+    /**
+     * Activation hook: event subprocesses are started by their start events, not by enterSubProcess.
+     *
+     * @param TokenInterface $token
+     *
+     * @return void
+     */
+    protected function onEmbeddedSubProcessActivated(TokenInterface $token)
+    {
+        if ($this->getTriggeredByEvent()) {
+            return;
+        }
+        $this->enterSubProcess($token);
     }
 
     /**
@@ -186,26 +198,7 @@ trait EmbeddedSubProcessTrait
     ) {
         $process = $this->getOwnerProcess();
         $check = function () use ($token, $scope, $instance, $adHoc) {
-            if (!$scope->isActive() || $scope->isCancelled()) {
-                return;
-            }
-            if ($token->getStatus() !== ActivityInterface::TOKEN_STATE_ACTIVE) {
-                return;
-            }
-            if ($adHoc && $this instanceof AdHocSubProcessInterface) {
-                $condition = $this->getCompletionCondition();
-                if ($condition) {
-                    $data = $instance->getDataStore()->getData();
-                    if ($condition($data)) {
-                        $this->completeEmbeddedSubProcess($token, $scope);
-
-                        return;
-                    }
-                }
-            }
-            if ($scope->getActiveTokensCount() === 0) {
-                $this->completeEmbeddedSubProcess($token, $scope);
-            }
+            $this->checkEmbeddedSubProcessCompletion($token, $scope, $instance, $adHoc);
         };
 
         $process->attachEvent(
@@ -214,12 +207,16 @@ trait EmbeddedSubProcessTrait
                 if (!$scope->isActive() || $scope->isCancelled() || !$this->containsNode($element)) {
                     return;
                 }
-                if ($element instanceof EndEventInterface) {                    foreach ($element->getEventDefinitions() as $definition) {                        if ($definition instanceof CancelEventDefinitionInterface) {                            $this->cancelTransaction($token, $scope, $instance);
+                if ($element instanceof EndEventInterface) {
+                    foreach ($element->getEventDefinitions() as $definition) {
+                        if ($definition instanceof CancelEventDefinitionInterface) {
+                            $this->cancelTransaction($token, $scope, $instance);
 
                             return;
                         }
                     }
-                }                $this->getOwnerProcess()->getEngine()->nextState($check);
+                }
+                $this->getOwnerProcess()->getEngine()->nextState($check);
             }
         );
         // Defer completion checks so tokens in transit to the next node are visible.
@@ -228,6 +225,44 @@ trait EmbeddedSubProcessTrait
         };
         $process->attachEvent(ActivityInterface::EVENT_ACTIVITY_CLOSED, $deferredCheck);
         $process->attachEvent(ActivityInterface::EVENT_ACTIVITY_COMPLETED, $deferredCheck);
+    }
+
+    /**
+     * Decide whether the parent subprocess token can complete.
+     *
+     * @param TokenInterface $token
+     * @param ScopeExecution $scope
+     * @param ExecutionInstanceInterface $instance
+     * @param bool $adHoc
+     *
+     * @return void
+     */
+    protected function checkEmbeddedSubProcessCompletion(
+        TokenInterface $token,
+        ScopeExecution $scope,
+        ExecutionInstanceInterface $instance,
+        $adHoc = false
+    ) {
+        if (!$scope->isActive() || $scope->isCancelled()) {
+            return;
+        }
+        if ($token->getStatus() !== ActivityInterface::TOKEN_STATE_ACTIVE) {
+            return;
+        }
+        if ($adHoc && $this instanceof AdHocSubProcessInterface) {
+            $condition = $this->getCompletionCondition();
+            if ($condition) {
+                $data = $instance->getDataStore()->getData();
+                if ($condition($data)) {
+                    $this->completeEmbeddedSubProcess($token, $scope);
+
+                    return;
+                }
+            }
+        }
+        if ($scope->getActiveTokensCount() === 0) {
+            $this->completeEmbeddedSubProcess($token, $scope);
+        }
     }
 
     /**

@@ -173,7 +173,7 @@ class ScopeExecution
         $nodes = [];
         foreach ($this->container->getActivities() as $activity) {
             $nodes[] = $activity;
-            if ($activity instanceof FlowElementsContainerInterface) {
+            if ($activity instanceof FlowElementsContainerInterface && $activity !== $this->container) {
                 $nodes = array_merge($nodes, $this->collectFromContainer($activity));
             }
         }
@@ -197,7 +197,7 @@ class ScopeExecution
         $nodes = [];
         foreach ($container->getActivities() as $activity) {
             $nodes[] = $activity;
-            if ($activity instanceof FlowElementsContainerInterface) {
+            if ($activity instanceof FlowElementsContainerInterface && $activity !== $container) {
                 $nodes = array_merge($nodes, $this->collectFromContainer($activity));
             }
         }
